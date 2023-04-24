@@ -1,7 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert';
-import 'package:fish/models/feed_history_daily.dart';
+import 'package:fish/models/feed_history_detail.dart';
 import 'package:fish/models/feed_history_hourly.dart';
 import 'package:fish/models/feed_history_monthly.dart';
 import 'package:fish/models/feed_history_weekly.dart';
