@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/feeding/feedtype_form_controller.dart';
 import 'package:fish/service/feed_history_service.dart';
@@ -37,6 +39,6 @@ class FeedEntryController extends GetxController {
       feedTypeId: feedTypeFormController.getIdByName(),
       feedDose: feedDosisController.text,
     );
-    print(value);
+    // print(value);
   }
 }

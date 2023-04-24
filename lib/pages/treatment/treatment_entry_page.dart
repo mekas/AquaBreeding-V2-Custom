@@ -1,17 +1,16 @@
-import 'package:fish/models/fish_model.dart';
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:fish/pages/component/treatment_berat_input_card.dart';
 import 'package:fish/pages/treatment/treatment_entry_controller.dart';
 import 'package:fish/pages/treatment/treatment_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:fish/pages/pond/detail_pond_controller.dart';
 import 'package:fish/theme.dart';
 
-import 'package:fish/pages/component/deactivation_list_input.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class TreatmentEntryPage extends StatefulWidget {
-  TreatmentEntryPage({Key? key}) : super(key: key);
+  const TreatmentEntryPage({Key? key}) : super(key: key);
   @override
   State<TreatmentEntryPage> createState() => _TreatmentEntryPageState();
 }
@@ -22,6 +21,7 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
 
   final TreatmentController treatmentTontroller =
       Get.put(TreatmentController());
+  @override
   void initState() {
     super.initState();
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
@@ -47,12 +47,12 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -75,47 +75,47 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
       );
     }
 
-    Widget carbonTypeNullInput() {
-      return Container(
-        margin: EdgeInsets.only(
-            top: defaultSpace, right: defaultMargin, left: defaultMargin),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Deskripsi',
-              style: primaryTextStyle.copyWith(
-                fontSize: 16,
-                fontWeight: medium,
-              ),
-            ),
-            SizedBox(
-              height: 12,
-            ),
-            Container(
-              height: 50,
-              padding: EdgeInsets.symmetric(
-                horizontal: 16,
-              ),
-              decoration: BoxDecoration(
-                color: backgroundColor2,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                child: TextFormField(
-                  style: primaryTextStyle,
-                  controller: controller.carbonTypeNullController,
-                  decoration: InputDecoration.collapsed(
-                    hintText: 'ex: Ikan Sakit',
-                    hintStyle: subtitleTextStyle,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+    // Widget carbonTypeNullInput() {
+    //   return Container(
+    //     margin: EdgeInsets.only(
+    //         top: defaultSpace, right: defaultMargin, left: defaultMargin),
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         Text(
+    //           'Deskripsi',
+    //           style: primaryTextStyle.copyWith(
+    //             fontSize: 16,
+    //             fontWeight: medium,
+    //           ),
+    //         ),
+    //         const SizedBox(
+    //           height: 12,
+    //         ),
+    //         Container(
+    //           height: 50,
+    //           padding: const EdgeInsets.symmetric(
+    //             horizontal: 16,
+    //           ),
+    //           decoration: BoxDecoration(
+    //             color: backgroundColor2,
+    //             borderRadius: BorderRadius.circular(12),
+    //           ),
+    //           child: Center(
+    //             child: TextFormField(
+    //               style: primaryTextStyle,
+    //               controller: controller.carbonTypeNullController,
+    //               decoration: InputDecoration.collapsed(
+    //                 hintText: 'ex: Ikan Sakit',
+    //                 hintStyle: subtitleTextStyle,
+    //               ),
+    //             ),
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
 
     Widget waterChangeInput() {
       return Container(
@@ -131,12 +131,12 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -173,12 +173,12 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -215,12 +215,12 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -243,7 +243,8 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
                         );
                       }).toList(),
                       dropdownColor: backgroundColor5,
-                      decoration: InputDecoration(border: InputBorder.none),
+                      decoration:
+                          const InputDecoration(border: InputBorder.none),
                     )),
               ),
             ),
@@ -282,12 +283,12 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -328,12 +329,12 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -419,12 +420,12 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -437,17 +438,18 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
                           .setSelected(newValue!),
                       value: controller.carbonTypeController.selected.value,
                       items: controller.carbonTypeController.listCarbon
-                          .map((carbohydrate_type) {
+                          .map((carbohydrateType) {
                         return DropdownMenuItem<String>(
-                          value: carbohydrate_type,
+                          value: carbohydrateType,
                           child: Text(
-                            carbohydrate_type,
+                            carbohydrateType,
                             style: primaryTextStyle,
                           ),
                         );
                       }).toList(),
                       dropdownColor: backgroundColor5,
-                      decoration: InputDecoration(border: InputBorder.none),
+                      decoration:
+                          const InputDecoration(border: InputBorder.none),
                     )),
               ),
             ),
@@ -667,7 +669,7 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
               controller.typeController.selected.value == "berat"
                   ? submitBeratButton()
                   : submitButton(),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               )
             ],

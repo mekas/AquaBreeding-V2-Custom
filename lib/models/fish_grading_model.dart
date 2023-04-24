@@ -24,7 +24,6 @@ class FishGrading {
   });
 
   factory FishGrading.fromJson(Map<String, dynamic> json) {
-    print(json);
     return FishGrading(
       id: json['_id'],
       fishType: json['fish_type'],

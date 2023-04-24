@@ -6,7 +6,7 @@ import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
 class FishTransferListPage extends StatefulWidget {
-  FishTransferListPage({Key? key}) : super(key: key);
+  const FishTransferListPage({Key? key}) : super(key: key);
 
   @override
   State<FishTransferListPage> createState() => _FishTransferListPageState();
@@ -47,7 +47,7 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
               ],
@@ -79,14 +79,14 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
           margin: EdgeInsets.only(right: defaultMargin, left: defaultMargin),
           child: Center(
             child: Column(children: [
-              SizedBox(height: 35),
-              Image(
+              const SizedBox(height: 35),
+              const Image(
                 image: AssetImage("assets/unavailable_icon.png"),
                 width: 100,
                 height: 100,
                 fit: BoxFit.fitWidth,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
                 "Kolam belum pernah melakukan transfer ikan",
                 style: primaryTextStyle.copyWith(
@@ -97,7 +97,7 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text(
                 "Silahkan masukan transfer ikan",
                 style: secondaryTextStyle.copyWith(
@@ -117,7 +117,7 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
         return Scaffold(
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              Get.to(() => FishTransferEntryPage(), arguments: {
+              Get.to(() => const FishTransferEntryPage(), arguments: {
                 "pond": controller.pond,
                 "activation": controller.activation
               });
@@ -132,7 +132,7 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
               controller.listTransfer.isEmpty
                   ? emptyListTransfer()
                   : listTransfer(),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               )
             ],

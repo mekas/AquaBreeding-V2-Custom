@@ -10,8 +10,6 @@ class WeeklyWaterService {
 
     var response = await http.get(url, headers: headers);
 
-    print(response.body);
-
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       List<WeeklyWater> ponds = [];
@@ -19,8 +17,6 @@ class WeeklyWaterService {
       for (var item in data) {
         ponds.add(WeeklyWater.fromJson(item));
       }
-
-      print(ponds);
 
       return ponds;
     } else {
@@ -38,16 +34,6 @@ class WeeklyWaterService {
     String? hardness,
     String? week,
   }) async {
-    print({
-      "pond_id": pondId.toString(),
-      "pond_activation_id": activationId.toString(),
-      "floc": floc,
-      "nitrite": nitrate,
-      "nitrate": nitrate,
-      "ammonia": ammonia,
-      "hardness": hardness,
-      "week": week,
-    });
     final response = await http.post(
       Uri.parse(Urls.weeklyWater),
       headers: {
@@ -67,10 +53,8 @@ class WeeklyWaterService {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
       return true;
     } else {
-      print(response.body);
       return false;
     }
   }

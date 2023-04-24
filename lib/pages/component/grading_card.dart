@@ -1,5 +1,5 @@
 import 'package:fish/models/activation_model.dart';
-import 'package:fish/models/fishGrading_model.dart';
+import 'package:fish/models/fish_grading_model.dart';
 import 'package:fish/models/pond_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/pages/grading/detail_grading_page.dart';
@@ -22,7 +22,7 @@ class GradingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => DetailGradingPage(), arguments: {
+        Get.to(() => const DetailGradingPage(), arguments: {
           "activation": activation,
           "pond": pond,
           "fishGrading": fishGrading,
@@ -33,7 +33,7 @@ class GradingCard extends StatelessWidget {
         margin: EdgeInsets.only(
           top: defaultMargin,
         ),
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: primaryColor),

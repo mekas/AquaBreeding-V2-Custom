@@ -28,12 +28,12 @@ class ConstantaGradingPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -74,12 +74,12 @@ class ConstantaGradingPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -144,7 +144,7 @@ class ConstantaGradingPage extends StatelessWidget {
               oversizeInput(),
               undersizeInput(),
               activationButton(),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               )
             ],

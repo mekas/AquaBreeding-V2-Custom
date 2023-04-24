@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:convert';
 
 import 'package:fish/models/pond_model.dart';
@@ -40,6 +42,6 @@ class FishDeathEntryController extends GetxController {
       pondId: pond.id,
       fish: buildJson(),
     );
-    print(value);
+    // print(value);
   }
 }

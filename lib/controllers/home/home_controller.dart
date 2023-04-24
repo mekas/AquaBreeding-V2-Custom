@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:fish/models/statistic_model.dart';
-import 'package:fish/service/statistic_service.dart';
 import 'package:fish/service/statistic_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,7 +8,6 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../pages/authentication/login_page.dart';
-import '../../pages/dashboard.dart';
 
 class HomeController extends GetxController {
   var isLoading = false.obs;
@@ -34,7 +31,7 @@ class HomeController extends GetxController {
     WidgetsFlutterBinding.ensureInitialized();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
-    Get.off(LoginPage());
+    Get.off(const LoginPage());
   }
 
   Future<void> getUserData() async {
@@ -43,7 +40,6 @@ class HomeController extends GetxController {
     var token = prefs.getString("token");
     Map<String, dynamic> jwtdecoderToken = JwtDecoder.decode(token!);
     username = jwtdecoderToken["sub"]["username"].toString();
-    print(username);
   }
 
   Future<void> getStatisticData() async {

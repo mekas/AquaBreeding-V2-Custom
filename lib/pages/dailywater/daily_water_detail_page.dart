@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:fish/controllers/daily_water/daily_water_detail_controller.dart';
 import 'package:fish/pages/dailywater/daily_water_edit_page.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +7,6 @@ import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/daily_water/daily_water_controller.dart';
-import '../../models/daily_water_model.dart';
 
 class DailyWaterDetailPage extends StatefulWidget {
   const DailyWaterDetailPage({Key? key}) : super(key: key);
@@ -52,7 +53,7 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
               ],
@@ -143,7 +144,7 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     TextButton(
@@ -160,7 +161,7 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: Icon(
+                        child: const Icon(
                           Icons.restore_from_trash,
                           color: Colors.white,
                         )),
@@ -231,8 +232,8 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
                   maxLines: 1,
                 ),
                 Text(
-                  "${controller.dailyWaterfix[0].ph} " +
-                      "${controller.dailyWaterfix[0].ph_desc}",
+                  "${controller.dailyWaterfix[0].ph} "
+                  "${controller.dailyWaterfix[0].ph_desc}",
                   style: secondaryTextStyle.copyWith(
                     color: controller.dailyWaterfix[0].ph_desc == "normal"
                         ? Colors.green
@@ -243,7 +244,7 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -256,7 +257,7 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
                   maxLines: 1,
                 ),
                 Text(
-                  "${controller.dailyWaterfix[0].temperature} " + "°C",
+                  "${controller.dailyWaterfix[0].temperature} " "°C",
                   style: secondaryTextStyle.copyWith(
                     fontSize: 16,
                     fontWeight: medium,
@@ -279,8 +280,8 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
                   maxLines: 1,
                 ),
                 Text(
-                  "${controller.dailyWaterfix[0].numDo} " +
-                      "${controller.dailyWaterfix[0].numDo_desc}",
+                  "${controller.dailyWaterfix[0].numDo} "
+                  "${controller.dailyWaterfix[0].numDo_desc}",
                   style: secondaryTextStyle.copyWith(
                     color: controller.dailyWaterfix[0].numDo_desc == "normal"
                         ? Colors.green
@@ -293,10 +294,10 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
               ],
@@ -312,8 +313,8 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Detail Kondisi Air Harian"),
-            leading: new IconButton(
-              icon: new Icon(Icons.arrow_back),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
               onPressed: () async {
                 // Get.back();
 
@@ -331,7 +332,7 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
               titleRecap(),
               dataTreatment(),
               detailTreatment(),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               )
             ],

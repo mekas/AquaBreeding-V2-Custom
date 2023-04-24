@@ -1,3 +1,5 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 import 'package:fish/pages/fish/fish_death_entry_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
@@ -29,12 +31,12 @@ class FishDeathEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -56,7 +58,8 @@ class FishDeathEntryPage extends StatelessWidget {
                         );
                       }).toList(),
                       dropdownColor: backgroundColor5,
-                      decoration: InputDecoration(border: InputBorder.none),
+                      decoration:
+                          const InputDecoration(border: InputBorder.none),
                     )),
               ),
             ),
@@ -79,12 +82,12 @@ class FishDeathEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -103,7 +106,7 @@ class FishDeathEntryPage extends StatelessWidget {
                   controller: controller.formDeathController,
                   decoration: controller.validatefishamount.value == true
                       ? controller.fishamount == ''
-                          ? InputDecoration(
+                          ? const InputDecoration(
                               errorText: 'jumlah ikan tidak boleh kosong',
                               isCollapsed: true)
                           : null
@@ -133,7 +136,7 @@ class FishDeathEntryPage extends StatelessWidget {
                 activation_id: controller.activation.id.toString());
             deathcontroller.getcharData(
                 activation_id: controller.activation.id.toString());
-            print(deathcontroller.charData);
+            // print(deathcontroller.charData);
           },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
@@ -165,7 +168,7 @@ class FishDeathEntryPage extends StatelessWidget {
               fishTypeInput(),
               fishDeathAmountInput(),
               submitButton(),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               )
             ],

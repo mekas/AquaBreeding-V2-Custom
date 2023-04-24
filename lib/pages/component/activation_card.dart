@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
-import '../pond/detail_Breed_page.dart';
-
 class ActivationCard extends StatelessWidget {
   final Activation? activation;
   final Pond? pond;

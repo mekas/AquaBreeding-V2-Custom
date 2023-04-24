@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:fish/service/daily_water_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fish/models/pond_model.dart';
@@ -57,14 +56,7 @@ class DailyWaterEntryController extends GetxController {
 
   Future<void> postDailyWaterData(
       BuildContext context, Function doInPost) async {
-    bool value = await DailyWaterService().postDailyWater(
-        pondId: pond.id,
-        activationId: activation.id,
-        ph: phController.value.text,
-        numDo: doController.value.text,
-        week: getWeek().toString(),
-        temperature: temperatureController.value.text);
-    print(value);
+    // print(value);
     doInPost();
   }
   // @override

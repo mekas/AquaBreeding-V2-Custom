@@ -1,7 +1,8 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:fish/pages/treatment/carbon_type_controller.dart';
 import 'package:fish/service/fish_transfer_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -161,8 +162,6 @@ class FishTransferEntryController extends GetxController {
         pondIdSelected = i.id.toString();
       }
     }
-    print(pondIdSelected);
-    print(pondSelected);
     isLoading.value = false;
   }
 
@@ -177,7 +176,6 @@ class FishTransferEntryController extends GetxController {
         sample_long: sampleLongController.value.text,
         sample_weight: sampleweight.toString(),
         fish: buildJsonFish());
-    print(value);
     doInPost();
   }
 
@@ -441,7 +439,6 @@ class FishTransferEntryController extends GetxController {
         fishstock: buildJsonFishActivation(),
         fishharvested: buildJsonFishDeactivation(),
         water_level: waterHeightController.value.text);
-    print(value);
     doInPost();
   }
 

@@ -1,3 +1,5 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 import 'package:fish/pages/grading/grading_entry_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
@@ -28,12 +30,12 @@ class GradingEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -55,7 +57,8 @@ class GradingEntryPage extends StatelessWidget {
                         );
                       }).toList(),
                       dropdownColor: backgroundColor5,
-                      decoration: InputDecoration(border: InputBorder.none),
+                      decoration:
+                          const InputDecoration(border: InputBorder.none),
                     )),
               ),
             ),
@@ -78,12 +81,12 @@ class GradingEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -102,7 +105,7 @@ class GradingEntryPage extends StatelessWidget {
                   controller: controller.sampleAmountController,
                   decoration: controller.validatesampleAmount.value == true
                       ? controller.sampleAmount == ''
-                          ? InputDecoration(
+                          ? const InputDecoration(
                               errorText: 'jumlah ikan tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -131,12 +134,12 @@ class GradingEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -152,7 +155,7 @@ class GradingEntryPage extends StatelessWidget {
                   controller: controller.fishWeightController,
                   decoration: controller.validatefishWeight.value == true
                       ? controller.fishWeight == ''
-                          ? InputDecoration(
+                          ? const InputDecoration(
                               errorText: 'tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -181,12 +184,12 @@ class GradingEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -202,7 +205,7 @@ class GradingEntryPage extends StatelessWidget {
                   controller: controller.fishLengthAvgController,
                   decoration: controller.validatefishLenght.value == true
                       ? controller.fishLenght == ''
-                          ? InputDecoration(
+                          ? const InputDecoration(
                               errorText: 'jumlah ikan tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -231,12 +234,12 @@ class GradingEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -255,7 +258,7 @@ class GradingEntryPage extends StatelessWidget {
                   controller: controller.undersizeController,
                   decoration: controller.validateundersize.value == true
                       ? controller.undersize == ''
-                          ? InputDecoration(
+                          ? const InputDecoration(
                               errorText: 'jumlah ikan tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -284,12 +287,12 @@ class GradingEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -308,7 +311,7 @@ class GradingEntryPage extends StatelessWidget {
                   controller: controller.oversizeController,
                   decoration: controller.validateoversize.value == true
                       ? controller.oversize == ''
-                          ? InputDecoration(
+                          ? const InputDecoration(
                               errorText: 'jumlah ikan tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -337,12 +340,12 @@ class GradingEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -361,7 +364,7 @@ class GradingEntryPage extends StatelessWidget {
                   controller: controller.normalsizeController,
                   decoration: controller.validatenormal.value == true
                       ? controller.normal == ''
-                          ? InputDecoration(
+                          ? const InputDecoration(
                               errorText: 'jumlah ikan tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -434,7 +437,7 @@ class GradingEntryPage extends StatelessWidget {
               undersizeInput(),
               oversizeInput(),
               submitButton(),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               )
             ],

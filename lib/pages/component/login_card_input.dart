@@ -1,3 +1,5 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
@@ -19,12 +21,12 @@ class LoginInputCard extends StatelessWidget {
           BoxShadow(
             color: backgroundColor3,
             blurRadius: 4,
-            offset: Offset(2, 8), // Shadow position
+            offset: const Offset(2, 8), // Shadow position
           ),
         ],
       ),
       width: double.infinity,
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       margin: EdgeInsets.only(
         top: defaultMargin / 2,
       ),
@@ -44,17 +46,17 @@ class LoginInputCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 6,
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Container(
             height: 50,
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: 16,
             ),
             decoration: BoxDecoration(
@@ -69,11 +71,11 @@ class LoginInputCard extends StatelessWidget {
                 controller: controller.usernameController,
                 decoration: controller.validateusername.value == true
                     ? controller.username == ''
-                        ? InputDecoration(
+                        ? const InputDecoration(
                             errorText: 'username tidak boleh kosong',
                             isCollapsed: true)
                         : controller.usernameController.text.length < 6
-                            ? InputDecoration(
+                            ? const InputDecoration(
                                 errorText: 'username kurang dari 6 karakter',
                                 isCollapsed: true)
                             : null
@@ -81,7 +83,7 @@ class LoginInputCard extends StatelessWidget {
               );
             })),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -97,17 +99,17 @@ class LoginInputCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 6,
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Container(
             height: 50,
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: 16,
             ),
             decoration: BoxDecoration(
@@ -173,7 +175,7 @@ class LoginInputCard extends StatelessWidget {
               );
             })),
           ),
-          SizedBox(
+          const SizedBox(
             height: 12,
           ),
           Container(
@@ -206,7 +208,7 @@ class LoginInputCard extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 6,
           ),
         ],

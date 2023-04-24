@@ -41,7 +41,6 @@ class Activation {
   });
 
   factory Activation.fromJson(Map<String, dynamic> json) {
-    print(json);
     return Activation(
       id: json['_id'],
       idInt: json['id_int'],
@@ -96,7 +95,6 @@ class Activation {
       DateFormat("dd-MM-yyyy").format(activationAt!);
 
   String getStringDeactivationDate() {
-    print(deactivationAt);
     if (isFinish == false) {
       return "-";
     }
@@ -104,10 +102,7 @@ class Activation {
   }
 
   num getRangeActivation() {
-    print(deactivationAt);
     if (isFinish == false) {
-      print(DateTime.now());
-      print(activationAt);
       return DateTime.now().difference(activationAt!).inDays;
     }
     return deactivationAt!.difference(activationAt!).inDays;

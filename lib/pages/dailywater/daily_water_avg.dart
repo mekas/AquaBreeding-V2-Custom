@@ -1,13 +1,11 @@
 import 'package:fish/pages/component/daily_water_avg_card.dart';
-import 'package:fish/pages/component/daily_water_card.dart';
 import 'package:fish/controllers/daily_water/daily_water_avg_controller.dart';
-import 'package:fish/pages/dailywater/daily_water_entry_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
 class DailyWaterAvgPage extends StatefulWidget {
-  DailyWaterAvgPage({Key? key}) : super(key: key);
+  const DailyWaterAvgPage({Key? key}) : super(key: key);
 
   @override
   State<DailyWaterAvgPage> createState() => _DailyWaterAvgPageState();
@@ -48,7 +46,7 @@ class _DailyWaterAvgPageState extends State<DailyWaterAvgPage> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
               ],
@@ -80,14 +78,14 @@ class _DailyWaterAvgPageState extends State<DailyWaterAvgPage> {
           margin: EdgeInsets.only(right: defaultMargin, left: defaultMargin),
           child: Center(
             child: Column(children: [
-              SizedBox(height: 35),
-              Image(
+              const SizedBox(height: 35),
+              const Image(
                 image: AssetImage("assets/unavailable_icon.png"),
                 width: 100,
                 height: 100,
                 fit: BoxFit.fitWidth,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
                 "Kolam belum pernah dilakukan treatment",
                 style: primaryTextStyle.copyWith(
@@ -98,7 +96,7 @@ class _DailyWaterAvgPageState extends State<DailyWaterAvgPage> {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text(
                 "Silahkan masukan treatment",
                 style: secondaryTextStyle.copyWith(
@@ -127,7 +125,7 @@ class _DailyWaterAvgPageState extends State<DailyWaterAvgPage> {
               controller.listDailyWater.isEmpty
                   ? emptyList()
                   : listDailyWater(),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               )
             ],

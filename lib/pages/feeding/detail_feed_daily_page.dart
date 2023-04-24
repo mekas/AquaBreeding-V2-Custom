@@ -58,7 +58,7 @@ class DetailFeedDailyPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
               ],
@@ -93,124 +93,124 @@ class DetailFeedDailyPage extends StatelessWidget {
     //   );
     // }
 
-    Widget detail() {
-      return Container(
-        width: double.infinity,
-        margin: EdgeInsets.only(
-            top: defaultSpace, right: defaultMargin, left: defaultMargin),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Lokasi Kolam",
-                  style: primaryTextStyle.copyWith(
-                    fontSize: 14,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-                Text(
-                  "Blok A",
-                  style: secondaryTextStyle.copyWith(
-                    fontSize: 13,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-                Text(
-                  " ",
-                  style: secondaryTextStyle.copyWith(
-                    fontSize: 13,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  "Total Pemberian Pakan",
-                  style: primaryTextStyle.copyWith(
-                    fontSize: 14,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-                Text(
-                  "30 Kali",
-                  style: secondaryTextStyle.copyWith(
-                    fontSize: 13,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Jumlah Ikan",
-                  style: primaryTextStyle.copyWith(
-                    fontSize: 14,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-                Text(
-                  "Lele: 100 Ekor",
-                  style: secondaryTextStyle.copyWith(
-                    fontSize: 13,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-                Text(
-                  "Nila Merah: 100 Ekor",
-                  style: secondaryTextStyle.copyWith(
-                    fontSize: 13,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  "Total Pakan",
-                  style: primaryTextStyle.copyWith(
-                    fontSize: 14,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-                Text(
-                  "30 Kg",
-                  style: secondaryTextStyle.copyWith(
-                    fontSize: 13,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    }
+    // Widget detail() {
+    //   return Container(
+    //     width: double.infinity,
+    //     margin: EdgeInsets.only(
+    //         top: defaultSpace, right: defaultMargin, left: defaultMargin),
+    //     child: Row(
+    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //       children: [
+    //         Column(
+    //           crossAxisAlignment: CrossAxisAlignment.start,
+    //           children: [
+    //             Text(
+    //               "Lokasi Kolam",
+    //               style: primaryTextStyle.copyWith(
+    //                 fontSize: 14,
+    //                 fontWeight: medium,
+    //               ),
+    //               overflow: TextOverflow.ellipsis,
+    //               maxLines: 1,
+    //             ),
+    //             Text(
+    //               "Blok A",
+    //               style: secondaryTextStyle.copyWith(
+    //                 fontSize: 13,
+    //                 fontWeight: medium,
+    //               ),
+    //               overflow: TextOverflow.ellipsis,
+    //               maxLines: 1,
+    //             ),
+    //             Text(
+    //               " ",
+    //               style: secondaryTextStyle.copyWith(
+    //                 fontSize: 13,
+    //                 fontWeight: medium,
+    //               ),
+    //               overflow: TextOverflow.ellipsis,
+    //               maxLines: 1,
+    //             ),
+    //             const SizedBox(
+    //               height: 20,
+    //             ),
+    //             Text(
+    //               "Total Pemberian Pakan",
+    //               style: primaryTextStyle.copyWith(
+    //                 fontSize: 14,
+    //                 fontWeight: medium,
+    //               ),
+    //               overflow: TextOverflow.ellipsis,
+    //               maxLines: 1,
+    //             ),
+    //             Text(
+    //               "30 Kali",
+    //               style: secondaryTextStyle.copyWith(
+    //                 fontSize: 13,
+    //                 fontWeight: medium,
+    //               ),
+    //               overflow: TextOverflow.ellipsis,
+    //               maxLines: 1,
+    //             ),
+    //           ],
+    //         ),
+    //         Column(
+    //           crossAxisAlignment: CrossAxisAlignment.start,
+    //           children: [
+    //             Text(
+    //               "Jumlah Ikan",
+    //               style: primaryTextStyle.copyWith(
+    //                 fontSize: 14,
+    //                 fontWeight: medium,
+    //               ),
+    //               overflow: TextOverflow.ellipsis,
+    //               maxLines: 1,
+    //             ),
+    //             Text(
+    //               "Lele: 100 Ekor",
+    //               style: secondaryTextStyle.copyWith(
+    //                 fontSize: 13,
+    //                 fontWeight: medium,
+    //               ),
+    //               overflow: TextOverflow.ellipsis,
+    //               maxLines: 1,
+    //             ),
+    //             Text(
+    //               "Nila Merah: 100 Ekor",
+    //               style: secondaryTextStyle.copyWith(
+    //                 fontSize: 13,
+    //                 fontWeight: medium,
+    //               ),
+    //               overflow: TextOverflow.ellipsis,
+    //               maxLines: 1,
+    //             ),
+    //             const SizedBox(
+    //               height: 20,
+    //             ),
+    //             Text(
+    //               "Total Pakan",
+    //               style: primaryTextStyle.copyWith(
+    //                 fontSize: 14,
+    //                 fontWeight: medium,
+    //               ),
+    //               overflow: TextOverflow.ellipsis,
+    //               maxLines: 1,
+    //             ),
+    //             Text(
+    //               "30 Kg",
+    //               style: secondaryTextStyle.copyWith(
+    //                 fontSize: 13,
+    //                 fontWeight: medium,
+    //               ),
+    //               overflow: TextOverflow.ellipsis,
+    //               maxLines: 1,
+    //             ),
+    //           ],
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
 
     Widget recapTitle() {
       return Container(
@@ -274,7 +274,7 @@ class DetailFeedDailyPage extends StatelessWidget {
               recapTitle(),
               // chartRecap(),
               listHourFeed(),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               )
             ],

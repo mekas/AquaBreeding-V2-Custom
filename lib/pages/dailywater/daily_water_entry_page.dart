@@ -1,8 +1,9 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 import 'package:fish/controllers/daily_water/daily_water_entry_controller.dart';
 import 'package:fish/controllers/daily_water/daily_water_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class DailyWaterEntryPage extends StatelessWidget {
@@ -30,12 +31,12 @@ class DailyWaterEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -51,7 +52,7 @@ class DailyWaterEntryPage extends StatelessWidget {
                   controller: controller.doController,
                   decoration: controller.validatedoVal.value == true
                       ? controller.doVal == ''
-                          ? InputDecoration(
+                          ? const InputDecoration(
                               errorText: 'tidak boleh kosong',
                               isCollapsed: true)
                           : null
@@ -79,12 +80,12 @@ class DailyWaterEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -100,7 +101,7 @@ class DailyWaterEntryPage extends StatelessWidget {
                   controller: controller.phController,
                   decoration: controller.validateph.value == true
                       ? controller.ph == ''
-                          ? InputDecoration(
+                          ? const InputDecoration(
                               errorText: 'tidak boleh kosong',
                               isCollapsed: true)
                           : null
@@ -128,12 +129,12 @@ class DailyWaterEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -149,7 +150,7 @@ class DailyWaterEntryPage extends StatelessWidget {
                   controller: controller.temperatureController,
                   decoration: controller.validatetemp.value == true
                       ? controller.temp == ''
-                          ? InputDecoration(
+                          ? const InputDecoration(
                               errorText: 'tidak boleh kosong',
                               isCollapsed: true)
                           : null
@@ -216,7 +217,7 @@ class DailyWaterEntryPage extends StatelessWidget {
               doInput(),
               temperatureInput(),
               submitButton(),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               )
             ],

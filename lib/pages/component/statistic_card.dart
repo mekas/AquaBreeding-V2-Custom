@@ -19,36 +19,36 @@ class StatisticCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
-        color: Color(0xffECEDEF),
+        color: const Color(0xffECEDEF),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           Container(
-            margin: EdgeInsets.symmetric(
+            margin: const EdgeInsets.symmetric(
               horizontal: 12,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  this.title!,
+                  title!,
                   style: blackTextStyle.copyWith(
                     fontSize: 18,
                     fontWeight: semiBold,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      this.value!.toString(),
+                      value!.toString(),
                       style: blackTextStyle.copyWith(
                         fontSize: 30,
                         fontWeight: FontWeight.w900,
@@ -56,11 +56,11 @@ class StatisticCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 8,
                     ),
                     Text(
-                      this.unit!,
+                      unit!,
                       style: blackTextStyle.copyWith(
                         fontSize: 20,
                         fontWeight: medium,
@@ -70,7 +70,7 @@ class StatisticCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
               ],

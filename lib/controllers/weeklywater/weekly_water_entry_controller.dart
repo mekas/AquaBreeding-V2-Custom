@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:async';
 import 'package:fish/service/weekly_water_service.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +49,6 @@ class WeeklyWaterEntryController extends GetxController {
             ? 0.toString()
             : hardnessController.value.text,
         week: getWeek().toString());
-    print(value);
     doInPost();
   }
   // @override

@@ -18,8 +18,6 @@ class PondService {
 
     var response = await http.get(url, headers: headers);
 
-    print(response.body);
-
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       List<Pond> ponds = [];
@@ -27,8 +25,6 @@ class PondService {
       for (var item in data) {
         ponds.add(Pond.fromJson(item));
       }
-
-      print(ponds);
 
       return ponds;
     } else {
@@ -42,10 +38,7 @@ class PondService {
 
     var response = await http.get(url, headers: headers);
 
-    print(response.body);
-
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
       // Pond pond = Pond.fromJson(data);
       // print(pond);
 
@@ -89,10 +82,8 @@ class PondService {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
       return true;
     } else {
-      print(response.body);
       return false;
     }
   }

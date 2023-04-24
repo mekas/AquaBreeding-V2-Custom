@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:fish/models/fishGrading_model.dart';
+import 'package:fish/models/fish_grading_model.dart';
 import 'package:fish/models/grading_chart_model.dart';
 import 'package:fish/service/url_api.dart';
 import 'package:http/http.dart' as http;
@@ -12,12 +12,9 @@ class FishGradingService {
 
     var response = await http.get(url, headers: headers);
 
-    print(response.body);
-
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       List<FishGrading> fishgradings = FishGrading.fromJsonList(data);
-      print("success add fishgradings");
       return fishgradings;
     } else {
       throw Exception('Gagal Get fishgradings!');
@@ -31,12 +28,9 @@ class FishGradingService {
 
     var response = await http.get(url, headers: headers);
 
-    print(response.body);
-
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       List<GradingChartData> fishgradings = GradingChartData.fromJsonList(data);
-      print("success add fishgradings");
       return fishgradings;
     } else {
       throw Exception('Gagal Get fishgradings!');
@@ -53,16 +47,6 @@ class FishGradingService {
     required String? amountOver,
     required String? amountUnder,
   }) async {
-    print({
-      "pond_id": pondId.toString(),
-      "fish_type": fishType,
-      "sampling_amount": samplingAmount,
-      "avg_fish_weight": avgFishWeight,
-      "avg_fish_long": avgFishLong,
-      "amount_normal_fish": amountNormal,
-      "amount_oversize_fish": amountOver,
-      "amount_undersize_fish": amountUnder,
-    });
     final response = await http.post(
       Uri.parse(Urls.fishGradings),
       headers: {
@@ -82,10 +66,8 @@ class FishGradingService {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
       return true;
     } else {
-      print(response.body);
       return false;
     }
   }

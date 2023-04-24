@@ -1,4 +1,4 @@
-import 'package:fish/models/fishDeath_model.dart';
+import 'package:fish/models/fish_death_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 
@@ -19,7 +19,7 @@ class DeathCard extends StatelessWidget {
         margin: EdgeInsets.only(
           top: defaultMargin,
         ),
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: primaryColor),

@@ -20,7 +20,7 @@ class WeeklyWaterCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => WeeklyWaterDetailPage(), arguments: {
+        Get.to(() => const WeeklyWaterDetailPage(), arguments: {
           "weeklywater": weeklyWaterList,
           "activation": activation,
           "pond": pond,
@@ -31,7 +31,7 @@ class WeeklyWaterCard extends StatelessWidget {
         margin: EdgeInsets.only(
           top: defaultMargin,
         ),
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: primaryColor),
@@ -104,7 +104,7 @@ class WeeklyWaterCard extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
+                    SizedBox(
                       height: 40,
                       width: 80,
                       // margin: EdgeInsets.only(

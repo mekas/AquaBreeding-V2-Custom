@@ -1,6 +1,7 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:fish/models/fish_harvested.dart';
 import 'package:intl/intl.dart';
-import 'package:fish/models/fish_model.dart';
 
 class FishTransfer {
   String? id;
@@ -30,7 +31,6 @@ class FishTransfer {
   });
 
   factory FishTransfer.fromJson(Map<String, dynamic> json) {
-    print(json);
     return FishTransfer(
       id: json['_id'],
       origin_pond_id: json['origin_pond_id'],

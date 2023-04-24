@@ -1,11 +1,7 @@
-import 'dart:developer';
-
-import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/component/activation_card.dart';
 import 'package:fish/pages/pond/activation_breed_controller.dart';
 import 'package:fish/pages/pond/activation_breed_page.dart';
 import 'package:fish/pages/pond/pond_controller.dart';
-import 'package:fish/pages/pond/add_pond_page.dart';
 import 'package:fish/pages/pond/deactivation_breed_page.dart';
 import 'package:fish/pages/pond/detail_pond_controller.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +52,7 @@ class _DetailPondPageState extends State<DetailPondPage> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Text(
@@ -136,7 +132,7 @@ class _DetailPondPageState extends State<DetailPondPage> {
             top: defaultSpace, right: defaultMargin, left: defaultMargin),
         child: TextButton(
           onPressed: () {
-            Get.to(() => DeactivationBreedPage(),
+            Get.to(() => const DeactivationBreedPage(),
                 arguments: {"pond": detailController.pond});
           },
           style: TextButton.styleFrom(
@@ -185,7 +181,7 @@ class _DetailPondPageState extends State<DetailPondPage> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -229,7 +225,7 @@ class _DetailPondPageState extends State<DetailPondPage> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -296,14 +292,14 @@ class _DetailPondPageState extends State<DetailPondPage> {
           margin: EdgeInsets.only(right: defaultMargin, left: defaultMargin),
           child: Center(
             child: Column(children: [
-              SizedBox(height: 35),
-              Image(
+              const SizedBox(height: 35),
+              const Image(
                 image: AssetImage("assets/unavailable_icon.png"),
                 width: 100,
                 height: 100,
                 fit: BoxFit.fitWidth,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
                 "Kolam belum pernah\nmemulai musim budidaya",
                 style: primaryTextStyle.copyWith(
@@ -314,7 +310,7 @@ class _DetailPondPageState extends State<DetailPondPage> {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text(
                 "Silahkan memulai musim budidaya!",
                 style: secondaryTextStyle.copyWith(
@@ -349,7 +345,7 @@ class _DetailPondPageState extends State<DetailPondPage> {
                   detailController.activations.isEmpty
                       ? emptyListActivation()
                       : listActivation(),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   )
                 ],

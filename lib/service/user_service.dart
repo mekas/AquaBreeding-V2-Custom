@@ -1,10 +1,7 @@
 import 'dart:convert';
 import 'package:fish/models/farm_model.dart';
-import 'package:fish/models/pond_model.dart';
 import 'package:fish/service/url_api.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class UserService {
   Future<List<Farm>> getFarm() async {
@@ -15,8 +12,6 @@ class UserService {
 
     var response = await http.get(url, headers: headers);
 
-    print(response.body);
-
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       List<Farm> farm = [];
@@ -24,8 +19,6 @@ class UserService {
       for (var item in data) {
         farm.add(Farm.fromJson(item));
       }
-
-      print(farm);
 
       return farm;
     } else {
@@ -63,10 +56,8 @@ class UserService {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
       return true;
     } else {
-      print(response.body);
       return false;
     }
   }

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 import 'package:fish/models/treatment_model.dart';
 import 'package:fish/service/url_api.dart';
@@ -9,8 +11,6 @@ class TreatmentService {
     var headers = {'Content-Type': 'application/json'};
 
     var response = await http.get(url, headers: headers);
-
-    print(response.body);
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -37,16 +37,6 @@ class TreatmentService {
     String? carbohydrate,
     String? carbohydrate_type,
   }) async {
-    print({
-      "pond_id": pondId.toString(),
-      "salt": salt,
-      "treatment_type": type,
-      "probiotic_culture": probiotic,
-      "water_change": water,
-      "description": desc,
-      "carbohydrate": carbohydrate,
-      "carbohydrate_type": carbohydrate_type,
-    });
     final response = await http.post(
       Uri.parse(Urls.treatment),
       headers: {
@@ -66,10 +56,8 @@ class TreatmentService {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
       return true;
     } else {
-      print(response.body);
       return false;
     }
   }
@@ -82,11 +70,6 @@ class TreatmentService {
       required num? total_weight_harvested,
       List? fish_harvested,
       bool? isFinish}) async {
-    print({
-      "pond_id": pondId.toString(),
-      "treatment_type": type,
-      "description": desc,
-    });
     final response = await http.post(
       Uri.parse(Urls.treatment),
       headers: {
@@ -104,10 +87,8 @@ class TreatmentService {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
       return true;
     } else {
-      print(response.body);
       return false;
     }
   }

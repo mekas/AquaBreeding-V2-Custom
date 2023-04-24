@@ -8,8 +8,6 @@ import 'package:fish/models/activation_model.dart';
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/pond/detail_pond_controller.dart';
 
-import 'package:get/get_connect/http/src/utils/utils.dart';
-
 class MyTabs extends GetxController with GetSingleTickerProviderStateMixin {
   var isLoading = false.obs;
 
@@ -17,27 +15,25 @@ class MyTabs extends GetxController with GetSingleTickerProviderStateMixin {
   Activation activation = Get.arguments()["activation"];
   Pond pond = Get.arguments()["pond"];
   final List<Tab> myTabs = <Tab>[
-    Tab(
+    const Tab(
       text: 'Rekap Data',
     ),
-    Tab(
+    const Tab(
       text: 'Treatment',
     ),
-    Tab(
+    const Tab(
       text: 'Riwayat Sortir',
     )
   ];
 
   @override
   void onInit() {
-    // TODO: implement onInit
     controller = TabController(length: 3, vsync: this);
     super.onInit();
   }
 
   @override
   void onClose() {
-    // TODO: implement onClose
     controller.dispose();
     super.onClose();
   }
@@ -49,18 +45,18 @@ class MyTabScreen extends StatelessWidget {
       Get.put(DetailPondController());
   @override
   Widget build(BuildContext context) {
-    final MyTabs _tabs = Get.put(MyTabs());
+    final MyTabs tabs = Get.put(MyTabs());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: backgroundColor2,
         title: const Text('Detail Musim Budidaya'),
         bottom: TabBar(
           indicatorColor: Colors.white,
-          tabs: _tabs.myTabs,
-          controller: _tabs.controller,
+          tabs: tabs.myTabs,
+          controller: tabs.controller,
         ),
-        leading: new IconButton(
-          icon: new Icon(Icons.arrow_back),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
           onPressed: () async {
             // Get.back();
 
@@ -71,8 +67,12 @@ class MyTabScreen extends StatelessWidget {
         ),
       ),
       body: TabBarView(
-        controller: _tabs.controller,
-        children: [DetailBreedPage(), TreatmentpPage(), FishTransferListPage()],
+        controller: tabs.controller,
+        children: const [
+          DetailBreedPage(),
+          TreatmentpPage(),
+          FishTransferListPage()
+        ],
       ),
     );
   }

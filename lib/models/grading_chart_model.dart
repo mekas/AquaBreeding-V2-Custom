@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:intl/intl.dart';
 
 class GradingChartData {
@@ -12,7 +14,7 @@ class GradingChartData {
   });
 
   factory GradingChartData.fromJson(Map<String, dynamic> json) {
-    print(json);
+    // print(json);
     return GradingChartData(
       avg_weight: json["avg_fish_weight"],
       fish_type: json["fish_type"],

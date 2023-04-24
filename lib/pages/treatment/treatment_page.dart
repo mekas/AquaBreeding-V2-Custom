@@ -1,4 +1,3 @@
-import 'package:fish/models/fishDeath_model.dart';
 import 'package:fish/pages/component/treatment_card.dart';
 import 'package:fish/pages/treatment/treatment_controller.dart';
 import 'package:fish/pages/treatment/treatment_entry_page.dart';
@@ -7,7 +6,7 @@ import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
 class TreatmentpPage extends StatefulWidget {
-  TreatmentpPage({Key? key}) : super(key: key);
+  const TreatmentpPage({Key? key}) : super(key: key);
 
   @override
   State<TreatmentpPage> createState() => _TreatmentPageState();
@@ -48,7 +47,7 @@ class _TreatmentPageState extends State<TreatmentpPage> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
               ],
@@ -80,14 +79,14 @@ class _TreatmentPageState extends State<TreatmentpPage> {
           margin: EdgeInsets.only(right: defaultMargin, left: defaultMargin),
           child: Center(
             child: Column(children: [
-              SizedBox(height: 35),
-              Image(
+              const SizedBox(height: 35),
+              const Image(
                 image: AssetImage("assets/unavailable_icon.png"),
                 width: 100,
                 height: 100,
                 fit: BoxFit.fitWidth,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
                 "Kolam belum pernah dilakukan treatment",
                 style: primaryTextStyle.copyWith(
@@ -98,7 +97,7 @@ class _TreatmentPageState extends State<TreatmentpPage> {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text(
                 "Silahkan masukan treatment",
                 style: secondaryTextStyle.copyWith(
@@ -118,7 +117,7 @@ class _TreatmentPageState extends State<TreatmentpPage> {
         return Scaffold(
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              Get.to(() => TreatmentEntryPage(), arguments: {
+              Get.to(() => const TreatmentEntryPage(), arguments: {
                 "pond": controller.pond,
                 "activation": controller.activation
               });
@@ -133,7 +132,7 @@ class _TreatmentPageState extends State<TreatmentpPage> {
               controller.listTreatmentTest.isEmpty
                   ? emptyListTreatment()
                   : listTreatment(),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               )
             ],

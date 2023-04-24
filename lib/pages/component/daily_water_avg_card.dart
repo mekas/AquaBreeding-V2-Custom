@@ -1,15 +1,5 @@
-import 'package:fish/models/daily_water_model.dart';
-import 'package:fish/models/pond_model.dart';
-import 'package:fish/pages/treatment/treatment_controller.dart';
-import 'package:fish/pages/dailywater/daily_water_detail_page.dart';
-
-import 'package:fish/controllers/daily_water/daily_water_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
-import 'package:get/get.dart';
-import 'package:fish/models/treatment_model.dart';
-
-import '../../models/activation_model.dart';
 
 class DailyWaterCardAvg extends StatelessWidget {
   final Map<String, dynamic> sol;
@@ -29,7 +19,7 @@ class DailyWaterCardAvg extends StatelessWidget {
         padding: EdgeInsets.all(defaultSpace),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: Color(0xffECEDEF),
+          color: const Color(0xffECEDEF),
         ),
         child: Column(
           children: [
@@ -47,9 +37,9 @@ class DailyWaterCardAvg extends StatelessWidget {
                 ),
               ],
             ),
-            Divider(color: Colors.black),
+            const Divider(color: Colors.black),
             Container(
-              margin: EdgeInsets.only(top: 5),
+              margin: const EdgeInsets.only(top: 5),
               child: Row(
                 children: [
                   Text(
@@ -61,7 +51,7 @@ class DailyWaterCardAvg extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Text(
@@ -77,7 +67,7 @@ class DailyWaterCardAvg extends StatelessWidget {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 5),
+              margin: const EdgeInsets.only(top: 5),
               child: Row(
                 children: [
                   Text(
@@ -89,7 +79,7 @@ class DailyWaterCardAvg extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Text(
@@ -105,7 +95,7 @@ class DailyWaterCardAvg extends StatelessWidget {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 5),
+              margin: const EdgeInsets.only(top: 5),
               child: Row(
                 children: [
                   Text(
@@ -117,7 +107,7 @@ class DailyWaterCardAvg extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Text(

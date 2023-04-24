@@ -78,7 +78,7 @@ class DetailBreedPage extends StatelessWidget {
             top: defaultSpace, right: defaultMargin, left: defaultMargin),
         child: TextButton(
           onPressed: () {
-            Get.to(() => DetailFeedPage(), arguments: {
+            Get.to(() => const DetailFeedPage(), arguments: {
               "pond": controller.pond,
               "activation": controller.activation,
             });
@@ -108,7 +108,7 @@ class DetailBreedPage extends StatelessWidget {
             top: defaultSpace, right: defaultMargin, left: defaultMargin),
         child: TextButton(
           onPressed: () {
-            Get.to(() => GradingPage(), arguments: {
+            Get.to(() => const GradingPage(), arguments: {
               "pond": controller.pond,
               "activation": controller.activation,
             });
@@ -138,7 +138,7 @@ class DetailBreedPage extends StatelessWidget {
             top: defaultSpace, right: defaultMargin, left: defaultMargin),
         child: TextButton(
           onPressed: () {
-            Get.to(() => FishRecapPage(), arguments: {
+            Get.to(() => const FishRecapPage(), arguments: {
               "pond": controller.pond,
               "activation": controller.activation,
             });
@@ -177,12 +177,12 @@ class DetailBreedPage extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Container(
               width: double.infinity,
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(color: primaryColor),
@@ -274,7 +274,7 @@ class DetailBreedPage extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             Text(
@@ -301,7 +301,7 @@ class DetailBreedPage extends StatelessWidget {
                       )
                       .toList(),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
           ],
@@ -343,12 +343,12 @@ class DetailBreedPage extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Container(
               width: double.infinity,
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: primaryColor),
@@ -433,7 +433,7 @@ class DetailBreedPage extends StatelessWidget {
               gradingButton(),
               deathButton(),
               // listMonthFeed(),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               )
             ],

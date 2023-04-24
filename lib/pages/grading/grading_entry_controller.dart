@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/grading/fish_type_controller.dart';
 import 'package:fish/service/fish_grading_service.dart';
@@ -91,6 +93,6 @@ class GradingEntryController extends GetxController {
       amountOver: oversizeController.value.text,
       amountUnder: undersizeController.value.text,
     );
-    print(value);
+    // print(value);
   }
 }

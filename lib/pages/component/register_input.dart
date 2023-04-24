@@ -1,10 +1,9 @@
-import 'package:fish/models/fish_model.dart';
-import 'package:fish/pages/authentication/login_page.dart';
+// ignore_for_file: unrelated_type_equality_checks
+
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import '../../controllers/authentication/register_controller.dart';
 
 class RegisterInputCard extends StatelessWidget {
@@ -25,12 +24,12 @@ class RegisterInputCard extends StatelessWidget {
           BoxShadow(
             color: backgroundColor3,
             blurRadius: 4,
-            offset: Offset(2, 8), // Shadow position
+            offset: const Offset(2, 8), // Shadow position
           ),
         ],
       ),
       width: double.infinity,
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -47,17 +46,17 @@ class RegisterInputCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 6,
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Container(
             height: 42,
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: 16,
             ),
             decoration: BoxDecoration(
@@ -76,11 +75,11 @@ class RegisterInputCard extends StatelessWidget {
                 controller: controller.nikController,
                 decoration: controller.validatenik.value == true
                     ? controller.nik == ''
-                        ? InputDecoration(
+                        ? const InputDecoration(
                             errorText: 'NIK tidak boleh kosong',
                             isCollapsed: true)
                         : controller.nikController.text.length < 16
-                            ? InputDecoration(
+                            ? const InputDecoration(
                                 errorText: 'NIK kurang dari 16 karakter',
                                 isCollapsed: true)
                             : null
@@ -101,17 +100,17 @@ class RegisterInputCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 6,
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Container(
             height: 42,
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: 16,
             ),
             decoration: BoxDecoration(
@@ -126,11 +125,11 @@ class RegisterInputCard extends StatelessWidget {
                 controller: controller.usernameController,
                 decoration: controller.validateusername.value == true
                     ? controller.username == ''
-                        ? InputDecoration(
+                        ? const InputDecoration(
                             errorText: 'username tidak boleh kosong',
                             isCollapsed: true)
                         : controller.usernameController.text.length < 8
-                            ? InputDecoration(
+                            ? const InputDecoration(
                                 errorText: 'username kurang dari 8 karakter',
                                 isCollapsed: true)
                             : null
@@ -138,7 +137,7 @@ class RegisterInputCard extends StatelessWidget {
               );
             })),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -154,17 +153,17 @@ class RegisterInputCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 6,
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Container(
             height: 42,
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: 16,
             ),
             decoration: BoxDecoration(
@@ -230,7 +229,7 @@ class RegisterInputCard extends StatelessWidget {
               );
             })),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -246,17 +245,17 @@ class RegisterInputCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 6,
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Container(
             height: 42,
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: 16,
             ),
             decoration: BoxDecoration(
@@ -271,7 +270,7 @@ class RegisterInputCard extends StatelessWidget {
                 controller: controller.nameController,
                 decoration: controller.validatename.value == true
                     ? controller.name == ''
-                        ? InputDecoration(
+                        ? const InputDecoration(
                             errorText: 'Nama tidak boleh kosong',
                             isCollapsed: true)
                         : null
@@ -279,7 +278,7 @@ class RegisterInputCard extends StatelessWidget {
               );
             })),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -295,17 +294,17 @@ class RegisterInputCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 6,
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Container(
             height: 42,
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: 16,
             ),
             decoration: BoxDecoration(
@@ -324,7 +323,7 @@ class RegisterInputCard extends StatelessWidget {
                 controller: controller.phoneController,
                 decoration: controller.validatephone.value == true
                     ? controller.phone == ''
-                        ? InputDecoration(
+                        ? const InputDecoration(
                             errorText: 'Phone tidak boleh kosong',
                             isCollapsed: true)
                         : null
@@ -332,7 +331,7 @@ class RegisterInputCard extends StatelessWidget {
               );
             })),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Container(
@@ -370,7 +369,7 @@ class RegisterInputCard extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 6,
           ),
         ],

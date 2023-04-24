@@ -1,7 +1,4 @@
-import 'package:fish/pages/component/daily_water_avg_card.dart';
-import 'package:fish/pages/component/daily_water_card.dart';
 import 'package:fish/controllers/weeklywater/weekly_water_avg_controller.dart';
-import 'package:fish/pages/dailywater/daily_water_entry_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
@@ -9,7 +6,7 @@ import 'package:get/get.dart';
 import '../component/weekly_water_avg_card.dart';
 
 class WeeklyWaterAvgPage extends StatefulWidget {
-  WeeklyWaterAvgPage({Key? key}) : super(key: key);
+  const WeeklyWaterAvgPage({Key? key}) : super(key: key);
 
   @override
   State<WeeklyWaterAvgPage> createState() => _WeeklyWaterAvgPageState();
@@ -51,7 +48,7 @@ class _WeeklyWaterAvgPageState extends State<WeeklyWaterAvgPage> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
               ],
@@ -83,14 +80,14 @@ class _WeeklyWaterAvgPageState extends State<WeeklyWaterAvgPage> {
           margin: EdgeInsets.only(right: defaultMargin, left: defaultMargin),
           child: Center(
             child: Column(children: [
-              SizedBox(height: 35),
-              Image(
+              const SizedBox(height: 35),
+              const Image(
                 image: AssetImage("assets/unavailable_icon.png"),
                 width: 100,
                 height: 100,
                 fit: BoxFit.fitWidth,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
                 "Kolam belum pernah dilakukan treatment",
                 style: primaryTextStyle.copyWith(
@@ -101,7 +98,7 @@ class _WeeklyWaterAvgPageState extends State<WeeklyWaterAvgPage> {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text(
                 "Silahkan masukan treatment",
                 style: secondaryTextStyle.copyWith(
@@ -130,7 +127,7 @@ class _WeeklyWaterAvgPageState extends State<WeeklyWaterAvgPage> {
               controller.listWeeklyWater.isEmpty
                   ? emptyList()
                   : listDailyWater(),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               )
             ],

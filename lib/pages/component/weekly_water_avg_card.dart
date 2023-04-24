@@ -19,7 +19,7 @@ class WeeklyWaterCardAvg extends StatelessWidget {
         padding: EdgeInsets.all(defaultSpace),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: Color(0xffECEDEF),
+          color: const Color(0xffECEDEF),
         ),
         child: Column(
           children: [
@@ -37,9 +37,9 @@ class WeeklyWaterCardAvg extends StatelessWidget {
                 ),
               ],
             ),
-            Divider(color: Colors.black),
+            const Divider(color: Colors.black),
             Container(
-              margin: EdgeInsets.only(top: 5),
+              margin: const EdgeInsets.only(top: 5),
               child: Row(
                 children: [
                   Text(
@@ -51,7 +51,7 @@ class WeeklyWaterCardAvg extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Text(
@@ -67,7 +67,7 @@ class WeeklyWaterCardAvg extends StatelessWidget {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 5),
+              margin: const EdgeInsets.only(top: 5),
               child: Row(
                 children: [
                   Text(
@@ -79,7 +79,7 @@ class WeeklyWaterCardAvg extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Text(
@@ -95,7 +95,7 @@ class WeeklyWaterCardAvg extends StatelessWidget {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 5),
+              margin: const EdgeInsets.only(top: 5),
               child: Row(
                 children: [
                   Text(
@@ -107,7 +107,7 @@ class WeeklyWaterCardAvg extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Text(
@@ -123,7 +123,7 @@ class WeeklyWaterCardAvg extends StatelessWidget {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 5),
+              margin: const EdgeInsets.only(top: 5),
               child: Row(
                 children: [
                   Text(
@@ -135,7 +135,7 @@ class WeeklyWaterCardAvg extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Text(
@@ -151,7 +151,7 @@ class WeeklyWaterCardAvg extends StatelessWidget {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 5),
+              margin: const EdgeInsets.only(top: 5),
               child: Row(
                 children: [
                   Text(
@@ -163,7 +163,7 @@ class WeeklyWaterCardAvg extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Text(

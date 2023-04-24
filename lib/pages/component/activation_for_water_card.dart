@@ -1,7 +1,6 @@
 import 'package:fish/models/activation_model.dart';
 import 'package:fish/models/pond_model.dart';
 import 'package:flutter/material.dart';
-import 'package:fish/pages/dailywater/daily_water_list_page.dart';
 import 'tabviewwater.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
@@ -17,7 +16,7 @@ class ActivationForWaterCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => MyWaterTabScreen(),
+        Get.to(() => const MyWaterTabScreen(),
             arguments: {"activation": activation, "pond": pond});
       },
       child: Container(

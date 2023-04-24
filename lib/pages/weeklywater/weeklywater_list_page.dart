@@ -1,4 +1,3 @@
-import 'package:fish/pages/component/daily_water_card.dart';
 import 'package:fish/controllers/weeklywater/weekly_water_controller.dart';
 import 'package:fish/pages/component/weekly_water_card.dart';
 import 'package:fish/pages/weeklywater/weeklywater_avg.dart';
@@ -9,7 +8,7 @@ import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
 class WeeklyWaterPage extends StatefulWidget {
-  WeeklyWaterPage({Key? key}) : super(key: key);
+  const WeeklyWaterPage({Key? key}) : super(key: key);
 
   @override
   State<WeeklyWaterPage> createState() => _WeeklyWaterPageState();
@@ -49,7 +48,7 @@ class _WeeklyWaterPageState extends State<WeeklyWaterPage> {
             ),
             TextButton(
               onPressed: () {
-                Get.to(() => WeeklyWaterAvgPage(), arguments: {
+                Get.to(() => const WeeklyWaterAvgPage(), arguments: {
                   "pond": controller.pond,
                   "activation": controller.activation
                 });
@@ -95,14 +94,14 @@ class _WeeklyWaterPageState extends State<WeeklyWaterPage> {
           margin: EdgeInsets.only(right: defaultMargin, left: defaultMargin),
           child: Center(
             child: Column(children: [
-              SizedBox(height: 35),
-              Image(
+              const SizedBox(height: 35),
+              const Image(
                 image: AssetImage("assets/unavailable_icon.png"),
                 width: 100,
                 height: 100,
                 fit: BoxFit.fitWidth,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
                 "Kolam belum pernah dilakukan treatment",
                 style: primaryTextStyle.copyWith(
@@ -113,7 +112,7 @@ class _WeeklyWaterPageState extends State<WeeklyWaterPage> {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text(
                 "Silahkan masukan treatment",
                 style: secondaryTextStyle.copyWith(
@@ -148,7 +147,7 @@ class _WeeklyWaterPageState extends State<WeeklyWaterPage> {
               controller.listWeeklyWater.isEmpty
                   ? emptyList()
                   : listWeeklyWater(),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               )
             ],

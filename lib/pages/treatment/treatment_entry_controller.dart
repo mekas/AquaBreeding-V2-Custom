@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -63,7 +65,7 @@ class TreatmentEntryController extends GetxController {
         carbohydrate_type: carbonTypeController.selected.value == "tidak ada"
             ? carbonTypeNullController.value.text
             : carbonTypeController.selected.value);
-    print(value);
+    // print(value);
     doInPost();
   }
 
@@ -171,7 +173,7 @@ class TreatmentEntryController extends GetxController {
         total_weight_harvested: getWeight(),
         isFinish: true,
         fish_harvested: buildJsonFish());
-    print(value);
+    // print(value);
     doInPost();
   }
 }

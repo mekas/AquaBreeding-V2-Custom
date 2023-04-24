@@ -15,37 +15,36 @@ class DetailFeedPage extends StatelessWidget {
     final FeedController controller = Get.put(FeedController());
 
     Widget chartFeed() {
-      return Container(
-        child: SfCartesianChart(
-          enableAxisAnimation: true,
-          tooltipBehavior: TooltipBehavior(enable: true),
-          zoomPanBehavior: ZoomPanBehavior(
-            enablePanning: true,
-          ),
-          title: ChartTitle(
-              text: 'Total Pakan', textStyle: TextStyle(color: Colors.white)),
-          legend: Legend(
-              isVisible: true,
-              position: LegendPosition.bottom,
-              textStyle: TextStyle(color: Colors.white)),
-          primaryXAxis: CategoryAxis(
-              labelStyle: TextStyle(color: Colors.white),
-              autoScrollingDelta: 4),
-          primaryYAxis: NumericAxis(
-              labelFormat: '{value}Kg',
-              // maximum: 100,
-              // minimum: 0,
-              labelStyle: TextStyle(color: Colors.white)),
-          series: <ChartSeries>[
-            LineSeries<FeedChartData, dynamic>(
-                enableTooltip: true,
-                color: Colors.blueAccent,
-                dataSource: controller.charData,
-                xValueMapper: (FeedChartData feed, _) => feed.getDate(),
-                yValueMapper: (FeedChartData feed, _) => feed.amount,
-                name: 'Jumlah Pakan')
-          ],
+      return SfCartesianChart(
+        enableAxisAnimation: true,
+        tooltipBehavior: TooltipBehavior(enable: true),
+        zoomPanBehavior: ZoomPanBehavior(
+          enablePanning: true,
         ),
+        title: ChartTitle(
+            text: 'Total Pakan',
+            textStyle: const TextStyle(color: Colors.white)),
+        legend: Legend(
+            isVisible: true,
+            position: LegendPosition.bottom,
+            textStyle: const TextStyle(color: Colors.white)),
+        primaryXAxis: CategoryAxis(
+            labelStyle: const TextStyle(color: Colors.white),
+            autoScrollingDelta: 4),
+        primaryYAxis: NumericAxis(
+            labelFormat: '{value}Kg',
+            // maximum: 100,
+            // minimum: 0,
+            labelStyle: const TextStyle(color: Colors.white)),
+        series: <ChartSeries>[
+          LineSeries<FeedChartData, dynamic>(
+              enableTooltip: true,
+              color: Colors.blueAccent,
+              dataSource: controller.charData,
+              xValueMapper: (FeedChartData feed, _) => feed.getDate(),
+              yValueMapper: (FeedChartData feed, _) => feed.amount,
+              name: 'Jumlah Pakan')
+        ],
       );
     }
 
@@ -69,7 +68,7 @@ class DetailFeedPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
               ],
@@ -87,7 +86,7 @@ class DetailFeedPage extends StatelessWidget {
             top: defaultSpace, right: defaultMargin, left: defaultMargin),
         child: TextButton(
           onPressed: () {
-            Get.to(() => FeedEntryPage(), arguments: {
+            Get.to(() => const FeedEntryPage(), arguments: {
               "pond": controller.pond,
               "activation": controller.activation
             });
@@ -109,130 +108,130 @@ class DetailFeedPage extends StatelessWidget {
       );
     }
 
-    Widget detail() {
-      return Container(
-        width: double.infinity,
-        margin: EdgeInsets.only(
-            top: defaultSpace, right: defaultMargin, left: defaultMargin),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Lokasi Kolam",
-                  style: primaryTextStyle.copyWith(
-                    fontSize: 14,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-                Text(
-                  "Blok A",
-                  style: secondaryTextStyle.copyWith(
-                    fontSize: 13,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-                Text(
-                  " ",
-                  style: secondaryTextStyle.copyWith(
-                    fontSize: 13,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  "Total Pemberian Pakan",
-                  style: primaryTextStyle.copyWith(
-                    fontSize: 14,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-                Text(
-                  "30 Kali",
-                  style: secondaryTextStyle.copyWith(
-                    fontSize: 13,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Jumlah Ikan",
-                  style: primaryTextStyle.copyWith(
-                    fontSize: 14,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-                Text(
-                  "Lele: 100 Ekor",
-                  style: secondaryTextStyle.copyWith(
-                    fontSize: 13,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-                Text(
-                  "Nila Merah: 100 Ekor",
-                  style: secondaryTextStyle.copyWith(
-                    fontSize: 13,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  "Total Pakan",
-                  style: primaryTextStyle.copyWith(
-                    fontSize: 14,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-                Text(
-                  "30 Kg",
-                  style: secondaryTextStyle.copyWith(
-                    fontSize: 13,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    }
+    // Widget detail() {
+    //   return Container(
+    //     width: double.infinity,
+    //     margin: EdgeInsets.only(
+    //         top: defaultSpace, right: defaultMargin, left: defaultMargin),
+    //     child: Row(
+    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //       children: [
+    //         Column(
+    //           crossAxisAlignment: CrossAxisAlignment.start,
+    //           children: [
+    //             Text(
+    //               "Lokasi Kolam",
+    //               style: primaryTextStyle.copyWith(
+    //                 fontSize: 14,
+    //                 fontWeight: medium,
+    //               ),
+    //               overflow: TextOverflow.ellipsis,
+    //               maxLines: 1,
+    //             ),
+    //             Text(
+    //               "Blok A",
+    //               style: secondaryTextStyle.copyWith(
+    //                 fontSize: 13,
+    //                 fontWeight: medium,
+    //               ),
+    //               overflow: TextOverflow.ellipsis,
+    //               maxLines: 1,
+    //             ),
+    //             Text(
+    //               " ",
+    //               style: secondaryTextStyle.copyWith(
+    //                 fontSize: 13,
+    //                 fontWeight: medium,
+    //               ),
+    //               overflow: TextOverflow.ellipsis,
+    //               maxLines: 1,
+    //             ),
+    //             const SizedBox(
+    //               height: 20,
+    //             ),
+    //             Text(
+    //               "Total Pemberian Pakan",
+    //               style: primaryTextStyle.copyWith(
+    //                 fontSize: 14,
+    //                 fontWeight: medium,
+    //               ),
+    //               overflow: TextOverflow.ellipsis,
+    //               maxLines: 1,
+    //             ),
+    //             Text(
+    //               "30 Kali",
+    //               style: secondaryTextStyle.copyWith(
+    //                 fontSize: 13,
+    //                 fontWeight: medium,
+    //               ),
+    //               overflow: TextOverflow.ellipsis,
+    //               maxLines: 1,
+    //             ),
+    //             const SizedBox(
+    //               height: 20,
+    //             ),
+    //           ],
+    //         ),
+    //         Column(
+    //           crossAxisAlignment: CrossAxisAlignment.start,
+    //           children: [
+    //             Text(
+    //               "Jumlah Ikan",
+    //               style: primaryTextStyle.copyWith(
+    //                 fontSize: 14,
+    //                 fontWeight: medium,
+    //               ),
+    //               overflow: TextOverflow.ellipsis,
+    //               maxLines: 1,
+    //             ),
+    //             Text(
+    //               "Lele: 100 Ekor",
+    //               style: secondaryTextStyle.copyWith(
+    //                 fontSize: 13,
+    //                 fontWeight: medium,
+    //               ),
+    //               overflow: TextOverflow.ellipsis,
+    //               maxLines: 1,
+    //             ),
+    //             Text(
+    //               "Nila Merah: 100 Ekor",
+    //               style: secondaryTextStyle.copyWith(
+    //                 fontSize: 13,
+    //                 fontWeight: medium,
+    //               ),
+    //               overflow: TextOverflow.ellipsis,
+    //               maxLines: 1,
+    //             ),
+    //             const SizedBox(
+    //               height: 20,
+    //             ),
+    //             Text(
+    //               "Total Pakan",
+    //               style: primaryTextStyle.copyWith(
+    //                 fontSize: 14,
+    //                 fontWeight: medium,
+    //               ),
+    //               overflow: TextOverflow.ellipsis,
+    //               maxLines: 1,
+    //             ),
+    //             Text(
+    //               "30 Kg",
+    //               style: secondaryTextStyle.copyWith(
+    //                 fontSize: 13,
+    //                 fontWeight: medium,
+    //               ),
+    //               overflow: TextOverflow.ellipsis,
+    //               maxLines: 1,
+    //             ),
+    //             const SizedBox(
+    //               height: 20,
+    //             ),
+    //           ],
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
 
     Widget recapTitle() {
       return Container(
@@ -294,7 +293,7 @@ class DetailFeedPage extends StatelessWidget {
               recapTitle(),
               // chartRecap(),
               listMonthFeed(),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               )
             ],

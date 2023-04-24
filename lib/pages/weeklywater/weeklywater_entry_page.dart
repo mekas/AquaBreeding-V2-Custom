@@ -2,7 +2,6 @@ import 'package:fish/controllers/weeklywater/weekly_water_entry_controller.dart'
 import 'package:fish/controllers/weeklywater/weekly_water_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class WeeklyWaterEntryPage extends StatelessWidget {
@@ -30,12 +29,12 @@ class WeeklyWaterEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -73,12 +72,12 @@ class WeeklyWaterEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -116,12 +115,12 @@ class WeeklyWaterEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -159,12 +158,12 @@ class WeeklyWaterEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -202,12 +201,12 @@ class WeeklyWaterEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -305,7 +304,7 @@ class WeeklyWaterEntryPage extends StatelessWidget {
               nitrateInput(),
               hardnessInput(),
               submitButton(),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               )
             ],

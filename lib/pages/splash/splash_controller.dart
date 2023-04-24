@@ -23,15 +23,15 @@ class SplashController extends GetxController {
     Timer(const Duration(seconds: 2), () {
       if (token != 'null') {
         bool hasExpired = JwtDecoder.isExpired(token);
-        print(hasExpired);
+        // print(hasExpired);
         if (hasExpired != true) {
-          Get.off(DashboardPage());
+          Get.off(const DashboardPage());
         } else {
           prefs.clear();
-          Get.off(LoginPage());
+          Get.off(const LoginPage());
         }
       } else {
-        Get.off(LoginPage());
+        Get.off(const LoginPage());
       }
     });
   }

@@ -1,5 +1,7 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:fish/models/activation_model.dart';
-import 'package:fish/models/fishGrading_model.dart';
+import 'package:fish/models/fish_grading_model.dart';
 import 'package:fish/models/grading_chart_model.dart';
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/service/fish_grading_service.dart';
@@ -61,8 +63,8 @@ class GradingController extends GetxController {
         charNilaHitamData.add(i);
       }
     }
-    print("penanda");
-    print(charLeleData);
+    // print("penanda");
+    // print(charLeleData);
     isLoading.value = false;
   }
 

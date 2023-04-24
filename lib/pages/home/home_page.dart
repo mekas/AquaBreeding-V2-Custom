@@ -1,4 +1,3 @@
-import 'package:fish/pages/component/fish_card.dart';
 import 'package:fish/pages/component/statistic_card.dart';
 import 'package:fish/pages/component/water_card.dart';
 import 'package:fish/controllers/home/home_controller.dart';
@@ -75,7 +74,7 @@ class HomePage extends StatelessWidget {
                       )),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Row(
@@ -98,7 +97,7 @@ class HomePage extends StatelessWidget {
                       )),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Row(
@@ -125,65 +124,65 @@ class HomePage extends StatelessWidget {
           ));
     }
 
-    Widget fishTitle() {
-      return Container(
-        margin: EdgeInsets.only(
-          top: defaultSpace,
-          left: defaultMargin,
-          right: defaultMargin,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Total Berat Ikan',
-              style: primaryTextStyle.copyWith(
-                fontSize: 24,
-                fontWeight: semiBold,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+    // Widget fishTitle() {
+    //   return Container(
+    //     margin: EdgeInsets.only(
+    //       top: defaultSpace,
+    //       left: defaultMargin,
+    //       right: defaultMargin,
+    //     ),
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         Text(
+    //           'Total Berat Ikan',
+    //           style: primaryTextStyle.copyWith(
+    //             fontSize: 24,
+    //             fontWeight: semiBold,
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
 
-    Widget fish() {
-      return Container(
-        margin: EdgeInsets.only(top: 14),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              SizedBox(
-                width: defaultMargin,
-              ),
-              Row(children: [
-                FishCard(
-                  title: "Lele",
-                  value: controller.statistic.value.fishes_weight_lele!,
-                  image: "assets/lele.png",
-                ),
-                FishCard(
-                  title: "Nila Merah",
-                  value: controller.statistic.value.fishes_weight_nilamerah!,
-                  image: "assets/nilamerah.png",
-                ),
-                FishCard(
-                  title: "Nila Hitam",
-                  value: controller.statistic.value.fishes_weight_nilahitam!,
-                  image: "assets/nilahitam.png",
-                ),
-                FishCard(
-                  title: "Mas",
-                  value: controller.statistic.value.fishes_weight_mas!,
-                  image: "assets/mas.png",
-                ),
-              ]),
-            ],
-          ),
-        ),
-      );
-    }
+    // Widget fish() {
+    //   return Container(
+    //     margin: const EdgeInsets.only(top: 14),
+    //     child: SingleChildScrollView(
+    //       scrollDirection: Axis.horizontal,
+    //       child: Row(
+    //         children: [
+    //           SizedBox(
+    //             width: defaultMargin,
+    //           ),
+    //           Row(children: [
+    //             FishCard(
+    //               title: "Lele",
+    //               value: controller.statistic.value.fishes_weight_lele!,
+    //               image: "assets/lele.png",
+    //             ),
+    //             FishCard(
+    //               title: "Nila Merah",
+    //               value: controller.statistic.value.fishes_weight_nilamerah!,
+    //               image: "assets/nilamerah.png",
+    //             ),
+    //             FishCard(
+    //               title: "Nila Hitam",
+    //               value: controller.statistic.value.fishes_weight_nilahitam!,
+    //               image: "assets/nilahitam.png",
+    //             ),
+    //             FishCard(
+    //               title: "Mas",
+    //               value: controller.statistic.value.fishes_weight_mas!,
+    //               image: "assets/mas.png",
+    //             ),
+    //           ]),
+    //         ],
+    //       ),
+    //     ),
+    //   );
+    // }
 
     Widget waterTitle() {
       return Container(
@@ -209,7 +208,7 @@ class HomePage extends StatelessWidget {
 
     Widget water() {
       return Container(
-        margin: EdgeInsets.only(top: 14),
+        margin: const EdgeInsets.only(top: 14),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -240,34 +239,34 @@ class HomePage extends StatelessWidget {
       );
     }
 
-    Widget logoutButton() {
-      return Container(
-        height: 50,
-        width: double.infinity,
-        margin: EdgeInsets.only(
-            top: defaultSpace * 3, right: defaultMargin, left: defaultMargin),
-        child: TextButton(
-          onPressed: () {
-            // Get.back();
-            controller.deleteToken();
-            // controller.getWeek();
-          },
-          style: TextButton.styleFrom(
-            backgroundColor: primaryColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          child: Text(
-            'Submit',
-            style: primaryTextStyle.copyWith(
-              fontSize: 16,
-              fontWeight: medium,
-            ),
-          ),
-        ),
-      );
-    }
+    // Widget logoutButton() {
+    //   return Container(
+    //     height: 50,
+    //     width: double.infinity,
+    //     margin: EdgeInsets.only(
+    //         top: defaultSpace * 3, right: defaultMargin, left: defaultMargin),
+    //     child: TextButton(
+    //       onPressed: () {
+    //         // Get.back();
+    //         controller.deleteToken();
+    //         // controller.getWeek();
+    //       },
+    //       style: TextButton.styleFrom(
+    //         backgroundColor: primaryColor,
+    //         shape: RoundedRectangleBorder(
+    //           borderRadius: BorderRadius.circular(12),
+    //         ),
+    //       ),
+    //       child: Text(
+    //         'Submit',
+    //         style: primaryTextStyle.copyWith(
+    //           fontSize: 16,
+    //           fontWeight: medium,
+    //         ),
+    //       ),
+    //     ),
+    //   );
+    // }
 
     return Obx(() {
       if (controller.isLoading.value == false) {
@@ -278,7 +277,7 @@ class HomePage extends StatelessWidget {
             statistic(),
             waterTitle(),
             water(),
-            SizedBox(
+            const SizedBox(
               height: 10,
             )
           ],

@@ -1,7 +1,7 @@
-import 'package:fish/models/FeedHistoryDaily.dart';
-import 'package:fish/models/FeedHistoryHourly.dart';
-import 'package:fish/models/FeedHistoryMonthly.dart';
-import 'package:fish/models/FeedHistoryWeekly.dart';
+import 'package:fish/models/feed_history_daily.dart';
+import 'package:fish/models/feed_history_hourly.dart';
+import 'package:fish/models/feed_history_monthly.dart';
+import 'package:fish/models/feed_history_weekly.dart';
 import 'package:fish/models/activation_model.dart';
 import 'package:fish/models/pond_model.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +35,7 @@ class FeedHourCard extends StatelessWidget {
         margin: EdgeInsets.only(
           top: defaultMargin,
         ),
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: primaryColor),

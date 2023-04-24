@@ -20,7 +20,7 @@ class FeedTypeFormController extends GetxController {
   }
 
   String? getIdByName() {
-    print(selected);
+    // print(selected);
     for (FeedType feedType in listFeedType) {
       if (feedType.type == selected.value) {
         return feedType.id;

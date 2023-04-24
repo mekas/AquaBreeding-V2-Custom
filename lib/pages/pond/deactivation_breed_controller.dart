@@ -1,10 +1,7 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:fish/models/activation_model.dart';
-import 'package:fish/models/fish_model.dart';
 import 'package:fish/models/pond_model.dart';
-import 'package:fish/pages/dashboard.dart';
 import 'package:fish/service/activation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -151,7 +148,7 @@ class DeactivationBreedController extends GetxController {
           isFinish: true,
           fish_harvested: buildJsonFish());
       doInPost();
-      print(buildJsonFish());
+      // print(buildJsonFish());
     } catch (e) {
       //
     }

@@ -19,12 +19,12 @@ class FishCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Color(0xffECEDEF),
+        color: const Color(0xffECEDEF),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Row(
@@ -33,7 +33,7 @@ class FishCard extends StatelessWidget {
             children: [
               Align(
                 child: Image(
-                  image: AssetImage(this.image!),
+                  image: AssetImage(image!),
                   width: 150,
                   height: 150,
                   fit: BoxFit.fitWidth,
@@ -42,14 +42,14 @@ class FishCard extends StatelessWidget {
             ],
           ),
           Container(
-            margin: EdgeInsets.symmetric(
+            margin: const EdgeInsets.symmetric(
               horizontal: 20,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  this.title!,
+                  title!,
                   style: blackTextStyle.copyWith(
                     fontSize: 16,
                     fontWeight: semiBold,
@@ -57,17 +57,17 @@ class FishCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 6,
                 ),
                 Text(
-                  '${this.value!.toStringAsFixed(3)} Kg',
+                  '${value!.toStringAsFixed(3)} Kg',
                   style: priceTextStyle.copyWith(
                     fontSize: 18,
                     fontWeight: bold,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 12,
                 ),
               ],

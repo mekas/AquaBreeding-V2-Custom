@@ -1,15 +1,6 @@
-import 'package:fish/models/fish_harvested.dart';
-import 'package:fish/models/fish_transfer_model.dart';
-import 'package:fish/controllers/fish_transfer/fish_transfer_list_controller.dart';
 // import 'package:fish/pages/treatment/treatment_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
-import 'package:get/get.dart';
-import 'package:fish/models/fish_transfer_model.dart';
-
-import 'package:fish/models/pond_model.dart';
-
-import 'package:fish/models/activation_model.dart';
 
 class FishList extends StatelessWidget {
   final String? amount;
@@ -32,7 +23,7 @@ class FishList extends StatelessWidget {
         margin: EdgeInsets.only(
           top: defaultMargin,
         ),
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             Row(
@@ -43,7 +34,7 @@ class FishList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "${type} : ${amount}",
+                      "$type : $amount",
                       style: primaryTextStyle.copyWith(
                         fontSize: 14,
                         fontWeight: bold,

@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
-import '../pond/detail_pond_page.dart';
-
 class PondCard extends StatelessWidget {
   final Pond pond;
 
@@ -30,7 +28,7 @@ class PondCard extends StatelessWidget {
         padding: EdgeInsets.all(defaultSpace),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: Color(0xffECEDEF),
+          color: const Color(0xffECEDEF),
         ),
         child: Column(
           children: [
@@ -67,9 +65,9 @@ class PondCard extends StatelessWidget {
                 )
               ],
             ),
-            Divider(color: Colors.black),
+            const Divider(color: Colors.black),
             Container(
-              margin: EdgeInsets.only(top: 5),
+              margin: const EdgeInsets.only(top: 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -77,7 +75,7 @@ class PondCard extends StatelessWidget {
                     children: [
                       Image.asset('assets/calendar_plus.png',
                           width: 25, color: blackColor),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Text(
@@ -102,7 +100,7 @@ class PondCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       pond.status! != "Aktif"
@@ -160,7 +158,7 @@ class PondCard extends StatelessWidget {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 5),
+              margin: const EdgeInsets.only(top: 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -168,7 +166,7 @@ class PondCard extends StatelessWidget {
                     children: [
                       Image.asset('assets/timesheet.png',
                           width: 25, color: blackColor),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Text(
@@ -193,7 +191,7 @@ class PondCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       pond.status! != "Aktif"
@@ -262,7 +260,7 @@ class PondCard extends StatelessWidget {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 5),
+              margin: const EdgeInsets.only(top: 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -270,11 +268,11 @@ class PondCard extends StatelessWidget {
                     children: [
                       Image.asset('assets/fish_transparent.png',
                           width: 25, color: blackColor),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Text(
-                        pond.getFishAlive() + " Ekor",
+                        "${pond.getFishAlive()} Ekor",
                         style: subtitleTextStyle.copyWith(
                           fontSize: 16,
                           fontWeight: regular,
@@ -295,7 +293,7 @@ class PondCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       pond.status != "Aktif"
@@ -319,7 +317,7 @@ class PondCard extends StatelessWidget {
                                   maxLines: 1,
                                 )
                               : Text(
-                                  "${pond.pondTemp} " + "°C",
+                                  "${pond.pondTemp} " "°C",
                                   style: subtitleTextStyle.copyWith(
                                     fontSize: 16,
                                     fontWeight: bold,

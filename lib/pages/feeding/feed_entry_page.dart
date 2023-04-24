@@ -1,7 +1,8 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 import 'package:fish/pages/feeding/feed_entry_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'feed_controller.dart';
@@ -73,12 +74,12 @@ class FeedEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -101,7 +102,8 @@ class FeedEntryPage extends StatelessWidget {
                         );
                       }).toList(),
                       dropdownColor: backgroundColor5,
-                      decoration: InputDecoration(border: InputBorder.none),
+                      decoration:
+                          const InputDecoration(border: InputBorder.none),
                     )),
               ),
             ),
@@ -124,12 +126,12 @@ class FeedEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -145,7 +147,7 @@ class FeedEntryPage extends StatelessWidget {
                   controller: controller.feedDosisController,
                   decoration: controller.validatedose.value == true
                       ? controller.dose == ''
-                          ? InputDecoration(
+                          ? const InputDecoration(
                               errorText: 'Dosis tidak boleh kosong',
                               isCollapsed: true)
                           : null
@@ -207,7 +209,7 @@ class FeedEntryPage extends StatelessWidget {
               feedTypeInput(),
               feedDosisInput(),
               submitButton(),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               )
             ],

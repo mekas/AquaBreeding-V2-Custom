@@ -18,7 +18,7 @@ class DeactivationListCard extends StatelessWidget {
       margin: EdgeInsets.only(
         top: defaultMargin / 2,
       ),
-      padding: EdgeInsets.symmetric(vertical: 7, horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -35,7 +35,7 @@ class DeactivationListCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 6,
               ),
               Text(
@@ -51,7 +51,7 @@ class DeactivationListCard extends StatelessWidget {
           ),
           Container(
             height: 50,
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: 16,
             ),
             decoration: BoxDecoration(

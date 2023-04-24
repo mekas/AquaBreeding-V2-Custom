@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 import 'package:fish/models/activation_model.dart';
 import 'package:fish/service/url_api.dart';
@@ -19,8 +21,6 @@ class ActivationService {
       for (var item in data["pond_activation_list"]) {
         activations.add(Activation.fromJson(item));
       }
-
-      print("success get activations");
 
       return activations;
     } else {
@@ -46,10 +46,8 @@ class ActivationService {
         });
 
     if (response.statusCode == 200) {
-      print(response.body);
       return true;
     } else {
-      print(response.body);
       return false;
     }
   }
@@ -72,10 +70,8 @@ class ActivationService {
         });
 
     if (response.statusCode == 200) {
-      print('sukses deaktifasi');
       return true;
     } else {
-      print('gagal deaktifasi');
       return false;
     }
   }

@@ -34,7 +34,7 @@ class TreatmentBeratCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 6,
               ),
               Text(
@@ -50,7 +50,7 @@ class TreatmentBeratCard extends StatelessWidget {
           ),
           Container(
             height: 50,
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: 16,
             ),
             decoration: BoxDecoration(

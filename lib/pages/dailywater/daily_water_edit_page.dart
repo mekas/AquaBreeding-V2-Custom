@@ -1,8 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:fish/controllers/daily_water/daily_water_edit_controller.dart';
-import 'package:fish/controllers/daily_water/daily_water_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/daily_water/daily_water_detail_controller.dart';
@@ -18,47 +18,47 @@ class DailyWaterEditPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget descInput() {
-      return Container(
-        margin: EdgeInsets.only(
-            top: defaultSpace, right: defaultMargin, left: defaultMargin),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Deskripsi',
-              style: primaryTextStyle.copyWith(
-                fontSize: 16,
-                fontWeight: medium,
-              ),
-            ),
-            SizedBox(
-              height: 12,
-            ),
-            Container(
-              height: 50,
-              padding: EdgeInsets.symmetric(
-                horizontal: 16,
-              ),
-              decoration: BoxDecoration(
-                color: backgroundColor2,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                child: TextFormField(
-                  style: primaryTextStyle,
-                  controller: controller.descController,
-                  decoration: InputDecoration.collapsed(
-                    hintText: 'ex: Ikan Sakit',
-                    hintStyle: subtitleTextStyle,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+    // Widget descInput() {
+    //   return Container(
+    //     margin: EdgeInsets.only(
+    //         top: defaultSpace, right: defaultMargin, left: defaultMargin),
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         Text(
+    //           'Deskripsi',
+    //           style: primaryTextStyle.copyWith(
+    //             fontSize: 16,
+    //             fontWeight: medium,
+    //           ),
+    //         ),
+    //         SizedBox(
+    //           height: 12,
+    //         ),
+    //         Container(
+    //           height: 50,
+    //           padding: EdgeInsets.symmetric(
+    //             horizontal: 16,
+    //           ),
+    //           decoration: BoxDecoration(
+    //             color: backgroundColor2,
+    //             borderRadius: BorderRadius.circular(12),
+    //           ),
+    //           child: Center(
+    //             child: TextFormField(
+    //               style: primaryTextStyle,
+    //               controller: controller.descController,
+    //               decoration: InputDecoration.collapsed(
+    //                 hintText: 'ex: Ikan Sakit',
+    //                 hintStyle: subtitleTextStyle,
+    //               ),
+    //             ),
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
 
     Widget doInput() {
       return Container(
@@ -74,12 +74,12 @@ class DailyWaterEditPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -117,12 +117,12 @@ class DailyWaterEditPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -160,12 +160,12 @@ class DailyWaterEditPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -255,7 +255,7 @@ class DailyWaterEditPage extends StatelessWidget {
               doInput(),
               temperatureInput(),
               submitButton(),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               )
             ],

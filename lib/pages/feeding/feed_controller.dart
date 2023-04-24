@@ -1,4 +1,6 @@
-import 'package:fish/models/FeedHistoryMonthly.dart';
+// ignore_for_file: non_constant_identifier_names
+
+import 'package:fish/models/feed_history_monthly.dart';
 import 'package:fish/models/activation_model.dart';
 import 'package:fish/models/feed_chart_model.dart';
 import 'package:fish/models/pond_model.dart';

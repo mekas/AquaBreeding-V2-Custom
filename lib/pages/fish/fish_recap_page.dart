@@ -16,37 +16,35 @@ class FishRecapPage extends StatelessWidget {
     final FishRecapController controller = Get.put(FishRecapController());
 
     Widget chartDeath() {
-      return Container(
-        child: SfCartesianChart(
-          enableAxisAnimation: true,
-          tooltipBehavior: TooltipBehavior(enable: true),
-          zoomPanBehavior: ZoomPanBehavior(
-            enablePanning: true,
-          ),
-          title: ChartTitle(
-              text: 'Jumlah Ikan Hidup',
-              textStyle: TextStyle(color: Colors.white)),
-          legend: Legend(
-              isVisible: true,
-              position: LegendPosition.bottom,
-              textStyle: TextStyle(color: Colors.white)),
-          primaryXAxis: CategoryAxis(
-              labelStyle: TextStyle(color: Colors.white),
-              autoScrollingDelta: 4),
-          primaryYAxis: NumericAxis(
-              // maximum: 100,
-              // minimum: 0,
-              labelStyle: TextStyle(color: Colors.white)),
-          series: <ChartSeries>[
-            LineSeries<FishLiveData, dynamic>(
-                enableTooltip: true,
-                color: Colors.red,
-                dataSource: controller.charData,
-                xValueMapper: (FishLiveData fish, _) => fish.getDate(),
-                yValueMapper: (FishLiveData fish, _) => fish.amount,
-                name: 'Ikan Hidup')
-          ],
+      return SfCartesianChart(
+        enableAxisAnimation: true,
+        tooltipBehavior: TooltipBehavior(enable: true),
+        zoomPanBehavior: ZoomPanBehavior(
+          enablePanning: true,
         ),
+        title: ChartTitle(
+            text: 'Jumlah Ikan Hidup',
+            textStyle: const TextStyle(color: Colors.white)),
+        legend: Legend(
+            isVisible: true,
+            position: LegendPosition.bottom,
+            textStyle: const TextStyle(color: Colors.white)),
+        primaryXAxis: CategoryAxis(
+            labelStyle: const TextStyle(color: Colors.white),
+            autoScrollingDelta: 4),
+        primaryYAxis: NumericAxis(
+            // maximum: 100,
+            // minimum: 0,
+            labelStyle: const TextStyle(color: Colors.white)),
+        series: <ChartSeries>[
+          LineSeries<FishLiveData, dynamic>(
+              enableTooltip: true,
+              color: Colors.red,
+              dataSource: controller.charData,
+              xValueMapper: (FishLiveData fish, _) => fish.getDate(),
+              yValueMapper: (FishLiveData fish, _) => fish.amount,
+              name: 'Ikan Hidup')
+        ],
       );
     }
 
@@ -70,7 +68,7 @@ class FishRecapPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
               ],
@@ -88,7 +86,7 @@ class FishRecapPage extends StatelessWidget {
             top: defaultSpace, right: defaultMargin, left: defaultMargin),
         child: TextButton(
           onPressed: () {
-            Get.to(() => FishDeathEntryPage(), arguments: {
+            Get.to(() => const FishDeathEntryPage(), arguments: {
               "pond": controller.pond,
               "activation": controller.activation
             });
@@ -146,7 +144,7 @@ class FishRecapPage extends StatelessWidget {
                       )
                       .toList(),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
               ],
@@ -179,7 +177,7 @@ class FishRecapPage extends StatelessWidget {
                       )
                       .toList(),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
               ],
@@ -239,7 +237,7 @@ class FishRecapPage extends StatelessWidget {
               recapTitle(),
               // chartRecap(),
               listDeath(),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               )
             ],

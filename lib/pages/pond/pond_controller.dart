@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:async';
 
 import 'package:fish/models/pond_model.dart';
@@ -82,7 +84,6 @@ class PondController extends GetxController {
     WidgetsFlutterBinding.ensureInitialized();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     token = prefs.getString('token').toString();
-    print(token);
     isLoading.value = true;
     ponds.clear();
     List<Pond> pondsData = await PondService().getPonds();
@@ -102,16 +103,13 @@ class PondController extends GetxController {
         diameter: diameterController.text,
         status: status,
         height: heightController.text);
-    print(value);
     doInPost();
-    Get.to(() => DashboardPage());
+    Get.to(() => const DashboardPage());
   }
 
   Future<void> getPondsFiltered(String statusFilter) async {
     isLoading.value = true;
     ponds.clear();
-    print(statusFilter);
-    print(statusFilter);
     List<Pond> filter = await PondService().getPonds();
     for (var i in filter) {
       if (i.status == statusFilter) {
@@ -119,7 +117,6 @@ class PondController extends GetxController {
         var testing = filter.where((element) => element.status == statusFilter);
         // print(testing.toString());
         ponds.addAll(testing);
-        print(pondFiltered);
       }
       if (statusFilter == 'all') {
         ponds.addAll(filter);

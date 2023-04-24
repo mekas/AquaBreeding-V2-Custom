@@ -1,16 +1,14 @@
-import 'dart:developer';
+// ignore_for_file: use_build_context_synchronously, non_constant_identifier_names
 
 import 'package:fish/pages/component/deactivation_list_input.dart';
-import 'package:fish/pages/dashboard.dart';
 import 'package:fish/pages/pond/deactivation_breed_controller.dart';
 import 'package:fish/pages/pond/detail_pond_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class DeactivationBreedPage extends StatefulWidget {
-  DeactivationBreedPage({Key? key}) : super(key: key);
+  const DeactivationBreedPage({Key? key}) : super(key: key);
   @override
   State<DeactivationBreedPage> createState() => _DeactivationBreedPageState();
 }
@@ -100,7 +98,7 @@ class _DeactivationBreedPageState extends State<DeactivationBreedPage> {
               DeactivationInput(),
               // waterHeightInput(),
               activationButton(),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               )
             ],

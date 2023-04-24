@@ -1,6 +1,8 @@
-import 'package:fish/models/FeedHistoryDaily.dart';
-import 'package:fish/models/FeedHistoryMonthly.dart';
-import 'package:fish/models/FeedHistoryWeekly.dart';
+// ignore_for_file: non_constant_identifier_names
+
+import 'package:fish/models/feed_history_daily.dart';
+import 'package:fish/models/feed_history_monthly.dart';
+import 'package:fish/models/feed_history_weekly.dart';
 import 'package:fish/models/activation_model.dart';
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/service/feed_history_service.dart';

@@ -34,11 +34,11 @@ class TreatmentController extends GetxController {
     listTreatment.addAll(treatmentData);
     for (var i in treatmentData) {
       if (i.activation_id == activation.id) {
-        print('treatment get test');
+        // print('treatment get test');
         listTreatmentTest.add(i);
       }
     }
-    print(listTreatmentTest);
+    // print(listTreatmentTest);
     // print(listTreatment.value);
     isLoading.value = false;
   }

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:fish/models/fishDeath_model.dart';
+import 'package:fish/models/fish_death_model.dart';
 import 'package:fish/models/fish_live_model.dart';
 import 'package:fish/service/url_api.dart';
 import 'package:http/http.dart' as http;
@@ -12,12 +12,9 @@ class FishDeathService {
 
     var response = await http.get(url, headers: headers);
 
-    print(response.body);
-
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       List<FishDeath> fishlive = FishDeath.fromJsonList(data);
-      print("success add fishlvie");
       return fishlive;
     } else {
       throw Exception('Gagal Get fishdeath!');
@@ -31,12 +28,9 @@ class FishDeathService {
 
     var response = await http.get(url, headers: headers);
 
-    print(response.body);
-
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       List<FishLiveData> fishdeath = FishLiveData.fromJsonList(data);
-      print("success add fishdeath");
       return fishdeath;
     } else {
       throw Exception('Gagal Get fishdeath!');
@@ -47,7 +41,6 @@ class FishDeathService {
     required String? pondId,
     required List fish,
   }) async {
-    print({"pond_id": pondId, "fish_death_amount": fish});
     final response = await http.post(
       Uri.parse(Urls.fishDeaths),
       headers: {
@@ -62,10 +55,8 @@ class FishDeathService {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
       return true;
     } else {
-      print(response.body);
       return false;
     }
   }

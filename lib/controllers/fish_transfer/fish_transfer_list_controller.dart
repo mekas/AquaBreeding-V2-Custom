@@ -4,7 +4,6 @@ import 'package:fish/models/pond_model.dart';
 import 'package:fish/models/fish_transfer_model.dart';
 import 'package:fish/service/fish_transfer_service.dart';
 
-import 'package:fish/service/pond_service.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
@@ -37,11 +36,9 @@ class TransferController extends GetxController {
     for (var i in transferData) {
       if (i.destination_activation_id == activation.id ||
           i.origin_activation_id == activation.id) {
-        print('treatment get test');
         listTransfer.add(i);
       }
     }
-    print(listTransfer);
     // print(listTreatment.value);
     isLoading.value = false;
   }
