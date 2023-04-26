@@ -1,6 +1,8 @@
 import 'package:fish/pages/component/statistic_card.dart';
 import 'package:fish/pages/component/water_card.dart';
 import 'package:fish/controllers/home/home_controller.dart';
+import 'package:fish/pages/inventaris/inventaris_pakan_page.dart';
+import 'package:fish/widgets/main_inventaris_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fish/theme.dart';
@@ -297,35 +299,38 @@ class HomePage extends StatelessWidget {
                 SizedBox(
                   height: 54,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      backgroundColor: primaryColor,
-                      minimumSize: const Size.fromHeight(50),
-                    ),
-                    onPressed: () {},
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
-                          'Pakan',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          size: 24,
-                        )
-                      ],
-                    ),
-                  ),
+                MainInvetarisButton(
+                  title: 'Pakan',
+                  doOnTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return InventarisPakanPage();
+                    }));
+                  },
+                ),
+                MainInvetarisButton(
+                  title: 'Bahan Budidaya',
+                  doOnTap: () {
+                    print('test');
+                  },
+                ),
+                MainInvetarisButton(
+                  title: 'Listrik',
+                  doOnTap: () {
+                    print('test');
+                  },
+                ),
+                MainInvetarisButton(
+                  title: 'Benih',
+                  doOnTap: () {
+                    print('test');
+                  },
+                ),
+                MainInvetarisButton(
+                  title: 'Aset',
+                  doOnTap: () {
+                    print('test');
+                  },
                 ),
               ],
             ),

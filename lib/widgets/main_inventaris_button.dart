@@ -2,15 +2,17 @@ import 'package:fish/theme.dart';
 import 'package:flutter/material.dart';
 
 class MainInvetarisButton extends StatelessWidget {
-  MainInvetarisButton({Key? key, required this.title, required this.doOnTap})
+  const MainInvetarisButton(
+      {Key? key, required this.title, required this.doOnTap})
       : super(key: key);
 
-  String? title;
-  Function? doOnTap;
+  final String title;
+  final Function() doOnTap;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
@@ -20,19 +22,19 @@ class MainInvetarisButton extends StatelessWidget {
           backgroundColor: primaryColor,
           minimumSize: const Size.fromHeight(50),
         ),
-        onPressed: () {},
+        onPressed: doOnTap,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
+          children: [
             Text(
-              'Pakan',
-              style: TextStyle(
+              title,
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Icon(
+            const Icon(
               Icons.arrow_forward_ios_rounded,
               size: 24,
             )
