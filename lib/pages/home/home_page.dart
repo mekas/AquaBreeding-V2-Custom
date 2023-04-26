@@ -270,17 +270,79 @@ class HomePage extends StatelessWidget {
 
     return Obx(() {
       if (controller.isLoading.value == false) {
-        return ListView(
-          children: [
-            title(),
-            username(),
-            statistic(),
-            waterTitle(),
-            water(),
-            const SizedBox(
-              height: 10,
-            )
-          ],
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: backgroundColor1,
+            title: Text('Home'),
+            centerTitle: true,
+            actions: [
+              IconButton(onPressed: () {}, icon: Icon(Icons.book_rounded))
+            ],
+          ),
+          drawer: Drawer(
+            backgroundColor: backgroundColor1,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 24,
+                ),
+                const Text(
+                  'Inventaris',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  height: 54,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      backgroundColor: primaryColor,
+                      minimumSize: const Size.fromHeight(50),
+                    ),
+                    onPressed: () {},
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        Text(
+                          'Pakan',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          size: 24,
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          backgroundColor: backgroundColor1,
+          body: ListView(
+            children: [
+              title(),
+              username(),
+              statistic(),
+              waterTitle(),
+              water(),
+              const SizedBox(
+                height: 10,
+              )
+            ],
+          ),
         );
       } else {
         return Center(

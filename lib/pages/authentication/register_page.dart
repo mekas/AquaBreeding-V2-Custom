@@ -31,7 +31,6 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   void dispose() {
     pageController.dispose();
-
     super.dispose();
   }
 
@@ -249,33 +248,6 @@ class _RegisterPageState extends State<RegisterPage> {
               fontWeight: bold,
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Sudah punya akun?",
-                style: secondaryTextStyle.copyWith(
-                  fontSize: 16,
-                  fontWeight: medium,
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginPage()));
-                },
-                child: Text(
-                  'Login',
-                  style: blueTextStyle.copyWith(
-                    fontSize: 16,
-                    fontWeight: bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
         ]),
       );
     }
@@ -324,6 +296,33 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     footer(),
                     formInput(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Sudah punya akun?",
+                          style: secondaryTextStyle.copyWith(
+                            fontSize: 16,
+                            fontWeight: medium,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginPage()));
+                          },
+                          child: Text(
+                            'Login',
+                            style: blueTextStyle.copyWith(
+                              fontSize: 16,
+                              fontWeight: bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
@@ -336,6 +335,33 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     footer(),
                     form2Input(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Sudah punya akun?",
+                          style: secondaryTextStyle.copyWith(
+                            fontSize: 16,
+                            fontWeight: medium,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginPage()));
+                          },
+                          child: Text(
+                            'Login',
+                            style: blueTextStyle.copyWith(
+                              fontSize: 16,
+                              fontWeight: bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     const SizedBox(
                       height: 10,
                     ),

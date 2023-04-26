@@ -225,13 +225,13 @@ class _LoginPageState extends State<LoginPage> {
     Widget footer() {
       return Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text(
-            "Login",
-            style: whiteTextStyle.copyWith(
-              fontSize: 24,
-              fontWeight: bold,
-            ),
-          ),
+          // Text(
+          //   "Login",
+          //   style: whiteTextStyle.copyWith(
+          //     fontSize: 24,
+          //     fontWeight: bold,
+          //   ),
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
