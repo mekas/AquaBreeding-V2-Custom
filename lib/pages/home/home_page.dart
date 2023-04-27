@@ -1,7 +1,7 @@
 import 'package:fish/pages/component/statistic_card.dart';
 import 'package:fish/pages/component/water_card.dart';
 import 'package:fish/controllers/home/home_controller.dart';
-import 'package:fish/pages/inventaris/inventaris_pakan_page.dart';
+import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_mainpage.dart';
 import 'package:fish/widgets/main_inventaris_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -304,7 +304,7 @@ class HomePage extends StatelessWidget {
                   doOnTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return InventarisPakanPage();
+                      return const InventarisPakanMainpage();
                     }));
                   },
                 ),
