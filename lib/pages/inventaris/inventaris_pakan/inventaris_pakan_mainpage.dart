@@ -79,10 +79,6 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.green.shade600,
           onPressed: () {
-            // DialogWidget.open(
-            //   context,
-
-            // );
             BottomSheetWidget.getBottomSheetWidget(
               context,
               [
@@ -179,7 +175,7 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
                     style: headingText3,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'Ex: Pelet',
+                      hintText: 'Ex: Pelet/Tumbuhan Air/Tepung',
                       hintStyle: hoverText,
                     ),
                   ),
@@ -265,101 +261,123 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
                 SizedBox(
                   height: 16,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Jumlah',
-                          style: headingText2,
-                        ),
-                        SizedBox(
-                          height: 12,
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width / 2.8,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 4),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: inputColor,
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                Obx(
+                  () => state.selectedDropdownValue.value == 'Pakan Alami'
+                      ? Container()
+                      : SizedBox(
+                          child: Column(
                             children: [
-                              Expanded(
-                                child: TextFormField(
-                                  style: headingText3,
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: 'Ex: 100',
-                                    hintStyle: hoverText,
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Jumlah',
+                                        style: headingText2,
+                                      ),
+                                      SizedBox(
+                                        height: 12,
+                                      ),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                2.8,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 4),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          color: inputColor,
+                                        ),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Expanded(
+                                              child: TextFormField(
+                                                style: headingText3,
+                                                decoration: InputDecoration(
+                                                  border: InputBorder.none,
+                                                  hintText: 'Ex: 100',
+                                                  hintStyle: hoverText,
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 12),
+                                              child: Text(
+                                                'gram',
+                                                style: headingText3,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Karbon',
+                                        style: headingText2,
+                                      ),
+                                      SizedBox(
+                                        height: 12,
+                                      ),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                2.8,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 4),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          color: inputColor,
+                                        ),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Expanded(
+                                              child: TextFormField(
+                                                style: headingText3,
+                                                decoration: InputDecoration(
+                                                  border: InputBorder.none,
+                                                  hintText: 'Ex: 100',
+                                                  hintStyle: hoverText,
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                left: 12,
+                                              ),
+                                              child: Text(
+                                                'gram',
+                                                style: headingText3,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 12),
-                                child: Text(
-                                  'gram',
-                                  style: headingText3,
-                                ),
-                              )
+                              SizedBox(
+                                height: 16,
+                              ),
                             ],
                           ),
                         ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Karbon',
-                          style: headingText2,
-                        ),
-                        SizedBox(
-                          height: 12,
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width / 2.8,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 4),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: inputColor,
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: TextFormField(
-                                  style: headingText3,
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: 'Ex: 100',
-                                    hintStyle: hoverText,
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 12,
-                                ),
-                                child: Text(
-                                  'gram',
-                                  style: headingText3,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 16,
                 ),
                 Text(
                   'Harga Beli',
@@ -392,7 +410,7 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
                           style: headingText3,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: 'Ex: 100',
+                            hintText: 'Ex: 10000',
                             hintStyle: hoverText,
                           ),
                         ),
