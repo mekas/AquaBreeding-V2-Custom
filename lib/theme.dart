@@ -20,6 +20,7 @@ Color subtitleColor = const Color(0xff504F5E);
 Color transparentColor = Colors.transparent;
 Color blackColor = const Color(0xff2E2E2E);
 Color inputColor = const Color(0xff2F2C40);
+Color addButtonColor = const Color(0xff1B7C1A);
 
 TextStyle primaryTextStyle = GoogleFonts.poppins(
   color: primaryTextColor,
@@ -78,3 +79,27 @@ const double padding5XL = 36;
 const double padding6XL = 64;
 const double padding7XL = 72;
 const double padding8XL = 92;
+
+TextStyle headingText1 = const TextStyle(
+  fontSize: 24,
+  color: Colors.white,
+  fontWeight: FontWeight.bold,
+);
+
+TextStyle headingText2 = const TextStyle(
+  fontSize: 16,
+  color: Colors.white,
+  fontWeight: FontWeight.bold,
+);
+
+TextStyle headingText3 = const TextStyle(
+  fontSize: 14,
+  color: Colors.white,
+  fontWeight: FontWeight.bold,
+);
+
+TextStyle hoverText = TextStyle(
+  fontSize: 14,
+  color: Colors.grey.shade500,
+  fontWeight: FontWeight.bold,
+);

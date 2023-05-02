@@ -3,6 +3,7 @@ import 'package:fish/pages/inventaris/inventaris_pakan/pakan_alami_page.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/pakan_campuran_page.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/pakan_industri_page.dart';
 import 'package:fish/theme.dart';
+import 'package:fish/widgets/bottom_sheet_widget.dart';
 import 'package:fish/widgets/dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -78,7 +79,11 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.green.shade600,
           onPressed: () {
-            DialogWidget.open(
+            // DialogWidget.open(
+            //   context,
+
+            // );
+            BottomSheetWidget.getBottomSheetWidget(
               context,
               [
                 Row(
@@ -100,11 +105,24 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
                     )
                   ],
                 ),
-                const Text('Catat Pakan'),
                 const SizedBox(
-                  height: 20,
+                  height: 18,
                 ),
-                const Text('Kategori Pakan'),
+                Text(
+                  'Catat Pakan',
+                  style: headingText1,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 54,
+                ),
+                Text(
+                  'Kategori Pakan',
+                  style: headingText2,
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
                 Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -121,7 +139,6 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
                               dropdownValue = value!;
                             });
                             state.selectedDropdownValue.value = value!;
-                            print(state.selectedDropdownValue.value);
                           }),
                           value: dropdownValue,
                           dropdownColor: inputColor,
@@ -131,10 +148,7 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
                                 value: val,
                                 child: Text(
                                   val,
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.white,
-                                  ),
+                                  style: headingText3,
                                 ),
                               );
                             },
@@ -144,15 +158,259 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
                     }),
                   ),
                 ),
-                Obx(
-                  () => state.selectedDropdownValue.value == 'Pakan Alami'
-                      ? Container()
-                      : Container(
-                          width: double.infinity,
-                          color: Colors.red,
-                          child: Text('TEST VALUE'),
+                const SizedBox(
+                  height: 16,
+                ),
+                Text(
+                  'Nama / Merek Pakan',
+                  style: headingText2,
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: inputColor,
+                  ),
+                  child: TextFormField(
+                    style: headingText3,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Ex: Pelet',
+                      hintStyle: hoverText,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Protein',
+                          style: headingText2,
                         ),
-                )
+                        SizedBox(
+                          height: 12,
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width / 2.8,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 4),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: inputColor,
+                          ),
+                          child: TextFormField(
+                            style: headingText3,
+                            textAlignVertical: TextAlignVertical.center,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Ex: 10',
+                              hintStyle: hoverText,
+                              suffixIcon: Icon(
+                                Icons.percent,
+                                size: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Karbon',
+                          style: headingText2,
+                        ),
+                        SizedBox(
+                          height: 12,
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width / 2.8,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 4),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: inputColor,
+                          ),
+                          child: TextFormField(
+                            style: headingText3,
+                            textAlignVertical: TextAlignVertical.center,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Ex: 10',
+                              hintStyle: hoverText,
+                              suffixIcon: Icon(
+                                Icons.percent,
+                                size: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Jumlah',
+                          style: headingText2,
+                        ),
+                        SizedBox(
+                          height: 12,
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width / 2.8,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 4),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: inputColor,
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  style: headingText3,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: 'Ex: 100',
+                                    hintStyle: hoverText,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 12),
+                                child: Text(
+                                  'gram',
+                                  style: headingText3,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Karbon',
+                          style: headingText2,
+                        ),
+                        SizedBox(
+                          height: 12,
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width / 2.8,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 4),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: inputColor,
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  style: headingText3,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: 'Ex: 100',
+                                    hintStyle: hoverText,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 12,
+                                ),
+                                child: Text(
+                                  'gram',
+                                  style: headingText3,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                Text(
+                  'Harga Beli',
+                  style: headingText2,
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: inputColor,
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          right: 12,
+                        ),
+                        child: Text(
+                          'Rp',
+                          style: headingText3,
+                        ),
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          style: headingText3,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Ex: 100',
+                            hintStyle: hoverText,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 36,
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: addButtonColor,
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  onPressed: () {},
+                  child: Icon(Icons.add),
+                ),
               ],
             );
           },
