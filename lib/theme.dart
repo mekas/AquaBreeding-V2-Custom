@@ -19,6 +19,7 @@ Color secondaryTextColor = const Color(0xff999999);
 Color subtitleColor = const Color(0xff504F5E);
 Color transparentColor = Colors.transparent;
 Color blackColor = const Color(0xff2E2E2E);
+Color inputColor = const Color(0xff2F2C40);
 
 TextStyle primaryTextStyle = GoogleFonts.poppins(
   color: primaryTextColor,
@@ -62,3 +63,18 @@ FontWeight medium = FontWeight.w500;
 FontWeight semiBold = FontWeight.w600;
 FontWeight bold = FontWeight.w700;
 FontWeight heavy = FontWeight.w900;
+
+const double padding3XS = 1;
+const double padding2XS = 2;
+const double paddingXS = 4;
+const double paddingS = 6;
+const double paddingM = 8;
+const double paddingL = 12;
+const double paddingXL = 18;
+const double padding2XL = 24;
+const double padding3XL = 28;
+const double padding4XL = 32;
+const double padding5XL = 36;
+const double padding6XL = 64;
+const double padding7XL = 72;
+const double padding8XL = 92;
