@@ -325,7 +325,7 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Karbon',
+                                        'Periode Kadaluarsa',
                                         style: headingText2,
                                       ),
                                       SizedBox(
@@ -361,7 +361,7 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
                                                 left: 12,
                                               ),
                                               child: Text(
-                                                'gram',
+                                                'hari',
                                                 style: headingText3,
                                               ),
                                             )
