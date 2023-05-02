@@ -69,7 +69,7 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
             ],
           ),
         ),
-        body: const TabBarView(
+        body: TabBarView(
           children: [
             PakanIndustriPage(),
             PakanAlamiPage(),
@@ -407,6 +407,9 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: addButtonColor,
                     padding: EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
                   ),
                   onPressed: () {},
                   child: Icon(Icons.add),

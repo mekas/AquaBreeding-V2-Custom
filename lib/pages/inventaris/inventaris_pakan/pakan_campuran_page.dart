@@ -1,24 +1,21 @@
+import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_state.dart';
 import 'package:fish/theme.dart';
+import 'package:fish/widgets/render_inventaris_organic_list_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class PakanCampuranPage extends StatelessWidget {
-  const PakanCampuranPage({super.key});
+  PakanCampuranPage({super.key});
+
+  final InventarisPakanState state = Get.put(InventarisPakanState());
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: backgroundColor1,
       child: SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Container(
-              margin: EdgeInsets.fromLTRB(16, 20, 16, 20),
-              child: Text(
-                'Ini Campuran',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
+        child: RenderInventarisOrganicListWidget(
+          data: state.dummyDataValue3,
         ),
       ),
     );
