@@ -1,3 +1,4 @@
+import 'package:fish/pages/inventaris/inventaris_pakan/detail_inventaris_pakan_page.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_state.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/pakan_alami_page.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/pakan_campuran_page.dart';
@@ -46,7 +47,13 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
           elevation: 0,
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: ((context) {
+                  return DetailInventarisPakanPage(
+                    pageIdentifier: state.pageDetail.value,
+                  );
+                })));
+              },
               icon: const Icon(Icons.history),
             ),
           ],
@@ -56,6 +63,20 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
               color: primaryColor,
             ),
             tabs: const [
+              // GestureDetector(
+              //   onTap: () {
+              //     setState(() {
+              //       pageTitleValue = 'Industri';
+              //     });
+              //     print(pageTitleValue);
+              //   },
+              //   child: Tab(
+              //     child: Text(
+              //       'Industri',
+              //       style: TextStyle(fontWeight: FontWeight.bold),
+              //     ),
+              //   ),
+              // ),
               Tab(
                 child: Text(
                   'Industri',
@@ -77,7 +98,7 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
             ],
           ),
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: [
             PakanIndustriPage(),
             PakanAlamiPage(),

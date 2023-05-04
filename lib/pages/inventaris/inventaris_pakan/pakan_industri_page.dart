@@ -4,10 +4,21 @@ import 'package:fish/widgets/render_inventaris_organic_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class PakanIndustriPage extends StatelessWidget {
-  PakanIndustriPage({super.key});
+class PakanIndustriPage extends StatefulWidget {
+  const PakanIndustriPage({super.key});
 
+  @override
+  State<PakanIndustriPage> createState() => _PakanIndustriPageState();
+}
+
+class _PakanIndustriPageState extends State<PakanIndustriPage> {
   final InventarisPakanState state = Get.put(InventarisPakanState());
+
+  @override
+  void initState() {
+    super.initState();
+    state.pageDetail.value = 'Industri';
+  }
 
   @override
   Widget build(BuildContext context) {

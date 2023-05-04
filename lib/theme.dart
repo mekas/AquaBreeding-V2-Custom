@@ -21,6 +21,7 @@ Color transparentColor = Colors.transparent;
 Color blackColor = const Color(0xff2E2E2E);
 Color inputColor = const Color(0xff2F2C40);
 Color addButtonColor = const Color(0xff1B7C1A);
+Color greyBackgroundColor = const Color(0xff3C3F4D);
 
 TextStyle primaryTextStyle = GoogleFonts.poppins(
   color: primaryTextColor,
