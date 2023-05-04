@@ -1,3 +1,4 @@
+import 'package:fish/theme.dart';
 import 'package:flutter/material.dart';
 
 class BahanBudidayaPerawatanAirPage extends StatelessWidget {
@@ -5,6 +6,8 @@ class BahanBudidayaPerawatanAirPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      color: backgroundColor1,
+    );
   }
 }

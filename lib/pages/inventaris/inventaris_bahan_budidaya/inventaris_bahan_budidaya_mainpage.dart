@@ -33,7 +33,7 @@ class _InventarisBahanBudidayaMainpageState
     'Obat-obatan',
   ];
 
-  static var dropdownList2 = ['kg', 'l'];
+  static var dropdownList2 = ['kg', 'ltr'];
 
   TextEditingController testControl = TextEditingController();
   TextEditingController testControl2 = TextEditingController();
@@ -129,13 +129,13 @@ class _InventarisBahanBudidayaMainpageState
                 TextFieldWidget(
                   label: 'Nama / Merek Bahan',
                   controller: testControl,
-                  hint: 'Ex: Tepung/',
+                  hint: 'Ex: Tepung',
                 ),
                 const SizedBox(
                   height: 16,
                 ),
                 Text(
-                  'Kategori Pakan',
+                  'Fungsi',
                   style: headingText2,
                 ),
                 const SizedBox(
@@ -179,74 +179,80 @@ class _InventarisBahanBudidayaMainpageState
                 const SizedBox(
                   height: 16,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextFieldWidget(
-                      label: 'Protein',
-                      controller: testControl2,
-                      isLong: false,
-                      hint: 'Ex: 10',
-                      suffixSection: const Icon(
-                        Icons.percent,
-                        size: 16,
-                        color: Colors.white,
-                      ),
-                    ),
-                    TextFieldWidget(
-                      label: 'Karbon',
-                      controller: testControl3,
-                      isLong: false,
-                      hint: 'Ex: 10',
-                      suffixSection: const Icon(
-                        Icons.percent,
-                        size: 16,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Obx(
-                  () => state.selectedDropdownValue.value == 'Pakan Alami'
-                      ? Container()
-                      : SizedBox(
-                          child: Column(
+                SizedBox(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  TextFieldWidget(
-                                    label: 'Jumlah',
-                                    controller: testControl4,
-                                    isLong: false,
-                                    hint: 'Ex: 100',
-                                    suffixSection: Text(
-                                      'gram',
-                                      style: headingText3,
-                                    ),
-                                  ),
-                                  TextFieldWidget(
-                                    label: 'Periode Kadaluarsa',
-                                    controller: testControl5,
-                                    isLong: false,
-                                    hint: 'Ex: 100',
-                                    suffixSection: Text(
-                                      'hari',
-                                      style: headingText3,
-                                    ),
-                                  ),
-                                ],
+                              TextFieldWidget(
+                                label: 'Jumlah',
+                                controller: testControl4,
+                                isLong: false,
+                                hint: 'Ex: 100',
                               ),
-                              const SizedBox(
-                                height: 16,
+                              SizedBox(
+                                width: 6,
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width / 6,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 4),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: inputColor,
+                                ),
+                                child: StatefulBuilder(
+                                  builder: ((context, setState) {
+                                    return DropdownButtonHideUnderline(
+                                      child: DropdownButton(
+                                        onChanged: ((String? value) {
+                                          setState(() {
+                                            dropdownValue2 = value!;
+                                          });
+                                          state.selectedDropdownValue2.value =
+                                              value!;
+                                        }),
+                                        value: dropdownValue2,
+                                        dropdownColor: inputColor,
+                                        items: dropdownList2.map(
+                                          (String val) {
+                                            return DropdownMenuItem(
+                                              value: val,
+                                              child: Text(
+                                                val,
+                                                style: headingText3,
+                                              ),
+                                            );
+                                          },
+                                        ).toList(),
+                                      ),
+                                    );
+                                  }),
+                                ),
                               ),
                             ],
                           ),
-                        ),
+                          TextFieldWidget(
+                            label: 'Periode Kadaluarsa',
+                            controller: testControl5,
+                            isLong: false,
+                            hint: 'Ex: 100',
+                            suffixSection: Text(
+                              'hari',
+                              style: headingText3,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                    ],
+                  ),
                 ),
                 TextFieldWidget(
                   label: 'Harga Beli',
