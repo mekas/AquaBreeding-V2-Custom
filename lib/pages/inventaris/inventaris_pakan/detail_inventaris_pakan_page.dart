@@ -240,10 +240,29 @@ class DetailInventarisPakanPage extends StatelessWidget {
     DialogWidget.open(
       context,
       [
-        Text(
-          'Pilih Tanggal',
-          style: headingText2,
-          textAlign: TextAlign.center,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Icon(
+                Icons.arrow_back_rounded,
+                size: 20,
+                color: Colors.white,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(right: 12),
+              child: Text(
+                'Pilih Tanggal',
+                style: headingText2,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Container(),
+          ],
         ),
         SizedBox(
           height: 36,
