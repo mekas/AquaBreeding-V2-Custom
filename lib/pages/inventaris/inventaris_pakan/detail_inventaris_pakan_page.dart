@@ -77,7 +77,7 @@ class DetailInventarisPakanPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Tanggal Input',
+                            'Tanggal Input :',
                             style: headingText3,
                           ),
                           Text(
@@ -115,7 +115,7 @@ class DetailInventarisPakanPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Kategori Protein :',
+                              'Kandungan Protein :',
                               style: headingText3,
                             ),
                             Text(
@@ -131,7 +131,7 @@ class DetailInventarisPakanPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Kategori Karbon :',
+                              'Kandungan Karbon :',
                               style: headingText3,
                             ),
                             Text(
