@@ -202,7 +202,7 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
                       controller: testControl2,
                       isLong: false,
                       hint: 'Ex: 10',
-                      suffixSection: Icon(
+                      suffixSection: const Icon(
                         Icons.percent,
                         size: 16,
                         color: Colors.white,
@@ -213,7 +213,7 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
                       controller: testControl3,
                       isLong: false,
                       hint: 'Ex: 10',
-                      suffixSection: Icon(
+                      suffixSection: const Icon(
                         Icons.percent,
                         size: 16,
                         color: Colors.white,
@@ -221,7 +221,7 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 ),
                 Obx(
@@ -256,7 +256,7 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
                                   ),
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 16,
                               ),
                             ],
@@ -272,19 +272,19 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
                     style: headingText3,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 36,
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: addButtonColor,
-                    padding: EdgeInsets.symmetric(vertical: 12),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
                   onPressed: () {},
-                  child: Icon(Icons.add),
+                  child: const Icon(Icons.add),
                 ),
               ],
             );

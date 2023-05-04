@@ -6,6 +6,7 @@ class TextFieldWidget extends StatelessWidget {
     Key? key,
     required this.label,
     this.isLong = true,
+    this.isEdit = true,
     required this.controller,
     this.hint,
     this.suffixSection,
@@ -17,6 +18,7 @@ class TextFieldWidget extends StatelessWidget {
   final bool isLong;
   final String? hint;
   final Widget? suffixSection, prefixSection;
+  final bool isEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +54,7 @@ class TextFieldWidget extends StatelessWidget {
                 child: TextFormField(
                   controller: controller,
                   style: headingText3,
+                  enabled: isEdit,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: hint,

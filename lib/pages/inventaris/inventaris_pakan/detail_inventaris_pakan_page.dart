@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_state.dart';
 import 'package:fish/theme.dart';
+import 'package:fish/widgets/dialog_widget.dart';
+import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 
@@ -10,6 +14,8 @@ class DetailInventarisPakanPage extends StatelessWidget {
   }) : super(key: key);
 
   final String pageIdentifier;
+  final TextEditingController firstDate = TextEditingController();
+  final TextEditingController lastDate = TextEditingController();
 
   final InventarisPakanState state = Get.put(InventarisPakanState());
 
@@ -25,7 +31,7 @@ class DetailInventarisPakanPage extends StatelessWidget {
               'Detail Pakan',
               style: headingText2,
             ),
-            SizedBox(
+            const SizedBox(
               height: 2,
             ),
             Text(
@@ -36,8 +42,10 @@ class DetailInventarisPakanPage extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: Icon(
+            onPressed: () async {
+              openDateDialogPicker(context);
+            },
+            icon: const Icon(
               Icons.filter_list_rounded,
             ),
           )
@@ -47,7 +55,7 @@ class DetailInventarisPakanPage extends StatelessWidget {
         color: backgroundColor1,
         child: SafeArea(
           child: ListView.builder(
-            padding: EdgeInsets.only(bottom: 16),
+            padding: const EdgeInsets.only(bottom: 16),
             itemCount: state.dummyDataValue4.length,
             itemBuilder: ((context, index) {
               return Container(
@@ -60,7 +68,7 @@ class DetailInventarisPakanPage extends StatelessWidget {
                 child: Column(
                   children: [
                     Container(
-                      padding: EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: primaryColor,
                         borderRadius: BorderRadius.circular(6),
@@ -80,8 +88,8 @@ class DetailInventarisPakanPage extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.all(12),
-                      padding: EdgeInsets.all(12),
+                      margin: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: greyBackgroundColor,
                         borderRadius: BorderRadius.circular(8),
@@ -100,7 +108,7 @@ class DetailInventarisPakanPage extends StatelessWidget {
                             )
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 8,
                         ),
                         Row(
@@ -116,7 +124,7 @@ class DetailInventarisPakanPage extends StatelessWidget {
                             )
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 8,
                         ),
                         Row(
@@ -134,11 +142,11 @@ class DetailInventarisPakanPage extends StatelessWidget {
                         )
                       ]),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 4,
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                         horizontal: 12,
                       ),
                       child: Column(
@@ -156,7 +164,7 @@ class DetailInventarisPakanPage extends StatelessWidget {
                               )
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 12,
                           ),
                           Row(
@@ -172,42 +180,50 @@ class DetailInventarisPakanPage extends StatelessWidget {
                               )
                             ],
                           ),
-                          SizedBox(
-                            height: 12,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Jumlah :',
-                                style: headingText3,
-                              ),
-                              Text(
-                                '${state.dummyDataValue4[index]['amount']} kg',
-                                style: headingText3,
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            height: 12,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Tgl. Kadaluarsa :',
-                                style: headingText3,
-                              ),
-                              Text(
-                                '${state.dummyDataValue4[index]['expired_date']}',
-                                style: headingText3,
-                              )
-                            ],
-                          ),
+                          pageIdentifier == 'Alami'
+                              ? Container()
+                              : Column(
+                                  children: [
+                                    const SizedBox(
+                                      height: 12,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Jumlah :',
+                                          style: headingText3,
+                                        ),
+                                        Text(
+                                          '${state.dummyDataValue4[index]['amount']} kg',
+                                          style: headingText3,
+                                        )
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 12,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Tgl. Kadaluarsa :',
+                                          style: headingText3,
+                                        ),
+                                        Text(
+                                          '${state.dummyDataValue4[index]['expired_date']}',
+                                          style: headingText3,
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 12,
                     ),
                   ],
@@ -217,6 +233,97 @@ class DetailInventarisPakanPage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  openDateDialogPicker(BuildContext context) {
+    DialogWidget.open(
+      context,
+      [
+        Text(
+          'Pilih Tanggal',
+          style: headingText2,
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(
+          height: 36,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GestureDetector(
+              onTap: () async {
+                final DateTime? datePicker = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime(2100),
+                );
+                firstDate.text = datePicker
+                    .toString()
+                    .split(' ')[0]
+                    .split('-')
+                    .reversed
+                    .join('-');
+              },
+              child: TextFieldWidget(
+                label: 'Tanggal Awal',
+                controller: firstDate,
+                isLong: false,
+                isEdit: false,
+                suffixSection: Icon(
+                  Icons.arrow_drop_down_circle_rounded,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () async {
+                final DateTime? datePicker = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime(2100),
+                );
+                lastDate.text = datePicker
+                    .toString()
+                    .split(' ')[0]
+                    .split('-')
+                    .reversed
+                    .join('-');
+              },
+              child: TextFieldWidget(
+                label: 'Tanggal Akhir',
+                controller: lastDate,
+                isLong: false,
+                isEdit: false,
+                suffixSection: Icon(
+                  Icons.arrow_drop_down_circle_rounded,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 16,
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: addButtonColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Icon(
+            Icons.navigate_next_rounded,
+            color: Colors.white,
+          ),
+        )
+      ],
     );
   }
 }
