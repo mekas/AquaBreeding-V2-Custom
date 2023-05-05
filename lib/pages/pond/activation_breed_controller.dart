@@ -9,7 +9,7 @@ import 'benih_option_controller.dart';
 import 'breed_option_controller.dart';
 
 class ActivationBreedController extends GetxController {
-  Pond pond = Get.arguments()['pond'];
+  Pond pond = Get.arguments['pond'];
   ActivationService service = ActivationService();
   BenihOptionController benihOptionController = BenihOptionController();
   BreedOptionController breedOptionController = BreedOptionController();

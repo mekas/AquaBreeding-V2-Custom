@@ -10,7 +10,7 @@ class DailyWaterBreedListController extends GetxController {
   final ActivationService service = ActivationService();
 
   var isLoading = false.obs;
-  Pond pond = Get.arguments()['pond'];
+  Pond pond = Get.arguments['pond'];
   RxList activations = List<Activation>.empty().obs;
   var isPondActive = false.obs;
 

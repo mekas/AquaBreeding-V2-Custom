@@ -62,7 +62,9 @@ class RenderInventarisOrganicListWidget extends StatelessWidget {
                     ),
                     SizedBox(height: 6),
                     Text(
-                      data[index]['amount'].toString(),
+                      data[index]['type'] != null
+                          ? '${data[index]['amount']} ${data[index]['type']}'
+                          : '${data[index]['amount']} gram',
                       style: TextStyle(
                         color: Colors.grey.shade500,
                         fontWeight: FontWeight.bold,

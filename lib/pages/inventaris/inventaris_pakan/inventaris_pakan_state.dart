@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 class InventarisPakanState {
   RxString selectedDropdownValue = 'Pakan Industri'.obs;
   RxString pageDetail = 'Industri'.obs;
+  RxString detailFilter = 'input'.obs;
 
   RxList dummyDataValue = [
     {'name': 'Industri 1', 'amount': 100, 'expired_date': '22-02-2022'},
@@ -56,5 +57,26 @@ class InventarisPakanState {
       'amount': 10,
       'expired_date': '30 Jan 2020'
     },
+  ].obs;
+
+  RxList dummyDataValue5 = [
+    {
+      'date_input': '15 Januari 2020',
+      'name': 'Pelet',
+      'amount': 100,
+      'pond': 'Alpha',
+    },
+    {
+      'date_input': '16 Januari 2020',
+      'name': 'Pelet',
+      'amount': 80,
+      'pond': 'Beta',
+    },
+    {
+      'date_input': '17 Januari 2020',
+      'name': 'Pelet',
+      'amount': 30,
+      'pond': 'Charlie',
+    }
   ].obs;
 }

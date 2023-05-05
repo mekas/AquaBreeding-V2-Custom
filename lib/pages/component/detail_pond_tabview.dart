@@ -11,7 +11,7 @@ class MyTabsPond extends GetxController with GetSingleTickerProviderStateMixin {
   var isLoading = false.obs;
 
   late TabController controller;
-  Pond pond = Get.arguments()["pond"];
+  Pond pond = Get.arguments["pond"];
   final List<Tab> myTabs = <Tab>[
     const Tab(
       text: 'Musim Budidaya',

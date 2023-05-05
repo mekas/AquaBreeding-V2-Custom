@@ -1,8 +1,8 @@
-import 'package:fish/pages/inventaris/inventaris_pakan/detail_inventaris_pakan_page.dart';
+import 'package:fish/pages/inventaris/inventaris_pakan/detail_inventaris_pakan/detail_inventaris_pakan_mainpage.dart';
+import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_pages/pakan_alami_page.dart';
+import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_pages/pakan_campuran_page.dart';
+import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_pages/pakan_industri_page.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_state.dart';
-import 'package:fish/pages/inventaris/inventaris_pakan/pakan_alami_page.dart';
-import 'package:fish/pages/inventaris/inventaris_pakan/pakan_campuran_page.dart';
-import 'package:fish/pages/inventaris/inventaris_pakan/pakan_industri_page.dart';
 import 'package:fish/theme.dart';
 import 'package:fish/widgets/bottom_sheet_widget.dart';
 import 'package:fish/widgets/dialog_widget.dart';
@@ -49,7 +49,7 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
             IconButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: ((context) {
-                  return DetailInventarisPakanPage(
+                  return DetailInventarisPakanMainpage(
                     pageIdentifier: state.pageDetail.value,
                   );
                 })));

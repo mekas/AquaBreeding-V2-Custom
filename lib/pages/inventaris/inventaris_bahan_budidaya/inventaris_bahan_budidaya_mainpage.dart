@@ -1,11 +1,10 @@
-import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/bahan_budidaya_obat.dart';
-import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/bahan_budidaya_perawatan_air.dart';
+import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/detail_inventaris_bahan_budidaya/detail_inventaris_bahan_budidaya_mainpage.dart';
+import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_pages/bahan_budidaya_obat.dart';
+import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_pages/bahan_budidaya_perawatan_air.dart';
 import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_state.dart';
-import 'package:fish/pages/inventaris/inventaris_pakan/detail_inventaris_pakan_page.dart';
+import 'package:fish/pages/inventaris/inventaris_pakan/detail_inventaris_pakan/detail_inventaris_pakan_mainpage.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_state.dart';
-import 'package:fish/pages/inventaris/inventaris_pakan/pakan_alami_page.dart';
-import 'package:fish/pages/inventaris/inventaris_pakan/pakan_campuran_page.dart';
-import 'package:fish/pages/inventaris/inventaris_pakan/pakan_industri_page.dart';
+
 import 'package:fish/theme.dart';
 import 'package:fish/widgets/bottom_sheet_widget.dart';
 import 'package:fish/widgets/dialog_widget.dart';
@@ -55,7 +54,7 @@ class _InventarisBahanBudidayaMainpageState
             IconButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: ((context) {
-                  return DetailInventarisPakanPage(
+                  return DetailInventarisBahanBudidayaMainpage(
                     pageIdentifier: state.pageDetail.value,
                   );
                 })));
