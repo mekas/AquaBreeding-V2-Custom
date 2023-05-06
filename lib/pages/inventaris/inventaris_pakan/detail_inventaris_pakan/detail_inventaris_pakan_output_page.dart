@@ -31,6 +31,7 @@ class _DetailInventarisPakanOutputPageState
           child: ListView.builder(
             shrinkWrap: true,
             padding: const EdgeInsets.only(bottom: padding4XL),
+            physics: BouncingScrollPhysics(),
             itemBuilder: ((context, index) {
               return Container(
                 margin: const EdgeInsets.only(bottom: 14),

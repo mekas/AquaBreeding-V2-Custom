@@ -7,6 +7,7 @@ class TextFieldWidget extends StatelessWidget {
     required this.label,
     this.isLong = true,
     this.isEdit = true,
+    this.isMoreText = false,
     required this.controller,
     this.hint,
     this.suffixSection,
@@ -19,6 +20,7 @@ class TextFieldWidget extends StatelessWidget {
   final String? hint;
   final Widget? suffixSection, prefixSection;
   final bool isEdit;
+  final bool isMoreText;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +54,8 @@ class TextFieldWidget extends StatelessWidget {
                   : const SizedBox(),
               Expanded(
                 child: TextFormField(
+                  minLines: isMoreText ? 5 : null,
+                  maxLines: isMoreText ? null : 1,
                   controller: controller,
                   style: headingText3,
                   enabled: isEdit,

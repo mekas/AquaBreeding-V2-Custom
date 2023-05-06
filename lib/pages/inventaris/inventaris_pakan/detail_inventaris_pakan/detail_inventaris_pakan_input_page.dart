@@ -32,6 +32,7 @@ class _DetailInventarisPakanInputPageState
         child: ListView.builder(
           padding: const EdgeInsets.only(bottom: 16),
           itemCount: state.dummyDataValue4.length,
+          physics: BouncingScrollPhysics(),
           itemBuilder: ((context, index) {
             return Container(
               margin: const EdgeInsets.fromLTRB(16, 20, 16, 0),

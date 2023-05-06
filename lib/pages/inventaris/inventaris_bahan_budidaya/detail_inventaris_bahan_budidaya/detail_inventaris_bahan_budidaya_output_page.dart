@@ -31,6 +31,7 @@ class _DetailInventarisBahanBudidayaOutputPageState
           margin: const EdgeInsets.fromLTRB(16, 20, 16, 20),
           child: ListView.builder(
             shrinkWrap: true,
+            physics: BouncingScrollPhysics(),
             padding: const EdgeInsets.only(bottom: padding4XL),
             itemBuilder: ((context, index) {
               return Container(
