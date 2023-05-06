@@ -13,4 +13,63 @@ class InventarisAsetState {
   RxString selectedFilter = 'all'.obs;
 
   RxString selectedDropdownValue = 'Aset Tukang'.obs;
+
+  RxList dummyDataValue2 = [
+    {
+      'date_input': '12 Januari 2020',
+      'name': 'Filter Air',
+      'price': 25000,
+      'amount': 10,
+      'function': 'Digunakan untuk memfilter air',
+    },
+    {
+      'date_input': '12 Januari 2020',
+      'name': 'Filter Air',
+      'price': 25000,
+      'amount': 10,
+      'function': 'Digunakan untuk memfilter air',
+    },
+    {
+      'date_input': '12 Januari 2020',
+      'name': 'Filter Air',
+      'price': 25000,
+      'amount': 10,
+      'function': 'Digunakan untuk memfilter air',
+    },
+    {
+      'date_input': '12 Januari 2020',
+      'name': 'Filter Air',
+      'price': 25000,
+      'amount': 10,
+      'function': 'Digunakan untuk memfilter air',
+    },
+    {
+      'date_input': '12 Januari 2020',
+      'name': 'Filter Air',
+      'price': 25000,
+      'amount': 10,
+      'function': 'Digunakan untuk memfilter air',
+    },
+    {
+      'date_input': '12 Januari 2020',
+      'name': 'Filter Air',
+      'price': 25000,
+      'amount': 10,
+      'function': 'Digunakan untuk memfilter air',
+    },
+    {
+      'date_input': '12 Januari 2020',
+      'name': 'Filter Air',
+      'price': 25000,
+      'amount': 10,
+      'function': 'Digunakan untuk memfilter air',
+    },
+    {
+      'date_input': '12 Januari 2020',
+      'name': 'Filter Air',
+      'price': 25000,
+      'amount': 10,
+      'function': 'Digunakan untuk memfilter air',
+    },
+  ].obs;
 }

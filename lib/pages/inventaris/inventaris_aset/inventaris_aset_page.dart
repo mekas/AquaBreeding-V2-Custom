@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:fish/pages/inventaris/inventaris_aset/inventaris_aset_state.dart';
 import 'package:fish/theme.dart';
 import 'package:fish/widgets/bottom_sheet_widget.dart';
+import 'package:fish/widgets/dialog_widget.dart';
+import 'package:fish/widgets/render_inventaris_aset_list_widget.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,6 +33,9 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
   TextEditingController testControl3 = TextEditingController();
   TextEditingController testControl4 = TextEditingController();
 
+  final TextEditingController firstDate = TextEditingController();
+  final TextEditingController lastDate = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,18 +45,21 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
         title: Text('Aset'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              openDateDialogPicker(context);
+            },
             icon: Icon(Icons.filter_list_rounded),
           )
         ],
       ),
       body: Container(
         color: backgroundColor1,
-        padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
+        padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
         child: SafeArea(
           child: Column(
             children: [
-              SizedBox(
+              Container(
+                margin: EdgeInsets.only(left: 16),
                 height: 35,
                 width: double.infinity,
                 child: ListView.builder(
@@ -96,8 +104,9 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
                 ),
               ),
               SizedBox(
-                height: 24,
+                height: 12,
               ),
+              RenderInventarisAsetListWidget(data: state.dummyDataValue2),
             ],
           ),
         ),
@@ -243,6 +252,116 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
           size: 32,
         ),
       ),
+    );
+  }
+
+  openDateDialogPicker(BuildContext context) {
+    DialogWidget.open(
+      context,
+      [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Icon(
+                Icons.arrow_back_rounded,
+                size: 20,
+                color: Colors.white,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(right: 12),
+              child: Text(
+                'Pilih Tanggal',
+                style: headingText2,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Container(),
+          ],
+        ),
+        SizedBox(
+          height: 36,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GestureDetector(
+              onTap: () async {
+                final DateTime? datePicker = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime(2100),
+                );
+                firstDate.text = datePicker
+                    .toString()
+                    .split(' ')[0]
+                    .split('-')
+                    .reversed
+                    .join('-');
+              },
+              child: TextFieldWidget(
+                label: 'Tanggal Awal',
+                controller: firstDate,
+                isLong: false,
+                isEdit: false,
+                suffixSection: Icon(
+                  Icons.arrow_drop_down_circle_rounded,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () async {
+                final DateTime? datePicker = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime(2100),
+                );
+                lastDate.text = datePicker
+                    .toString()
+                    .split(' ')[0]
+                    .split('-')
+                    .reversed
+                    .join('-');
+              },
+              child: TextFieldWidget(
+                label: 'Tanggal Akhir',
+                controller: lastDate,
+                isLong: false,
+                isEdit: false,
+                suffixSection: Icon(
+                  Icons.arrow_drop_down_circle_rounded,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 16,
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: addButtonColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Icon(
+            Icons.navigate_next_rounded,
+            color: Colors.white,
+          ),
+        )
+      ],
     );
   }
 }

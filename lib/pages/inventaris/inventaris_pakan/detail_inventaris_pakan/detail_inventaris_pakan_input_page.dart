@@ -53,7 +53,7 @@ class _DetailInventarisPakanInputPageState
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Tanggal Input :',
+                          'Tanggal :',
                           style: headingText3,
                         ),
                         Text(
