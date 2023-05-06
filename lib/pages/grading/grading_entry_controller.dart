@@ -19,8 +19,8 @@ class GradingEntryController extends GetxController {
       TextEditingController(text: '');
   FishTypeController fishTypeController = FishTypeController();
   var isLoading = false.obs;
-  Pond pond = Get.arguments()['pond'];
-  Activation activation = Get.arguments()["activation"];
+  Pond pond = Get.arguments['pond'];
+  Activation activation = Get.arguments["activation"];
 
   final fishWeight = ''.obs;
   final validatefishWeight = false.obs;

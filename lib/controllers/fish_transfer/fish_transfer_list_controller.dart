@@ -8,8 +8,8 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
 class TransferController extends GetxController {
-  Activation activation = Get.arguments()["activation"];
-  Pond pond = Get.arguments()["pond"];
+  Activation activation = Get.arguments["activation"];
+  Pond pond = Get.arguments["pond"];
   var isLoading = false.obs;
   final listTransfer = <FishTransfer>[].obs;
 

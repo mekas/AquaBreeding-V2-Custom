@@ -11,8 +11,8 @@ import 'package:intl/intl.dart';
 class FeedController extends GetxController {
   final charData = <FeedChartData>[].obs;
   var isLoading = false.obs;
-  Activation activation = Get.arguments()["activation"];
-  Pond pond = Get.arguments()["pond"];
+  Activation activation = Get.arguments["activation"];
+  Pond pond = Get.arguments["pond"];
   final list_feedHistoryMonthly = <FeedHistoryMonthly>[].obs;
 
   @override

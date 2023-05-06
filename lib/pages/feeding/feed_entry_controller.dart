@@ -12,8 +12,8 @@ class FeedEntryController extends GetxController {
   FeedTypeFormController feedTypeFormController = FeedTypeFormController();
   TextEditingController feedDosisController = TextEditingController(text: '');
   var isLoading = false.obs;
-  Pond pond = Get.arguments()['pond'];
-  Activation activation = Get.arguments()["activation"];
+  Pond pond = Get.arguments['pond'];
+  Activation activation = Get.arguments["activation"];
   final dose = ''.obs;
   final validatedose = false.obs;
 

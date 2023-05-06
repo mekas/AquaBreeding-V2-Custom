@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 class WeeklyWaterDetailController extends GetxController {
   var isLoading = false.obs;
-  WeeklyWater weeklyWater = Get.arguments()["weeklywater"];
-  Activation activation = Get.arguments()["activation"];
-  Pond pond = Get.arguments()["pond"];
+  WeeklyWater weeklyWater = Get.arguments["weeklywater"];
+  Activation activation = Get.arguments["activation"];
+  Pond pond = Get.arguments["pond"];
 }

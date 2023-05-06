@@ -22,8 +22,8 @@ class WeeklyWaterEntryController extends GetxController {
   TextEditingController amoniaController = TextEditingController(text: '0');
 
   TextEditingController hardnessController = TextEditingController(text: '0');
-  Activation activation = Get.arguments()["activation"];
-  Pond pond = Get.arguments()["pond"];
+  Activation activation = Get.arguments["activation"];
+  Pond pond = Get.arguments["pond"];
 
   getWeek() {
     var week = (DateTime.now().day - activation.activationAt!.day) / 7;

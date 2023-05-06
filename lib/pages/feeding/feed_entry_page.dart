@@ -116,45 +116,85 @@ class FeedEntryPage extends StatelessWidget {
       return Container(
         margin: EdgeInsets.only(
             top: defaultSpace, right: defaultMargin, left: defaultMargin),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Dosis Pakan (Kg)',
-              style: primaryTextStyle.copyWith(
-                fontSize: 16,
-                fontWeight: medium,
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Dosis Pakan (Kg)',
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 16,
+                    fontWeight: medium,
+                  ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width / 2.6,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                  ),
+                  decoration: BoxDecoration(
+                    color: backgroundColor2,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(child: Obx(() {
+                    return TextFormField(
+                      style: primaryTextStyle,
+                      keyboardType: TextInputType.number,
+                      onChanged: controller.doseChanged,
+                      onTap: controller.valdose,
+                      controller: controller.feedDosisController,
+                      decoration: controller.validatedose.value == true
+                          ? controller.dose == ''
+                              ? const InputDecoration(
+                                  errorText: 'Dosis tidak boleh kosong',
+                                  isCollapsed: true)
+                              : null
+                          : InputDecoration.collapsed(
+                              hintText: 'ex: 2.1',
+                              hintStyle: subtitleTextStyle),
+                    );
+                  })),
+                ),
+              ],
             ),
-            const SizedBox(
-              height: 12,
-            ),
-            Container(
-              height: 50,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-              ),
-              decoration: BoxDecoration(
-                color: backgroundColor2,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(child: Obx(() {
-                return TextFormField(
-                  style: primaryTextStyle,
-                  keyboardType: TextInputType.number,
-                  onChanged: controller.doseChanged,
-                  onTap: controller.valdose,
-                  controller: controller.feedDosisController,
-                  decoration: controller.validatedose.value == true
-                      ? controller.dose == ''
-                          ? const InputDecoration(
-                              errorText: 'Dosis tidak boleh kosong',
-                              isCollapsed: true)
-                          : null
-                      : InputDecoration.collapsed(
-                          hintText: 'ex: 2.1', hintStyle: subtitleTextStyle),
-                );
-              })),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Stok Pakan',
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 16,
+                    fontWeight: medium,
+                  ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width / 2.6,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                  ),
+                  decoration: BoxDecoration(
+                    color: backgroundColor1,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: Text(
+                      '100 gram',
+                      textAlign: TextAlign.start,
+                      style: headingText2,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

@@ -10,9 +10,9 @@ import '../../service/daily_water_service.dart';
 
 class DailyWaterDetailController extends GetxController {
   var isLoading = false.obs;
-  DailyWater dailyWater = Get.arguments()["dailywater"];
-  Activation activation = Get.arguments()["activation"];
-  Pond pond = Get.arguments()["pond"];
+  DailyWater dailyWater = Get.arguments["dailywater"];
+  Activation activation = Get.arguments["activation"];
+  Pond pond = Get.arguments["pond"];
   final dailyWaterfix = <DailyWater>[].obs;
 
   Future<void> getDailyWaterData(

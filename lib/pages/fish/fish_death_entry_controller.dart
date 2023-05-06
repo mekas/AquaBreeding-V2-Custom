@@ -13,8 +13,8 @@ import '../../models/activation_model.dart';
 class FishDeathEntryController extends GetxController {
   TextEditingController formDeathController = TextEditingController(text: '');
   FishTypeController fishTypeController = FishTypeController();
-  Activation activation = Get.arguments()["activation"];
-  Pond pond = Get.arguments()["pond"];
+  Activation activation = Get.arguments["activation"];
+  Pond pond = Get.arguments["pond"];
   final fishamount = ''.obs;
   final validatefishamount = false.obs;
   var isLoading = false.obs;

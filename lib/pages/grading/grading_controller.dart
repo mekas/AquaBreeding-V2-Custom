@@ -20,8 +20,8 @@ class GradingController extends GetxController {
   var isNilaMerah = false.obs;
   var isNilaHitam = false.obs;
 
-  Activation activation = Get.arguments()["activation"];
-  Pond pond = Get.arguments()["pond"];
+  Activation activation = Get.arguments["activation"];
+  Pond pond = Get.arguments["pond"];
   final list_fishGrading = <FishGrading>[].obs;
 
   @override

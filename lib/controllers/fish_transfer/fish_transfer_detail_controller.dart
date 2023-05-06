@@ -5,9 +5,9 @@ import 'package:fish/models/pond_model.dart';
 
 class SortirDetailController extends GetxController {
   var isLoading = false.obs;
-  Activation activation = Get.arguments()["activation"];
-  Pond pond = Get.arguments()["pond"];
-  FishTransfer sortir = Get.arguments()["sortir"];
+  Activation activation = Get.arguments["activation"];
+  Pond pond = Get.arguments["pond"];
+  FishTransfer sortir = Get.arguments["sortir"];
 
   // Activation activation = Get.arguments()["activation"];
   // Pond pond = Get.arguments()["pond"];

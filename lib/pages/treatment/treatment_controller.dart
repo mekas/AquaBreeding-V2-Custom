@@ -7,8 +7,8 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
 class TreatmentController extends GetxController {
-  Activation activation = Get.arguments()["activation"];
-  Pond pond = Get.arguments()["pond"];
+  Activation activation = Get.arguments["activation"];
+  Pond pond = Get.arguments["pond"];
   var isLoading = false.obs;
   final listTreatment = <Treatment>[].obs;
   final listTreatmentTest = <Treatment>[].obs;

@@ -12,8 +12,8 @@ class MyTabs extends GetxController with GetSingleTickerProviderStateMixin {
   var isLoading = false.obs;
 
   late TabController controller;
-  Activation activation = Get.arguments()["activation"];
-  Pond pond = Get.arguments()["pond"];
+  Activation activation = Get.arguments["activation"];
+  Pond pond = Get.arguments["pond"];
   final List<Tab> myTabs = <Tab>[
     const Tab(
       text: 'Rekap Data',

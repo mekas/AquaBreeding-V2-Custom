@@ -14,8 +14,8 @@ import '../../models/fish_live_model.dart';
 class FishRecapController extends GetxController {
   final list_fishDeath = <FishDeath>[].obs;
   final charData = <FishLiveData>[].obs;
-  Activation activation = Get.arguments()["activation"];
-  Pond pond = Get.arguments()["pond"];
+  Activation activation = Get.arguments["activation"];
+  Pond pond = Get.arguments["pond"];
   // var fishlive = activation.fishAmount.obs;
   var isLoading = false.obs;
 

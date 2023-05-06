@@ -10,8 +10,8 @@ import '../weeklywater/weeklywater_list_page.dart';
 
 class MyWaterTabs extends GetxController
     with GetSingleTickerProviderStateMixin {
-  Activation activation = Get.arguments()["activation"];
-  Pond pond = Get.arguments()["pond"];
+  Activation activation = Get.arguments["activation"];
+  Pond pond = Get.arguments["pond"];
   var isLoading = false.obs;
   late TabController controller;
   final List<Tab> myTabs = <Tab>[

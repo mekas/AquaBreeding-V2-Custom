@@ -16,8 +16,8 @@ class DailyWaterEntryController extends GetxController {
       TextEditingController(text: '0');
   TextEditingController phController = TextEditingController(text: '0');
   TextEditingController doController = TextEditingController(text: '0');
-  Activation activation = Get.arguments()["activation"];
-  Pond pond = Get.arguments()["pond"];
+  Activation activation = Get.arguments["activation"];
+  Pond pond = Get.arguments["pond"];
 
   getWeek() {
     var week = (DateTime.now().day - activation.activationAt!.day) / 7;

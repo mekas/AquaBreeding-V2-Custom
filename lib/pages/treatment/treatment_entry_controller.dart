@@ -50,8 +50,8 @@ class TreatmentEntryController extends GetxController {
 
   TextEditingController patinWeightController = TextEditingController(text: '');
   TextEditingController masWeightController = TextEditingController(text: '');
-  Activation activation = Get.arguments()["activation"];
-  Pond pond = Get.arguments()["pond"];
+  Activation activation = Get.arguments["activation"];
+  Pond pond = Get.arguments["pond"];
 
   Future<void> postFishGrading(BuildContext context, Function doInPost) async {
     bool value = await TreatmentService().postPondTreatment(
