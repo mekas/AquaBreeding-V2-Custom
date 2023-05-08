@@ -1,4 +1,5 @@
 import 'package:fish/models/fish_model.dart';
+import 'package:fish/widgets/dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/pages/pond/deactivation_breed_controller.dart';
 import 'package:fish/theme.dart';
@@ -92,6 +93,7 @@ class DeactivationListCard extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
+                  openDetailPriceDialog(context);
                   print('hHH');
                 },
                 child: Icon(
@@ -141,6 +143,73 @@ class DeactivationListCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  openDetailPriceDialog(BuildContext context) {
+    DialogWidget.open(
+      context,
+      [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const CircleAvatar(
+                backgroundColor: Colors.red,
+                radius: 12,
+                child: Icon(
+                  Icons.close,
+                  size: 14,
+                  color: Colors.black,
+                ),
+              ),
+            )
+          ],
+        ),
+        Text(
+          'Harga Ikan',
+          style: headingText2,
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(
+          height: 24,
+        ),
+        Text(
+          'Harga ikan dihitung berdasarkan formula berikut.',
+          style: headingText3,
+        ),
+        SizedBox(
+          height: 14,
+        ),
+        Text(
+          '1. Harga Total',
+          style: headingText3,
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        Text(
+          'Harga benih + harga pakan + (harga listrik / jumlah kolam) + harga bahan budidaya',
+          style: hoverText.copyWith(fontSize: 12),
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        Text(
+          '2. Harga Individu (per ekor)',
+          style: headingText3,
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        Text(
+          'Harga total / jumlah ikan hidup pada kolam',
+          style: hoverText.copyWith(fontSize: 12),
+        )
+      ],
     );
   }
 }
