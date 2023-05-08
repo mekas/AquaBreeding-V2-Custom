@@ -163,38 +163,77 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
       return Container(
         margin: EdgeInsets.only(
             top: defaultSpace, right: defaultMargin, left: defaultMargin),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Dosis Garam (Kg)',
-              style: primaryTextStyle.copyWith(
-                fontSize: 16,
-                fontWeight: medium,
-              ),
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-            Container(
-              height: 50,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-              ),
-              decoration: BoxDecoration(
-                color: backgroundColor2,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                child: TextFormField(
-                  style: primaryTextStyle,
-                  controller: controller.saltController,
-                  decoration: InputDecoration.collapsed(
-                    hintText: 'ex: 20',
-                    hintStyle: subtitleTextStyle,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Dosis Garam (Kg)',
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 16,
+                    fontWeight: medium,
                   ),
                 ),
-              ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width / 2.6,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                  ),
+                  decoration: BoxDecoration(
+                    color: backgroundColor2,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: TextFormField(
+                      style: primaryTextStyle,
+                      controller: controller.saltController,
+                      decoration: InputDecoration.collapsed(
+                        hintText: 'ex: 20',
+                        hintStyle: subtitleTextStyle,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Stok Garam',
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 16,
+                    fontWeight: medium,
+                  ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width / 2.6,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                  ),
+                  decoration: BoxDecoration(
+                    color: backgroundColor2,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: Text(
+                      '100 gram',
+                      textAlign: TextAlign.start,
+                      style: headingText2,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -319,42 +358,81 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
       return Container(
         margin: EdgeInsets.only(
             top: defaultSpace, right: defaultMargin, left: defaultMargin),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Karbon (gram)',
-              style: primaryTextStyle.copyWith(
-                fontSize: 16,
-                fontWeight: medium,
-              ),
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-            Container(
-              height: 50,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-              ),
-              decoration: BoxDecoration(
-                color: backgroundColor2,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                child: TextFormField(
-                  style: primaryTextStyle,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                  keyboardType: TextInputType.number,
-                  controller: controller.carbonController,
-                  decoration: InputDecoration.collapsed(
-                    hintText: 'ex: 2',
-                    hintStyle: subtitleTextStyle,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Karbon (gram)',
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 16,
+                    fontWeight: medium,
                   ),
                 ),
-              ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width / 2.6,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                  ),
+                  decoration: BoxDecoration(
+                    color: backgroundColor2,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: TextFormField(
+                      style: primaryTextStyle,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      keyboardType: TextInputType.number,
+                      controller: controller.carbonController,
+                      decoration: InputDecoration.collapsed(
+                        hintText: 'ex: 2',
+                        hintStyle: subtitleTextStyle,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Stok Karbon',
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 16,
+                    fontWeight: medium,
+                  ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width / 2.6,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                  ),
+                  decoration: BoxDecoration(
+                    color: backgroundColor2,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: Text(
+                      '100 gram',
+                      textAlign: TextAlign.start,
+                      style: headingText2,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

@@ -183,7 +183,7 @@ class FeedEntryPage extends StatelessWidget {
                     horizontal: 16,
                   ),
                   decoration: BoxDecoration(
-                    color: backgroundColor1,
+                    color: backgroundColor2,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Center(
