@@ -28,10 +28,7 @@ class DeactivationListCard extends StatelessWidget {
             children: [
               Text(
                 fish.type!,
-                style: primaryTextStyle.copyWith(
-                  fontSize: 18,
-                  fontWeight: medium,
-                ),
+                style: headingText2,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
@@ -48,6 +45,9 @@ class DeactivationListCard extends StatelessWidget {
                 maxLines: 1,
               ),
             ],
+          ),
+          SizedBox(
+            height: 6,
           ),
           Container(
             height: 50,
@@ -75,6 +75,68 @@ class DeactivationListCard extends StatelessWidget {
                   hintStyle: subtitleTextStyle,
                 ),
               ),
+            ),
+          ),
+          SizedBox(
+            height: 12,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                'Harga',
+                style: headingText2,
+              ),
+              SizedBox(
+                width: 8,
+              ),
+              GestureDetector(
+                onTap: () {
+                  print('hHH');
+                },
+                child: Icon(
+                  Icons.info_outline,
+                  color: Colors.grey,
+                  size: 18,
+                ),
+              )
+            ],
+          ),
+          Container(
+            height: 50,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+            ),
+            decoration: BoxDecoration(
+              color: backgroundColor1,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: Text(
+                    'Rp',
+                    style: hoverText.copyWith(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: TextFormField(
+                    style: headingText3,
+                    enabled: false,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: '100,000.00 / ekor',
+                      hintStyle: hoverText.copyWith(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
