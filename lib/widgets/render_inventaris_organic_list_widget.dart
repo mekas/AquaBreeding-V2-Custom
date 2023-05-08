@@ -31,6 +31,7 @@ class RenderInventarisOrganicListWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Nama / Merek',
@@ -75,6 +76,7 @@ class RenderInventarisOrganicListWidget extends StatelessWidget {
                   ],
                 ),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Kadaluarsa',

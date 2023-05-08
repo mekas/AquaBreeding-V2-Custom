@@ -3,6 +3,7 @@ import 'package:fish/pages/component/water_card.dart';
 import 'package:fish/controllers/home/home_controller.dart';
 import 'package:fish/pages/inventaris/inventaris_aset/inventaris_aset_page.dart';
 import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_mainpage.dart';
+import 'package:fish/pages/inventaris/inventaris_listrik/inventaris_listrik_page.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_mainpage.dart';
 import 'package:fish/widgets/main_inventaris_button.dart';
 import 'package:flutter/material.dart';
@@ -322,7 +323,10 @@ class HomePage extends StatelessWidget {
                 MainInvetarisButton(
                   title: 'Listrik',
                   doOnTap: () {
-                    print('test');
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return const InventarisListrikPage();
+                    }));
                   },
                 ),
                 MainInvetarisButton(
