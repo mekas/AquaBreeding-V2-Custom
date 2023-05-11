@@ -23,7 +23,7 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
 
   static var dropdownList = [
     'Aset Tukang',
-    'Aset Budidaya',
+    'Aset Peralatan Budidaya',
     'Aset Kolam',
     'Aset Living',
   ];
@@ -78,7 +78,10 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
                         });
                       },
                       child: Container(
-                        width: 100,
+                        width: state.filterList[index]['title'] ==
+                                'Peralatan Budidaya'
+                            ? 150
+                            : 100,
                         padding: EdgeInsets.fromLTRB(12, 8, 12, 8),
                         margin: EdgeInsets.only(right: 8),
                         decoration: BoxDecoration(

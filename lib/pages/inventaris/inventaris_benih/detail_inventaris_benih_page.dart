@@ -99,21 +99,72 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
                         color: greyBackgroundColor,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Column(children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Fungsi :',
-                              style: headingText3,
-                            ),
-                            Text(
-                              '${state.dummyDataValue2[index]['function']}',
-                              style: headingText3,
-                            )
-                          ],
-                        ),
-                      ]),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Kategori :',
+                                style: headingText3,
+                              ),
+                              Text(
+                                '${state.dummyDataValue2[index]['category']}',
+                                style: headingText3,
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 12,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Jenis Ikan :',
+                                style: headingText3,
+                              ),
+                              Text(
+                                'Ikan ${state.dummyDataValue2[index]['fish_type']}',
+                                style: headingText3,
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 12,
+                          ),
+                          state.dummyDataValue2[index]['category'] ==
+                                  'Kelas Benih'
+                              ? Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Satuan Sortir :',
+                                      style: headingText3,
+                                    ),
+                                    Text(
+                                      '${state.dummyDataValue2[index]['sortir']} cm',
+                                      style: headingText3,
+                                    )
+                                  ],
+                                )
+                              : Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Panjang & Lebar :',
+                                      style: headingText3,
+                                    ),
+                                    Text(
+                                      '${state.dummyDataValue2[index]['panjang']}x${state.dummyDataValue2[index]['panjang']} cm',
+                                      style: headingText3,
+                                    )
+                                  ],
+                                ),
+                        ],
+                      ),
                     ),
                     const SizedBox(
                       height: 4,
@@ -128,46 +179,12 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Nama / Merek :',
-                                style: headingText3,
-                              ),
-                              Text(
-                                '${state.dummyDataValue2[index]['name']}',
-                                style: headingText3,
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Harga Beli :',
-                                style: headingText3,
-                              ),
-                              Text(
-                                '${state.dummyDataValue2[index]['price']}',
-                                style: headingText3,
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
                                 'Jumlah :',
                                 style: headingText3,
                               ),
                               Text(
-                                '+${state.dummyDataValue2[index]['amount']} kg',
-                                style: headingText3.copyWith(
-                                  color: addButtonColor,
-                                ),
+                                '${state.dummyDataValue2[index]['amount']} ekor',
+                                style: headingText3,
                               )
                             ],
                           ),
@@ -178,14 +195,31 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Tgl. Kadaluarsa :',
+                                'Berat :',
                                 style: headingText3,
                               ),
                               Text(
-                                '${state.dummyDataValue2[index]['expired_date']}',
+                                '${state.dummyDataValue2[index]['weight']} gram',
                                 style: headingText3,
                               )
                             ],
+                          ),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Harga :',
+                                style: headingText3,
+                              ),
+                              Text('Rp${state.dummyDataValue2[index]['price']}',
+                                  style: headingText3)
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 12,
                           ),
                         ],
                       ),
