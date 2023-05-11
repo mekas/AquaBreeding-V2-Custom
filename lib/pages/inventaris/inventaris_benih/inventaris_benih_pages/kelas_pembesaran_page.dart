@@ -83,7 +83,27 @@ class _KelasPembesaranPageState extends State<KelasPembesaranPage> {
                   ],
                 ),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Berat',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                    SizedBox(height: 6),
+                    Text(
+                      '${state.dummyDataValue[index]['weight']} gram',
+                      style: TextStyle(
+                        color: Colors.grey.shade500,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
                   children: [
                     Text(
                       'Jumlah',
@@ -95,7 +115,7 @@ class _KelasPembesaranPageState extends State<KelasPembesaranPage> {
                     ),
                     SizedBox(height: 6),
                     Text(
-                      state.dummyDataValue[index]['amount'].toString(),
+                      '${state.dummyDataValue[index]['amount']} ekor',
                       style: TextStyle(
                         color: Colors.grey.shade500,
                         fontWeight: FontWeight.bold,

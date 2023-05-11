@@ -40,7 +40,7 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
           backgroundColor: backgroundColor1,
           elevation: 0,
           title: Text(
-            'Detail Pakan',
+            'Benih',
             style: headingText2,
           ),
           actions: [

@@ -7,10 +7,30 @@ class InventarisBenihState {
   RxString selectedPage = 'Kelas Benih'.obs;
 
   RxList dummyDataValue = [
-    {'year': 2023, 'fish_type': 'lele', 'amount': 90},
-    {'year': 2023, 'fish_type': 'lele', 'amount': 90},
-    {'year': 2023, 'fish_type': 'lele', 'amount': 90},
-    {'year': 2023, 'fish_type': 'lele', 'amount': 90}
+    {
+      'year': 2023,
+      'fish_type': 'lele',
+      'amount': 90,
+      'weight': 800,
+    },
+    {
+      'year': 2023,
+      'fish_type': 'lele',
+      'amount': 90,
+      'weight': 800,
+    },
+    {
+      'year': 2023,
+      'fish_type': 'lele',
+      'amount': 90,
+      'weight': 800,
+    },
+    {
+      'year': 2023,
+      'fish_type': 'lele',
+      'amount': 90,
+      'weight': 800,
+    }
   ].obs;
 
   RxList dummyDataValue2 = [
