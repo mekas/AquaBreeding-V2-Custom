@@ -33,6 +33,33 @@ class InventarisBenihState {
     }
   ].obs;
 
+  RxList dummyDataValue4 = [
+    {
+      'year': 2023,
+      'fish_type': 'lele',
+      'sortir': '1-2',
+      'weight': 800,
+    },
+    {
+      'year': 2023,
+      'fish_type': 'lele',
+      'sortir': '1-2',
+      'weight': 800,
+    },
+    {
+      'year': 2023,
+      'fish_type': 'lele',
+      'sortir': '1-2',
+      'weight': 800,
+    },
+    {
+      'year': 2023,
+      'fish_type': 'lele',
+      'sortir': '1-2',
+      'weight': 800,
+    }
+  ].obs;
+
   RxList dummyDataValue2 = [
     {
       'date_input': '22-02-2022',
@@ -56,6 +83,9 @@ class InventarisBenihState {
       'panjang': null,
       'lebar': null,
     },
+  ].obs;
+
+  RxList dummyDataValue3 = [
     {
       'date_input': '22-02-2022',
       'amount': 10,

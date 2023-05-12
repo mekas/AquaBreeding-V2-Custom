@@ -19,7 +19,23 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
   final TextEditingController firstDate = TextEditingController();
   final TextEditingController lastDate = TextEditingController();
 
+  List usedList = [];
+
   final InventarisBenihState state = Get.put(InventarisBenihState());
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.pageIdentifier == 'Kelas Benih') {
+      setState(() {
+        usedList = state.dummyDataValue2;
+      });
+    } else {
+      setState(() {
+        usedList = state.dummyDataValue3;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +76,7 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
         child: SafeArea(
           child: ListView.builder(
             padding: const EdgeInsets.only(bottom: 16),
-            itemCount: state.dummyDataValue2.length,
+            itemCount: usedList.length,
             physics: BouncingScrollPhysics(),
             itemBuilder: ((context, index) {
               return Container(
@@ -86,7 +102,7 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
                             style: headingText3,
                           ),
                           Text(
-                            state.dummyDataValue2[index]['date_input'],
+                            usedList[index]['date_input'],
                             style: headingText3,
                           )
                         ],
@@ -109,7 +125,7 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
                                 style: headingText3,
                               ),
                               Text(
-                                '${state.dummyDataValue2[index]['category']}',
+                                '${usedList[index]['category']}',
                                 style: headingText3,
                               )
                             ],
@@ -125,7 +141,7 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
                                 style: headingText3,
                               ),
                               Text(
-                                'Ikan ${state.dummyDataValue2[index]['fish_type']}',
+                                'Ikan ${usedList[index]['fish_type']}',
                                 style: headingText3,
                               )
                             ],
@@ -133,8 +149,7 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
                           SizedBox(
                             height: 12,
                           ),
-                          state.dummyDataValue2[index]['category'] ==
-                                  'Kelas Benih'
+                          usedList[index]['category'] == 'Kelas Benih'
                               ? Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -144,7 +159,7 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
                                       style: headingText3,
                                     ),
                                     Text(
-                                      '${state.dummyDataValue2[index]['sortir']} cm',
+                                      '${usedList[index]['sortir']} cm',
                                       style: headingText3,
                                     )
                                   ],
@@ -158,7 +173,7 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
                                       style: headingText3,
                                     ),
                                     Text(
-                                      '${state.dummyDataValue2[index]['panjang']}x${state.dummyDataValue2[index]['panjang']} cm',
+                                      '${usedList[index]['panjang']}x${usedList[index]['panjang']} cm',
                                       style: headingText3,
                                     )
                                   ],
@@ -183,7 +198,7 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
                                 style: headingText3,
                               ),
                               Text(
-                                '${state.dummyDataValue2[index]['amount']} ekor',
+                                '${usedList[index]['amount']} ekor',
                                 style: headingText3,
                               )
                             ],
@@ -199,7 +214,7 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
                                 style: headingText3,
                               ),
                               Text(
-                                '${state.dummyDataValue2[index]['weight']} gram',
+                                '${usedList[index]['weight']} gram',
                                 style: headingText3,
                               )
                             ],
@@ -214,7 +229,7 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
                                 'Harga :',
                                 style: headingText3,
                               ),
-                              Text('Rp${state.dummyDataValue2[index]['price']}',
+                              Text('Rp${usedList[index]['price']}',
                                   style: headingText3)
                             ],
                           ),

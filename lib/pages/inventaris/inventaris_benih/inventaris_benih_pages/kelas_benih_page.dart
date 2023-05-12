@@ -85,7 +85,7 @@ class _KelasBenihPageState extends State<KelasBenihPage> {
                 Column(
                   children: [
                     Text(
-                      'Berat',
+                      'Uk. Sortir',
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -94,7 +94,7 @@ class _KelasBenihPageState extends State<KelasBenihPage> {
                     ),
                     SizedBox(height: 6),
                     Text(
-                      '${state.dummyDataValue[index]['weight']} gram',
+                      '${state.dummyDataValue4[index]['sortir']} cm',
                       style: TextStyle(
                         color: Colors.grey.shade500,
                         fontWeight: FontWeight.bold,
