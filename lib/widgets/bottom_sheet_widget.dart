@@ -2,16 +2,14 @@ import 'package:fish/theme.dart';
 import 'package:fish/widgets/max_width_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class BottomSheetWidget {
   static getBottomSheetWidget(BuildContext context, List<Widget> children,
       {Function()? onClose}) {
-    showMaterialModalBottomSheet(
+    showModalBottomSheet(
         backgroundColor: Colors.transparent,
         barrierColor: Colors.black.withOpacity(0.8),
         context: context,
-        expand: false,
         builder: (context) {
           return WillPopScope(
             onWillPop: () async {
