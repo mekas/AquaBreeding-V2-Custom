@@ -354,46 +354,126 @@ class ActivationBreedPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Center(
-                child: TextFormField(
-                  style: primaryTextStyle,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                  keyboardType: TextInputType.number,
-                  controller: controller.nilaHitamAmountController,
-                  decoration: InputDecoration.collapsed(
-                    hintText: 'Jumlah Ikan',
-                    hintStyle: subtitleTextStyle,
-                  ),
-                ),
+                child: Obx(() => DropdownButtonFormField<String>(
+                      onChanged: (newValue) {
+                        // controller.breedOptionController.setSelected(newValue!);
+                        // controller.isLele.value = false;
+                        // controller.isNilaHitam.value = false;
+                        // controller.isNilaMerah.value = false;
+                        // controller.isPatin.value = false;
+                        // controller.isMas.value = false;
+                      },
+                      value: controller.breedOptionController.selected.value,
+                      items: controller.breedOptionController.listBreed
+                          .map((material) {
+                        return DropdownMenuItem<String>(
+                          value: material,
+                          child: Text(
+                            material,
+                            style: primaryTextStyle,
+                          ),
+                        );
+                      }).toList(),
+                      dropdownColor: backgroundColor5,
+                      decoration:
+                          const InputDecoration(border: InputBorder.none),
+                    )),
               ),
             ),
             const SizedBox(
               height: 12,
             ),
-            Container(
-              height: 50,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-              ),
-              decoration: BoxDecoration(
-                color: backgroundColor2,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                child: TextFormField(
-                  style: primaryTextStyle,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                  keyboardType: TextInputType.number,
-                  controller: controller.nilaHitamWeightController,
-                  decoration: InputDecoration.collapsed(
-                    hintText: 'Berat Total Ikan',
-                    hintStyle: subtitleTextStyle,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width / 2.3,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                  ),
+                  decoration: BoxDecoration(
+                    color: backgroundColor2,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Berat Ikan : 1000 gram',
+                      style: headingText3,
+                    ),
                   ),
                 ),
-              ),
+                Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width / 2.3,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                  ),
+                  decoration: BoxDecoration(
+                    color: backgroundColor2,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Ukuran : -',
+                      style: headingText3,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width / 2.3,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                  ),
+                  decoration: BoxDecoration(
+                    color: backgroundColor2,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Stok Benih : 100 Ekor',
+                      style: headingText3,
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width / 2.3,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                  ),
+                  decoration: BoxDecoration(
+                    color: backgroundColor2,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: TextFormField(
+                      style: primaryTextStyle,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      keyboardType: TextInputType.number,
+                      controller: controller.nilaHitamAmountController,
+                      decoration: InputDecoration.collapsed(
+                        hintText: 'Jumlah Ikan',
+                        hintStyle: subtitleTextStyle,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 12,
             ),
           ],
         ),
@@ -554,7 +634,7 @@ class ActivationBreedPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Jenis Budidaya',
+              'Kategori',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -574,8 +654,14 @@ class ActivationBreedPage extends StatelessWidget {
               ),
               child: Center(
                 child: Obx(() => DropdownButtonFormField<String>(
-                      onChanged: (newValue) => controller.breedOptionController
-                          .setSelected(newValue!),
+                      onChanged: (newValue) {
+                        controller.breedOptionController.setSelected(newValue!);
+                        controller.isLele.value = false;
+                        controller.isNilaHitam.value = false;
+                        controller.isNilaMerah.value = false;
+                        controller.isPatin.value = false;
+                        controller.isMas.value = false;
+                      },
                       value: controller.breedOptionController.selected.value,
                       items: controller.breedOptionController.listBreed
                           .map((material) {
@@ -598,99 +684,99 @@ class ActivationBreedPage extends StatelessWidget {
       );
     }
 
-    Widget pembesaranInput() {
-      return Container(
-        margin: EdgeInsets.only(
-            top: defaultSpace, right: defaultMargin, left: defaultMargin),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Kelas Pembesaran (gram)',
-              style: primaryTextStyle.copyWith(
-                fontSize: 16,
-                fontWeight: medium,
-              ),
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-            Container(
-              height: 50,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-              ),
-              decoration: BoxDecoration(
-                color: backgroundColor2,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                child: TextFormField(
-                  style: primaryTextStyle,
-                  controller: controller.kelasPembesaranController,
-                  decoration: InputDecoration.collapsed(
-                    hintText: 'ex: 100',
-                    hintStyle: subtitleTextStyle,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+    // Widget pembesaranInput() {
+    //   return Container(
+    //     margin: EdgeInsets.only(
+    //         top: defaultSpace, right: defaultMargin, left: defaultMargin),
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         Text(
+    //           'Kelas Pembesaran (gram)',
+    //           style: primaryTextStyle.copyWith(
+    //             fontSize: 16,
+    //             fontWeight: medium,
+    //           ),
+    //         ),
+    //         const SizedBox(
+    //           height: 12,
+    //         ),
+    //         Container(
+    //           height: 50,
+    //           padding: const EdgeInsets.symmetric(
+    //             horizontal: 16,
+    //           ),
+    //           decoration: BoxDecoration(
+    //             color: backgroundColor2,
+    //             borderRadius: BorderRadius.circular(12),
+    //           ),
+    //           child: Center(
+    //             child: TextFormField(
+    //               style: primaryTextStyle,
+    //               controller: controller.kelasPembesaranController,
+    //               decoration: InputDecoration.collapsed(
+    //                 hintText: 'ex: 100',
+    //                 hintStyle: subtitleTextStyle,
+    //               ),
+    //             ),
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
 
-    Widget benihInput() {
-      return Container(
-        margin: EdgeInsets.only(
-            top: defaultSpace, right: defaultMargin, left: defaultMargin),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Kelas Benih (cm)',
-              style: primaryTextStyle.copyWith(
-                fontSize: 16,
-                fontWeight: medium,
-              ),
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-            Container(
-              height: 50,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-              ),
-              decoration: BoxDecoration(
-                color: backgroundColor2,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                child: Obx(() => DropdownButtonFormField<String>(
-                      onChanged: (newValue) => controller.benihOptionController
-                          .setSelected(newValue!),
-                      value: controller.benihOptionController.selected.value,
-                      items: controller.benihOptionController.listBenih
-                          .map((material) {
-                        return DropdownMenuItem<String>(
-                          value: material,
-                          child: Text(
-                            material,
-                            style: primaryTextStyle,
-                          ),
-                        );
-                      }).toList(),
-                      dropdownColor: backgroundColor5,
-                      decoration:
-                          const InputDecoration(border: InputBorder.none),
-                    )),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+    // Widget benihInput() {
+    //   return Container(
+    //     margin: EdgeInsets.only(
+    //         top: defaultSpace, right: defaultMargin, left: defaultMargin),
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         Text(
+    //           'Kelas Benih (cm)',
+    //           style: primaryTextStyle.copyWith(
+    //             fontSize: 16,
+    //             fontWeight: medium,
+    //           ),
+    //         ),
+    //         const SizedBox(
+    //           height: 12,
+    //         ),
+    //         Container(
+    //           height: 50,
+    //           padding: const EdgeInsets.symmetric(
+    //             horizontal: 16,
+    //           ),
+    //           decoration: BoxDecoration(
+    //             color: backgroundColor2,
+    //             borderRadius: BorderRadius.circular(12),
+    //           ),
+    //           child: Center(
+    //             child: Obx(() => DropdownButtonFormField<String>(
+    //                   onChanged: (newValue) => controller.benihOptionController
+    //                       .setSelected(newValue!),
+    //                   value: controller.benihOptionController.selected.value,
+    //                   items: controller.benihOptionController.listBenih
+    //                       .map((material) {
+    //                     return DropdownMenuItem<String>(
+    //                       value: material,
+    //                       child: Text(
+    //                         material,
+    //                         style: primaryTextStyle,
+    //                       ),
+    //                     );
+    //                   }).toList(),
+    //                   dropdownColor: backgroundColor5,
+    //                   decoration:
+    //                       const InputDecoration(border: InputBorder.none),
+    //                 )),
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
 
     Widget activationButton() {
       // return Obx(() {
@@ -741,9 +827,9 @@ class ActivationBreedPage extends StatelessWidget {
           body: ListView(
             children: [
               breedOptionInput(),
-              controller.breedOptionController.selected.value == "Benih"
-                  ? benihInput()
-                  : pembesaranInput(),
+              // controller.breedOptionController.selected.value == "Benih"
+              //     ? benihInput()
+              //     : pembesaranInput(),
               checkBoxFish(),
               controller.isNilaHitam == true ? nilaHitamInput() : Container(),
               controller.isNilaMerah == true ? nilaMerahInput() : Container(),
