@@ -9,6 +9,7 @@ class BottomSheetWidget {
     showModalBottomSheet(
         backgroundColor: Colors.transparent,
         barrierColor: Colors.black.withOpacity(0.8),
+        isScrollControlled: true,
         context: context,
         builder: (context) {
           return WillPopScope(

@@ -79,172 +79,173 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
             itemCount: usedList.length,
             physics: BouncingScrollPhysics(),
             itemBuilder: ((context, index) {
-              return Container(
-                margin: const EdgeInsets.fromLTRB(16, 20, 16, 0),
-                decoration: BoxDecoration(
-                  color: backgroundColor1,
-                  border: Border.all(width: 2, color: primaryColor),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Tanggal :',
-                            style: headingText3,
-                          ),
-                          Text(
-                            usedList[index]['date_input'],
-                            style: headingText3,
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.all(12),
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: greyBackgroundColor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Kategori :',
-                                style: headingText3,
-                              ),
-                              Text(
-                                '${usedList[index]['category']}',
-                                style: headingText3,
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            height: 12,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Jenis Ikan :',
-                                style: headingText3,
-                              ),
-                              Text(
-                                'Ikan ${usedList[index]['fish_type']}',
-                                style: headingText3,
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            height: 12,
-                          ),
-                          usedList[index]['category'] == 'Kelas Benih'
-                              ? Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Satuan Sortir :',
-                                      style: headingText3,
-                                    ),
-                                    Text(
-                                      '${usedList[index]['sortir']} cm',
-                                      style: headingText3,
-                                    )
-                                  ],
-                                )
-                              : Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Panjang & Lebar :',
-                                      style: headingText3,
-                                    ),
-                                    Text(
-                                      '${usedList[index]['panjang']}x${usedList[index]['panjang']} cm',
-                                      style: headingText3,
-                                    )
-                                  ],
-                                ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                      ),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Jumlah :',
-                                style: headingText3,
-                              ),
-                              Text(
-                                '${usedList[index]['amount']} ekor',
-                                style: headingText3,
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Berat :',
-                                style: headingText3,
-                              ),
-                              Text(
-                                '${usedList[index]['weight']} gram',
-                                style: headingText3,
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Harga :',
-                                style: headingText3,
-                              ),
-                              Text('Rp${usedList[index]['price']}',
-                                  style: headingText3)
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                  ],
-                ),
-              );
+              // return Container(
+              //   margin: const EdgeInsets.fromLTRB(16, 20, 16, 0),
+              //   decoration: BoxDecoration(
+              //     color: backgroundColor1,
+              //     border: Border.all(width: 2, color: primaryColor),
+              //     borderRadius: BorderRadius.circular(8),
+              //   ),
+              //   child: Column(
+              //     children: [
+              //       Container(
+              //         padding: const EdgeInsets.all(8),
+              //         decoration: BoxDecoration(
+              //           color: primaryColor,
+              //           borderRadius: BorderRadius.circular(6),
+              //         ),
+              //         child: Row(
+              //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //           children: [
+              //             Text(
+              //               'Tanggal :',
+              //               style: headingText3,
+              //             ),
+              //             Text(
+              //               usedList[index]['date_input'],
+              //               style: headingText3,
+              //             )
+              //           ],
+              //         ),
+              //       ),
+              //       Container(
+              //         margin: const EdgeInsets.all(12),
+              //         padding: const EdgeInsets.all(12),
+              //         decoration: BoxDecoration(
+              //           color: greyBackgroundColor,
+              //           borderRadius: BorderRadius.circular(8),
+              //         ),
+              //         child: Column(
+              //           children: [
+              //             Row(
+              //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //               children: [
+              //                 Text(
+              //                   'Kategori :',
+              //                   style: headingText3,
+              //                 ),
+              //                 Text(
+              //                   '${usedList[index]['category']}',
+              //                   style: headingText3,
+              //                 )
+              //               ],
+              //             ),
+              //             SizedBox(
+              //               height: 12,
+              //             ),
+              //             Row(
+              //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //               children: [
+              //                 Text(
+              //                   'Jenis Ikan :',
+              //                   style: headingText3,
+              //                 ),
+              //                 Text(
+              //                   'Ikan ${usedList[index]['fish_type']}',
+              //                   style: headingText3,
+              //                 )
+              //               ],
+              //             ),
+              //             SizedBox(
+              //               height: 12,
+              //             ),
+              //             usedList[index]['category'] == 'Kelas Benih'
+              //                 ? Row(
+              //                     mainAxisAlignment:
+              //                         MainAxisAlignment.spaceBetween,
+              //                     children: [
+              //                       Text(
+              //                         'Satuan Sortir :',
+              //                         style: headingText3,
+              //                       ),
+              //                       Text(
+              //                         '${usedList[index]['sortir']} cm',
+              //                         style: headingText3,
+              //                       )
+              //                     ],
+              //                   )
+              //                 : Row(
+              //                     mainAxisAlignment:
+              //                         MainAxisAlignment.spaceBetween,
+              //                     children: [
+              //                       Text(
+              //                         'Panjang & Lebar :',
+              //                         style: headingText3,
+              //                       ),
+              //                       Text(
+              //                         '${usedList[index]['panjang']}x${usedList[index]['panjang']} cm',
+              //                         style: headingText3,
+              //                       )
+              //                     ],
+              //                   ),
+              //           ],
+              //         ),
+              //       ),
+              //       const SizedBox(
+              //         height: 4,
+              //       ),
+              //       Padding(
+              //         padding: const EdgeInsets.symmetric(
+              //           horizontal: 12,
+              //         ),
+              //         child: Column(
+              //           children: [
+              //             Row(
+              //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //               children: [
+              //                 Text(
+              //                   'Jumlah :',
+              //                   style: headingText3,
+              //                 ),
+              //                 Text(
+              //                   '${usedList[index]['amount']} ekor',
+              //                   style: headingText3,
+              //                 )
+              //               ],
+              //             ),
+              //             const SizedBox(
+              //               height: 12,
+              //             ),
+              //             Row(
+              //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //               children: [
+              //                 Text(
+              //                   'Berat :',
+              //                   style: headingText3,
+              //                 ),
+              //                 Text(
+              //                   '${usedList[index]['weight']} gram',
+              //                   style: headingText3,
+              //                 )
+              //               ],
+              //             ),
+              //             const SizedBox(
+              //               height: 12,
+              //             ),
+              //             Row(
+              //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //               children: [
+              //                 Text(
+              //                   'Harga :',
+              //                   style: headingText3,
+              //                 ),
+              //                 Text('Rp${usedList[index]['price']}',
+              //                     style: headingText3)
+              //               ],
+              //             ),
+              //             const SizedBox(
+              //               height: 12,
+              //             ),
+              //           ],
+              //         ),
+              //       ),
+              //       const SizedBox(
+              //         height: 12,
+              //       ),
+              //     ],
+              //   ),
+              // );
+              return Container();
             }),
           ),
         ),
