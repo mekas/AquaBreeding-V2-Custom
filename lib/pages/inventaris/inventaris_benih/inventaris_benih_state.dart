@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class InventarisBenihState {
-  String url = 'https://ba16-110-138-92-153.ap.ngrok.io/api';
+  String url = 'https://695f-182-2-135-41.ap.ngrok.io/api';
 
   RxString selectedDropdown = 'Kelas Benih'.obs;
   RxString selectedDropdown2 = ''.obs;

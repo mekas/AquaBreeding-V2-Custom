@@ -1,23 +1,19 @@
-import 'dart:developer';
-
-import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_state.dart';
 import 'package:fish/theme.dart';
 import 'package:fish/widgets/dialog_widget.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:get/instance_manager.dart';
 
-class DetailInventarisPakanMainpage extends StatelessWidget {
-  DetailInventarisPakanMainpage({
-    Key? key,
-    required this.pageIdentifier,
-  }) : super(key: key);
+class DetailInventarisAsetPage extends StatefulWidget {
+  const DetailInventarisAsetPage({super.key});
 
-  final String pageIdentifier;
+  @override
+  State<DetailInventarisAsetPage> createState() =>
+      _DetailInventarisAsetPageState();
+}
+
+class _DetailInventarisAsetPageState extends State<DetailInventarisAsetPage> {
   final TextEditingController firstDate = TextEditingController();
   final TextEditingController lastDate = TextEditingController();
-
-  final InventarisPakanState state = Get.put(InventarisPakanState());
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +34,7 @@ class DetailInventarisPakanMainpage extends StatelessWidget {
           )
         ],
         title: Text(
-          'Riwayat Pakan',
+          'Riwayat Aset',
           style: headingText2,
         ),
       ),

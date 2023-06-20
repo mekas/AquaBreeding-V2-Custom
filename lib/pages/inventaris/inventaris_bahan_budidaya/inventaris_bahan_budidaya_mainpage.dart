@@ -62,7 +62,7 @@ class _InventarisBahanBudidayaMainpageState
               icon: const Icon(Icons.history),
             ),
           ],
-          title: const Text('Bahan Budidaya'),
+          title: const Text('Suplemen'),
           bottom: TabBar(
             indicator: BoxDecoration(
               color: primaryColor,

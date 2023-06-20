@@ -313,7 +313,7 @@ class HomePage extends StatelessWidget {
                   },
                 ),
                 MainInvetarisButton(
-                  title: 'Bahan Budidaya',
+                  title: 'Suplemen',
                   doOnTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:fish/pages/inventaris/inventaris_aset/detail_inventaris_aset/detail_inventaris_aset_page.dart';
 import 'package:fish/pages/inventaris/inventaris_aset/inventaris_aset_state.dart';
 import 'package:fish/theme.dart';
 import 'package:fish/widgets/bottom_sheet_widget.dart';
@@ -46,9 +47,11 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
         actions: [
           IconButton(
             onPressed: () {
-              openDateDialogPicker(context);
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return const DetailInventarisAsetPage();
+              }));
             },
-            icon: Icon(Icons.filter_list_rounded),
+            icon: Icon(Icons.history),
           )
         ],
       ),
