@@ -18,6 +18,7 @@ class _KelasPembesaranPageState extends State<KelasPembesaranPage> {
     // TODO: implement initState
     super.initState();
     state.selectedPage.value = 'Kelas Pembesaran';
+    state.getAllSeedData('pembesaran');
   }
 
   @override

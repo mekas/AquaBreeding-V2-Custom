@@ -22,12 +22,31 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
   final TextEditingController controller = TextEditingController();
 
   String dropdownValue = 'Kelas Benih';
-  String dropdownValue2 = 'Ikan Lele';
+  String dropdownValue2 = 'Lele';
   String dropdownValue3 = '1 - 2 cm';
 
   static var dropdownList = ['Kelas Benih', 'Kelas Pembesaran'];
-  static var dropdownList2 = ['Ikan Lele', 'Ikan Nila'];
-  static var dropdownList3 = ['1 - 2 cm', '3 - 4 cm', '5 - 6 cm'];
+  static var dropdownList2 = [
+    'Lele',
+    'Nila Merah',
+    'Nila Hitam',
+    'Patin',
+    'Mas'
+  ];
+  static var dropdownList3 = [
+    '1 - 2 cm',
+    '2 - 3 cm',
+    '3 - 4 cm',
+    '4 - 5 cm',
+    '5 - 6 cm',
+    '6 - 7 cm',
+    '7 - 8 cm',
+    '8 - 9 cm',
+    '9 - 10 cm',
+    '10 - 11 cm',
+    '11 - 12 cm',
+    '12 - 13 cm',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -209,76 +228,79 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                 const SizedBox(
                   height: 16,
                 ),
+                TextFieldWidget(
+                  label: 'Nama',
+                  controller: controller,
+                  hint: 'Ex: Ikan01',
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
                 Obx(
                   () => state.selectedDropdown.value == 'Kelas Benih'
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Text(
-                              'Satuan Sortir',
-                              style: headingText2,
-                            ),
-                            const SizedBox(
-                              height: 12,
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 4),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: inputColor,
-                              ),
-                              child: StatefulBuilder(
-                                builder: ((context, setState) {
-                                  return DropdownButtonHideUnderline(
-                                    child: DropdownButton(
-                                      onChanged: ((String? value) {
-                                        setState(() {
-                                          dropdownValue3 = value!;
-                                        });
-                                        state.selectedDropdown3.value = value!;
-                                      }),
-                                      value: dropdownValue3,
-                                      dropdownColor: inputColor,
-                                      items: dropdownList3.map(
-                                        (String val) {
-                                          return DropdownMenuItem(
-                                            value: val,
-                                            child: Text(
-                                              val,
-                                              style: headingText3,
-                                            ),
-                                          );
-                                        },
-                                      ).toList(),
-                                    ),
-                                  );
-                                }),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 16,
-                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Satuan Sortir',
+                                      style: headingText2,
+                                    ),
+                                    const SizedBox(
+                                      height: 12,
+                                    ),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width /
+                                          2.5,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        color: inputColor,
+                                      ),
+                                      child: StatefulBuilder(
+                                        builder: ((context, setState) {
+                                          return DropdownButtonHideUnderline(
+                                            child: DropdownButton(
+                                              onChanged: ((String? value) {
+                                                setState(() {
+                                                  dropdownValue3 = value!;
+                                                });
+                                                state.selectedDropdown3.value =
+                                                    value!;
+                                              }),
+                                              value: dropdownValue3,
+                                              dropdownColor: inputColor,
+                                              items: dropdownList3.map(
+                                                (String val) {
+                                                  return DropdownMenuItem(
+                                                    value: val,
+                                                    child: Text(
+                                                      val,
+                                                      style: headingText3,
+                                                    ),
+                                                  );
+                                                },
+                                              ).toList(),
+                                            ),
+                                          );
+                                        }),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                                 TextFieldWidget(
                                   label: 'Jumlah',
                                   controller: controller,
                                   isLong: false,
-                                  hint: 'Ex: 10',
+                                  hint: 'Ex: 1000',
                                   suffixSection: Text(
                                     'ekor',
-                                    style: headingText3,
-                                  ),
-                                ),
-                                TextFieldWidget(
-                                  label: 'Berat',
-                                  controller: controller,
-                                  isLong: false,
-                                  hint: 'Ex: 10',
-                                  suffixSection: Text(
-                                    'gram',
                                     style: headingText3,
                                   ),
                                 ),
@@ -295,58 +317,22 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 TextFieldWidget(
-                                  label: 'Panjang',
+                                  label: 'Berat',
                                   controller: controller,
                                   isLong: false,
-                                  hint: 'Ex: 10',
-                                  prefixSection: Text(
-                                    'P :',
-                                    style: headingText3,
-                                  ),
+                                  hint: 'Ex: 100',
                                   suffixSection: Text(
-                                    'cm',
+                                    'gram',
                                     style: headingText3,
                                   ),
                                 ),
                                 TextFieldWidget(
                                   label: 'Jumlah',
                                   controller: controller,
+                                  hint: 'Ex: 1000',
                                   isLong: false,
-                                  hint: 'Ex: 10',
                                   suffixSection: Text(
                                     'ekor',
-                                    style: headingText3,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                TextFieldWidget(
-                                  label: 'Lebar',
-                                  controller: controller,
-                                  isLong: false,
-                                  hint: 'Ex: 10',
-                                  prefixSection: Text(
-                                    'L :',
-                                    style: headingText3,
-                                  ),
-                                  suffixSection: Text(
-                                    'cm',
-                                    style: headingText3,
-                                  ),
-                                ),
-                                TextFieldWidget(
-                                  label: 'Berat',
-                                  controller: controller,
-                                  isLong: false,
-                                  hint: 'Ex: 10',
-                                  suffixSection: Text(
-                                    'gram',
                                     style: headingText3,
                                   ),
                                 ),
@@ -362,10 +348,29 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                   label: 'Harga Beli',
                   controller: controller,
                   hint: 'Ex: 10000',
+                  isLong: true,
                   prefixSection: Text(
                     'Rp',
                     style: headingText3,
                   ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Text(
+                  'Gambar',
+                  style: headingText2,
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.grey,
+                  ),
+                  width: MediaQuery.of(context).size.width,
+                  height: 300,
                 ),
                 const SizedBox(
                   height: 36,

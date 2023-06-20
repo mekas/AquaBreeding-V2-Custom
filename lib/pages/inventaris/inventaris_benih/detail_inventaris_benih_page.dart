@@ -55,20 +55,9 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
             ),
           )
         ],
-        title: Column(
-          children: [
-            Text(
-              'Detail Bahan',
-              style: headingText2,
-            ),
-            const SizedBox(
-              height: 2,
-            ),
-            Text(
-              '(${widget.pageIdentifier})',
-              style: hoverText,
-            ),
-          ],
+        title: Text(
+          'Riwayat Benih',
+          style: headingText2,
         ),
       ),
       body: Container(
@@ -245,7 +234,103 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
               //     ],
               //   ),
               // );
-              return Container();
+              return Container(
+                margin: const EdgeInsets.fromLTRB(12, 14, 12, 0),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  border: Border.all(width: 1, color: primaryColor),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          'Tanggal',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                        SizedBox(height: 6),
+                        Text(
+                          'Tanggal',
+                          style: TextStyle(
+                            color: Colors.grey.shade500,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          'Nama',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                        SizedBox(height: 6),
+                        Text(
+                          'Nama',
+                          style: TextStyle(
+                            color: Colors.grey.shade500,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          'Jumlah',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                        SizedBox(height: 6),
+                        Text(
+                          'Jumlah',
+                          style: TextStyle(
+                            color: Colors.red.shade900,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          'Kolam',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                        SizedBox(height: 6),
+                        Text(
+                          'Kolam',
+                          style: TextStyle(
+                            color: Colors.grey.shade500,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
             }),
           ),
         ),

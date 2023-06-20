@@ -37,7 +37,7 @@ class TextFieldWidget extends StatelessWidget {
         Container(
           width: isLong
               ? MediaQuery.of(context).size.width
-              : MediaQuery.of(context).size.width / 2.8,
+              : MediaQuery.of(context).size.width / 2.5,
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
