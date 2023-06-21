@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:another_flushbar/flushbar.dart';
 import 'package:fish/pages/inventaris/inventaris_benih/detail_inventaris_benih_page.dart';
 import 'package:fish/pages/inventaris/inventaris_benih/inventaris_benih_pages/kelas_benih_page.dart';
 import 'package:fish/pages/inventaris/inventaris_benih/inventaris_benih_pages/kelas_pembesaran_page.dart';
@@ -392,20 +393,33 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                     ),
                   ),
                   onPressed: () async {
-                    await state.postSeedData(
-                      () => {
-                        state.getAllSeedData('Benih'),
-                        state.resetVariables(),
-                        Navigator.pop(context),
-                      },
-                    );
+                    if (state.fishName.text == '' ||
+                        state.fishAmount.text == '' ||
+                        state.fishPrice.text == '') {
+                      Flushbar(
+                        message: "Gagal, Form tidak sesuai",
+                        duration: Duration(seconds: 3),
+                        leftBarIndicatorColor: Colors.red[400],
+                      ).show(context);
+                    } else {
+                      await state.postSeedData(
+                        context,
+                        () => {
+                          state.getAllSeedData('Benih'),
+                          state.resetVariables(),
+                          Navigator.pop(context),
+                        },
+                      );
+                    }
                   },
                   child: Obx(
                     () => state.isLoadingPost.value
                         ? SizedBox(
                             width: 20,
                             height: 20,
-                            child: CircularProgressIndicator(),
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
                           )
                         : Icon(
                             Icons.add,
@@ -424,3 +438,10 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
     );
   }
 }
+
+const snackBar = SnackBar(
+  content: Text(
+    'Gagal, Form tidak sesuai.',
+  ),
+  behavior: SnackBarBehavior.floating,
+);

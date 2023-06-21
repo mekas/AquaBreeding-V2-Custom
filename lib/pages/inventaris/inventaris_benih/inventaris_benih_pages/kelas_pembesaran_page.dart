@@ -25,11 +25,13 @@ class _KelasPembesaranPageState extends State<KelasPembesaranPage> {
   Widget build(BuildContext context) {
     return Obx(
       () => state.isLoadingPage.value
-          ? SizedBox(
-              height: 100,
-              width: 100,
-              child: CircularProgressIndicator(
-                color: primaryColor,
+          ? Center(
+              child: SizedBox(
+                height: 50,
+                width: 50,
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
               ),
             )
           : Container(
@@ -221,33 +223,42 @@ class _KelasPembesaranPageState extends State<KelasPembesaranPage> {
                                   ],
                                 ),
                               ),
-                              Container(
-                                padding: EdgeInsets.all(6),
-                                width:
-                                    MediaQuery.of(context).size.width / 2.182,
-                                decoration: BoxDecoration(
-                                  color: Colors.red.shade800,
-                                  borderRadius: BorderRadius.only(
-                                    bottomRight: Radius.circular(14),
+                              GestureDetector(
+                                onTap: () async {
+                                  await state.deleteSeedData(
+                                      state.seedList.value.data![index].idInt!,
+                                      () => {
+                                            state.getAllSeedData('Pembesaran'),
+                                          });
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.all(6),
+                                  width:
+                                      MediaQuery.of(context).size.width / 2.182,
+                                  decoration: BoxDecoration(
+                                    color: Colors.red.shade800,
+                                    borderRadius: BorderRadius.only(
+                                      bottomRight: Radius.circular(14),
+                                    ),
                                   ),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.delete,
-                                      color: Colors.white,
-                                    ),
-                                    SizedBox(
-                                      width: 8,
-                                    ),
-                                    Text(
-                                      'Hapus',
-                                      style: headingText3.copyWith(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.delete,
                                         color: Colors.white,
                                       ),
-                                    ),
-                                  ],
+                                      SizedBox(
+                                        width: 8,
+                                      ),
+                                      Text(
+                                        'Hapus',
+                                        style: headingText3.copyWith(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],

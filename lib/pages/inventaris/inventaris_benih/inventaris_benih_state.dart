@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class InventarisBenihState {
-  String url = 'https://ba22-182-3-52-243.ap.ngrok.io/api';
+  String url = 'https://1e22-103-136-58-71.ap.ngrok.io/api';
 
   RxBool isLoadingPage = false.obs;
   RxBool isLoadingPost = false.obs;
@@ -39,17 +39,18 @@ class InventarisBenihState {
         inspect(seedList.value.data);
       }
     } catch (e) {
-      const SnackBar(
-        content: Text(
-          'Failed to load',
-        ),
-      );
+      // const SnackBar(
+      //   content: Text(
+      //     'Failed to load',
+      //   ),
+      // );
+      throw Exception(e);
     }
   }
 
   Future getSeedDataByID(int id) async {}
 
-  Future postSeedData(Function() doAfter) async {
+  Future postSeedData(BuildContext context, Function() doAfter) async {
     var map = <String, dynamic>{};
 
     map['fish_seed_category'] = seedCategory.value;
@@ -70,18 +71,30 @@ class InventarisBenihState {
       );
       isLoadingPost.value = false;
     } catch (e) {
-      const SnackBar(
-        content: Text(
-          'Failed to post',
-        ),
-      );
+      throw Exception(e);
     }
     doAfter();
   }
 
   Future updateSeedData(int id) async {}
 
-  Future deleteSeedData(int id) async {}
+  Future deleteSeedData(int id, Function() doAfter) async {
+    isLoadingPage.value = true;
+    try {
+      await http.delete(
+        Uri.parse(
+          '$url/inventory/seed/$id',
+        ),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      doAfter();
+    } catch (e) {
+      throw Exception(e);
+    }
+    isLoadingPage.value = false;
+  }
 
   resetVariables() {
     fishName.clear();
