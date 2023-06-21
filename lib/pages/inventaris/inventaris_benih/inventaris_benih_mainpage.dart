@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fish/pages/inventaris/inventaris_benih/detail_inventaris_benih_page.dart';
 import 'package:fish/pages/inventaris/inventaris_benih/inventaris_benih_pages/kelas_benih_page.dart';
 import 'package:fish/pages/inventaris/inventaris_benih/inventaris_benih_pages/kelas_pembesaran_page.dart';
@@ -21,11 +23,11 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
   final InventarisBenihState state = Get.put(InventarisBenihState());
   final TextEditingController controller = TextEditingController();
 
-  String dropdownValue = 'Kelas Benih';
+  String dropdownValue = 'Benih';
   String dropdownValue2 = 'Lele';
   String dropdownValue3 = '1 - 2 cm';
 
-  static var dropdownList = ['Kelas Benih', 'Kelas Pembesaran'];
+  static var dropdownList = ['Benih', 'Pembesaran'];
   static var dropdownList2 = [
     'Lele',
     'Nila Merah',
@@ -66,9 +68,7 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
             IconButton(
               onPressed: () async {
                 Navigator.push(context, MaterialPageRoute(builder: ((context) {
-                  return DetailInventarisBenihPage(
-                    pageIdentifier: state.selectedPage.value,
-                  );
+                  return DetailInventarisBenihPage();
                 })));
               },
               icon: const Icon(
@@ -97,6 +97,7 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
           ),
         ),
         body: TabBarView(
+          physics: const NeverScrollableScrollPhysics(),
           children: [
             KelasBenihPage(),
             KelasPembesaranPage(),
@@ -139,7 +140,7 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                   height: 54,
                 ),
                 Text(
-                  'Kategori Benih',
+                  'Kategori',
                   style: headingText2,
                 ),
                 const SizedBox(
@@ -160,7 +161,8 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                             setState(() {
                               dropdownValue = value!;
                             });
-                            state.selectedDropdown.value = value!;
+                            state.seedCategory.value = value!;
+                            state.resetVariables();
                           }),
                           value: dropdownValue,
                           dropdownColor: inputColor,
@@ -205,7 +207,7 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                             setState(() {
                               dropdownValue2 = value!;
                             });
-                            state.selectedDropdown2.value = value!;
+                            state.fishCategory.value = value!;
                           }),
                           value: dropdownValue2,
                           dropdownColor: inputColor,
@@ -230,14 +232,14 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                 ),
                 TextFieldWidget(
                   label: 'Nama',
-                  controller: controller,
+                  controller: state.fishName,
                   hint: 'Ex: Ikan01',
                 ),
                 const SizedBox(
                   height: 16,
                 ),
                 Obx(
-                  () => state.selectedDropdown.value == 'Kelas Benih'
+                  () => state.seedCategory.value == 'Benih'
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
@@ -271,8 +273,7 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                                                 setState(() {
                                                   dropdownValue3 = value!;
                                                 });
-                                                state.selectedDropdown3.value =
-                                                    value!;
+                                                state.sortSize.value = value!;
                                               }),
                                               value: dropdownValue3,
                                               dropdownColor: inputColor,
@@ -296,9 +297,10 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                                 ),
                                 TextFieldWidget(
                                   label: 'Jumlah',
-                                  controller: controller,
+                                  controller: state.fishAmount,
                                   isLong: false,
                                   hint: 'Ex: 1000',
+                                  numberOutput: true,
                                   suffixSection: Text(
                                     'ekor',
                                     style: headingText3,
@@ -318,9 +320,10 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                               children: [
                                 TextFieldWidget(
                                   label: 'Berat',
-                                  controller: controller,
+                                  controller: state.fishWeight,
                                   isLong: false,
                                   hint: 'Ex: 100',
+                                  numberOutput: true,
                                   suffixSection: Text(
                                     'gram',
                                     style: headingText3,
@@ -328,9 +331,10 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                                 ),
                                 TextFieldWidget(
                                   label: 'Jumlah',
-                                  controller: controller,
+                                  controller: state.fishAmount,
                                   hint: 'Ex: 1000',
                                   isLong: false,
+                                  numberOutput: true,
                                   suffixSection: Text(
                                     'ekor',
                                     style: headingText3,
@@ -346,9 +350,10 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                 ),
                 TextFieldWidget(
                   label: 'Harga Beli',
-                  controller: controller,
+                  controller: state.fishPrice,
                   hint: 'Ex: 10000',
                   isLong: true,
+                  numberOutput: true,
                   prefixSection: Text(
                     'Rp',
                     style: headingText3,
@@ -371,6 +376,10 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                   ),
                   width: MediaQuery.of(context).size.width,
                   height: 300,
+                  child: Image.network(
+                    'https://www.hepper.com/wp-content/uploads/2022/09/red-male-betta-fish-in-aquarium_Grigorii-Pisotscki-Shutterstock.jpg',
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 const SizedBox(
                   height: 36,
@@ -383,8 +392,26 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
-                  onPressed: () {},
-                  child: const Icon(Icons.add),
+                  onPressed: () async {
+                    await state.postSeedData(
+                      () => {
+                        state.getAllSeedData('Benih'),
+                        state.resetVariables(),
+                        Navigator.pop(context),
+                      },
+                    );
+                  },
+                  child: Obx(
+                    () => state.isLoadingPost.value
+                        ? SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(),
+                          )
+                        : Icon(
+                            Icons.add,
+                          ),
+                  ),
                 ),
               ],
             );

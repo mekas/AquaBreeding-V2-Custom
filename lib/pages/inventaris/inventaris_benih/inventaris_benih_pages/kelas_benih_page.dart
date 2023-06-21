@@ -16,7 +16,6 @@ class _KelasBenihPageState extends State<KelasBenihPage> {
   @override
   void initState() {
     super.initState();
-    state.selectedPage.value = 'Kelas Benih';
     state.getAllSeedData('Benih');
   }
 
@@ -69,8 +68,10 @@ class _KelasBenihPageState extends State<KelasBenihPage> {
                                       ),
                                       SizedBox(height: 6),
                                       Text(
-                                        state.dummyDataValue[index]['year']
-                                            .toString(),
+                                        state.seedList.value.data![index]
+                                            .createdAt
+                                            .toString()
+                                            .split('-')[0],
                                         style: TextStyle(
                                           color: Colors.grey.shade500,
                                           fontWeight: FontWeight.bold,
@@ -91,8 +92,9 @@ class _KelasBenihPageState extends State<KelasBenihPage> {
                                       ),
                                       SizedBox(height: 6),
                                       Text(
-                                        state.dummyDataValue[index]
-                                            ['fish_type'],
+                                        state.seedList.value.data![index]
+                                            .fishType
+                                            .toString(),
                                         style: TextStyle(
                                           color: Colors.grey.shade500,
                                           fontWeight: FontWeight.bold,
@@ -113,7 +115,8 @@ class _KelasBenihPageState extends State<KelasBenihPage> {
                                       ),
                                       SizedBox(height: 6),
                                       Text(
-                                        '${state.dummyDataValue4[index]['sortir']} cm',
+                                        state.seedList.value.data![index].width
+                                            .toString(),
                                         style: TextStyle(
                                           color: Colors.grey.shade500,
                                           fontWeight: FontWeight.bold,
@@ -134,7 +137,7 @@ class _KelasBenihPageState extends State<KelasBenihPage> {
                                       ),
                                       SizedBox(height: 6),
                                       Text(
-                                        '${state.dummyDataValue[index]['amount']} ekor',
+                                        '${state.seedList.value.data![index].amount} ekor',
                                         style: TextStyle(
                                           color: Colors.grey.shade500,
                                           fontWeight: FontWeight.bold,
@@ -170,7 +173,7 @@ class _KelasBenihPageState extends State<KelasBenihPage> {
                                     ),
                                   ),
                                   Text(
-                                    'Rp10000',
+                                    'Rp${state.seedList.value.data![index].price}',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
@@ -191,7 +194,7 @@ class _KelasBenihPageState extends State<KelasBenihPage> {
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Container(
-                                padding: EdgeInsets.all(12),
+                                padding: EdgeInsets.all(6),
                                 width:
                                     MediaQuery.of(context).size.width / 2.182,
                                 decoration: BoxDecoration(
@@ -218,7 +221,7 @@ class _KelasBenihPageState extends State<KelasBenihPage> {
                                 ),
                               ),
                               Container(
-                                padding: EdgeInsets.all(12),
+                                padding: EdgeInsets.all(6),
                                 width:
                                     MediaQuery.of(context).size.width / 2.182,
                                 decoration: BoxDecoration(

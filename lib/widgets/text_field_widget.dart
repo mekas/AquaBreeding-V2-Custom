@@ -12,6 +12,7 @@ class TextFieldWidget extends StatelessWidget {
     this.hint,
     this.suffixSection,
     this.prefixSection,
+    this.numberOutput = false,
   }) : super(key: key);
 
   final String label;
@@ -21,6 +22,7 @@ class TextFieldWidget extends StatelessWidget {
   final Widget? suffixSection, prefixSection;
   final bool isEdit;
   final bool isMoreText;
+  final bool numberOutput;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +61,8 @@ class TextFieldWidget extends StatelessWidget {
                   controller: controller,
                   style: headingText3,
                   enabled: isEdit,
+                  keyboardType:
+                      numberOutput ? TextInputType.number : TextInputType.text,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: hint,

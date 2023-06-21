@@ -6,9 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DetailInventarisBenihPage extends StatefulWidget {
-  const DetailInventarisBenihPage({super.key, required this.pageIdentifier});
-
-  final String pageIdentifier;
+  const DetailInventarisBenihPage({super.key});
 
   @override
   State<DetailInventarisBenihPage> createState() =>
@@ -26,15 +24,6 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.pageIdentifier == 'Kelas Benih') {
-      setState(() {
-        usedList = state.dummyDataValue2;
-      });
-    } else {
-      setState(() {
-        usedList = state.dummyDataValue3;
-      });
-    }
   }
 
   @override
@@ -65,7 +54,7 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
         child: SafeArea(
           child: ListView.builder(
             padding: const EdgeInsets.only(bottom: 16),
-            itemCount: usedList.length,
+            itemCount: 2,
             physics: BouncingScrollPhysics(),
             itemBuilder: ((context, index) {
               // return Container(
