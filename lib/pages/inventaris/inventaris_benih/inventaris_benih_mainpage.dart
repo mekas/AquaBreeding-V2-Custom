@@ -8,8 +8,7 @@ import 'package:fish/theme.dart';
 import 'package:fish/widgets/bottom_sheet_widget.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/instance_manager.dart';
+import 'package:get/get.dart';
 
 class InventarisBenihMainpage extends StatefulWidget {
   const InventarisBenihMainpage({super.key});
