@@ -23,33 +23,6 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
   final InventarisBenihState state = Get.put(InventarisBenihState());
   final TextEditingController controller = TextEditingController();
 
-  String dropdownValue = 'Benih';
-  String dropdownValue2 = 'Lele';
-  String dropdownValue3 = '1 - 2 cm';
-
-  static var dropdownList = ['Benih', 'Pembesaran'];
-  static var dropdownList2 = [
-    'Lele',
-    'Nila Merah',
-    'Nila Hitam',
-    'Patin',
-    'Mas'
-  ];
-  static var dropdownList3 = [
-    '1 - 2 cm',
-    '2 - 3 cm',
-    '3 - 4 cm',
-    '4 - 5 cm',
-    '5 - 6 cm',
-    '6 - 7 cm',
-    '7 - 8 cm',
-    '8 - 9 cm',
-    '9 - 10 cm',
-    '10 - 11 cm',
-    '11 - 12 cm',
-    '12 - 13 cm',
-  ];
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -106,6 +79,7 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.green.shade600,
           onPressed: () {
+            state.resetVariables();
             BottomSheetWidget.getBottomSheetWidget(
               context,
               [
@@ -159,14 +133,14 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                         child: DropdownButton(
                           onChanged: ((String? value) {
                             setState(() {
-                              dropdownValue = value!;
+                              state.seedCategory.value = value!;
                             });
-                            state.seedCategory.value = value!;
+
                             state.resetVariables();
                           }),
-                          value: dropdownValue,
+                          value: state.seedCategory.value,
                           dropdownColor: inputColor,
-                          items: dropdownList.map(
+                          items: state.dropdownList.map(
                             (String val) {
                               return DropdownMenuItem(
                                 value: val,
@@ -205,13 +179,12 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                         child: DropdownButton(
                           onChanged: ((String? value) {
                             setState(() {
-                              dropdownValue2 = value!;
+                              state.fishCategory.value = value!;
                             });
-                            state.fishCategory.value = value!;
                           }),
-                          value: dropdownValue2,
+                          value: state.fishCategory.value,
                           dropdownColor: inputColor,
-                          items: dropdownList2.map(
+                          items: state.dropdownList2.map(
                             (String val) {
                               return DropdownMenuItem(
                                 value: val,
@@ -271,13 +244,12 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                                             child: DropdownButton(
                                               onChanged: ((String? value) {
                                                 setState(() {
-                                                  dropdownValue3 = value!;
+                                                  state.sortSize.value = value!;
                                                 });
-                                                state.sortSize.value = value!;
                                               }),
-                                              value: dropdownValue3,
+                                              value: state.sortSize.value,
                                               dropdownColor: inputColor,
-                                              items: dropdownList3.map(
+                                              items: state.dropdownList3.map(
                                                 (String val) {
                                                   return DropdownMenuItem(
                                                     value: val,
@@ -403,7 +375,6 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                       ).show(context);
                     } else {
                       await state.postSeedData(
-                        context,
                         () => {
                           state.getAllSeedData('Benih'),
                           state.resetVariables(),
