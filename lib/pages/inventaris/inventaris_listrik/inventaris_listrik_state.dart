@@ -1,15 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:fish/core/baseUrl.dart';
 import 'package:fish/models/inventaris/listrik/detail_inventaris_listrik_model.dart';
 import 'package:fish/models/inventaris/listrik/inventaris_listrik_model.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-class InventarisListrikState {
-  String url = 'https://e2ef-103-136-58-71.ap.ngrok.io/api';
-
+class InventarisListrikState extends BaseURL {
   RxBool isLoadingPage = false.obs;
   RxBool isLoadingPost = false.obs;
   RxBool isLoadingDelete = false.obs;
@@ -37,7 +36,7 @@ class InventarisListrikState {
     electricList.value.data!.clear();
     isLoadingPage.value = true;
     final response = await http
-        .get(Uri.parse('$url/inventory/electric?year=$year&type=$type'));
+        .get(Uri.parse('$baseUrl/inventory/electric?year=$year&type=$type'));
 
     try {
       if (response.statusCode == 200) {
@@ -57,7 +56,8 @@ class InventarisListrikState {
   Future getDataByID(int id, Function() doAfter) async {
     isLoadingDetail.value = true;
 
-    final response = await http.get(Uri.parse('$url/inventory/electric/$id'));
+    final response =
+        await http.get(Uri.parse('$baseUrl/inventory/electric/$id'));
 
     try {
       if (response.statusCode == 200) {
@@ -90,7 +90,7 @@ class InventarisListrikState {
 
     try {
       await http.post(
-        Uri.parse('$url/inventory/electric'),
+        Uri.parse('$baseUrl/inventory/electric'),
         body: map,
       );
       doAfter();
@@ -114,7 +114,7 @@ class InventarisListrikState {
     try {
       inspect(map);
       await http.put(
-        Uri.parse('$url/inventory/electric/$id'),
+        Uri.parse('$baseUrl/inventory/electric/$id'),
         body: map,
       );
       doAfter();
@@ -129,7 +129,7 @@ class InventarisListrikState {
     try {
       await http.delete(
         Uri.parse(
-          '$url/inventory/electric/$id',
+          '$baseUrl/inventory/electric/$id',
         ),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',

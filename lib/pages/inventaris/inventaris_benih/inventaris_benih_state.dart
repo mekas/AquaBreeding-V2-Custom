@@ -1,15 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:fish/core/baseUrl.dart';
 import 'package:fish/models/inventaris/benih/detail_inventaris_benih_model.dart';
 import 'package:fish/models/inventaris/benih/inventaris_benih_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-class InventarisBenihState {
-  String url = 'https://e2ef-103-136-58-71.ap.ngrok.io/api';
-
+class InventarisBenihState extends BaseURL {
   RxString pageIdentifier = 'benih'.obs;
 
   RxBool isLoadingPage = false.obs;
@@ -60,7 +59,7 @@ class InventarisBenihState {
     seedList.value.data!.clear();
     isLoadingPage.value = true;
     final response =
-        await http.get(Uri.parse('$url/inventory/seed?type=$type'));
+        await http.get(Uri.parse('$baseUrl/inventory/seed?type=$type'));
 
     try {
       if (response.statusCode == 200) {
@@ -79,7 +78,7 @@ class InventarisBenihState {
   Future getSeedDataByID(int id, Function() doAfter) async {
     isLoadingDetail.value = true;
 
-    final response = await http.get(Uri.parse('$url/inventory/seed/$id'));
+    final response = await http.get(Uri.parse('$baseUrl/inventory/seed/$id'));
 
     try {
       if (response.statusCode == 200) {
@@ -117,7 +116,7 @@ class InventarisBenihState {
 
     try {
       await http.post(
-        Uri.parse('$url/inventory/seed'),
+        Uri.parse('$baseUrl/inventory/seed'),
         body: map,
       );
       doAfter();
@@ -144,7 +143,7 @@ class InventarisBenihState {
     try {
       inspect(map);
       await http.put(
-        Uri.parse('$url/inventory/seed/$id'),
+        Uri.parse('$baseUrl/inventory/seed/$id'),
         body: map,
       );
       doAfter();
@@ -159,7 +158,7 @@ class InventarisBenihState {
     try {
       await http.delete(
         Uri.parse(
-          '$url/inventory/seed/$id',
+          '$baseUrl/inventory/seed/$id',
         ),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
