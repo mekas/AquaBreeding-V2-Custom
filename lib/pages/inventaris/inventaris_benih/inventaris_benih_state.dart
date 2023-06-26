@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class InventarisBenihState {
-  String url = 'https://a81b-103-136-58-71.ap.ngrok.io/api';
+  String url = 'https://e2ef-103-136-58-71.ap.ngrok.io/api';
 
   RxString pageIdentifier = 'benih'.obs;
 

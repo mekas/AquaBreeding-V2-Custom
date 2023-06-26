@@ -19,7 +19,6 @@ class InventarisBenihMainpage extends StatefulWidget {
 
 class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
   final InventarisBenihState state = Get.put(InventarisBenihState());
-  final TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
