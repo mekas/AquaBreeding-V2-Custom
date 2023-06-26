@@ -28,154 +28,171 @@ class _PrabayarPageState extends State<PrabayarPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => state.isLoadingPage.value
-        ? Center(
-            child: SizedBox(
-              height: 50,
-              width: 50,
-              child: CircularProgressIndicator(
-                color: Colors.white,
+    return Obx(
+      () => state.isLoadingPage.value
+          ? Center(
+              child: SizedBox(
+                height: 50,
+                width: 50,
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
               ),
-            ),
-          )
-        : Container(
-            margin: const EdgeInsets.fromLTRB(16, 20, 16, 20),
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: state.electricList.value.data!.length,
-              physics: BouncingScrollPhysics(),
-              padding: const EdgeInsets.only(bottom: padding4XL),
-              itemBuilder: ((context, index) {
-                return GestureDetector(
-                  onTap: () async {
-                    await state.getDataByID(
-                        state.electricList.value.data![index].idInt!, () {
-                      getBottomSheet(
-                          index, state.electricList.value.data![index].idInt!);
-                    });
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 14),
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 1, color: primaryColor),
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(8),
+            )
+          : state.electricList.value.data!.isEmpty
+              ? Center(
+                  child: Text(
+                    'Tidak ada data',
+                    style: headingText3,
+                  ),
+                )
+              : Container(
+                  margin: const EdgeInsets.fromLTRB(16, 20, 16, 20),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: state.electricList.value.data!.length,
+                    physics: BouncingScrollPhysics(),
+                    padding: const EdgeInsets.only(bottom: padding4XL),
+                    itemBuilder: ((context, index) {
+                      return GestureDetector(
+                        onTap: () async {
+                          await state.getDataByID(
+                              state.electricList.value.data![index].idInt!, () {
+                            getBottomSheet(index,
+                                state.electricList.value.data![index].idInt!);
+                          });
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 14),
                           decoration: BoxDecoration(
                             border: Border.all(width: 1, color: primaryColor),
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(12),
-                              topRight: Radius.circular(12),
-                            ),
-                            color: primaryColor,
+                            borderRadius: BorderRadius.circular(14),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          child: Column(
                             children: [
-                              Text(
-                                'Tanggal :',
-                                style: headingText3,
+                              Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  border:
+                                      Border.all(width: 1, color: primaryColor),
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(12),
+                                    topRight: Radius.circular(12),
+                                  ),
+                                  color: primaryColor,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Tanggal :',
+                                      style: headingText3,
+                                    ),
+                                    Text(
+                                        state.electricList.value.data![index]
+                                            .createdAt
+                                            .toString()
+                                            .split(' ')[0]
+                                            .split('-')
+                                            .reversed
+                                            .join('-'),
+                                        style: headingText3),
+                                  ],
+                                ),
                               ),
-                              Text(
-                                  state
-                                      .electricList.value.data![index].createdAt
-                                      .toString()
-                                      .split(' ')[0]
-                                      .split('-')
-                                      .reversed
-                                      .join('-'),
-                                  style: headingText3),
+                              Container(
+                                padding: const EdgeInsets.all(12),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Nama',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        SizedBox(height: 6),
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              6,
+                                          child: Text(
+                                            state.electricList.value
+                                                .data![index].name
+                                                .toString(),
+                                            style: TextStyle(
+                                              color: Colors.grey.shade500,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text(
+                                          'Tipe',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        SizedBox(height: 6),
+                                        Text(
+                                          state.electricList.value.data![index]
+                                              .type
+                                              .toString(),
+                                          style: TextStyle(
+                                            color: Colors.grey.shade500,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text(
+                                          'Harga',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        SizedBox(height: 6),
+                                        Text(
+                                          'Rp${state.electricList.value.data![index].price.toString()}',
+                                          style: TextStyle(
+                                            color: Colors.grey.shade500,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
                         ),
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Nama',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  SizedBox(height: 6),
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width / 6,
-                                    child: Text(
-                                      state.electricList.value.data![index].name
-                                          .toString(),
-                                      style: TextStyle(
-                                        color: Colors.grey.shade500,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  Text(
-                                    'Tipe',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  SizedBox(height: 6),
-                                  Text(
-                                    state.electricList.value.data![index].type
-                                        .toString(),
-                                    style: TextStyle(
-                                      color: Colors.grey.shade500,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  Text(
-                                    'Harga',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  SizedBox(height: 6),
-                                  Text(
-                                    'Rp${state.electricList.value.data![index].price.toString()}',
-                                    style: TextStyle(
-                                      color: Colors.grey.shade500,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      );
+                    }),
                   ),
-                );
-              }),
-            ),
-          ));
+                ),
+    );
   }
 
   getBottomSheet(int index, int id) {
