@@ -19,7 +19,11 @@ class _KelasBenihPageState extends State<KelasBenihPage> {
   @override
   void initState() {
     super.initState();
-    state.getAllSeedData('Benih');
+    state.pageIdentifier.value = 'benih';
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      state.getAllSeedData('benih');
+    });
   }
 
   @override
@@ -37,180 +41,174 @@ class _KelasBenihPageState extends State<KelasBenihPage> {
             )
           : Container(
               margin: const EdgeInsets.fromLTRB(16, 20, 16, 20),
-              child: state.seedList.value.data!.isEmpty
-                  ? Center(
-                      child: Text(
-                        'Tidak ada data',
-                        style: headingText2,
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.only(bottom: padding4XL),
+                itemCount: state.seedList.value.data!.length,
+                itemBuilder: ((context, index) {
+                  return GestureDetector(
+                    onTap: () async {
+                      await state.getSeedDataByID(
+                          state.seedList.value.data![index].idInt!, () {
+                        getBottomSheet(
+                            index, state.seedList.value.data![index].idInt!);
+                      });
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 14),
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1, color: primaryColor),
+                        borderRadius: BorderRadius.circular(14),
                       ),
-                    )
-                  : ListView.builder(
-                      shrinkWrap: true,
-                      physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.only(bottom: padding4XL),
-                      itemCount: state.seedList.value.data!.length,
-                      itemBuilder: ((context, index) {
-                        return GestureDetector(
-                          onTap: () async {
-                            getBottomSheet(index,
-                                state.seedList.value.data![index].idInt!);
-                            await state.getSeedDataByID(
-                                state.seedList.value.data![index].idInt!);
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.only(bottom: 14),
-                            decoration: BoxDecoration(
-                              border: Border.all(width: 1, color: primaryColor),
-                              borderRadius: BorderRadius.circular(14),
-                            ),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
                             child: Column(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                'Tahun',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14,
-                                                ),
-                                              ),
-                                              SizedBox(height: 6),
-                                              Text(
-                                                state.seedList.value
-                                                    .data![index].createdAt
-                                                    .toString()
-                                                    .split('-')[0],
-                                                style: TextStyle(
-                                                  color: Colors.grey.shade500,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ],
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Tahun',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
                                           ),
-                                          Column(
-                                            children: [
-                                              Text(
-                                                'Jenis Ikan',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14,
-                                                ),
-                                              ),
-                                              SizedBox(height: 6),
-                                              Text(
-                                                state.seedList.value
-                                                    .data![index].fishType
-                                                    .toString(),
-                                                style: TextStyle(
-                                                  color: Colors.grey.shade500,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ],
+                                        ),
+                                        SizedBox(height: 6),
+                                        Text(
+                                          state.seedList.value.data![index]
+                                              .createdAt
+                                              .toString()
+                                              .split('-')[0],
+                                          style: TextStyle(
+                                            color: Colors.grey.shade500,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
                                           ),
-                                          Column(
-                                            children: [
-                                              Text(
-                                                'Uk. Sortir',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14,
-                                                ),
-                                              ),
-                                              SizedBox(height: 6),
-                                              Text(
-                                                state.seedList.value
-                                                    .data![index].width
-                                                    .toString(),
-                                                style: TextStyle(
-                                                  color: Colors.grey.shade500,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ],
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text(
+                                          'Jenis Ikan',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
                                           ),
-                                          Column(
-                                            children: [
-                                              Text(
-                                                'Jumlah',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14,
-                                                ),
-                                              ),
-                                              SizedBox(height: 6),
-                                              Text(
-                                                '${state.seedList.value.data![index].amount} ekor',
-                                                style: TextStyle(
-                                                  color: Colors.grey.shade500,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ],
+                                        ),
+                                        SizedBox(height: 6),
+                                        Text(
+                                          state.seedList.value.data![index]
+                                              .fishType
+                                              .toString(),
+                                          style: TextStyle(
+                                            color: Colors.grey.shade500,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
                                           ),
-                                        ],
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text(
+                                          'Uk. Sortir',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        SizedBox(height: 6),
+                                        Text(
+                                          state
+                                              .seedList.value.data![index].width
+                                              .toString(),
+                                          style: TextStyle(
+                                            color: Colors.grey.shade500,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text(
+                                          'Jumlah',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        SizedBox(height: 6),
+                                        Text(
+                                          '${state.seedList.value.data![index].amount} ekor',
+                                          style: TextStyle(
+                                            color: Colors.grey.shade500,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 8),
+                                Divider(color: Colors.white),
+                                SizedBox(height: 6),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Harga : ',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
                                       ),
-                                      SizedBox(height: 8),
-                                      Divider(color: Colors.white),
-                                      SizedBox(height: 6),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            'Harga : ',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Text(
-                                              '.' * 100,
-                                              maxLines: 1,
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                          ),
-                                          Text(
-                                            'Rp${state.seedList.value.data![index].price}',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ],
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        '.' * 100,
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    Text(
+                                      'Rp${state.seedList.value.data![index].price}',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
                           ),
-                        );
-                      }),
+                        ],
+                      ),
                     ),
+                  );
+                }),
+              ),
             ),
     );
   }
@@ -307,113 +305,71 @@ class _KelasBenihPageState extends State<KelasBenihPage> {
         const SizedBox(
           height: 16,
         ),
-        Obx(
-          () => state.seedCategory.value == 'Benih'
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Satuan Sortir',
-                              style: headingText2,
-                            ),
-                            const SizedBox(
-                              height: 12,
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width / 2.5,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 4),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: inputColor,
-                              ),
-                              child: StatefulBuilder(
-                                builder: ((context, setState) {
-                                  return DropdownButtonHideUnderline(
-                                    child: DropdownButton(
-                                      onChanged: ((String? value) {
-                                        setState(() {
-                                          state.sortSize.value = value!;
-                                        });
-                                      }),
-                                      value: state.sortSize.value,
-                                      dropdownColor: inputColor,
-                                      items: state.dropdownList3.map(
-                                        (String val) {
-                                          return DropdownMenuItem(
-                                            value: val,
-                                            child: Text(
-                                              val,
-                                              style: headingText3,
-                                            ),
-                                          );
-                                        },
-                                      ).toList(),
-                                    ),
-                                  );
-                                }),
-                              ),
-                            ),
-                          ],
-                        ),
-                        TextFieldWidget(
-                          label: 'Jumlah',
-                          controller: state.fishAmount,
-                          isLong: false,
-                          hint: 'Ex: 1000',
-                          numberOutput: true,
-                          suffixSection: Text(
-                            'ekor',
-                            style: headingText3,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                  ],
-                )
-              : Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextFieldWidget(
-                          label: 'Berat',
-                          controller: state.fishWeight,
-                          isLong: false,
-                          hint: 'Ex: 100',
-                          numberOutput: true,
-                          suffixSection: Text(
-                            'gram',
-                            style: headingText3,
-                          ),
-                        ),
-                        TextFieldWidget(
-                          label: 'Jumlah',
-                          controller: state.fishAmount,
-                          hint: 'Ex: 1000',
-                          isLong: false,
-                          numberOutput: true,
-                          suffixSection: Text(
-                            'ekor',
-                            style: headingText3,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                  ],
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Satuan Sortir',
+                  style: headingText2,
                 ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width / 2.5,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: inputColor,
+                  ),
+                  child: StatefulBuilder(
+                    builder: ((context, setState) {
+                      return DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          onChanged: ((String? value) {
+                            setState(() {
+                              state.sortSize.value = value!;
+                            });
+                          }),
+                          value: state.sortSize.value,
+                          dropdownColor: inputColor,
+                          items: state.dropdownList3.map(
+                            (String val) {
+                              return DropdownMenuItem(
+                                value: val,
+                                child: Text(
+                                  val,
+                                  style: headingText3,
+                                ),
+                              );
+                            },
+                          ).toList(),
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+              ],
+            ),
+            TextFieldWidget(
+              label: 'Jumlah',
+              controller: state.fishAmount,
+              isLong: false,
+              hint: 'Ex: 1000',
+              numberOutput: true,
+              suffixSection: Text(
+                'ekor',
+                style: headingText3,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 16,
         ),
         TextFieldWidget(
           label: 'Harga Beli',

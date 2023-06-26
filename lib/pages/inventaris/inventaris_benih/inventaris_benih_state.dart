@@ -8,11 +8,14 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class InventarisBenihState {
-  String url = 'https://b8dd-103-136-58-71.ap.ngrok.io/api';
+  String url = 'https://a81b-103-136-58-71.ap.ngrok.io/api';
+
+  RxString pageIdentifier = 'benih'.obs;
 
   RxBool isLoadingPage = false.obs;
   RxBool isLoadingPost = false.obs;
   RxBool isLoadingDelete = false.obs;
+  RxBool isLoadingDetail = false.obs;
 
   var seedList = InventarisBenihModel(data: []).obs;
 
@@ -55,6 +58,7 @@ class InventarisBenihState {
 
   Future getAllSeedData(String type) async {
     seedList.value.data!.clear();
+    isLoadingPage.value = true;
     final response =
         await http.get(Uri.parse('$url/inventory/seed?type=$type'));
 
@@ -69,9 +73,12 @@ class InventarisBenihState {
     } catch (e) {
       throw Exception(e);
     }
+    isLoadingPage.value = false;
   }
 
-  Future getSeedDataByID(int id) async {
+  Future getSeedDataByID(int id, Function() doAfter) async {
+    isLoadingDetail.value = true;
+
     final response = await http.get(Uri.parse('$url/inventory/seed/$id'));
 
     try {
@@ -79,7 +86,6 @@ class InventarisBenihState {
         DetailInventarisBenihModel res =
             DetailInventarisBenihModel.fromJson(jsonDecode(response.body));
 
-        inspect(res.data);
         seedCategory.value = res.data!.fishSeedCategory!;
         fishCategory.value = res.data!.fishType!;
         sortSize.value = res.data!.width!;
@@ -88,9 +94,11 @@ class InventarisBenihState {
         fishWeight.text = res.data!.weight.toString();
         fishPrice.text = res.data!.price.toString();
       }
+      doAfter();
     } catch (e) {
       throw Exception(e);
     }
+    isLoadingDetail.value = false;
   }
 
   Future postSeedData(Function() doAfter) async {
@@ -105,18 +113,18 @@ class InventarisBenihState {
     map['price'] = fishPrice.text == '' ? '0' : fishPrice.text;
     map['image'] = fishImage.value;
 
+    isLoadingPost.value = true;
+
     try {
-      isLoadingPost.value = true;
-      inspect(map);
       await http.post(
         Uri.parse('$url/inventory/seed'),
         body: map,
       );
-      isLoadingPost.value = false;
+      doAfter();
     } catch (e) {
       throw Exception(e);
     }
-    doAfter();
+    isLoadingPost.value = false;
   }
 
   Future updateSeedData(int id, Function() doAfter) async {
@@ -131,18 +139,19 @@ class InventarisBenihState {
     map['price'] = fishPrice.text == '' ? '0' : fishPrice.text;
     map['image'] = fishImage.value;
 
+    isLoadingPost.value = true;
+
     try {
-      isLoadingPost.value = true;
       inspect(map);
       await http.put(
         Uri.parse('$url/inventory/seed/$id'),
         body: map,
       );
-      isLoadingPost.value = false;
+      doAfter();
     } catch (e) {
       throw Exception(e);
     }
-    doAfter();
+    isLoadingPost.value = false;
   }
 
   Future deleteSeedData(int id, Function() doAfter) async {
