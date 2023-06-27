@@ -64,11 +64,11 @@ class InventarisListrikState extends BaseURL {
         DetailInventarisListrikModel res =
             DetailInventarisListrikModel.fromJson(jsonDecode(response.body));
 
-        electricCategory.value = res.data!.type!;
-        name.text = res.data!.name!;
-        power.text = res.data!.daya!;
-        price.text = res.data!.price!.toString();
-        image.value = res.data!.image!;
+        electricCategory.value = res.data!.type.toString();
+        name.text = res.data!.name.toString();
+        power.text = res.data!.daya.toString();
+        price.text = res.data!.price.toString();
+        image.value = res.data!.image.toString();
       }
       doAfter();
     } catch (e) {

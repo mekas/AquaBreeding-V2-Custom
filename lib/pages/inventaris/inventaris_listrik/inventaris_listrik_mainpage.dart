@@ -141,6 +141,7 @@ class _InventarisListrikPageState extends State<InventarisListrikPage> {
                                     setState(() {
                                       state.electricCategory.value = value!;
                                     });
+                                    state.resetVariables();
                                   }),
                                   value: state.electricCategory.value,
                                   dropdownColor: inputColor,

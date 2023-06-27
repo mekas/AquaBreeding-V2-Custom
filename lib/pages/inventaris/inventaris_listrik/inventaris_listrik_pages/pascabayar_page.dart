@@ -299,9 +299,6 @@ class _PascabayarPageState extends State<PascabayarPage> {
         const SizedBox(
           height: 16,
         ),
-        const SizedBox(
-          height: 16,
-        ),
         Text(
           'Gambar (Struk)',
           style: headingText2,

@@ -10,10 +10,8 @@ import 'package:get/instance_manager.dart';
 class DetailInventarisPakanMainpage extends StatelessWidget {
   DetailInventarisPakanMainpage({
     Key? key,
-    required this.pageIdentifier,
   }) : super(key: key);
 
-  final String pageIdentifier;
   final TextEditingController firstDate = TextEditingController();
   final TextEditingController lastDate = TextEditingController();
 

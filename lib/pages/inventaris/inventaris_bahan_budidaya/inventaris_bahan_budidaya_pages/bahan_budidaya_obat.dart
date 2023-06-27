@@ -1,6 +1,6 @@
 import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_state.dart';
 import 'package:fish/theme.dart';
-import 'package:fish/widgets/render_inventaris_organic_list_widget.dart';
+import 'package:fish/widgets/render_inventaris_pakan_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,12 +24,12 @@ class _BahanBudidayaObatPageState extends State<BahanBudidayaObatPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: backgroundColor1,
-      child: SafeArea(
-        child: RenderInventarisOrganicListWidget(
-          data: state.dummyDataValue,
-        ),
-      ),
-    );
+        // color: backgroundColor1,
+        // child: SafeArea(
+        //   child: RenderInventarisPakanListWidget(
+        //     data: state.dummyDataValue,
+        //   ),
+        // ),
+        );
   }
 }

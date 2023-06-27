@@ -85,13 +85,14 @@ class InventarisBenihState extends BaseURL {
         DetailInventarisBenihModel res =
             DetailInventarisBenihModel.fromJson(jsonDecode(response.body));
 
-        seedCategory.value = res.data!.fishSeedCategory!;
-        fishCategory.value = res.data!.fishType!;
-        sortSize.value = res.data!.width!;
-        fishName.text = res.data!.brandName!;
+        seedCategory.value = res.data!.fishSeedCategory.toString();
+        fishCategory.value = res.data!.fishType.toString();
+        sortSize.value = res.data!.width.toString();
+        fishName.text = res.data!.brandName.toString();
         fishAmount.text = res.data!.amount.toString();
         fishWeight.text = res.data!.weight.toString();
         fishPrice.text = res.data!.price.toString();
+        fishImage.value = res.data!.image.toString();
       }
       doAfter();
     } catch (e) {
