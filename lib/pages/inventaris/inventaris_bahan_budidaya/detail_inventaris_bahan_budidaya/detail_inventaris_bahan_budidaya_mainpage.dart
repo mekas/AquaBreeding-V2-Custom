@@ -6,11 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DetailInventarisBahanBudidayaMainpage extends StatelessWidget {
-  DetailInventarisBahanBudidayaMainpage(
-      {Key? key, required this.pageIdentifier})
-      : super(key: key);
-
-  final String pageIdentifier;
+  DetailInventarisBahanBudidayaMainpage({Key? key}) : super(key: key);
 
   final TextEditingController firstDate = TextEditingController();
   final TextEditingController lastDate = TextEditingController();
