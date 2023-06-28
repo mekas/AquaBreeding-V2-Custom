@@ -2,7 +2,9 @@ import 'package:fish/pages/component/statistic_card.dart';
 import 'package:fish/pages/component/water_card.dart';
 import 'package:fish/controllers/home/home_controller.dart';
 import 'package:fish/pages/inventaris/inventaris_aset/inventaris_aset_page.dart';
+import 'package:fish/pages/inventaris/inventaris_aset/inventaris_aset_state.dart';
 import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_mainpage.dart';
+import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_state.dart';
 import 'package:fish/pages/inventaris/inventaris_benih/inventaris_benih_mainpage.dart';
 import 'package:fish/pages/inventaris/inventaris_listrik/inventaris_listrik_mainpage.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_mainpage.dart';
@@ -12,7 +14,12 @@ import 'package:get/get.dart';
 import 'package:fish/theme.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
+
+  final InventarisBahanBudidayaState stateA =
+      Get.put(InventarisBahanBudidayaState());
+
+  final InventarisAsetState stateB = Get.put(InventarisAsetState());
 
   @override
   Widget build(BuildContext context) {
@@ -315,6 +322,7 @@ class HomePage extends StatelessWidget {
                 MainInvetarisButton(
                   title: 'Suplemen',
                   doOnTap: () {
+                    stateA.currIndexFilter.value = 1;
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return const InventarisBahanBudidayaMainpage();
@@ -342,6 +350,7 @@ class HomePage extends StatelessWidget {
                 MainInvetarisButton(
                   title: 'Aset',
                   doOnTap: () {
+                    stateB.currIndexFilter.value = 1;
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return const InventarisAsetPage();

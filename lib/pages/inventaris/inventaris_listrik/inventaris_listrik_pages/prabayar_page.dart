@@ -103,55 +103,34 @@ class _PrabayarPageState extends State<PrabayarPage> {
                               ),
                               Container(
                                 padding: const EdgeInsets.all(12),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                child: Column(
                                   children: [
-                                    Column(
+                                    Row(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Text(
-                                          'Nama',
+                                          'Nama : ',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 14,
                                           ),
                                         ),
-                                        SizedBox(height: 6),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              6,
+                                        Expanded(
                                           child: Text(
-                                            state.electricList.value
-                                                .data![index].name
-                                                .toString(),
+                                            '.' * 100,
+                                            maxLines: 1,
                                             style: TextStyle(
-                                              color: Colors.grey.shade500,
+                                              color: Colors.white,
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 12,
+                                              fontSize: 14,
                                             ),
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          'Tipe',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                        SizedBox(height: 6),
                                         Text(
                                           state.electricList.value.data![index]
-                                              .type
+                                              .name
                                               .toString(),
                                           style: TextStyle(
                                             color: Colors.grey.shade500,
@@ -161,17 +140,30 @@ class _PrabayarPageState extends State<PrabayarPage> {
                                         ),
                                       ],
                                     ),
-                                    Column(
+                                    SizedBox(height: 8),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Text(
-                                          'Harga',
+                                          'Harga : ',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 14,
                                           ),
                                         ),
-                                        SizedBox(height: 6),
+                                        Expanded(
+                                          child: Text(
+                                            '.' * 100,
+                                            maxLines: 1,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ),
                                         Text(
                                           'Rp${state.electricList.value.data![index].price.toString()}',
                                           style: TextStyle(

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:another_flushbar/flushbar.dart';
 import 'package:fish/core/baseUrl.dart';
 import 'package:fish/models/inventaris/suplemen/detail_inventaris_suplemen_model.dart';
 import 'package:fish/models/inventaris/suplemen/inventaris_suplemen_model.dart';
@@ -22,8 +21,7 @@ class InventarisBahanBudidayaState extends BaseURL {
     {'title_id': 1, 'title': 'Obat', 'key': 'obat'},
     {'title_id': 2, 'title': 'Perawatan Air', 'key': 'perawatan'},
     {'title_id': 3, 'title': 'Probiotik', 'key': 'probiotik'},
-    {'title_id': 4, 'title': 'Habis Pakai', 'key': 'pakai'},
-    {'title_id': 5, 'title': 'Feed Additive', 'key': 'feed'},
+    {'title_id': 4, 'title': 'Feed Additive', 'key': 'feed'},
   ].obs;
 
   RxString pageIdentifier = 'Obat'.obs;
@@ -33,7 +31,6 @@ class InventarisBahanBudidayaState extends BaseURL {
     'Obat',
     'Perawatan Air',
     'Probiotik',
-    'Habis Pakai',
     'Feed Additive',
   ];
 

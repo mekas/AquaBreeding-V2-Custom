@@ -122,7 +122,7 @@ class _PascabayarPageState extends State<PascabayarPage> {
                                       SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width /
-                                                6,
+                                                3,
                                         child: Text(
                                           state.electricList.value.data![index]
                                               .name
@@ -132,29 +132,6 @@ class _PascabayarPageState extends State<PascabayarPage> {
                                             fontWeight: FontWeight.bold,
                                             fontSize: 12,
                                           ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        'Tipe',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                      SizedBox(height: 6),
-                                      Text(
-                                        state.electricList.value.data![index]
-                                            .type
-                                            .toString(),
-                                        style: TextStyle(
-                                          color: Colors.grey.shade500,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12,
                                         ),
                                       ),
                                     ],

@@ -32,7 +32,7 @@ class _DashboardPageState extends State<DashboardPage> {
             child: IndexedStack(
               index: controller.tabIndex,
               children: [
-                const HomePage(),
+                HomePage(),
                 const PondPage(),
                 ProfilePage(),
               ],

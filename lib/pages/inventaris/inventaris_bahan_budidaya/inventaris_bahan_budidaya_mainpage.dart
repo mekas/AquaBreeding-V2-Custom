@@ -42,7 +42,6 @@ class _InventarisBahanBudidayaMainpageState
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: backgroundColor1,
-        elevation: 0,
         actions: [
           IconButton(
             onPressed: () {
@@ -77,10 +76,10 @@ class _InventarisBahanBudidayaMainpageState
                             state.currIndexFilter.value = index + 1;
                             state.functionCategory.value = state
                                     .filterList[state.currIndexFilter.value - 1]
-                                ['key'];
+                                ['title'];
                             state.pageIdentifier.value = state
                                     .filterList[state.currIndexFilter.value - 1]
-                                ['key'];
+                                ['title'];
                           });
                           await state.getAllData(
                               state.functionCategory.value, () {});
@@ -359,6 +358,8 @@ class _InventarisBahanBudidayaMainpageState
                         return DropdownButtonHideUnderline(
                           child: DropdownButton(
                             onChanged: ((String? value) {
+                              state.resetVariables();
+
                               setState(() {
                                 state.functionCategory.value = value!;
                               });
@@ -390,7 +391,7 @@ class _InventarisBahanBudidayaMainpageState
         TextFieldWidget(
           label: 'Deskripsi Bahan',
           controller: state.desc,
-          isLong: true,
+          isMoreText: true,
           hint: 'Ex: Bahan kimia',
         ),
         const SizedBox(

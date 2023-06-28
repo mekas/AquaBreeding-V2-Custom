@@ -1,11 +1,10 @@
 import 'dart:developer';
 
-import 'package:fish/pages/inventaris/inventaris_aset/detail_inventaris_aset/detail_inventaris_aset_page.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:fish/pages/inventaris/inventaris_aset/inventaris_aset_state.dart';
 import 'package:fish/theme.dart';
 import 'package:fish/widgets/bottom_sheet_widget.dart';
 import 'package:fish/widgets/dialog_widget.dart';
-import 'package:fish/widgets/render_inventaris_aset_list_widget.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,22 +19,20 @@ class InventarisAsetPage extends StatefulWidget {
 class _InventarisAsetPageState extends State<InventarisAsetPage> {
   final InventarisAsetState state = Get.put(InventarisAsetState());
 
-  String dropdownValue = 'Aset Tukang';
+  DateTime currDate = DateTime.now();
 
-  static var dropdownList = [
-    'Aset Tukang',
-    'Aset Peralatan Budidaya',
-    'Aset Kolam',
-    'Aset Living',
-  ];
+  @override
+  void initState() {
+    super.initState();
 
-  TextEditingController testControl = TextEditingController();
-  TextEditingController testControl2 = TextEditingController();
-  TextEditingController testControl3 = TextEditingController();
-  TextEditingController testControl4 = TextEditingController();
+    state.firstDate.text = currDate.toString().split(' ')[0];
+    state.lastDate.text = currDate.toString().split(' ')[0];
 
-  final TextEditingController firstDate = TextEditingController();
-  final TextEditingController lastDate = TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      state.getAllData(
+          'alat', state.firstDate.text, state.lastDate.text, () {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,199 +44,602 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return const DetailInventarisAsetPage();
-              }));
+              openDateDialogPicker(context);
             },
-            icon: Icon(Icons.history),
+            icon: Icon(Icons.filter_list_rounded),
           )
         ],
       ),
-      body: Container(
-        color: backgroundColor1,
-        padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-        child: SafeArea(
-          child: Column(
-            children: [
-              Container(
-                margin: EdgeInsets.only(left: 16),
-                height: 35,
-                width: double.infinity,
-                child: ListView.builder(
-                  itemCount: state.filterList.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: ((context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          state.currIndexFilter.value = index + 1;
-                          state.selectedFilter.value =
-                              state.filterList[state.currIndexFilter.value - 1]
-                                  ['key'];
-                          inspect(state.selectedFilter.value);
-                        });
-                      },
-                      child: Container(
-                        width: state.filterList[index]['title'] ==
-                                'Peralatan Budidaya'
-                            ? 150
-                            : 100,
-                        padding: EdgeInsets.fromLTRB(12, 8, 12, 8),
-                        margin: EdgeInsets.only(right: 8),
-                        decoration: BoxDecoration(
-                          color: state.currIndexFilter.value ==
-                                  state.filterList[index]['title_id']
-                              ? Colors.white
-                              : backgroundColor2,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          state.filterList[index]['title'],
-                          style: headingText3.copyWith(
+      body: Obx(
+        () => Container(
+          color: backgroundColor1,
+          padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+          child: SafeArea(
+            child: Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(left: 16),
+                  height: 35,
+                  width: double.infinity,
+                  child: ListView.builder(
+                    itemCount: state.filterList.length,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: ((context, index) {
+                      return GestureDetector(
+                        onTap: () async {
+                          state.firstDate.text =
+                              currDate.toString().split(' ')[0];
+                          state.lastDate.text =
+                              currDate.toString().split(' ')[0];
+                          setState(() {
+                            state.currIndexFilter.value = index + 1;
+                            state.assetCategory.value = state
+                                    .filterList[state.currIndexFilter.value - 1]
+                                ['title'];
+                            state.pageIdentifier.value = state
+                                    .filterList[state.currIndexFilter.value - 1]
+                                ['title'];
+                          });
+                          await state.getAllData(state.assetCategory.value,
+                              state.firstDate.text, state.lastDate.text, () {});
+                        },
+                        child: Container(
+                          width: state.filterList[index]['title'] ==
+                                  'Perlengkapan Habis Pakai'
+                              ? 200
+                              : 150,
+                          padding: EdgeInsets.fromLTRB(12, 8, 12, 8),
+                          margin: EdgeInsets.only(right: 8),
+                          decoration: BoxDecoration(
                             color: state.currIndexFilter.value ==
                                     state.filterList[index]['title_id']
-                                ? Colors.black
-                                : Colors.white,
+                                ? Colors.white
+                                : backgroundColor2,
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                          textAlign: TextAlign.center,
+                          child: Text(
+                            state.filterList[index]['title'],
+                            style: headingText3.copyWith(
+                              color: state.currIndexFilter.value ==
+                                      state.filterList[index]['title_id']
+                                  ? Colors.black
+                                  : Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                      ),
-                    );
-                  }),
+                      );
+                    }),
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              RenderInventarisAsetListWidget(data: state.dummyDataValue2),
-            ],
+                SizedBox(
+                  height: 12,
+                ),
+                state.isLoadingPage.value
+                    ? Padding(
+                        padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.width / 2,
+                        ),
+                        child: Center(
+                          child: SizedBox(
+                            height: 50,
+                            width: 50,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      )
+                    : state.assetList.value.data!.isEmpty
+                        ? Padding(
+                            padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.width / 2,
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Tidak ada data',
+                                style: headingText3,
+                              ),
+                            ),
+                          )
+                        : Container(
+                            margin: const EdgeInsets.fromLTRB(4, 8, 4, 20),
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              padding:
+                                  const EdgeInsets.only(bottom: padding4XL),
+                              itemCount: state.assetList.value.data!.length,
+                              physics: BouncingScrollPhysics(),
+                              itemBuilder: ((context, index) {
+                                return GestureDetector(
+                                  onTap: () async {
+                                    await state.getDataByID(
+                                        state.assetList.value.data![index]
+                                            .idInt!, () {
+                                      getBottomSheet(
+                                          index,
+                                          state.assetList.value.data![index]
+                                              .idInt!,
+                                          true);
+                                    });
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.fromLTRB(
+                                        16, 8, 16, 12),
+                                    decoration: BoxDecoration(
+                                      color: backgroundColor1,
+                                      border: Border.all(
+                                          width: 2, color: primaryColor),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color: primaryColor,
+                                            borderRadius:
+                                                BorderRadius.circular(6),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'Tanggal :',
+                                                style: headingText3,
+                                              ),
+                                              Text(
+                                                state.assetList.value
+                                                    .data![index].createdAt!
+                                                    .toString()
+                                                    .split(' ')[0]
+                                                    .split('-')
+                                                    .reversed
+                                                    .join('-'),
+                                                style: headingText3,
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 12,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    'Nama : ',
+                                                    style: headingText3,
+                                                  ),
+                                                  Expanded(
+                                                    child: Text(
+                                                      '.' * 100,
+                                                      maxLines: 1,
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    state.assetList.value
+                                                        .data![index].name
+                                                        .toString(),
+                                                    style: headingText3,
+                                                  )
+                                                ],
+                                              ),
+                                              const SizedBox(
+                                                height: 12,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    'Harga Beli : ',
+                                                    style: headingText3,
+                                                  ),
+                                                  Expanded(
+                                                    child: Text(
+                                                      '.' * 100,
+                                                      maxLines: 1,
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    'Rp${state.assetList.value.data![index].price.toString()}',
+                                                    style: headingText3,
+                                                  )
+                                                ],
+                                              ),
+                                              const SizedBox(
+                                                height: 12,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    'Jumlah : ',
+                                                    style: headingText3,
+                                                  ),
+                                                  Expanded(
+                                                    child: Text(
+                                                      '.' * 100,
+                                                      maxLines: 1,
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    '${state.assetList.value.data![index].amount.toString()} buah',
+                                                    style: headingText3,
+                                                  )
+                                                ],
+                                              ),
+                                              const SizedBox(
+                                                height: 12,
+                                              ),
+                                              Text(
+                                                'Fungsi :',
+                                                style: headingText3,
+                                              ),
+                                              const SizedBox(
+                                                height: 12,
+                                              ),
+                                              Text(
+                                                state.assetList.value
+                                                    .data![index].description
+                                                    .toString(),
+                                                style: hoverText,
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 12,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }),
+                            ),
+                          ),
+              ],
+            ),
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green.shade600,
         onPressed: () {
-          BottomSheetWidget.getBottomSheetWidget(
-            context,
-            [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+          state.resetVariables();
+          getBottomSheet(0, 0, false);
+        },
+        child: const Icon(
+          Icons.add,
+          size: 32,
+        ),
+      ),
+    );
+  }
+
+  getBottomSheet(int index, int id, bool editable) {
+    BottomSheetWidget.getBottomSheetWidget(
+      context,
+      [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const CircleAvatar(
+                backgroundColor: Colors.red,
+                radius: 12,
+                child: Icon(
+                  Icons.close,
+                  size: 14,
+                  color: Colors.black,
+                ),
+              ),
+            )
+          ],
+        ),
+        const SizedBox(
+          height: 18,
+        ),
+        Text(
+          editable ? 'Edit Aset' : 'Catat Aset',
+          style: headingText1,
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(
+          height: 54,
+        ),
+        editable
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: const CircleAvatar(
-                      backgroundColor: Colors.red,
-                      radius: 12,
-                      child: Icon(
-                        Icons.close,
-                        size: 14,
-                        color: Colors.black,
-                      ),
+                  Text(
+                    'Kategori : ${state.assetCategory.value}',
+                    style: headingText2,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                ],
+              )
+            : Container(),
+        editable
+            ? Container()
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'Kategori Aset',
+                    style: headingText2,
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: inputColor,
                     ),
-                  )
+                    child: StatefulBuilder(
+                      builder: ((context, setState) {
+                        return DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            onChanged: ((String? value) {
+                              setState(() {
+                                state.assetCategory.value = value!;
+                              });
+                            }),
+                            value: state.assetCategory.value,
+                            dropdownColor: inputColor,
+                            items: state.dropdownList.map(
+                              (String val) {
+                                return DropdownMenuItem(
+                                  value: val,
+                                  child: Text(
+                                    val,
+                                    style: headingText3,
+                                  ),
+                                );
+                              },
+                            ).toList(),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
                 ],
               ),
-              const SizedBox(
-                height: 18,
+        TextFieldWidget(
+          label: 'Nama Aset',
+          controller: state.name,
+          hint: 'Ex: Filter Air',
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            TextFieldWidget(
+              label: 'Jumlah',
+              controller: state.amount,
+              isLong: false,
+              hint: 'Ex: 2',
+              suffixSection: Text(
+                'buah',
+                style: headingText3,
               ),
-              Text(
-                'Catat Aset',
-                style: headingText1,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(
-                height: 54,
-              ),
-              Text(
-                'Kategori Aset',
+            ),
+            TextFieldWidget(
+              label: 'Harga Beli',
+              controller: state.price,
+              hint: 'Ex: 50000',
+              isLong: false,
+              prefixSection: Text(
+                'Rp',
                 style: headingText2,
               ),
-              const SizedBox(
-                height: 12,
-              ),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: inputColor,
-                ),
-                child: StatefulBuilder(
-                  builder: ((context, setState) {
-                    return DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        onChanged: ((String? value) {
-                          setState(() {
-                            dropdownValue = value!;
-                          });
-                          state.selectedDropdownValue.value = value!;
-                        }),
-                        value: dropdownValue,
-                        dropdownColor: inputColor,
-                        items: dropdownList.map(
-                          (String val) {
-                            return DropdownMenuItem(
-                              value: val,
-                              child: Text(
-                                val,
-                                style: headingText3,
-                              ),
-                            );
-                          },
-                        ).toList(),
-                      ),
-                    );
-                  }),
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              TextFieldWidget(
-                label: 'Nama Aset',
-                controller: testControl,
-                hint: 'Ex: Filter Air',
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        TextFieldWidget(
+          label: 'Deskripsi',
+          controller: state.desc,
+          isMoreText: true,
+          hint: 'Ex: memfilter air kolam',
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        Text(
+          'Gambar (Struk)',
+          style: headingText2,
+        ),
+        const SizedBox(
+          height: 12,
+        ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.grey,
+          ),
+          width: MediaQuery.of(context).size.width,
+          height: 300,
+          child: Image.network(
+            'https://lh3.googleusercontent.com/p/AF1QipPgPgQ17AeKRLeQWWb3sZYRtkyoJndsRMKE8rNc=w1080-h608-p-no-v0',
+            fit: BoxFit.cover,
+          ),
+        ),
+        const SizedBox(
+          height: 36,
+        ),
+        editable
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  TextFieldWidget(
-                    label: 'Harga Beli',
-                    controller: testControl2,
-                    hint: 'Ex: 50000',
-                    isLong: false,
-                    prefixSection: Text(
-                      'Rp',
-                      style: headingText2,
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: addButtonColor,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    onPressed: () async {
+                      if (state.name.text == '' ||
+                          state.price.text == '' ||
+                          state.desc.text == '' ||
+                          state.amount.text == '' ||
+                          state.image.value == '') {
+                        Flushbar(
+                          message: "Gagal, Form tidak sesuai",
+                          duration: Duration(seconds: 3),
+                          leftBarIndicatorColor: Colors.red[400],
+                        ).show(context);
+                      } else {
+                        await state.updateData(
+                          id,
+                          () => {
+                            state.getAllData(
+                              state.pageIdentifier.value,
+                              state.firstDate.text,
+                              state.lastDate.text,
+                              () {},
+                            ),
+                            state.resetVariables(),
+                            Navigator.pop(context),
+                          },
+                        );
+                      }
+                    },
+                    child: Obx(
+                      () => state.isLoadingPost.value
+                          ? SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            )
+                          : Text(
+                              'Ubah',
+                              style: headingText2,
+                            ),
                     ),
                   ),
-                  TextFieldWidget(
-                    label: 'Jumlah',
-                    controller: testControl3,
-                    isLong: false,
-                    hint: 'Ex: 2',
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('Hapus Data'),
+                              content: const Text(
+                                  'Apakah anda yakin ingin menghapus data ini?'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(context, 'Cancel'),
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    await state.deleteData(
+                                        state.assetList.value.data![index]
+                                            .idInt!,
+                                        () => {
+                                              state.getAllData(
+                                                state.pageIdentifier.value,
+                                                state.firstDate.text,
+                                                state.lastDate.text,
+                                                () {},
+                                              ),
+                                            });
+                                    if (context.mounted) {
+                                      Navigator.of(context).pop();
+                                    }
+                                    if (context.mounted) {
+                                      Navigator.of(context).pop();
+                                    }
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            );
+                          });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    child: Obx(
+                      () => state.isLoadingDelete.value
+                          ? SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            )
+                          : Text(
+                              'Hapus',
+                              style: headingText2,
+                            ),
+                    ),
                   ),
                 ],
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              TextFieldWidget(
-                label: 'Fungsi',
-                controller: testControl4,
-                hint: 'Fungsi Alat',
-                isMoreText: true,
-              ),
-              const SizedBox(
-                height: 36,
-              ),
-              ElevatedButton(
+              )
+            : ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: addButtonColor,
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -247,17 +647,47 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
-                onPressed: () {},
-                child: const Icon(Icons.add),
+                onPressed: () async {
+                  if (state.name.text == '' ||
+                      state.price.text == '' ||
+                      state.desc.text == '' ||
+                      state.amount.text == '' ||
+                      state.image.value == '') {
+                    Flushbar(
+                      message: "Gagal, Form tidak sesuai",
+                      duration: Duration(seconds: 3),
+                      leftBarIndicatorColor: Colors.red[400],
+                    ).show(context);
+                  } else {
+                    await state.postData(
+                      () => {
+                        state.getAllData(
+                          state.pageIdentifier.value,
+                          state.firstDate.text,
+                          state.lastDate.text,
+                          () {},
+                        ),
+                        state.resetVariables(),
+                        Navigator.pop(context),
+                      },
+                    );
+                  }
+                },
+                child: Obx(
+                  () => state.isLoadingPost.value
+                      ? SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        )
+                      : Icon(
+                          Icons.add,
+                        ),
+                ),
               ),
-            ],
-          );
-        },
-        child: const Icon(
-          Icons.add,
-          size: 32,
-        ),
-      ),
+      ],
     );
   }
 
@@ -303,16 +733,11 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
                   firstDate: DateTime(1900),
                   lastDate: DateTime(2100),
                 );
-                firstDate.text = datePicker
-                    .toString()
-                    .split(' ')[0]
-                    .split('-')
-                    .reversed
-                    .join('-');
+                state.firstDate.text = datePicker.toString().split(' ')[0];
               },
               child: TextFieldWidget(
                 label: 'Tanggal Awal',
-                controller: firstDate,
+                controller: state.firstDate,
                 isLong: false,
                 isEdit: false,
                 suffixSection: Icon(
@@ -329,16 +754,11 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
                   firstDate: DateTime(1900),
                   lastDate: DateTime(2100),
                 );
-                lastDate.text = datePicker
-                    .toString()
-                    .split(' ')[0]
-                    .split('-')
-                    .reversed
-                    .join('-');
+                state.lastDate.text = datePicker.toString().split(' ')[0];
               },
               child: TextFieldWidget(
                 label: 'Tanggal Akhir',
-                controller: lastDate,
+                controller: state.lastDate,
                 isLong: false,
                 isEdit: false,
                 suffixSection: Icon(
@@ -359,8 +779,15 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
               borderRadius: BorderRadius.circular(8),
             ),
           ),
-          onPressed: () {
-            Navigator.pop(context);
+          onPressed: () async {
+            await state.getAllData(
+              state.pageIdentifier.value,
+              state.firstDate.text,
+              state.lastDate.text,
+              () {
+                Navigator.pop(context);
+              },
+            );
           },
           child: Icon(
             Icons.navigate_next_rounded,
