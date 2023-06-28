@@ -45,12 +45,12 @@ class InventarisAsetState extends BaseURL {
   TextEditingController firstDate = TextEditingController();
   TextEditingController lastDate = TextEditingController();
 
-  Future getAllData(String type, String firstDate, String lastDate,
-      Function() doAfter) async {
+  Future getAllData(
+      String type, String first, String last, Function() doAfter) async {
     assetList.value.data!.clear();
     isLoadingPage.value = true;
     final response = await http.get(Uri.parse(
-        '$baseUrl/inventory/asset?type=$type&start_date=$firstDate&end_date=$lastDate'));
+        '$baseUrl/inventory/asset?type=$type&start_date=$first&end_date=$last'));
 
     try {
       if (response.statusCode == 200) {
@@ -166,5 +166,7 @@ class InventarisAsetState extends BaseURL {
     desc.clear();
     price.clear();
     amount.clear();
+    firstDate.clear();
+    lastDate.clear();
   }
 }

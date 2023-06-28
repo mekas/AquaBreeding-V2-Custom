@@ -79,10 +79,10 @@ class _InventarisBahanBudidayaMainpageState
                                 ['title'];
                             state.pageIdentifier.value = state
                                     .filterList[state.currIndexFilter.value - 1]
-                                ['title'];
+                                ['key'];
                           });
                           await state.getAllData(
-                              state.functionCategory.value, () {});
+                              state.pageIdentifier.value, () {});
                         },
                         child: Container(
                           width: state.filterList[index]['title'] ==

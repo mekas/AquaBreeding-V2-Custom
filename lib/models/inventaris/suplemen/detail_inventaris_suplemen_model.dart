@@ -26,7 +26,7 @@ class Data {
   String? name;
   String? description;
   int? price;
-  int? amount;
+  double? amount;
   String? type;
   int? minExpiredPeriod;
   int? maxExpiredPeriod;

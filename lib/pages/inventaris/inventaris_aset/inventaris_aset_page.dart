@@ -25,9 +25,6 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
   void initState() {
     super.initState();
 
-    state.firstDate.text = currDate.toString().split(' ')[0];
-    state.lastDate.text = currDate.toString().split(' ')[0];
-
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       state.getAllData(
           'alat', state.firstDate.text, state.lastDate.text, () {});
@@ -68,10 +65,7 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
                     itemBuilder: ((context, index) {
                       return GestureDetector(
                         onTap: () async {
-                          state.firstDate.text =
-                              currDate.toString().split(' ')[0];
-                          state.lastDate.text =
-                              currDate.toString().split(' ')[0];
+                          state.resetVariables();
                           setState(() {
                             state.currIndexFilter.value = index + 1;
                             state.assetCategory.value = state
@@ -79,9 +73,9 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
                                 ['title'];
                             state.pageIdentifier.value = state
                                     .filterList[state.currIndexFilter.value - 1]
-                                ['title'];
+                                ['key'];
                           });
-                          await state.getAllData(state.assetCategory.value,
+                          await state.getAllData(state.pageIdentifier.value,
                               state.firstDate.text, state.lastDate.text, () {});
                         },
                         child: Container(

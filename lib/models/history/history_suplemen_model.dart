@@ -1,10 +1,10 @@
-class InventarisSuplemenModel {
+class HistorySuplemenModel {
   String? status;
   List<Data>? data;
 
-  InventarisSuplemenModel({this.status, this.data});
+  HistorySuplemenModel({this.status, this.data});
 
-  InventarisSuplemenModel.fromJson(Map<String, dynamic> json) {
+  HistorySuplemenModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
       data = <Data>[];
@@ -26,6 +26,55 @@ class InventarisSuplemenModel {
 
 class Data {
   String? sId;
+  String? fishSuplemenId;
+  double? originalAmount;
+  double? usage;
+  String? pond;
+  String? createdAt;
+  String? updatedAt;
+  Suplemen? suplemen;
+
+  Data(
+      {this.sId,
+      this.fishSuplemenId,
+      this.originalAmount,
+      this.usage,
+      this.pond,
+      this.createdAt,
+      this.updatedAt,
+      this.suplemen});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    fishSuplemenId = json['fish_suplemen_id'];
+    originalAmount = json['original_amount'];
+    usage = json['usage'];
+    pond = json['pond'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    suplemen = json['suplemen'] != null
+        ? new Suplemen.fromJson(json['suplemen'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['fish_suplemen_id'] = this.fishSuplemenId;
+    data['original_amount'] = this.originalAmount;
+    data['usage'] = this.usage;
+    data['pond'] = this.pond;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    if (this.suplemen != null) {
+      data['suplemen'] = this.suplemen!.toJson();
+    }
+    return data;
+  }
+}
+
+class Suplemen {
+  String? sId;
   int? idInt;
   String? function;
   String? name;
@@ -37,9 +86,8 @@ class Data {
   int? maxExpiredPeriod;
   String? image;
   String? createdAt;
-  String? updatedAt;
 
-  Data(
+  Suplemen(
       {this.sId,
       this.idInt,
       this.function,
@@ -51,10 +99,9 @@ class Data {
       this.minExpiredPeriod,
       this.maxExpiredPeriod,
       this.image,
-      this.createdAt,
-      this.updatedAt});
+      this.createdAt});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  Suplemen.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     idInt = json['id_int'];
     function = json['function'];
@@ -67,7 +114,6 @@ class Data {
     maxExpiredPeriod = json['max_expired_period'];
     image = json['image'];
     createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
   }
 
   Map<String, dynamic> toJson() {
@@ -84,7 +130,6 @@ class Data {
     data['max_expired_period'] = this.maxExpiredPeriod;
     data['image'] = this.image;
     data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
     return data;
   }
 }

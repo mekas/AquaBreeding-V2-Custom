@@ -7,6 +7,7 @@ import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan
 import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_state.dart';
 import 'package:fish/pages/inventaris/inventaris_benih/inventaris_benih_mainpage.dart';
 import 'package:fish/pages/inventaris/inventaris_listrik/inventaris_listrik_mainpage.dart';
+import 'package:fish/pages/inventaris/inventaris_listrik/inventaris_listrik_state.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_mainpage.dart';
 import 'package:fish/widgets/main_inventaris_button.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,10 @@ class HomePage extends StatelessWidget {
       Get.put(InventarisBahanBudidayaState());
 
   final InventarisAsetState stateB = Get.put(InventarisAsetState());
+
+  final InventarisListrikState stateC = Get.put(InventarisListrikState());
+
+  DateTime now = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -332,6 +337,7 @@ class HomePage extends StatelessWidget {
                 MainInvetarisButton(
                   title: 'Listrik',
                   doOnTap: () {
+                    stateC.thisYear = now;
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return const InventarisListrikPage();
@@ -351,6 +357,8 @@ class HomePage extends StatelessWidget {
                   title: 'Aset',
                   doOnTap: () {
                     stateB.currIndexFilter.value = 1;
+                    stateB.firstDate.text = '';
+                    stateB.lastDate.text = '';
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return const InventarisAsetPage();
