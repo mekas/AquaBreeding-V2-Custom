@@ -89,7 +89,7 @@ class InventarisBahanBudidayaState extends BaseURL {
         name.text = res.data!.name.toString();
         desc.text = res.data!.description.toString();
         price.text = res.data!.price.toString();
-        amount.text = res.data!.amount.toString();
+        amount.text = res.data!.amount!.toStringAsFixed(3);
         typeCategory.value = res.data!.type.toString();
         minExp.text = res.data!.minExpiredPeriod.toString();
         maxExp.text = res.data!.maxExpiredPeriod.toString();

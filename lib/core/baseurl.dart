@@ -1,3 +1,3 @@
 class BaseURL {
-  final String baseUrl = 'https://550e-103-136-58-71.ap.ngrok.io/api';
+  final String baseUrl = 'https://27bb-36-69-167-229.ap.ngrok.io/api';
 }
