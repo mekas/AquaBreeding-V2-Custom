@@ -16,6 +16,48 @@ class InventarisBenihState extends BaseURL {
   RxBool isLoadingDelete = false.obs;
   RxBool isLoadingDetail = false.obs;
 
+  final List listLele = [];
+  RxMap<String, dynamic> selectedLele = <String, dynamic>{}.obs;
+  RxBool isLoadingLeleDetail = false.obs;
+  RxString leleFishWeigth = ''.obs;
+  RxString leleFishSize = ''.obs;
+  RxString leleFishStock = ''.obs;
+  RxString leleID = ''.obs;
+
+  final List listNilaHitam = [];
+  RxMap<String, dynamic> selectedNilaHitam = <String, dynamic>{}.obs;
+  RxBool isLoadingNilaHitamDetail = false.obs;
+  RxString nilaHitamFishWeigth = ''.obs;
+  RxString nilaHitamFishSize = ''.obs;
+  RxString nilaHitamFishStock = ''.obs;
+  RxString nilaHitamID = ''.obs;
+
+  final List listNilaMerah = [];
+  RxMap<String, dynamic> selectedNilaMerah = <String, dynamic>{}.obs;
+  RxBool isLoadingNilaMerahDetail = false.obs;
+  RxString nilaMerahFishWeigth = ''.obs;
+  RxString nilaMerahFishSize = ''.obs;
+  RxString nilaMerahFishStock = ''.obs;
+  RxString nilaMerahID = ''.obs;
+
+  final List listPatin = [];
+  RxMap<String, dynamic> selectedPatin = <String, dynamic>{}.obs;
+  RxBool isLoadingPatinDetail = false.obs;
+  RxString patinFishWeigth = ''.obs;
+  RxString patinFishSize = ''.obs;
+  RxString patinFishStock = ''.obs;
+  RxString patinID = ''.obs;
+
+  final List listMas = [];
+  RxMap<String, dynamic> selectedMas = <String, dynamic>{}.obs;
+  RxBool isLoadingMasDetail = false.obs;
+  RxString masFishWeigth = ''.obs;
+  RxString masFishSize = ''.obs;
+  RxString masFishStock = ''.obs;
+  RxString masID = ''.obs;
+
+  RxBool switchValue = false.obs;
+
   var seedList = InventarisBenihModel(data: []).obs;
 
   var dropdownList = [
@@ -30,23 +72,23 @@ class InventarisBenihState extends BaseURL {
     'Mas',
   ];
   var dropdownList3 = [
-    '1 - 2 cm',
-    '2 - 3 cm',
-    '3 - 4 cm',
-    '4 - 5 cm',
-    '5 - 6 cm',
-    '6 - 7 cm',
-    '7 - 8 cm',
-    '8 - 9 cm',
-    '9 - 10 cm',
-    '10 - 11 cm',
-    '11 - 12 cm',
-    '12 - 13 cm',
+    '1-2 cm',
+    '2-3 cm',
+    '3-4 cm',
+    '4-5 cm',
+    '5-6 cm',
+    '6-7 cm',
+    '7-8 cm',
+    '8-9 cm',
+    '9-10 cm',
+    '10-11 cm',
+    '11-12 cm',
+    '12-13 cm',
   ];
 
   RxString seedCategory = 'Benih'.obs;
   RxString fishCategory = 'Lele'.obs;
-  RxString sortSize = '1 - 2 cm'.obs;
+  RxString sortSize = '1-2 cm'.obs;
   TextEditingController fishName = TextEditingController();
   TextEditingController fishAmount = TextEditingController();
   TextEditingController fishWeight = TextEditingController();
@@ -67,8 +109,64 @@ class InventarisBenihState extends BaseURL {
             InventarisBenihModel.fromJson(jsonDecode(response.body));
 
         seedList.value = res;
-        inspect(seedList.value.data);
+
+        for (var i in seedList.value.data!) {
+          if (i.fishType == 'Lele') {
+            listMas.clear();
+            listNilaHitam.clear();
+            listNilaMerah.clear();
+            listPatin.clear();
+
+            listLele.add({
+              'id': i.idInt,
+              'fishName': i.brandName,
+            });
+
+            selectedLele.value = listLele[0];
+          }
+          if (i.fishType == 'Nila Hitam') {
+            listLele.clear();
+            listNilaMerah.clear();
+            listPatin.clear();
+            listMas.clear();
+            listNilaHitam.add({
+              'id': i.idInt,
+              'fishName': i.brandName,
+            });
+          }
+          if (i.fishType == 'Nila Merah') {
+            listNilaHitam.clear();
+            listLele.clear();
+            listMas.clear();
+            listPatin.clear();
+            listNilaMerah.add({
+              'id': i.idInt,
+              'fishName': i.brandName,
+            });
+          }
+          if (i.fishType == 'Patin') {
+            listMas.clear();
+            listLele.clear();
+            listNilaHitam.clear();
+            listNilaMerah.clear();
+            listPatin.add({
+              'id': i.idInt,
+              'fishName': i.brandName,
+            });
+          }
+          if (i.fishType == 'Mas') {
+            listLele.clear();
+            listNilaHitam.clear();
+            listNilaMerah.clear();
+            listPatin.clear();
+            listMas.add({
+              'id': i.idInt,
+              'fishName': i.brandName,
+            });
+          }
+        }
       }
+      // inspect(listLele);
     } catch (e) {
       throw Exception(e);
     }
@@ -78,12 +176,26 @@ class InventarisBenihState extends BaseURL {
   Future getSeedDataByID(int id, Function() doAfter) async {
     isLoadingDetail.value = true;
 
+    isLoadingLeleDetail.value = true;
+
     final response = await http.get(Uri.parse('$baseUrl/inventory/seed/$id'));
 
     try {
       if (response.statusCode == 200) {
         DetailInventarisBenihModel res =
             DetailInventarisBenihModel.fromJson(jsonDecode(response.body));
+
+        if (res.data!.fishType == 'Lele') {
+          leleFishWeigth.value = res.data!.weight.toString() == '0'
+              ? '-'
+              : res.data!.weight.toString();
+          leleFishSize.value = res.data!.width.toString() == ''
+              ? '-'
+              : res.data!.width.toString();
+          leleFishStock.value = res.data!.amount.toString();
+          leleID.value = res.data!.sId.toString();
+          isLoadingLeleDetail.value = false;
+        }
 
         seedCategory.value = res.data!.fishSeedCategory.toString();
         fishCategory.value = res.data!.fishType.toString();

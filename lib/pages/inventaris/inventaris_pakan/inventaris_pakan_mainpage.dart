@@ -166,18 +166,27 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
                   height: 16,
                 ),
                 TextFieldWidget(
-                  label: 'Deskripsi Pakan',
-                  controller: state.desc,
-                  hint: 'Ex: Bahan pakan ikan',
-                  isMoreText: true,
+                  label: 'Produser Pakan',
+                  controller: state.producer,
+                  hint: 'Ex: Sinta',
                 ),
                 const SizedBox(
                   height: 16,
                 ),
-                TextFieldWidget(
-                  label: 'Produser Pakan',
-                  controller: state.producer,
-                  hint: 'Ex: Sinta',
+                Obx(
+                  () => TextFieldWidget(
+                    isEnableSwitch: true,
+                    switchValue: state.switchValue.value,
+                    switchOnChange: (v) {
+                      setState(() {
+                        state.switchValue.value = v;
+                      });
+                    },
+                    label: 'Deskripsi Pakan',
+                    controller: state.desc,
+                    hint: 'Ex: Bahan pakan ikan',
+                    isMoreText: true,
+                  ),
                 ),
                 const SizedBox(
                   height: 16,

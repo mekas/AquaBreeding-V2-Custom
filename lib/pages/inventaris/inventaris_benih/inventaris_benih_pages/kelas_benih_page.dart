@@ -177,6 +177,8 @@ class _KelasBenihPageState extends State<KelasBenihPage> {
                                     Divider(color: Colors.white),
                                     SizedBox(height: 6),
                                     Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           'Harga : ',
@@ -184,17 +186,6 @@ class _KelasBenihPageState extends State<KelasBenihPage> {
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 14,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            '.' * 100,
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                            ),
                                           ),
                                         ),
                                         Text(

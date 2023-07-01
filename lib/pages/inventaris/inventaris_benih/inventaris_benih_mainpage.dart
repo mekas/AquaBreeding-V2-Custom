@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:another_flushbar/flushbar.dart';
 import 'package:fish/pages/inventaris/inventaris_benih/detail_inventaris_benih_page.dart';
 import 'package:fish/pages/inventaris/inventaris_benih/inventaris_benih_pages/kelas_benih_page.dart';
@@ -265,6 +267,14 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                                   ],
                                 ),
                                 TextFieldWidget(
+                                  isEnableSwitch: true,
+                                  switchValue: state.switchValue.value,
+                                  switchOnChange: (v) {
+                                    setState(() {
+                                      state.switchValue.value = v;
+                                    });
+                                    inspect(state.switchValue.value);
+                                  },
                                   label: 'Jumlah',
                                   controller: state.fishAmount,
                                   isLong: false,

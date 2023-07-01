@@ -1,7 +1,11 @@
 // ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks
 
+import 'dart:developer';
+
+import 'package:fish/pages/inventaris/inventaris_benih/inventaris_benih_state.dart';
 import 'package:fish/pages/pond/activation_breed_controller.dart';
 import 'package:fish/pages/pond/detail_pond_controller.dart';
+import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +19,10 @@ class ActivationBreedPage extends StatelessWidget {
 
   final DetailPondController detailPondController =
       Get.put(DetailPondController());
+
+  final InventarisBenihState benihState = Get.put(InventarisBenihState());
+
+  TextEditingController dump = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -208,46 +216,111 @@ class ActivationBreedPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Center(
-                child: TextFormField(
-                  style: primaryTextStyle,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                  keyboardType: TextInputType.number,
-                  controller: controller.leleAmountController,
-                  decoration: InputDecoration.collapsed(
-                    hintText: 'Jumlah Ikan',
-                    hintStyle: subtitleTextStyle,
-                  ),
+                child: DropdownButtonFormField<Map<String, dynamic>>(
+                  onChanged: (newValue) async {
+                    benihState.selectedLele.value = newValue!;
+                    await benihState.getSeedDataByID(
+                        newValue['id'], () => null);
+                  },
+                  value: benihState.selectedLele.value,
+                  items: benihState.listLele
+                      .map<DropdownMenuItem<Map<String, dynamic>>>((material) {
+                    return DropdownMenuItem<Map<String, dynamic>>(
+                      value: material,
+                      child: Text(
+                        material['fishName'],
+                        style: primaryTextStyle,
+                      ),
+                    );
+                  }).toList(),
+                  dropdownColor: backgroundColor5,
+                  decoration: const InputDecoration(border: InputBorder.none),
                 ),
               ),
             ),
+            const SizedBox(height: 16),
+            benihState.isLoadingLeleDetail.value
+                ? Center(
+                    child: SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                : Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextFieldWidget(
+                            label: 'Berat Ikan',
+                            controller: dump,
+                            isLong: false,
+                            isEdit: false,
+                            hint: benihState.leleFishWeigth.value == ''
+                                ? '-'
+                                : benihState.leleFishWeigth.value,
+                            isHintStyle: true,
+                            styleHint: const TextStyle(color: Colors.white),
+                            suffixSection: Text(
+                              'kg',
+                              style: headingText3,
+                            ),
+                          ),
+                          TextFieldWidget(
+                            label: 'Ukuran Sortir',
+                            controller: dump,
+                            isLong: false,
+                            isEdit: false,
+                            hint: benihState.leleFishSize.value == ''
+                                ? '-'
+                                : benihState.leleFishSize.value,
+                            isHintStyle: true,
+                            styleHint: const TextStyle(color: Colors.white),
+                            suffixSection: Text(
+                              'cm',
+                              style: headingText3,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextFieldWidget(
+                            label: 'Stok Benih',
+                            controller: dump,
+                            isLong: false,
+                            isEdit: false,
+                            hint: benihState.leleFishStock.value == ''
+                                ? '-'
+                                : benihState.leleFishStock.value,
+                            isHintStyle: true,
+                            styleHint: const TextStyle(color: Colors.white),
+                            suffixSection: Text(
+                              'ekor',
+                              style: headingText3,
+                            ),
+                          ),
+                          TextFieldWidget(
+                            label: 'Jumlah Ikan',
+                            controller: controller.leleAmountController,
+                            isLong: false,
+                            hint: 'Ex: 100',
+                            suffixSection: Text(
+                              'ekor',
+                              style: headingText3,
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
             const SizedBox(
               height: 12,
-            ),
-            Container(
-              height: 50,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-              ),
-              decoration: BoxDecoration(
-                color: backgroundColor2,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                child: TextFormField(
-                  style: primaryTextStyle,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                  keyboardType: TextInputType.number,
-                  controller: controller.leleWeightController,
-                  decoration: InputDecoration.collapsed(
-                    hintText: 'Berat Total Ikan',
-                    hintStyle: subtitleTextStyle,
-                  ),
-                ),
-              ),
             ),
           ],
         ),
@@ -356,18 +429,12 @@ class ActivationBreedPage extends StatelessWidget {
               child: Center(
                 child: Obx(() => DropdownButtonFormField<String>(
                       onChanged: (newValue) {
-                        // controller.breedOptionController.setSelected(newValue!);
-                        // controller.isLele.value = false;
-                        // controller.isNilaHitam.value = false;
-                        // controller.isNilaMerah.value = false;
-                        // controller.isPatin.value = false;
-                        // controller.isMas.value = false;
+                        inspect(newValue);
                       },
-                      value: controller.breedOptionController.selected.value,
-                      items: controller.breedOptionController.listBreed
-                          .map((material) {
+                      value: benihState.listNilaHitam[0],
+                      items: benihState.listNilaHitam.map((material) {
                         return DropdownMenuItem<String>(
-                          value: material,
+                          value: material['fishName'],
                           child: Text(
                             material,
                             style: primaryTextStyle,
@@ -380,96 +447,65 @@ class ActivationBreedPage extends StatelessWidget {
                     )),
               ),
             ),
-            const SizedBox(
-              height: 12,
-            ),
+            const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width / 2.3,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                  ),
-                  decoration: BoxDecoration(
-                    color: backgroundColor2,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Berat Ikan : 1000 gram',
-                      style: headingText3,
-                    ),
+                TextFieldWidget(
+                  label: 'Berat Ikan',
+                  controller: dump,
+                  isLong: false,
+                  isEdit: false,
+                  hint: '1000',
+                  isHintStyle: true,
+                  styleHint: const TextStyle(color: Colors.white),
+                  suffixSection: Text(
+                    'gram',
+                    style: headingText3,
                   ),
                 ),
-                Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width / 2.3,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                  ),
-                  decoration: BoxDecoration(
-                    color: backgroundColor2,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Ukuran : -',
-                      style: headingText3,
-                    ),
+                TextFieldWidget(
+                  label: 'Ukuran',
+                  controller: dump,
+                  isLong: false,
+                  isEdit: false,
+                  hint: '1 - 2',
+                  isHintStyle: true,
+                  styleHint: const TextStyle(color: Colors.white),
+                  suffixSection: Text(
+                    'cm',
+                    style: headingText3,
                   ),
                 ),
               ],
             ),
-            const SizedBox(
-              height: 12,
-            ),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width / 2.3,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                  ),
-                  decoration: BoxDecoration(
-                    color: backgroundColor2,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Stok Benih : 100 Ekor',
-                      style: headingText3,
-                    ),
+                TextFieldWidget(
+                  label: 'Stok Benih',
+                  controller: dump,
+                  isLong: false,
+                  isEdit: false,
+                  hint: '1000',
+                  isHintStyle: true,
+                  styleHint: const TextStyle(color: Colors.white),
+                  suffixSection: Text(
+                    'ekor',
+                    style: headingText3,
                   ),
                 ),
-                Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width / 2.3,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
+                TextFieldWidget(
+                  label: 'Jumlah Ikan',
+                  controller: controller.nilaHitamAmountController,
+                  isLong: false,
+                  hint: 'Ex: 100',
+                  suffixSection: Text(
+                    'ekor',
+                    style: headingText3,
                   ),
-                  decoration: BoxDecoration(
-                    color: backgroundColor2,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(
-                    child: TextFormField(
-                      style: primaryTextStyle,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                      keyboardType: TextInputType.number,
-                      controller: controller.nilaHitamAmountController,
-                      decoration: InputDecoration.collapsed(
-                        hintText: 'Jumlah Ikan',
-                        hintStyle: subtitleTextStyle,
-                      ),
-                    ),
-                  ),
-                ),
+                )
               ],
             ),
             const SizedBox(
@@ -655,6 +691,7 @@ class ActivationBreedPage extends StatelessWidget {
               child: Center(
                 child: Obx(() => DropdownButtonFormField<String>(
                       onChanged: (newValue) {
+                        benihState.getAllSeedData(newValue!);
                         controller.breedOptionController.setSelected(newValue!);
                         controller.isLele.value = false;
                         controller.isNilaHitam.value = false;

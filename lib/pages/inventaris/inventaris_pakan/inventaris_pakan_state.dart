@@ -24,6 +24,8 @@ class InventarisPakanState extends BaseURL {
     'Custom',
   ];
 
+  RxBool switchValue = false.obs;
+
   RxString feedCategory = 'Alami'.obs;
   TextEditingController name = TextEditingController();
   TextEditingController desc = TextEditingController();
