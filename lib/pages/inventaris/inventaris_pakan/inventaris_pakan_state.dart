@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:fish/core/baseUrl.dart';
 import 'package:fish/models/inventaris/pakan/detail_inventaris_pakan_model.dart';
 import 'package:fish/models/inventaris/pakan/inventaris_pakan_model.dart';
+import 'package:fish/service/url_api.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-class InventarisPakanState extends BaseURL {
+class InventarisPakanState extends Urls {
   RxBool isLoadingPage = false.obs;
   RxBool isLoadingPost = false.obs;
   RxBool isLoadingDelete = false.obs;
@@ -43,8 +43,7 @@ class InventarisPakanState extends BaseURL {
   Future getAllData(String type, Function() doAfter) async {
     feedList.value.data!.clear();
     isLoadingPage.value = true;
-    final response =
-        await http.get(Uri.parse('$baseUrl/inventory/feed?type=$type'));
+    final response = await http.get(Uri.parse('${Urls.invFeed}?type=$type'));
 
     try {
       if (response.statusCode == 200) {
@@ -65,7 +64,7 @@ class InventarisPakanState extends BaseURL {
   Future getDataByID(int id, Function() doAfter) async {
     isLoadingDetail.value = true;
 
-    final response = await http.get(Uri.parse('$baseUrl/inventory/feed/$id'));
+    final response = await http.get(Uri.parse('${Urls.invFeed}/$id'));
 
     try {
       if (response.statusCode == 200) {
@@ -112,7 +111,7 @@ class InventarisPakanState extends BaseURL {
 
     try {
       await http.post(
-        Uri.parse('$baseUrl/inventory/feed'),
+        Uri.parse(Urls.invFeed),
         body: map,
       );
       doAfter();
@@ -144,7 +143,7 @@ class InventarisPakanState extends BaseURL {
     try {
       inspect(map);
       await http.put(
-        Uri.parse('$baseUrl/inventory/feed/$id'),
+        Uri.parse('${Urls.invFeed}/$id'),
         body: map,
       );
       doAfter();
@@ -159,7 +158,7 @@ class InventarisPakanState extends BaseURL {
     try {
       await http.delete(
         Uri.parse(
-          '$baseUrl/inventory/feed/$id',
+          '${Urls.invFeed}/$id',
         ),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',

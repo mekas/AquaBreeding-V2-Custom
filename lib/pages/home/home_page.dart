@@ -14,9 +14,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fish/theme.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final InventarisBahanBudidayaState stateA =
       Get.put(InventarisBahanBudidayaState());
 
@@ -24,13 +29,12 @@ class HomePage extends StatelessWidget {
 
   final InventarisListrikState stateC = Get.put(InventarisListrikState());
 
+  final HomeController controller = Get.put(HomeController(), permanent: false);
+
   DateTime now = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
-    final HomeController controller =
-        Get.put(HomeController(), permanent: false);
-
     Widget title() {
       return Container(
         margin: EdgeInsets.only(

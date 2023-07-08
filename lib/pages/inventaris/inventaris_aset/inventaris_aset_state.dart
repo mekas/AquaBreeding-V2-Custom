@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:fish/core/baseUrl.dart';
 import 'package:fish/models/inventaris/aset/detail_inventaris_asset_model.dart';
 import 'package:fish/models/inventaris/aset/inventaris_asset_model.dart';
+import 'package:fish/service/url_api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-class InventarisAsetState extends BaseURL {
+class InventarisAsetState extends Urls {
   RxBool isLoadingPage = false.obs;
   RxBool isLoadingPost = false.obs;
   RxBool isLoadingDelete = false.obs;
@@ -50,7 +50,7 @@ class InventarisAsetState extends BaseURL {
     assetList.value.data!.clear();
     isLoadingPage.value = true;
     final response = await http.get(Uri.parse(
-        '$baseUrl/inventory/asset?type=$type&start_date=$first&end_date=$last'));
+        '${Urls.invAsset}?type=$type&start_date=$first&end_date=$last'));
 
     try {
       if (response.statusCode == 200) {
@@ -71,7 +71,7 @@ class InventarisAsetState extends BaseURL {
   Future getDataByID(int id, Function() doAfter) async {
     isLoadingDetail.value = true;
 
-    final response = await http.get(Uri.parse('$baseUrl/inventory/asset/$id'));
+    final response = await http.get(Uri.parse('${Urls.invAsset}/$id'));
 
     try {
       if (response.statusCode == 200) {
@@ -106,7 +106,7 @@ class InventarisAsetState extends BaseURL {
 
     try {
       final res = await http.post(
-        Uri.parse('$baseUrl/inventory/asset'),
+        Uri.parse(Urls.invAsset),
         body: map,
       );
       inspect(res);
@@ -132,7 +132,7 @@ class InventarisAsetState extends BaseURL {
     try {
       inspect(map);
       final res = await http.put(
-        Uri.parse('$baseUrl/inventory/asset/$id'),
+        Uri.parse('${Urls.invAsset}/$id'),
         body: map,
       );
       inspect(res);
@@ -148,7 +148,7 @@ class InventarisAsetState extends BaseURL {
     try {
       await http.delete(
         Uri.parse(
-          '$baseUrl/inventory/asset/$id',
+          '${Urls.invAsset}/$id',
         ),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',

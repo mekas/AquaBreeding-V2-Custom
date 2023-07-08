@@ -28,6 +28,8 @@ class _DetailPondPageState extends State<DetailPondPage> {
     //       pondId: controller.pond.id.toString());
     // });
     detailController.getPondActivation(context);
+    activationController.pondName.value =
+        'kolam ${detailController.pond.alias}';
   }
 
   @override

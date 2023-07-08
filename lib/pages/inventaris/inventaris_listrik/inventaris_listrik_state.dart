@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:fish/core/baseUrl.dart';
 import 'package:fish/models/inventaris/listrik/detail_inventaris_listrik_model.dart';
 import 'package:fish/models/inventaris/listrik/inventaris_listrik_model.dart';
+import 'package:fish/service/url_api.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-class InventarisListrikState extends BaseURL {
+class InventarisListrikState extends Urls {
   RxBool isLoadingPage = false.obs;
   RxBool isLoadingPost = false.obs;
   RxBool isLoadingDelete = false.obs;
@@ -35,8 +35,8 @@ class InventarisListrikState extends BaseURL {
   Future getAllData(int year, String type, Function() doAfter) async {
     electricList.value.data!.clear();
     isLoadingPage.value = true;
-    final response = await http
-        .get(Uri.parse('$baseUrl/inventory/electric?year=$year&type=$type'));
+    final response =
+        await http.get(Uri.parse('${Urls.invElect}?year=$year&type=$type'));
 
     try {
       if (response.statusCode == 200) {
@@ -56,8 +56,7 @@ class InventarisListrikState extends BaseURL {
   Future getDataByID(int id, Function() doAfter) async {
     isLoadingDetail.value = true;
 
-    final response =
-        await http.get(Uri.parse('$baseUrl/inventory/electric/$id'));
+    final response = await http.get(Uri.parse('${Urls.invElect}/$id'));
 
     try {
       if (response.statusCode == 200) {
@@ -90,7 +89,7 @@ class InventarisListrikState extends BaseURL {
 
     try {
       await http.post(
-        Uri.parse('$baseUrl/inventory/electric'),
+        Uri.parse(Urls.invElect),
         body: map,
       );
       doAfter();
@@ -114,7 +113,7 @@ class InventarisListrikState extends BaseURL {
     try {
       inspect(map);
       await http.put(
-        Uri.parse('$baseUrl/inventory/electric/$id'),
+        Uri.parse('${Urls.invElect}/$id'),
         body: map,
       );
       doAfter();
@@ -129,7 +128,7 @@ class InventarisListrikState extends BaseURL {
     try {
       await http.delete(
         Uri.parse(
-          '$baseUrl/inventory/electric/$id',
+          '${Urls.invElect}/$id',
         ),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',

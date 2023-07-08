@@ -16,6 +16,7 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   late String username;
+
   @override
   void initState() {
     super.initState();

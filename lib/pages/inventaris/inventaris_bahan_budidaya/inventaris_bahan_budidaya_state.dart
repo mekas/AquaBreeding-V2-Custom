@@ -1,15 +1,15 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:fish/core/baseUrl.dart';
 import 'package:fish/models/inventaris/suplemen/detail_inventaris_suplemen_model.dart';
 import 'package:fish/models/inventaris/suplemen/inventaris_suplemen_model.dart';
+import 'package:fish/service/url_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-class InventarisBahanBudidayaState extends BaseURL {
+class InventarisBahanBudidayaState extends Urls {
   RxBool isLoadingPage = false.obs;
   RxBool isLoadingPost = false.obs;
   RxBool isLoadingDelete = false.obs;
@@ -55,8 +55,7 @@ class InventarisBahanBudidayaState extends BaseURL {
   Future getAllData(String type, Function() doAfter) async {
     suplemenList.value.data!.clear();
     isLoadingPage.value = true;
-    final response =
-        await http.get(Uri.parse('$baseUrl/inventory/suplemen?type=$type'));
+    final response = await http.get(Uri.parse('${Urls.invSup}?type=$type'));
 
     try {
       if (response.statusCode == 200) {
@@ -77,8 +76,7 @@ class InventarisBahanBudidayaState extends BaseURL {
   Future getDataByID(int id, Function() doAfter) async {
     isLoadingDetail.value = true;
 
-    final response =
-        await http.get(Uri.parse('$baseUrl/inventory/suplemen/$id'));
+    final response = await http.get(Uri.parse('${Urls.invSup}/$id'));
 
     try {
       if (response.statusCode == 200) {
@@ -121,7 +119,7 @@ class InventarisBahanBudidayaState extends BaseURL {
 
     try {
       await http.post(
-        Uri.parse('$baseUrl/inventory/suplemen'),
+        Uri.parse(Urls.invSup),
         body: map,
       );
       doAfter();
@@ -153,7 +151,7 @@ class InventarisBahanBudidayaState extends BaseURL {
     try {
       inspect(map);
       final res = await http.put(
-        Uri.parse('$baseUrl/inventory/suplemen/$id'),
+        Uri.parse('${Urls.invSup}/$id'),
         body: map,
       );
       inspect(res);
@@ -169,7 +167,7 @@ class InventarisBahanBudidayaState extends BaseURL {
     try {
       await http.delete(
         Uri.parse(
-          '$baseUrl/inventory/suplemen/$id',
+          '${Urls.invSup}/$id',
         ),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',

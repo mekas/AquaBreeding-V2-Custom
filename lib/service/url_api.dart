@@ -1,5 +1,5 @@
 class Urls {
-  static const String baseUrl = 'http://jft.web.id/fishapiv2/api';
+  static const String baseUrl = 'https://03f1-103-136-58-71.ap.ngrok.io/api';
   // static const String baseUrl = 'http://10.0.2.2:5000/api';
 
   // Home
@@ -64,4 +64,17 @@ class Urls {
   //user
   static String breeder = '$baseUrl/breeder';
   static String farm = '$baseUrl/farm';
+
+  // inventories
+  static String invSeed = '$baseUrl/inventory/seed';
+  static String invFeed = '$baseUrl/inventory/feed';
+  static String invSup = '$baseUrl/inventory/suplemen';
+  static String invAsset = '$baseUrl/inventory/asset';
+  static String invElect = '$baseUrl/inventory/electric';
+
+  // histories
+
+  static String seedSch = '$baseUrl/history/inventory/seed';
+  static String feedSch = '$baseUrl/history/inventory/feed';
+  static String suplemenSch = '$baseUrl/history/inventory/suplemen';
 }
