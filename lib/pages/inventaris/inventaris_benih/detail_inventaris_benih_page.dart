@@ -32,7 +32,6 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
         appBar: AppBar(
           centerTitle: true,
           backgroundColor: backgroundColor1,
-          elevation: 0,
           actions: [
             IconButton(
               onPressed: () async {
@@ -69,7 +68,7 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
                     color: backgroundColor1,
                     child: SafeArea(
                       child: ListView.builder(
-                        padding: const EdgeInsets.only(bottom: 16),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
                         itemCount: state.seedHistoryList.value.data!.length,
                         physics: BouncingScrollPhysics(),
                         itemBuilder: ((context, index) {

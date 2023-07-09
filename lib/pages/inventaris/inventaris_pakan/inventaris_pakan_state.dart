@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:fish/models/history/history_feed_model.dart';
 import 'package:fish/models/inventaris/pakan/detail_inventaris_pakan_model.dart';
 import 'package:fish/models/inventaris/pakan/inventaris_pakan_model.dart';
 import 'package:fish/service/url_api.dart';
@@ -13,8 +14,10 @@ class InventarisPakanState extends Urls {
   RxBool isLoadingPost = false.obs;
   RxBool isLoadingDelete = false.obs;
   RxBool isLoadingDetail = false.obs;
+  RxBool isLoadingHistory = false.obs;
 
   var feedList = InventarisPakanModel(data: []).obs;
+  var feedHistoryList = HistoryFeedModel(data: []).obs;
 
   RxString pageIdentifier = 'alami'.obs;
 
@@ -39,6 +42,9 @@ class InventarisPakanState extends Urls {
   RxString image =
       'https://1.bp.blogspot.com/-9tt1qS0wO-8/X8uLEZd9HGI/AAAAAAAAAnQ/4uGdwluBvYg-cwgjFAf85P_MzITSUos1ACLcBGAsYHQ/s1078/Pakan.png'
           .obs;
+
+  TextEditingController firstDate = TextEditingController();
+  TextEditingController lastDate = TextEditingController();
 
   Future getAllData(String type, Function() doAfter) async {
     feedList.value.data!.clear();
@@ -169,6 +175,54 @@ class InventarisPakanState extends Urls {
       throw Exception(e);
     }
     isLoadingDelete.value = false;
+  }
+
+  Future postHistoryFeedData(
+      String pondName, List feed, Function() doAfter) async {
+    var map = <String, dynamic>{};
+
+    map['pond'] = pondName;
+
+    // print('HEHE');
+
+    for (var i = 0; i < feed.length; i++) {
+      map['fish_feed_id'] = feed[i]['feed_id'];
+      map['original_amount'] = feed[i]['original_value'];
+      map['usage'] = feed[i]['amount'];
+
+      try {
+        await http.post(
+          Uri.parse(Urls.feedSch),
+          body: map,
+        );
+        doAfter();
+      } catch (e) {
+        throw Exception(e);
+      }
+    }
+  }
+
+  Future getHistoryFeedData(
+      String firstDate, String lastDate, Function() doAfter) async {
+    feedHistoryList.value.data!.clear();
+    isLoadingHistory.value = true;
+
+    final response = await http.get(
+        Uri.parse('${Urls.feedSch}?start_date=$firstDate&end_date=$lastDate'));
+
+    try {
+      if (response.statusCode == 200) {
+        HistoryFeedModel res =
+            HistoryFeedModel.fromJson(jsonDecode(response.body));
+
+        feedHistoryList.value = res;
+
+        doAfter();
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+    isLoadingHistory.value = false;
   }
 
   resetVariables() {

@@ -313,6 +313,51 @@ class InventarisBenihState extends Urls {
     isLoadingPost.value = false;
   }
 
+  Future updateSeedData(int id, Function() doAfter) async {
+    var map = <String, dynamic>{};
+
+    map['fish_seed_category'] = seedCategory.value;
+    map['fish_type'] = fishCategory.value;
+    map['brand_name'] = fishName.text;
+    map['amount'] = fishAmount.text == '' ? '0' : fishAmount.text;
+    map['weight'] = fishWeight.text == '' ? '0' : fishWeight.text;
+    map['width'] = seedCategory.value == 'Benih' ? sortSize.value : "";
+    map['price'] = fishPrice.text == '' ? '0' : fishPrice.text;
+    map['image'] = fishImage.value;
+
+    isLoadingPost.value = true;
+
+    try {
+      inspect(map);
+      await http.put(
+        Uri.parse('${Urls.invSeed}/$id'),
+        body: map,
+      );
+      doAfter();
+    } catch (e) {
+      throw Exception(e);
+    }
+    isLoadingPost.value = false;
+  }
+
+  Future deleteSeedData(int id, Function() doAfter) async {
+    isLoadingDelete.value = true;
+    try {
+      await http.delete(
+        Uri.parse(
+          '${Urls.invSeed}/$id',
+        ),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      doAfter();
+    } catch (e) {
+      throw Exception(e);
+    }
+    isLoadingDelete.value = false;
+  }
+
   Future postHistorySeedData(
       String pondName, List fish, Function() doAfter) async {
     var map = <String, dynamic>{};
@@ -359,51 +404,6 @@ class InventarisBenihState extends Urls {
       throw Exception(e);
     }
     isLoadingHistory.value = false;
-  }
-
-  Future updateSeedData(int id, Function() doAfter) async {
-    var map = <String, dynamic>{};
-
-    map['fish_seed_category'] = seedCategory.value;
-    map['fish_type'] = fishCategory.value;
-    map['brand_name'] = fishName.text;
-    map['amount'] = fishAmount.text == '' ? '0' : fishAmount.text;
-    map['weight'] = fishWeight.text == '' ? '0' : fishWeight.text;
-    map['width'] = seedCategory.value == 'Benih' ? sortSize.value : "";
-    map['price'] = fishPrice.text == '' ? '0' : fishPrice.text;
-    map['image'] = fishImage.value;
-
-    isLoadingPost.value = true;
-
-    try {
-      inspect(map);
-      await http.put(
-        Uri.parse('${Urls.invSeed}/$id'),
-        body: map,
-      );
-      doAfter();
-    } catch (e) {
-      throw Exception(e);
-    }
-    isLoadingPost.value = false;
-  }
-
-  Future deleteSeedData(int id, Function() doAfter) async {
-    isLoadingDelete.value = true;
-    try {
-      await http.delete(
-        Uri.parse(
-          '${Urls.invSeed}/$id',
-        ),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-      );
-      doAfter();
-    } catch (e) {
-      throw Exception(e);
-    }
-    isLoadingDelete.value = false;
   }
 
   resetVariables() {

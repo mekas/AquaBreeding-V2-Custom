@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:fish/models/history/history_suplemen_model.dart';
 import 'package:fish/models/inventaris/suplemen/detail_inventaris_suplemen_model.dart';
 import 'package:fish/models/inventaris/suplemen/inventaris_suplemen_model.dart';
 import 'package:fish/service/url_api.dart';
@@ -14,8 +15,10 @@ class InventarisBahanBudidayaState extends Urls {
   RxBool isLoadingPost = false.obs;
   RxBool isLoadingDelete = false.obs;
   RxBool isLoadingDetail = false.obs;
+  RxBool isLoadingHistory = false.obs;
 
   var suplemenList = InventarisSuplemenModel(data: []).obs;
+  var suplemenHistoryList = HistorySuplemenModel(data: []).obs;
 
   RxList filterList = [
     {'title_id': 1, 'title': 'Obat', 'key': 'obat'},
@@ -51,6 +54,9 @@ class InventarisBahanBudidayaState extends Urls {
   RxString image =
       'https://d1vbn70lmn1nqe.cloudfront.net/prod/wp-content/uploads/2021/06/28062837/vector_5.kesehatan-vitamin-dan-suplemen.jpg'
           .obs;
+
+  TextEditingController firstDate = TextEditingController();
+  TextEditingController lastDate = TextEditingController();
 
   Future getAllData(String type, Function() doAfter) async {
     suplemenList.value.data!.clear();
@@ -178,6 +184,54 @@ class InventarisBahanBudidayaState extends Urls {
       throw Exception(e);
     }
     isLoadingDelete.value = false;
+  }
+
+  Future postHistorySuplemenData(
+      String pondName, List suplemen, Function() doAfter) async {
+    var map = <String, dynamic>{};
+
+    map['pond'] = pondName;
+
+    // print('HEHE');
+
+    for (var i = 0; i < suplemen.length; i++) {
+      map['fish_suplemen_id'] = suplemen[i]['suplemen_id'];
+      map['original_amount'] = suplemen[i]['original_value'];
+      map['usage'] = suplemen[i]['amount'];
+
+      try {
+        await http.post(
+          Uri.parse(Urls.suplemenSch),
+          body: map,
+        );
+        doAfter();
+      } catch (e) {
+        throw Exception(e);
+      }
+    }
+  }
+
+  Future getHistorySuplemenData(
+      String firstDate, String lastDate, Function() doAfter) async {
+    suplemenHistoryList.value.data!.clear();
+    isLoadingHistory.value = true;
+
+    final response = await http.get(Uri.parse(
+        '${Urls.suplemenSch}?start_date=$firstDate&end_date=$lastDate'));
+
+    try {
+      if (response.statusCode == 200) {
+        HistorySuplemenModel res =
+            HistorySuplemenModel.fromJson(jsonDecode(response.body));
+
+        suplemenHistoryList.value = res;
+
+        doAfter();
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+    isLoadingHistory.value = false;
   }
 
   resetVariables() {
