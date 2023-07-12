@@ -1,19 +1,37 @@
 // ignore_for_file: unrelated_type_equality_checks
 
 import 'package:fish/pages/feeding/feed_entry_controller.dart';
+import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_state.dart';
+import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
 import 'feed_controller.dart';
 
-class FeedEntryPage extends StatelessWidget {
+class FeedEntryPage extends StatefulWidget {
   const FeedEntryPage({Key? key}) : super(key: key);
 
   @override
+  State<FeedEntryPage> createState() => _FeedEntryPageState();
+}
+
+class _FeedEntryPageState extends State<FeedEntryPage> {
+  final FeedEntryController controller = Get.put(FeedEntryController());
+  final FeedController feedcontroller = Get.put(FeedController());
+  final InventarisPakanState pakanState = Get.put(InventarisPakanState());
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    controller.feedDosisController.text = '0';
+    pakanState.setStatusDetailFeed.value = false;
+    pakanState.getAllData('Alami', () => null);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final FeedEntryController controller = Get.put(FeedEntryController());
-    final FeedController feedcontroller = Get.put(FeedController());
     // Widget feedTypeInput1() {
     //   return Container(
     //     margin: EdgeInsets.only(
@@ -65,10 +83,10 @@ class FeedEntryPage extends StatelessWidget {
         margin: EdgeInsets.only(
             top: defaultSpace, right: defaultMargin, left: defaultMargin),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Pilih Pakan',
+              'Tipe Pakan',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -78,33 +96,87 @@ class FeedEntryPage extends StatelessWidget {
               height: 12,
             ),
             Container(
-              height: 50,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               decoration: BoxDecoration(
-                color: backgroundColor2,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(8),
+                color: inputColor,
               ),
-              child: Center(
-                child: Obx(() => DropdownButtonFormField<String>(
-                      onChanged: (newValue) => controller.feedTypeFormController
-                          .setSelected(newValue!),
-                      value: controller.feedTypeFormController.selected.value,
-                      items: controller.feedTypeFormController.listFeedType
-                          .map((feedtype) {
-                        return DropdownMenuItem<String>(
-                          value: feedtype.type,
-                          child: Text(
-                            feedtype.type.toString(),
-                            style: primaryTextStyle,
-                          ),
-                        );
-                      }).toList(),
-                      dropdownColor: backgroundColor5,
-                      decoration:
-                          const InputDecoration(border: InputBorder.none),
-                    )),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  onChanged: ((String? value) async {
+                    pakanState.setStatusDetailFeed.value = false;
+                    pakanState.selectedFeedType.value = value!;
+
+                    await pakanState.getAllData(value, () => null);
+                    pakanState.resetVariables();
+                  }),
+                  value: pakanState.selectedFeedType.value,
+                  dropdownColor: inputColor,
+                  items: pakanState.dropdownList.map(
+                    (String val) {
+                      return DropdownMenuItem(
+                        value: val,
+                        child: Text(
+                          val,
+                          style: headingText3,
+                        ),
+                      );
+                    },
+                  ).toList(),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget feedList() {
+      return Container(
+        margin: EdgeInsets.only(
+            top: defaultSpace, right: defaultMargin, left: defaultMargin),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'List Pakan',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: inputColor,
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<Map<String, dynamic>>(
+                  onChanged: (val) async {
+                    pakanState.selectedFeedName.value = val!;
+                    pakanState.setStatusDetailFeed.value = true;
+                    controller.fishFeedID.value = val['feed_id'];
+                    await pakanState.getDataByID(val['id'], () => null);
+                  },
+                  value: pakanState.selectedFeedName.value,
+                  dropdownColor: inputColor,
+                  items: pakanState.selectedFeedList
+                      .map<DropdownMenuItem<Map<String, dynamic>>>(
+                    (val) {
+                      return DropdownMenuItem<Map<String, dynamic>>(
+                        value: val,
+                        child: Text(
+                          val['feed_name'],
+                          style: headingText3,
+                        ),
+                      );
+                    },
+                  ).toList(),
+                ),
               ),
             ),
           ],
@@ -116,82 +188,83 @@ class FeedEntryPage extends StatelessWidget {
       return Container(
         margin: EdgeInsets.only(
             top: defaultSpace, right: defaultMargin, left: defaultMargin),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Dosis Pakan (Kg)',
-                  style: primaryTextStyle.copyWith(
-                    fontSize: 16,
-                    fontWeight: medium,
-                  ),
+                TextFieldWidget(
+                  label: 'Produser',
+                  controller: pakanState.producer,
+                  isLong: false,
+                  isEdit: false,
                 ),
-                const SizedBox(
-                  height: 12,
-                ),
-                Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width / 2.6,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
+                TextFieldWidget(
+                  label: 'Masa Kadaluarsa',
+                  isLong: false,
+                  isEdit: false,
+                  controller: pakanState.minExp,
+                  suffixSection: Text(
+                    'hari',
+                    style: headingText3,
                   ),
-                  decoration: BoxDecoration(
-                    color: backgroundColor2,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(child: Obx(() {
-                    return TextFormField(
-                      style: primaryTextStyle,
-                      keyboardType: TextInputType.number,
-                      onChanged: controller.doseChanged,
-                      onTap: controller.valdose,
-                      controller: controller.feedDosisController,
-                      decoration: controller.validatedose.value == true
-                          ? controller.dose == ''
-                              ? const InputDecoration(
-                                  errorText: 'Dosis tidak boleh kosong',
-                                  isCollapsed: true)
-                              : null
-                          : InputDecoration.collapsed(
-                              hintText: 'ex: 2.1',
-                              hintStyle: subtitleTextStyle),
-                    );
-                  })),
                 ),
               ],
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            SizedBox(
+              height: 12,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Stok Pakan',
-                  style: primaryTextStyle.copyWith(
-                    fontSize: 16,
-                    fontWeight: medium,
+                TextFieldWidget(
+                  label: 'Protein',
+                  controller: pakanState.protein,
+                  isLong: false,
+                  isEdit: false,
+                  suffixSection: Text(
+                    '%',
+                    style: headingText3,
                   ),
                 ),
-                const SizedBox(
-                  height: 12,
+                TextFieldWidget(
+                  label: 'Karbo',
+                  isLong: false,
+                  isEdit: false,
+                  controller: pakanState.carbo,
+                  suffixSection: Text(
+                    '%',
+                    style: headingText3,
+                  ),
                 ),
-                Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width / 2.6,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
+              ],
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextFieldWidget(
+                  label: 'Stok Pakan',
+                  controller: pakanState.amount,
+                  isLong: false,
+                  isEdit: false,
+                  suffixSection: Text(
+                    'kg',
+                    style: headingText3,
                   ),
-                  decoration: BoxDecoration(
-                    color: backgroundColor2,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(
-                    child: Text(
-                      '100 gram',
-                      textAlign: TextAlign.start,
-                      style: headingText2,
-                    ),
+                ),
+                TextFieldWidget(
+                  label: 'Dosis Pakan',
+                  isLong: false,
+                  isEdit: true,
+                  numberOutput: true,
+                  controller: controller.feedDosisController,
+                  hint: 'ex: 2.1',
+                  suffixSection: Text(
+                    'kg',
+                    style: headingText3,
                   ),
                 ),
               ],
@@ -213,8 +286,9 @@ class FeedEntryPage extends StatelessWidget {
                 ? null
                 : Navigator.pop(context);
             controller.postFeedHistory();
-            feedcontroller.getChartFeed(
-                activation_id: controller.activation.id.toString());
+            // feedcontroller.getChartFeed(
+            //     activation_id: controller.activation.id.toString());
+            feedcontroller.getChartFeed('Alami');
             feedcontroller.getWeeklyRecapFeedHistory(
                 activation_id: controller.activation.id.toString());
           },
@@ -247,11 +321,45 @@ class FeedEntryPage extends StatelessWidget {
             children: [
               // pondInput(),
               feedTypeInput(),
-              feedDosisInput(),
-              submitButton(),
-              const SizedBox(
-                height: 8,
-              )
+              pakanState.isLoadingPage.value
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 32),
+                      child: Center(
+                        child: SizedBox(
+                          height: 50,
+                          width: 50,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Column(
+                      children: [
+                        feedList(),
+                        pakanState.isLoadingFeedDetail.value
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 16),
+                                child: Center(
+                                  child: SizedBox(
+                                    height: 50,
+                                    width: 50,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : pakanState.setStatusDetailFeed.value
+                                ? Column(
+                                    children: [
+                                      feedDosisInput(),
+                                      submitButton(),
+                                    ],
+                                  )
+                                : Container(),
+                      ],
+                    )
             ],
           ),
         );

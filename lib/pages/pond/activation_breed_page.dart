@@ -39,6 +39,11 @@ class _ActivationBreedPageState extends State<ActivationBreedPage> {
     controller.patinAmountController.text = '';
     controller.nilaMerahAmountController.text = '';
     controller.nilaHitamAmountController.text = '';
+    controller.isLele.value = false;
+    controller.isNilaHitam.value = false;
+    controller.isNilaMerah.value = false;
+    controller.isPatin.value = false;
+    controller.isMas.value = false;
   }
 
   @override
@@ -268,79 +273,81 @@ class _ActivationBreedPageState extends State<ActivationBreedPage> {
                       ),
                     ),
                   )
-                : Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                : benihState.isLeleSelected.value
+                    ? Column(
                         children: [
-                          TextFieldWidget(
-                            label: 'Berat Ikan',
-                            controller: dump,
-                            isLong: false,
-                            isEdit: false,
-                            hint: benihState.leleFishWeigth.value == ''
-                                ? '-'
-                                : benihState.leleFishWeigth.value,
-                            isHintStyle: true,
-                            styleHint: const TextStyle(color: Colors.white),
-                            suffixSection: Text(
-                              'kg',
-                              style: headingText3,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextFieldWidget(
+                                label: 'Berat Ikan',
+                                controller: dump,
+                                isLong: false,
+                                isEdit: false,
+                                hint: benihState.leleFishWeigth.value == ''
+                                    ? '-'
+                                    : benihState.leleFishWeigth.value,
+                                isHintStyle: true,
+                                styleHint: const TextStyle(color: Colors.white),
+                                suffixSection: Text(
+                                  'kg',
+                                  style: headingText3,
+                                ),
+                              ),
+                              TextFieldWidget(
+                                label: 'Ukuran Sortir',
+                                controller: dump,
+                                isLong: false,
+                                isEdit: false,
+                                hint: benihState.leleFishSize.value == ''
+                                    ? '-'
+                                    : benihState.leleFishSize.value,
+                                isHintStyle: true,
+                                styleHint: const TextStyle(color: Colors.white),
+                                suffixSection: Text(
+                                  'cm',
+                                  style: headingText3,
+                                ),
+                              ),
+                            ],
                           ),
-                          TextFieldWidget(
-                            label: 'Ukuran Sortir',
-                            controller: dump,
-                            isLong: false,
-                            isEdit: false,
-                            hint: benihState.leleFishSize.value == ''
-                                ? '-'
-                                : benihState.leleFishSize.value,
-                            isHintStyle: true,
-                            styleHint: const TextStyle(color: Colors.white),
-                            suffixSection: Text(
-                              'cm',
-                              style: headingText3,
-                            ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextFieldWidget(
+                                label: 'Stok Benih',
+                                controller: dump,
+                                isLong: false,
+                                isEdit: false,
+                                hint: benihState.leleFishStock.value == ''
+                                    ? '-'
+                                    : benihState.leleFishStock.value,
+                                isHintStyle: true,
+                                styleHint: const TextStyle(color: Colors.white),
+                                suffixSection: Text(
+                                  'ekor',
+                                  style: headingText3,
+                                ),
+                              ),
+                              TextFieldWidget(
+                                label: 'Jumlah Ikan',
+                                controller: controller.leleAmountController,
+                                isLong: false,
+                                hint: 'Ex: 100',
+                                suffixSection: Text(
+                                  'ekor',
+                                  style: headingText3,
+                                ),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 12,
                           ),
                         ],
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextFieldWidget(
-                            label: 'Stok Benih',
-                            controller: dump,
-                            isLong: false,
-                            isEdit: false,
-                            hint: benihState.leleFishStock.value == ''
-                                ? '-'
-                                : benihState.leleFishStock.value,
-                            isHintStyle: true,
-                            styleHint: const TextStyle(color: Colors.white),
-                            suffixSection: Text(
-                              'ekor',
-                              style: headingText3,
-                            ),
-                          ),
-                          TextFieldWidget(
-                            label: 'Jumlah Ikan',
-                            controller: controller.leleAmountController,
-                            isLong: false,
-                            hint: 'Ex: 100',
-                            suffixSection: Text(
-                              'ekor',
-                              style: headingText3,
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-            const SizedBox(
-              height: 12,
-            ),
+                      )
+                    : Container(),
           ],
         ),
       );
@@ -408,79 +415,82 @@ class _ActivationBreedPageState extends State<ActivationBreedPage> {
                       ),
                     ),
                   )
-                : Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                : benihState.isNilaMerahSelected.value
+                    ? Column(
                         children: [
-                          TextFieldWidget(
-                            label: 'Berat Ikan',
-                            controller: dump,
-                            isLong: false,
-                            isEdit: false,
-                            hint: benihState.nilaMerahFishWeigth.value == ''
-                                ? '-'
-                                : benihState.nilaMerahFishWeigth.value,
-                            isHintStyle: true,
-                            styleHint: const TextStyle(color: Colors.white),
-                            suffixSection: Text(
-                              'kg',
-                              style: headingText3,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextFieldWidget(
+                                label: 'Berat Ikan',
+                                controller: dump,
+                                isLong: false,
+                                isEdit: false,
+                                hint: benihState.nilaMerahFishWeigth.value == ''
+                                    ? '-'
+                                    : benihState.nilaMerahFishWeigth.value,
+                                isHintStyle: true,
+                                styleHint: const TextStyle(color: Colors.white),
+                                suffixSection: Text(
+                                  'kg',
+                                  style: headingText3,
+                                ),
+                              ),
+                              TextFieldWidget(
+                                label: 'Ukuran Sortir',
+                                controller: dump,
+                                isLong: false,
+                                isEdit: false,
+                                hint: benihState.nilaMerahFishSize.value == ''
+                                    ? '-'
+                                    : benihState.nilaMerahFishSize.value,
+                                isHintStyle: true,
+                                styleHint: const TextStyle(color: Colors.white),
+                                suffixSection: Text(
+                                  'cm',
+                                  style: headingText3,
+                                ),
+                              ),
+                            ],
                           ),
-                          TextFieldWidget(
-                            label: 'Ukuran Sortir',
-                            controller: dump,
-                            isLong: false,
-                            isEdit: false,
-                            hint: benihState.nilaMerahFishSize.value == ''
-                                ? '-'
-                                : benihState.nilaMerahFishSize.value,
-                            isHintStyle: true,
-                            styleHint: const TextStyle(color: Colors.white),
-                            suffixSection: Text(
-                              'cm',
-                              style: headingText3,
-                            ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextFieldWidget(
+                                label: 'Stok Benih',
+                                controller: dump,
+                                isLong: false,
+                                isEdit: false,
+                                hint: benihState.nilaMerahFishStock.value == ''
+                                    ? '-'
+                                    : benihState.nilaMerahFishStock.value,
+                                isHintStyle: true,
+                                styleHint: const TextStyle(color: Colors.white),
+                                suffixSection: Text(
+                                  'ekor',
+                                  style: headingText3,
+                                ),
+                              ),
+                              TextFieldWidget(
+                                label: 'Jumlah Ikan',
+                                controller:
+                                    controller.nilaMerahAmountController,
+                                isLong: false,
+                                hint: 'Ex: 100',
+                                suffixSection: Text(
+                                  'ekor',
+                                  style: headingText3,
+                                ),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 12,
                           ),
                         ],
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextFieldWidget(
-                            label: 'Stok Benih',
-                            controller: dump,
-                            isLong: false,
-                            isEdit: false,
-                            hint: benihState.nilaMerahFishStock.value == ''
-                                ? '-'
-                                : benihState.nilaMerahFishStock.value,
-                            isHintStyle: true,
-                            styleHint: const TextStyle(color: Colors.white),
-                            suffixSection: Text(
-                              'ekor',
-                              style: headingText3,
-                            ),
-                          ),
-                          TextFieldWidget(
-                            label: 'Jumlah Ikan',
-                            controller: controller.nilaMerahAmountController,
-                            isLong: false,
-                            hint: 'Ex: 100',
-                            suffixSection: Text(
-                              'ekor',
-                              style: headingText3,
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-            const SizedBox(
-              height: 12,
-            ),
+                      )
+                    : Container(),
           ],
         ),
       );
@@ -548,79 +558,82 @@ class _ActivationBreedPageState extends State<ActivationBreedPage> {
                       ),
                     ),
                   )
-                : Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                : benihState.isNilaHitamSelected.value
+                    ? Column(
                         children: [
-                          TextFieldWidget(
-                            label: 'Berat Ikan',
-                            controller: dump,
-                            isLong: false,
-                            isEdit: false,
-                            hint: benihState.nilaHitamFishWeigth.value == ''
-                                ? '-'
-                                : benihState.nilaHitamFishWeigth.value,
-                            isHintStyle: true,
-                            styleHint: const TextStyle(color: Colors.white),
-                            suffixSection: Text(
-                              'kg',
-                              style: headingText3,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextFieldWidget(
+                                label: 'Berat Ikan',
+                                controller: dump,
+                                isLong: false,
+                                isEdit: false,
+                                hint: benihState.nilaHitamFishWeigth.value == ''
+                                    ? '-'
+                                    : benihState.nilaHitamFishWeigth.value,
+                                isHintStyle: true,
+                                styleHint: const TextStyle(color: Colors.white),
+                                suffixSection: Text(
+                                  'kg',
+                                  style: headingText3,
+                                ),
+                              ),
+                              TextFieldWidget(
+                                label: 'Ukuran Sortir',
+                                controller: dump,
+                                isLong: false,
+                                isEdit: false,
+                                hint: benihState.nilaHitamFishSize.value == ''
+                                    ? '-'
+                                    : benihState.nilaHitamFishSize.value,
+                                isHintStyle: true,
+                                styleHint: const TextStyle(color: Colors.white),
+                                suffixSection: Text(
+                                  'cm',
+                                  style: headingText3,
+                                ),
+                              ),
+                            ],
                           ),
-                          TextFieldWidget(
-                            label: 'Ukuran Sortir',
-                            controller: dump,
-                            isLong: false,
-                            isEdit: false,
-                            hint: benihState.nilaHitamFishSize.value == ''
-                                ? '-'
-                                : benihState.nilaHitamFishSize.value,
-                            isHintStyle: true,
-                            styleHint: const TextStyle(color: Colors.white),
-                            suffixSection: Text(
-                              'cm',
-                              style: headingText3,
-                            ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextFieldWidget(
+                                label: 'Stok Benih',
+                                controller: dump,
+                                isLong: false,
+                                isEdit: false,
+                                hint: benihState.nilaHitamFishStock.value == ''
+                                    ? '-'
+                                    : benihState.nilaHitamFishStock.value,
+                                isHintStyle: true,
+                                styleHint: const TextStyle(color: Colors.white),
+                                suffixSection: Text(
+                                  'ekor',
+                                  style: headingText3,
+                                ),
+                              ),
+                              TextFieldWidget(
+                                label: 'Jumlah Ikan',
+                                controller:
+                                    controller.nilaHitamAmountController,
+                                isLong: false,
+                                hint: 'Ex: 100',
+                                suffixSection: Text(
+                                  'ekor',
+                                  style: headingText3,
+                                ),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 12,
                           ),
                         ],
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextFieldWidget(
-                            label: 'Stok Benih',
-                            controller: dump,
-                            isLong: false,
-                            isEdit: false,
-                            hint: benihState.nilaHitamFishStock.value == ''
-                                ? '-'
-                                : benihState.nilaHitamFishStock.value,
-                            isHintStyle: true,
-                            styleHint: const TextStyle(color: Colors.white),
-                            suffixSection: Text(
-                              'ekor',
-                              style: headingText3,
-                            ),
-                          ),
-                          TextFieldWidget(
-                            label: 'Jumlah Ikan',
-                            controller: controller.nilaHitamAmountController,
-                            isLong: false,
-                            hint: 'Ex: 100',
-                            suffixSection: Text(
-                              'ekor',
-                              style: headingText3,
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-            const SizedBox(
-              height: 12,
-            ),
+                      )
+                    : Container(),
           ],
         ),
       );
@@ -688,79 +701,81 @@ class _ActivationBreedPageState extends State<ActivationBreedPage> {
                       ),
                     ),
                   )
-                : Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                : benihState.isPatinSelected.value
+                    ? Column(
                         children: [
-                          TextFieldWidget(
-                            label: 'Berat Ikan',
-                            controller: dump,
-                            isLong: false,
-                            isEdit: false,
-                            hint: benihState.patinFishWeigth.value == ''
-                                ? '-'
-                                : benihState.patinFishWeigth.value,
-                            isHintStyle: true,
-                            styleHint: const TextStyle(color: Colors.white),
-                            suffixSection: Text(
-                              'kg',
-                              style: headingText3,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextFieldWidget(
+                                label: 'Berat Ikan',
+                                controller: dump,
+                                isLong: false,
+                                isEdit: false,
+                                hint: benihState.patinFishWeigth.value == ''
+                                    ? '-'
+                                    : benihState.patinFishWeigth.value,
+                                isHintStyle: true,
+                                styleHint: const TextStyle(color: Colors.white),
+                                suffixSection: Text(
+                                  'kg',
+                                  style: headingText3,
+                                ),
+                              ),
+                              TextFieldWidget(
+                                label: 'Ukuran Sortir',
+                                controller: dump,
+                                isLong: false,
+                                isEdit: false,
+                                hint: benihState.patinFishSize.value == ''
+                                    ? '-'
+                                    : benihState.patinFishSize.value,
+                                isHintStyle: true,
+                                styleHint: const TextStyle(color: Colors.white),
+                                suffixSection: Text(
+                                  'cm',
+                                  style: headingText3,
+                                ),
+                              ),
+                            ],
                           ),
-                          TextFieldWidget(
-                            label: 'Ukuran Sortir',
-                            controller: dump,
-                            isLong: false,
-                            isEdit: false,
-                            hint: benihState.patinFishSize.value == ''
-                                ? '-'
-                                : benihState.patinFishSize.value,
-                            isHintStyle: true,
-                            styleHint: const TextStyle(color: Colors.white),
-                            suffixSection: Text(
-                              'cm',
-                              style: headingText3,
-                            ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextFieldWidget(
+                                label: 'Stok Benih',
+                                controller: dump,
+                                isLong: false,
+                                isEdit: false,
+                                hint: benihState.patinFishStock.value == ''
+                                    ? '-'
+                                    : benihState.patinFishStock.value,
+                                isHintStyle: true,
+                                styleHint: const TextStyle(color: Colors.white),
+                                suffixSection: Text(
+                                  'ekor',
+                                  style: headingText3,
+                                ),
+                              ),
+                              TextFieldWidget(
+                                label: 'Jumlah Ikan',
+                                controller: controller.patinAmountController,
+                                isLong: false,
+                                hint: 'Ex: 100',
+                                suffixSection: Text(
+                                  'ekor',
+                                  style: headingText3,
+                                ),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 12,
                           ),
                         ],
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextFieldWidget(
-                            label: 'Stok Benih',
-                            controller: dump,
-                            isLong: false,
-                            isEdit: false,
-                            hint: benihState.patinFishStock.value == ''
-                                ? '-'
-                                : benihState.patinFishStock.value,
-                            isHintStyle: true,
-                            styleHint: const TextStyle(color: Colors.white),
-                            suffixSection: Text(
-                              'ekor',
-                              style: headingText3,
-                            ),
-                          ),
-                          TextFieldWidget(
-                            label: 'Jumlah Ikan',
-                            controller: controller.patinAmountController,
-                            isLong: false,
-                            hint: 'Ex: 100',
-                            suffixSection: Text(
-                              'ekor',
-                              style: headingText3,
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-            const SizedBox(
-              height: 12,
-            ),
+                      )
+                    : Container(),
           ],
         ),
       );
@@ -827,79 +842,81 @@ class _ActivationBreedPageState extends State<ActivationBreedPage> {
                       ),
                     ),
                   )
-                : Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                : benihState.isMasSelected.value
+                    ? Column(
                         children: [
-                          TextFieldWidget(
-                            label: 'Berat Ikan',
-                            controller: dump,
-                            isLong: false,
-                            isEdit: false,
-                            hint: benihState.masFishWeigth.value == ''
-                                ? '-'
-                                : benihState.masFishWeigth.value,
-                            isHintStyle: true,
-                            styleHint: const TextStyle(color: Colors.white),
-                            suffixSection: Text(
-                              'kg',
-                              style: headingText3,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextFieldWidget(
+                                label: 'Berat Ikan',
+                                controller: dump,
+                                isLong: false,
+                                isEdit: false,
+                                hint: benihState.masFishWeigth.value == ''
+                                    ? '-'
+                                    : benihState.masFishWeigth.value,
+                                isHintStyle: true,
+                                styleHint: const TextStyle(color: Colors.white),
+                                suffixSection: Text(
+                                  'kg',
+                                  style: headingText3,
+                                ),
+                              ),
+                              TextFieldWidget(
+                                label: 'Ukuran Sortir',
+                                controller: dump,
+                                isLong: false,
+                                isEdit: false,
+                                hint: benihState.masFishSize.value == ''
+                                    ? '-'
+                                    : benihState.masFishSize.value,
+                                isHintStyle: true,
+                                styleHint: const TextStyle(color: Colors.white),
+                                suffixSection: Text(
+                                  'cm',
+                                  style: headingText3,
+                                ),
+                              ),
+                            ],
                           ),
-                          TextFieldWidget(
-                            label: 'Ukuran Sortir',
-                            controller: dump,
-                            isLong: false,
-                            isEdit: false,
-                            hint: benihState.masFishSize.value == ''
-                                ? '-'
-                                : benihState.masFishSize.value,
-                            isHintStyle: true,
-                            styleHint: const TextStyle(color: Colors.white),
-                            suffixSection: Text(
-                              'cm',
-                              style: headingText3,
-                            ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextFieldWidget(
+                                label: 'Stok Benih',
+                                controller: dump,
+                                isLong: false,
+                                isEdit: false,
+                                hint: benihState.masFishStock.value == ''
+                                    ? '-'
+                                    : benihState.masFishStock.value,
+                                isHintStyle: true,
+                                styleHint: const TextStyle(color: Colors.white),
+                                suffixSection: Text(
+                                  'ekor',
+                                  style: headingText3,
+                                ),
+                              ),
+                              TextFieldWidget(
+                                label: 'Jumlah Ikan',
+                                controller: controller.masAmountController,
+                                isLong: false,
+                                hint: 'Ex: 100',
+                                suffixSection: Text(
+                                  'ekor',
+                                  style: headingText3,
+                                ),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 12,
                           ),
                         ],
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextFieldWidget(
-                            label: 'Stok Benih',
-                            controller: dump,
-                            isLong: false,
-                            isEdit: false,
-                            hint: benihState.masFishStock.value == ''
-                                ? '-'
-                                : benihState.masFishStock.value,
-                            isHintStyle: true,
-                            styleHint: const TextStyle(color: Colors.white),
-                            suffixSection: Text(
-                              'ekor',
-                              style: headingText3,
-                            ),
-                          ),
-                          TextFieldWidget(
-                            label: 'Jumlah Ikan',
-                            controller: controller.masAmountController,
-                            isLong: false,
-                            hint: 'Ex: 100',
-                            suffixSection: Text(
-                              'ekor',
-                              style: headingText3,
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-            const SizedBox(
-              height: 12,
-            ),
+                      )
+                    : Container(),
           ],
         ),
       );
@@ -913,7 +930,7 @@ class _ActivationBreedPageState extends State<ActivationBreedPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Kategori',
+              'Kategori Ikan',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -941,6 +958,12 @@ class _ActivationBreedPageState extends State<ActivationBreedPage> {
                         controller.isNilaMerah.value = false;
                         controller.isPatin.value = false;
                         controller.isMas.value = false;
+
+                        benihState.isLeleSelected.value = false;
+                        benihState.isMasSelected.value = false;
+                        benihState.isNilaHitamSelected.value = false;
+                        benihState.isPatinSelected.value = false;
+                        benihState.isNilaMerahSelected.value = false;
                       },
                       value: controller.breedOptionController.selected.value,
                       items: controller.breedOptionController.listBreed
@@ -1105,6 +1128,7 @@ class _ActivationBreedPageState extends State<ActivationBreedPage> {
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              waterHeightInput(),
               breedOptionInput(),
               // controller.breedOptionController.selected.value == "Benih"
               //     ? benihInput()
@@ -1134,7 +1158,6 @@ class _ActivationBreedPageState extends State<ActivationBreedPage> {
                         controller.isLele == true ? leleInput() : Container(),
                         controller.isPatin == true ? patinInput() : Container(),
                         controller.isMas == true ? masInput() : Container(),
-                        waterHeightInput(),
                         activationButton(),
                       ],
                     ),

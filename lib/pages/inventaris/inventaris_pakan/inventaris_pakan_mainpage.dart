@@ -261,9 +261,9 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
                       controller: state.amount,
                       isLong: false,
                       numberOutput: true,
-                      hint: 'Ex: 10',
+                      hint: 'Ex: 1.5',
                       suffixSection: Text(
-                        'gram',
+                        'kg',
                         style: headingText3,
                       ),
                     ),

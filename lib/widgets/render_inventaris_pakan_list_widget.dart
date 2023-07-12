@@ -93,7 +93,7 @@ class _RenderInventarisPakanListWidgetState
                             ),
                             SizedBox(height: 6),
                             Text(
-                              '${widget.data.data![index].amount!} gram',
+                              '${widget.data.data![index].amount!.toStringAsFixed(2)} kg',
                               style: TextStyle(
                                 color: Colors.grey.shade500,
                                 fontWeight: FontWeight.bold,
@@ -270,9 +270,9 @@ class _RenderInventarisPakanListWidgetState
               controller: state.amount,
               isLong: false,
               numberOutput: true,
-              hint: 'Ex: 10',
+              hint: 'Ex: 1.5',
               suffixSection: Text(
-                'gram',
+                'kg',
                 style: headingText3,
               ),
             ),

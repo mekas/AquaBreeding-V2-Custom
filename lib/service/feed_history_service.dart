@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert';
+import 'dart:developer';
 import 'package:fish/models/feed_history_detail.dart';
 import 'package:fish/models/feed_history_hourly.dart';
 import 'package:fish/models/feed_history_monthly.dart';
@@ -10,20 +11,21 @@ import 'package:fish/service/url_api.dart';
 import 'package:http/http.dart' as http;
 
 class FeedHistoryService {
-  Future<List<FeedChartData>> getChart({required String activation_id}) async {
-    var url = Uri.parse(Urls.feedChartApi(activation_id));
-    var headers = {'Content-Type': 'application/json'};
+  // Future<List<FeedChartData>> getChart({required String activation_id}) async {
+  //   var url = Uri.parse(Urls.feedChartApi(activation_id));
+  //   var headers = {'Content-Type': 'application/json'};
 
-    var response = await http.get(url, headers: headers);
+  //   var response = await http.get(url, headers: headers);
 
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      List<FeedChartData> feedChartData = FeedChartData.fromJsonList(data);
-      return feedChartData;
-    } else {
-      throw Exception('Gagal Get Activation!');
-    }
-  }
+  //   if (response.statusCode == 200) {
+  //     var data = jsonDecode(response.body);
+  //     // inspect(data);
+  //     List<FeedChartData> feedChartData = FeedChartData.fromJsonList(data);
+  //     return feedChartData;
+  //   } else {
+  //     throw Exception('Gagal Get Activation!');
+  //   }
+  // }
 
   Future<List<FeedHistoryMonthly>> getMonthlyRecap(
       {required String activation_id}) async {
@@ -85,6 +87,7 @@ class FeedHistoryService {
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
+      inspect(data);
       List<FeedHistoryHourly> feedHistoryHourly =
           FeedHistoryHourly.fromJsonList(data);
       return feedHistoryHourly;
@@ -95,7 +98,7 @@ class FeedHistoryService {
 
   Future<bool> postFeedHistory({
     required String? pondId,
-    required String? feedTypeId,
+    required String? fishFeedId,
     required String? feedDose,
   }) async {
     final response = await http.post(
@@ -106,7 +109,7 @@ class FeedHistoryService {
       encoding: Encoding.getByName('utf-8'),
       body: {
         "pond_id": pondId,
-        "feed_type_id": feedTypeId,
+        "fish_feed_id": fishFeedId,
         "feed_dose": feedDose,
       },
     );

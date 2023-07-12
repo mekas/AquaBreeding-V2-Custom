@@ -1,4 +1,6 @@
 import 'package:fish/pages/component/activation_card.dart';
+import 'package:fish/pages/feeding/feed_entry_controller.dart';
+import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_state.dart';
 import 'package:fish/pages/pond/activation_breed_controller.dart';
 import 'package:fish/pages/pond/activation_breed_page.dart';
 import 'package:fish/pages/pond/pond_controller.dart';
@@ -18,7 +20,9 @@ class DetailPondPage extends StatefulWidget {
 class _DetailPondPageState extends State<DetailPondPage> {
   final detailController = Get.put(DetailPondController());
   final activationController = Get.put(ActivationBreedController());
+  // final feedEntryController = Get.put(FeedEntryController());
   final pondController = Get.put(PondController());
+  final InventarisPakanState pakanState = Get.put(InventarisPakanState());
 
   @override
   void initState() {
@@ -30,6 +34,7 @@ class _DetailPondPageState extends State<DetailPondPage> {
     detailController.getPondActivation(context);
     activationController.pondName.value =
         'kolam ${detailController.pond.alias}';
+    pakanState.pondName.value = 'kolam ${detailController.pond.alias}';
   }
 
   @override

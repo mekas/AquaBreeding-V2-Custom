@@ -93,7 +93,7 @@ class InventarisBahanBudidayaState extends Urls {
         name.text = res.data!.name.toString();
         desc.text = res.data!.description.toString();
         price.text = res.data!.price.toString();
-        amount.text = res.data!.amount!.toStringAsFixed(3);
+        amount.text = res.data!.amount!.toStringAsFixed(2);
         typeCategory.value = res.data!.type.toString();
         minExp.text = res.data!.minExpiredPeriod.toString();
         maxExp.text = res.data!.maxExpiredPeriod.toString();
@@ -106,6 +106,18 @@ class InventarisBahanBudidayaState extends Urls {
     isLoadingDetail.value = false;
   }
 
+  String amountChecker(String text) {
+    var textList = text.split('');
+
+    for (var i = 0; i < textList.length; i++) {
+      if (textList[i] == ',') {
+        textList[i] = '.';
+      }
+    }
+
+    return textList.join('');
+  }
+
   Future postData(Function() doAfter) async {
     var map = <String, dynamic>{};
 
@@ -113,7 +125,7 @@ class InventarisBahanBudidayaState extends Urls {
     map['name'] = name.text;
     map['description'] = desc.text;
     map['price'] = price.text;
-    map['amount'] = amount.text;
+    map['amount'] = amountChecker(amount.text);
     map['type'] = typeCategory.value;
     map['min_expired_period'] = minExp.text;
     map['max_expired_period'] = maxExp.text == ''

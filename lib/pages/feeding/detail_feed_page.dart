@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:fish/models/feed_chart_model.dart';
 import 'package:fish/pages/component/feed_month_card.dart';
 import 'package:fish/pages/feeding/feed_controller.dart';
+import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_state.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/pages/feeding/feed_entry_page.dart';
 import 'package:fish/theme.dart';
@@ -13,6 +16,64 @@ class DetailFeedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final FeedController controller = Get.put(FeedController());
+    final InventarisPakanState pakanState = Get.put(InventarisPakanState());
+
+    Widget feedCatDropdown() {
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Kategori Pakan',
+              style: headingText2,
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: inputColor,
+              ),
+              child: StatefulBuilder(
+                builder: ((context, setState) {
+                  return DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      onChanged: ((String? value) async {
+                        setState(() {
+                          pakanState.feedCategory.value = value!;
+                        });
+                        pakanState.feedCategory.value = value!;
+                        await pakanState.getHistoryFeedChartData(
+                            pakanState.feedCategory.value, () {
+                          controller
+                              .getChartFeed(pakanState.feedCategory.value);
+                        });
+                      }),
+                      value: pakanState.feedCategory.value,
+                      dropdownColor: inputColor,
+                      items: pakanState.dropdownList.map(
+                        (String val) {
+                          return DropdownMenuItem(
+                            value: val,
+                            child: Text(
+                              val,
+                              style: headingText3,
+                            ),
+                          );
+                        },
+                      ).toList(),
+                    ),
+                  );
+                }),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
 
     Widget chartFeed() {
       return SfCartesianChart(
@@ -32,7 +93,7 @@ class DetailFeedPage extends StatelessWidget {
             labelStyle: const TextStyle(color: Colors.white),
             autoScrollingDelta: 4),
         primaryYAxis: NumericAxis(
-            labelFormat: '{value}Kg',
+            labelFormat: '{value} kg',
             // maximum: 100,
             // minimum: 0,
             labelStyle: const TextStyle(color: Colors.white)),
@@ -90,6 +151,8 @@ class DetailFeedPage extends StatelessWidget {
               "pond": controller.pond,
               "activation": controller.activation
             });
+            // inspect(
+            //     {"pond": controller.pond, "activation": controller.activation});
           },
           style: TextButton.styleFrom(
             backgroundColor: Colors.green.shade400,
@@ -276,36 +339,35 @@ class DetailFeedPage extends StatelessWidget {
           ));
     }
 
-    return Obx(() {
-      if (controller.isLoading.value == false) {
-        return Scaffold(
-          appBar: AppBar(
-            backgroundColor: backgroundColor2,
-            title: const Text("Detail Pakan Permusim"),
-          ),
-          backgroundColor: backgroundColor1,
-          body: ListView(
-            children: [
-              chartFeed(),
-              feedDataRecap(),
-              // detail(),
-              entryPakanButton(),
-              recapTitle(),
-              // chartRecap(),
-              listMonthFeed(),
-              const SizedBox(
-                height: 10,
+    return Obx(
+      () => Scaffold(
+        appBar: AppBar(
+          backgroundColor: backgroundColor2,
+          title: const Text("Detail Pakan Permusim"),
+        ),
+        backgroundColor: backgroundColor1,
+        body: controller.isLoading.value
+            ? Center(
+                child: CircularProgressIndicator(
+                  color: secondaryColor,
+                ),
               )
-            ],
-          ),
-        );
-      } else {
-        return Center(
-          child: CircularProgressIndicator(
-            color: secondaryColor,
-          ),
-        );
-      }
-    });
+            : ListView(
+                children: [
+                  feedCatDropdown(),
+                  chartFeed(),
+                  feedDataRecap(),
+                  // detail(),
+                  entryPakanButton(),
+                  recapTitle(),
+                  // chartRecap(),
+                  listMonthFeed(),
+                  const SizedBox(
+                    height: 10,
+                  )
+                ],
+              ),
+      ),
+    );
   }
 }

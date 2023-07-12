@@ -71,7 +71,7 @@ class TextFieldWidget extends StatelessWidget {
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      color: inputColor,
+                      color: isEdit ? inputColor : Colors.transparent,
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,

@@ -1,5 +1,5 @@
 class Urls {
-  static const String baseUrl = 'https://c0f6-125-160-231-45.ap.ngrok.io/api';
+  static const String baseUrl = 'https://c3f1-103-136-58-71.ngrok.io/api';
   // static const String baseUrl = 'http://10.0.2.2:5000/api';
 
   // Home
@@ -31,6 +31,8 @@ class Urls {
       '$baseUrl/feedhistorys/day/$activationId/$week';
   static String feedHistory(String? activationId, date) =>
       '$baseUrl/feedhistorys/hour/$activationId/$date';
+  static String feedChartHistory(String? type) =>
+      '$baseUrl/feedhistoryforchart?type=$type';
 
   // Fish Grading
   static const String fishGradings = '$baseUrl/fishgradings';

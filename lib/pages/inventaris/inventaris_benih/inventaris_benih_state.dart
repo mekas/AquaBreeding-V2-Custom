@@ -24,6 +24,7 @@ class InventarisBenihState extends Urls {
   RxString leleFishWeigth = ''.obs;
   RxString leleFishSize = ''.obs;
   RxString leleFishStock = ''.obs;
+  RxBool isLeleSelected = false.obs;
 
   final List listNilaHitam = [];
   RxMap<String, dynamic> selectedNilaHitam = <String, dynamic>{}.obs;
@@ -31,6 +32,7 @@ class InventarisBenihState extends Urls {
   RxString nilaHitamFishWeigth = ''.obs;
   RxString nilaHitamFishSize = ''.obs;
   RxString nilaHitamFishStock = ''.obs;
+  RxBool isNilaHitamSelected = false.obs;
 
   final List listNilaMerah = [];
   RxMap<String, dynamic> selectedNilaMerah = <String, dynamic>{}.obs;
@@ -38,6 +40,7 @@ class InventarisBenihState extends Urls {
   RxString nilaMerahFishWeigth = ''.obs;
   RxString nilaMerahFishSize = ''.obs;
   RxString nilaMerahFishStock = ''.obs;
+  RxBool isNilaMerahSelected = false.obs;
 
   final List listPatin = [];
   RxMap<String, dynamic> selectedPatin = <String, dynamic>{}.obs;
@@ -45,6 +48,7 @@ class InventarisBenihState extends Urls {
   RxString patinFishWeigth = ''.obs;
   RxString patinFishSize = ''.obs;
   RxString patinFishStock = ''.obs;
+  RxBool isPatinSelected = false.obs;
 
   final List listMas = [];
   RxMap<String, dynamic> selectedMas = <String, dynamic>{}.obs;
@@ -52,6 +56,7 @@ class InventarisBenihState extends Urls {
   RxString masFishWeigth = ''.obs;
   RxString masFishSize = ''.obs;
   RxString masFishStock = ''.obs;
+  RxBool isMasSelected = false.obs;
 
   TextEditingController firstDate = TextEditingController();
   TextEditingController lastDate = TextEditingController();
@@ -130,6 +135,8 @@ class InventarisBenihState extends Urls {
               'seed_id': i.sId,
               'fishName': i.brandName,
             });
+
+            selectedNilaHitam.value = listNilaHitam[0];
           }
           if (i.fishType == 'Nila Merah') {
             listNilaMerah.add({
@@ -137,6 +144,8 @@ class InventarisBenihState extends Urls {
               'seed_id': i.sId,
               'fishName': i.brandName,
             });
+
+            selectedNilaMerah.value = listNilaMerah[0];
           }
           if (i.fishType == 'Patin') {
             listPatin.add({
@@ -144,6 +153,8 @@ class InventarisBenihState extends Urls {
               'seed_id': i.sId,
               'fishName': i.brandName,
             });
+
+            selectedPatin.value = listPatin[0];
           }
           if (i.fishType == 'Mas') {
             listMas.add({
@@ -151,6 +162,8 @@ class InventarisBenihState extends Urls {
               'seed_id': i.sId,
               'fishName': i.brandName,
             });
+
+            selectedMas.value = listMas[0];
           }
         }
       }
@@ -168,6 +181,7 @@ class InventarisBenihState extends Urls {
     try {
       if (type == 'Lele') {
         isLoadingLeleDetail.value = true;
+        isLeleSelected.value = true;
 
         if (response.statusCode == 200) {
           DetailInventarisBenihModel res =
@@ -185,6 +199,7 @@ class InventarisBenihState extends Urls {
 
       if (type == 'Mas') {
         isLoadingMasDetail.value = true;
+        isMasSelected.value = true;
 
         if (response.statusCode == 200) {
           DetailInventarisBenihModel res =
@@ -202,6 +217,7 @@ class InventarisBenihState extends Urls {
 
       if (type == 'Patin') {
         isLoadingPatinDetail.value = true;
+        isPatinSelected.value = true;
 
         if (response.statusCode == 200) {
           DetailInventarisBenihModel res =
@@ -219,6 +235,7 @@ class InventarisBenihState extends Urls {
 
       if (type == 'Nila Hitam') {
         isLoadingNilaHitamDetail.value = true;
+        isNilaHitamSelected.value = true;
 
         if (response.statusCode == 200) {
           DetailInventarisBenihModel res =
@@ -236,6 +253,7 @@ class InventarisBenihState extends Urls {
 
       if (type == 'Nila Merah') {
         isLoadingNilaMerahDetail.value = true;
+        isNilaMerahSelected.value = true;
 
         if (response.statusCode == 200) {
           DetailInventarisBenihModel res =

@@ -214,7 +214,7 @@ class _InventarisBahanBudidayaMainpageState
                                             ),
                                             SizedBox(height: 6),
                                             Text(
-                                              '${state.suplemenList.value.data![index].amount!.toStringAsFixed(3)} ${state.suplemenList.value.data![index].type!}',
+                                              '${state.suplemenList.value.data![index].amount!.toStringAsFixed(2)} ${state.suplemenList.value.data![index].type!}',
                                               style: TextStyle(
                                                 color: Colors.grey.shade500,
                                                 fontWeight: FontWeight.bold,

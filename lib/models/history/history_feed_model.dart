@@ -27,8 +27,8 @@ class HistoryFeedModel {
 class Data {
   String? sId;
   String? fishFeedId;
-  int? originalAmount;
-  int? usage;
+  double? originalAmount;
+  double? usage;
   String? pond;
   String? createdAt;
   String? updatedAt;
@@ -78,7 +78,7 @@ class Feed {
   String? brandName;
   String? description;
   int? price;
-  int? amount;
+  double? amount;
   String? producer;
   int? protein;
   int? carbohydrate;

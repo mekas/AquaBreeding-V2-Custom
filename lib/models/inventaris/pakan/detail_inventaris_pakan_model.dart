@@ -26,7 +26,7 @@ class Data {
   String? brandName;
   String? description;
   int? price;
-  int? amount;
+  double? amount;
   String? producer;
   int? protein;
   int? carbohydrate;

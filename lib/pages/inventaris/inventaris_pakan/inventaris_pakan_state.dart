@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:fish/models/history/history_feed_chart_model.dart';
 import 'package:fish/models/history/history_feed_model.dart';
 import 'package:fish/models/inventaris/pakan/detail_inventaris_pakan_model.dart';
 import 'package:fish/models/inventaris/pakan/inventaris_pakan_model.dart';
@@ -15,9 +16,11 @@ class InventarisPakanState extends Urls {
   RxBool isLoadingDelete = false.obs;
   RxBool isLoadingDetail = false.obs;
   RxBool isLoadingHistory = false.obs;
+  RxBool isLoadingChart = false.obs;
 
   var feedList = InventarisPakanModel(data: []).obs;
   var feedHistoryList = HistoryFeedModel(data: []).obs;
+  var feedChartHistoryList = HistoryFeedChartModel(data: []).obs;
 
   RxString pageIdentifier = 'alami'.obs;
 
@@ -46,8 +49,19 @@ class InventarisPakanState extends Urls {
   TextEditingController firstDate = TextEditingController();
   TextEditingController lastDate = TextEditingController();
 
+  RxString selectedFeedType = 'Alami'.obs;
+  final List selectedFeedList = [];
+  RxMap<String, dynamic> selectedFeedName = <String, dynamic>{}.obs;
+
+  RxBool isLoadingFeedList = false.obs;
+  RxBool isLoadingFeedDetail = false.obs;
+  RxBool setStatusDetailFeed = false.obs;
+
+  RxString pondName = ''.obs;
+
   Future getAllData(String type, Function() doAfter) async {
     feedList.value.data!.clear();
+    selectedFeedList.clear();
     isLoadingPage.value = true;
     final response = await http.get(Uri.parse('${Urls.invFeed}?type=$type'));
 
@@ -57,6 +71,17 @@ class InventarisPakanState extends Urls {
             InventarisPakanModel.fromJson(jsonDecode(response.body));
 
         feedList.value = res;
+
+        for (var i in feedList.value.data!) {
+          selectedFeedList.add({
+            'id': i.idInt,
+            'feed_id': i.sId,
+            'feed_name': i.brandName,
+          });
+
+          selectedFeedName.value = selectedFeedList[0];
+        }
+
         inspect(feedList.value.data);
 
         doAfter();
@@ -68,7 +93,9 @@ class InventarisPakanState extends Urls {
   }
 
   Future getDataByID(int id, Function() doAfter) async {
+    // resetVariables();
     isLoadingDetail.value = true;
+    isLoadingFeedDetail.value = true;
 
     final response = await http.get(Uri.parse('${Urls.invFeed}/$id'));
 
@@ -81,7 +108,7 @@ class InventarisPakanState extends Urls {
         name.text = res.data!.brandName.toString();
         desc.text = res.data!.description.toString();
         price.text = res.data!.price.toString();
-        amount.text = res.data!.amount.toString();
+        amount.text = res.data!.amount!.toStringAsFixed(2);
         producer.text = res.data!.producer.toString();
         protein.text = res.data!.protein.toString();
         carbo.text = res.data!.carbohydrate.toString();
@@ -94,6 +121,19 @@ class InventarisPakanState extends Urls {
       throw Exception(e);
     }
     isLoadingDetail.value = false;
+    isLoadingFeedDetail.value = false;
+  }
+
+  String amountChecker(String text) {
+    var textList = text.split('');
+
+    for (var i = 0; i < textList.length; i++) {
+      if (textList[i] == ',') {
+        textList[i] = '.';
+      }
+    }
+
+    return textList.join('');
   }
 
   Future postData(Function() doAfter) async {
@@ -103,7 +143,7 @@ class InventarisPakanState extends Urls {
     map['brand_name'] = name.text;
     map['description'] = desc.text;
     map['price'] = price.text;
-    map['amount'] = amount.text;
+    map['amount'] = amountChecker(amount.text);
     map['producer'] = producer.text;
     map['protein'] = protein.text;
     map['carbohydrate'] = carbo.text;
@@ -114,6 +154,8 @@ class InventarisPakanState extends Urls {
     map['image'] = image.value;
 
     isLoadingPost.value = true;
+
+    inspect(map);
 
     try {
       await http.post(
@@ -178,27 +220,27 @@ class InventarisPakanState extends Urls {
   }
 
   Future postHistoryFeedData(
-      String pondName, List feed, Function() doAfter) async {
+    String pondName,
+    String feedId,
+    String amount,
+    String used,
+    Function() doAfter,
+  ) async {
     var map = <String, dynamic>{};
 
     map['pond'] = pondName;
+    map['fish_feed_id'] = feedId;
+    map['original_amount'] = amount;
+    map['usage'] = amountChecker(used);
 
-    // print('HEHE');
-
-    for (var i = 0; i < feed.length; i++) {
-      map['fish_feed_id'] = feed[i]['feed_id'];
-      map['original_amount'] = feed[i]['original_value'];
-      map['usage'] = feed[i]['amount'];
-
-      try {
-        await http.post(
-          Uri.parse(Urls.feedSch),
-          body: map,
-        );
-        doAfter();
-      } catch (e) {
-        throw Exception(e);
-      }
+    try {
+      await http.post(
+        Uri.parse(Urls.feedSch),
+        body: map,
+      );
+      doAfter();
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
@@ -223,6 +265,29 @@ class InventarisPakanState extends Urls {
       throw Exception(e);
     }
     isLoadingHistory.value = false;
+  }
+
+  Future getHistoryFeedChartData(String type, Function() doAfter) async {
+    feedChartHistoryList.value.data!.clear();
+    isLoadingChart.value = true;
+
+    final response = await http.get(Uri.parse(Urls.feedChartHistory(type)));
+
+    try {
+      if (response.statusCode == 200) {
+        HistoryFeedChartModel res =
+            HistoryFeedChartModel.fromJson(jsonDecode(response.body));
+
+        feedChartHistoryList.value = res;
+
+        inspect(feedChartHistoryList.value);
+
+        doAfter();
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+    isLoadingChart.value = false;
   }
 
   resetVariables() {
