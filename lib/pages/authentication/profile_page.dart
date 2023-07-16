@@ -1,11 +1,18 @@
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:fish/controllers/authentication/register_controller.dart';
+import 'package:fish/pages/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../controllers/authentication/profile_controller.dart';
 import 'login_page.dart';
 
 class ProfilePage extends StatelessWidget {
   ProfilePage({Key? key}) : super(key: key);
+  @override
   final ProfileController controller = Get.put(ProfileController());
 
   @override
@@ -19,7 +26,7 @@ class ProfilePage extends StatelessWidget {
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(
-                  'assets/logo.png',
+                  'assets/logov2.png',
                 ),
               ),
             ),
@@ -43,53 +50,51 @@ class ProfilePage extends StatelessWidget {
       );
     }
 
-    // Widget footer() {
-    //   return Center(
-    //     child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-    //       Text(
-    //         "Profile",
-    //         style: whiteTextStyle.copyWith(
-    //           fontSize: 24,
-    //           fontWeight: bold,
-    //         ),
-    //       ),
-    //       Row(
-    //         mainAxisAlignment: MainAxisAlignment.center,
-    //         children: [
-    //           Text(
-    //             "Sudah punya akun?",
-    //             style: secondaryTextStyle.copyWith(
-    //               fontSize: 16,
-    //               fontWeight: medium,
-    //             ),
-    //           ),
-    //           TextButton(
-    //             onPressed: () {
-    //               Navigator.push(
-    //                   context,
-    //                   MaterialPageRoute(
-    //                       builder: (context) => const LoginPage()));
-    //             },
-    //             child: Text(
-    //               'Login',
-    //               style: blueTextStyle.copyWith(
-    //                 fontSize: 16,
-    //                 fontWeight: bold,
-    //               ),
-    //             ),
-    //           ),
-    //         ],
-    //       ),
-    //     ]),
-    //   );
-    // }
+    Widget footer() {
+      return Center(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Text(
+            "Profile",
+            style: whiteTextStyle.copyWith(
+              fontSize: 24,
+              fontWeight: bold,
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Sudah punya akun?",
+                style: secondaryTextStyle.copyWith(
+                  fontSize: 16,
+                  fontWeight: medium,
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LoginPage()));
+                },
+                child: Text(
+                  'Login',
+                  style: blueTextStyle.copyWith(
+                    fontSize: 16,
+                    fontWeight: bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ]),
+      );
+    }
 
     Widget profileList() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Card(
-            margin: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 25.0),
+            margin: EdgeInsets.symmetric(vertical: 6.0, horizontal: 25.0),
             child: ListTile(
               leading: Icon(
                 Icons.person,
@@ -105,8 +110,7 @@ class ProfilePage extends StatelessWidget {
             ),
           ),
           Card(
-            margin:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
+            margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
             child: ListTile(
               leading: Icon(
                 Icons.water,
@@ -122,8 +126,7 @@ class ProfilePage extends StatelessWidget {
             ),
           ),
           Card(
-            margin:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
+            margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
             child: ListTile(
               leading: Icon(
                 Icons.place,
@@ -139,8 +142,7 @@ class ProfilePage extends StatelessWidget {
             ),
           ),
           Card(
-            margin:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
+            margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
             child: ListTile(
               leading: Icon(
                 Icons.phone,
@@ -168,8 +170,8 @@ class ProfilePage extends StatelessWidget {
         child: TextButton(
           onPressed: () {
             // Get.back();
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const LoginPage()));
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => LoginPage()));
             controller.deleteToken();
 
             // controller.getWeek();
@@ -191,34 +193,34 @@ class ProfilePage extends StatelessWidget {
       );
     }
 
-    // Widget submitButton() {
-    //   return Container(
-    //     height: 50,
-    //     width: double.infinity,
-    //     margin: EdgeInsets.only(
-    //         top: defaultSpace * 3, right: defaultMargin, left: defaultMargin),
-    //     child: TextButton(
-    //       onPressed: () {
-    //         // Get.back();
-    //         // register();
-    //         // controller.getWeek();
-    //       },
-    //       style: TextButton.styleFrom(
-    //         backgroundColor: primaryColor,
-    //         shape: RoundedRectangleBorder(
-    //           borderRadius: BorderRadius.circular(12),
-    //         ),
-    //       ),
-    //       child: Text(
-    //         'Submit',
-    //         style: primaryTextStyle.copyWith(
-    //           fontSize: 16,
-    //           fontWeight: medium,
-    //         ),
-    //       ),
-    //     ),
-    //   );
-    // }
+    Widget submitButton() {
+      return Container(
+        height: 50,
+        width: double.infinity,
+        margin: EdgeInsets.only(
+            top: defaultSpace * 3, right: defaultMargin, left: defaultMargin),
+        child: TextButton(
+          onPressed: () {
+            // Get.back();
+            // register();
+            // controller.getWeek();
+          },
+          style: TextButton.styleFrom(
+            backgroundColor: primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          child: Text(
+            'Submit',
+            style: primaryTextStyle.copyWith(
+              fontSize: 16,
+              fontWeight: medium,
+            ),
+          ),
+        ),
+      );
+    }
 
     return Obx(() {
       if (controller.isLoading.value == false) {
@@ -226,16 +228,16 @@ class ProfilePage extends StatelessWidget {
           backgroundColor: backgroundColor2,
           body: ListView(
             children: [
-              const SizedBox(
+              SizedBox(
                 height: 10,
               ),
               logo(),
-              const SizedBox(
+              SizedBox(
                 height: 16,
               ),
               profileList(),
               logoutButton(),
-              const SizedBox(
+              SizedBox(
                 height: 8,
               ),
               // footer(),

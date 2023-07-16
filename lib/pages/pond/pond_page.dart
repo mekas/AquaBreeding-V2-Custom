@@ -1,3 +1,4 @@
+import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/component/pond_card.dart';
 
 import 'package:fish/pages/pond/add_pond_page.dart';
@@ -7,14 +8,14 @@ import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
 class PondPage extends StatefulWidget {
-  const PondPage({Key? key}) : super(key: key);
+  PondPage({Key? key}) : super(key: key);
   @override
   State<PondPage> createState() => _PondPageState();
 }
 
 class _PondPageState extends State<PondPage> {
   final PondController controller = Get.put(PondController());
-  int? _value;
+  int? _value = null;
   final chip = ["Aktif", "Panen", "Tidak Aktif"];
   @override
   void initState() {
@@ -61,10 +62,9 @@ class _PondPageState extends State<PondPage> {
               return ChoiceChip(
                 label: Text(
                   chip[index],
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.white),
                 ),
-                shape:
-                    const StadiumBorder(side: BorderSide(color: Colors.white)),
+                shape: StadiumBorder(side: BorderSide(color: Colors.white)),
                 selected: _value == index,
                 backgroundColor: backgroundColor1,
                 selectedColor: primaryColor,
@@ -88,7 +88,7 @@ class _PondPageState extends State<PondPage> {
 
     Widget pondList() {
       return Container(
-        margin: const EdgeInsets.only(top: 14),
+        margin: EdgeInsets.only(top: 14),
         child: SingleChildScrollView(
           child: ListView.builder(
             shrinkWrap: true,
@@ -110,14 +110,14 @@ class _PondPageState extends State<PondPage> {
           margin: EdgeInsets.only(right: defaultMargin, left: defaultMargin),
           child: Center(
             child: Column(children: [
-              const SizedBox(height: 35),
-              const Image(
+              SizedBox(height: 35),
+              Image(
                 image: AssetImage("assets/unavailable_icon.png"),
                 width: 100,
                 height: 100,
                 fit: BoxFit.fitWidth,
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Text(
                 "Anda belum pernah melakukan registrasi kolam",
                 style: primaryTextStyle.copyWith(
@@ -128,7 +128,7 @@ class _PondPageState extends State<PondPage> {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               Text(
                 "Silahkan registrasi kolam",
                 style: secondaryTextStyle.copyWith(
@@ -149,7 +149,7 @@ class _PondPageState extends State<PondPage> {
           backgroundColor: backgroundColor1,
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              Get.to(() => const AddPondPage());
+              Get.to(() => AddPondPage());
             },
             backgroundColor: primaryColor,
             child: const Icon(Icons.add),
@@ -159,7 +159,7 @@ class _PondPageState extends State<PondPage> {
               title(),
               filter(),
               controller.ponds.isEmpty ? emptyListPond() : pondList(),
-              const SizedBox(
+              SizedBox(
                 height: 10,
               )
             ],

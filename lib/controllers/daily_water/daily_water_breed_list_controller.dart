@@ -6,6 +6,8 @@ import 'package:fish/service/activation_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
+import '../../service/logging_service.dart';
+
 class DailyWaterBreedListController extends GetxController {
   final ActivationService service = ActivationService();
 
@@ -33,6 +35,28 @@ class DailyWaterBreedListController extends GetxController {
     isLoading.value = false;
   }
 
+  late DateTime startTime;
+  late DateTime endTime;
+  final fitur = 'Daily Water Quality';
+  @override
+  void onClose() {
+    endTime = DateTime.now();
+    postDataLog(fitur);
+    super.onClose();
+  }
+
+  @override
+  void onInit() {
+    startTime = DateTime.now();
+    super.onInit();
+  }
+
+  Future<void> postDataLog(String fitur) async {
+    // print(buildJsonFish());
+    bool value =
+        await LoggingService().postLogging(startAt: startTime, fitur: fitur);
+    print(value);
+  }
   // @override
   // void onInit() async {
   //   print("pond_id : ${pond.id}");

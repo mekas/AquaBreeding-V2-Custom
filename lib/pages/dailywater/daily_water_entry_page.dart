@@ -1,10 +1,11 @@
-// ignore_for_file: unrelated_type_equality_checks
-
 import 'package:fish/controllers/daily_water/daily_water_entry_controller.dart';
 import 'package:fish/controllers/daily_water/daily_water_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+
+import '../component/tabviewwater.dart';
 
 class DailyWaterEntryPage extends StatelessWidget {
   DailyWaterEntryPage({Key? key}) : super(key: key);
@@ -12,8 +13,7 @@ class DailyWaterEntryPage extends StatelessWidget {
   final DailyWaterEntryController controller =
       Get.put(DailyWaterEntryController());
 
-  final DailyWaterController dailyWaterControlller =
-      Get.put(DailyWaterController());
+  final DailyWaterController water = Get.put(DailyWaterController());
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +31,12 @@ class DailyWaterEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -47,12 +47,15 @@ class DailyWaterEntryPage extends StatelessWidget {
                 return TextFormField(
                   style: primaryTextStyle,
                   keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
                   onChanged: controller.doValChanged,
                   onTap: controller.valdoVal,
                   controller: controller.doController,
                   decoration: controller.validatedoVal.value == true
                       ? controller.doVal == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'tidak boleh kosong',
                               isCollapsed: true)
                           : null
@@ -80,12 +83,12 @@ class DailyWaterEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -96,12 +99,15 @@ class DailyWaterEntryPage extends StatelessWidget {
                 return TextFormField(
                   style: primaryTextStyle,
                   keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
                   onChanged: controller.phChanged,
                   onTap: controller.valph,
                   controller: controller.phController,
                   decoration: controller.validateph.value == true
                       ? controller.ph == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'tidak boleh kosong',
                               isCollapsed: true)
                           : null
@@ -129,12 +135,12 @@ class DailyWaterEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -144,13 +150,16 @@ class DailyWaterEntryPage extends StatelessWidget {
               child: Center(child: Obx(() {
                 return TextFormField(
                   style: primaryTextStyle,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
                   keyboardType: TextInputType.number,
                   onChanged: controller.tempChanged,
                   onTap: controller.valtemp,
                   controller: controller.temperatureController,
                   decoration: controller.validatetemp.value == true
                       ? controller.temp == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'tidak boleh kosong',
                               isCollapsed: true)
                           : null
@@ -181,9 +190,20 @@ class DailyWaterEntryPage extends StatelessWidget {
                     context,
                     () {
                       Navigator.pop(context);
-                      dailyWaterControlller.getDailyWaterData(context);
+                      water.getDailyWaterData(context);
+                      // Get.offUntil(
+                      //     MaterialPageRoute(
+                      //         builder: (context) => MyWaterTabScreen()),
+                      //     (Route<dynamic> route) => false);
+                      // Get.off(MyWaterTabScreen(), arguments: {
+                      //   'pond': controller.pond,
+                      //   'activation': controller.activation
+                      // });
+
+                      // Get.close(1);
                     },
                   );
+            controller.postDataLog(controller.fitur);
             // controller.getWeek();
           },
           style: TextButton.styleFrom(
@@ -217,7 +237,7 @@ class DailyWaterEntryPage extends StatelessWidget {
               doInput(),
               temperatureInput(),
               submitButton(),
-              const SizedBox(
+              SizedBox(
                 height: 8,
               )
             ],

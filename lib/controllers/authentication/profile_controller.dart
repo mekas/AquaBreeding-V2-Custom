@@ -27,7 +27,7 @@ class ProfileController extends GetxController {
     breeder.clear();
     Breeder breederData = await ProfileService().getBreeder();
     breeder.add(breederData);
-    // print(breeder);
+    print(breeder);
     isLoading.value = false;
   }
 }

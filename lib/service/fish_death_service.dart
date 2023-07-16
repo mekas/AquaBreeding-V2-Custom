@@ -12,9 +12,12 @@ class FishDeathService {
 
     var response = await http.get(url, headers: headers);
 
+    print(response.body);
+
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       List<FishDeath> fishlive = FishDeath.fromJsonList(data);
+      print("success add fishlvie");
       return fishlive;
     } else {
       throw Exception('Gagal Get fishdeath!');
@@ -28,9 +31,12 @@ class FishDeathService {
 
     var response = await http.get(url, headers: headers);
 
+    print(response.body);
+
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       List<FishLiveData> fishdeath = FishLiveData.fromJsonList(data);
+      print("success add fishdeath");
       return fishdeath;
     } else {
       throw Exception('Gagal Get fishdeath!');
@@ -41,6 +47,7 @@ class FishDeathService {
     required String? pondId,
     required List fish,
   }) async {
+    print({"pond_id": pondId, "fish_death_amount": fish});
     final response = await http.post(
       Uri.parse(Urls.fishDeaths),
       headers: {
@@ -55,8 +62,10 @@ class FishDeathService {
     );
 
     if (response.statusCode == 200) {
+      print(response.body);
       return true;
     } else {
+      print(response.body);
       return false;
     }
   }

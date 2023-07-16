@@ -1,14 +1,20 @@
-import 'package:fish/pages/component/activation_card.dart';
-import 'package:fish/pages/feeding/feed_entry_controller.dart';
+import 'dart:developer';
+
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_state.dart';
+
+import 'package:fish/models/pond_model.dart';
+import 'package:fish/pages/component/activation_card.dart';
 import 'package:fish/pages/pond/activation_breed_controller.dart';
 import 'package:fish/pages/pond/activation_breed_page.dart';
 import 'package:fish/pages/pond/pond_controller.dart';
+import 'package:fish/pages/pond/add_pond_page.dart';
 import 'package:fish/pages/pond/deactivation_breed_page.dart';
 import 'package:fish/pages/pond/detail_pond_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
+
+import '../fish_transfer/fish_transfer_entry_page.dart';
 
 class DetailPondPage extends StatefulWidget {
   const DetailPondPage({Key? key}) : super(key: key);
@@ -33,8 +39,9 @@ class _DetailPondPageState extends State<DetailPondPage> {
     // });
     detailController.getPondActivation(context);
     activationController.pondName.value =
-        'kolam ${detailController.pond.alias}';
-    pakanState.pondName.value = 'kolam ${detailController.pond.alias}';
+        'kolam ${detailController.pondController.selectedPond.value.alias}';
+    pakanState.pondName.value =
+        'kolam ${detailController.pondController.selectedPond.value.alias}';
   }
 
   @override
@@ -51,7 +58,7 @@ class _DetailPondPageState extends State<DetailPondPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "kolam ${detailController.pond.alias}",
+                  "kolam ${detailController.pondController.selectedPond.value.alias}",
                   style: primaryTextStyle.copyWith(
                     fontSize: 18,
                     fontWeight: heavy,
@@ -59,11 +66,12 @@ class _DetailPondPageState extends State<DetailPondPage> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 5,
                 ),
                 Text(
-                  detailController.pond.getGmtToNormalDate(),
+                  detailController.pondController.selectedPond.value
+                      .getGmtToNormalDate(),
                   style: secondaryTextStyle.copyWith(
                     fontSize: 16,
                     fontWeight: medium,
@@ -78,7 +86,7 @@ class _DetailPondPageState extends State<DetailPondPage> {
               height: 40,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                // border: Border.all(color: detailController.pond.getColor()),
+                // border: Border.all(color: detailController.pondController.selectedPond.getColor()),
                 border: Border.all(
                     color: detailController.isPondActive.value
                         ? Colors.green
@@ -87,7 +95,9 @@ class _DetailPondPageState extends State<DetailPondPage> {
               ),
               child: Center(
                 child: Text(
-                  detailController.isPondActive.value ? "Aktif" : "Tidak Aktif",
+                  detailController.isPondActive.value == false
+                      ? "Tidak Aktif"
+                      : "Aktif",
                   style: primaryTextStyle.copyWith(
                     fontSize: 14,
                     fontWeight: heavy,
@@ -111,8 +121,9 @@ class _DetailPondPageState extends State<DetailPondPage> {
         child: TextButton(
           onPressed: () {
             Get.to(() => ActivationBreedPage(), arguments: {
-              'pond': detailController.pond,
+              'pond': detailController.pondController.selectedPond,
             });
+            detailController.postDataLog(detailController.fitur);
           },
           style: TextButton.styleFrom(
             backgroundColor: Colors.green.shade400,
@@ -139,8 +150,19 @@ class _DetailPondPageState extends State<DetailPondPage> {
             top: defaultSpace, right: defaultMargin, left: defaultMargin),
         child: TextButton(
           onPressed: () {
-            Get.to(() => const DeactivationBreedPage(),
-                arguments: {"pond": detailController.pond});
+            Get.defaultDialog(
+                title: 'Konfirmasi Panen!',
+                middleText: 'Apakah anda yakin ingin melakukan panen?',
+                buttonColor: primaryColor,
+                confirmTextColor: Colors.white,
+                cancelTextColor: Colors.black,
+                textConfirm: 'Panen',
+                textCancel: 'Tidak',
+                onConfirm: (() {
+                  Get.to(() => DeactivationBreedPage(), arguments: {
+                    "pond": detailController.pondController.selectedPond,
+                  });
+                }));
           },
           style: TextButton.styleFrom(
             backgroundColor: Colors.amber,
@@ -180,7 +202,7 @@ class _DetailPondPageState extends State<DetailPondPage> {
                   maxLines: 1,
                 ),
                 Text(
-                  detailController.pond.location!,
+                  detailController.pondController.selectedPond.value.location!,
                   style: secondaryTextStyle.copyWith(
                     fontSize: 13,
                     fontWeight: medium,
@@ -188,7 +210,7 @@ class _DetailPondPageState extends State<DetailPondPage> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -201,7 +223,7 @@ class _DetailPondPageState extends State<DetailPondPage> {
                   maxLines: 1,
                 ),
                 Text(
-                  detailController.pond.shape!,
+                  detailController.pondController.selectedPond.value.shape!,
                   style: secondaryTextStyle.copyWith(
                     fontSize: 13,
                     fontWeight: medium,
@@ -224,7 +246,7 @@ class _DetailPondPageState extends State<DetailPondPage> {
                   maxLines: 1,
                 ),
                 Text(
-                  detailController.pond.material!,
+                  detailController.pondController.selectedPond.value.material!,
                   style: secondaryTextStyle.copyWith(
                     fontSize: 13,
                     fontWeight: medium,
@@ -232,7 +254,7 @@ class _DetailPondPageState extends State<DetailPondPage> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -245,9 +267,10 @@ class _DetailPondPageState extends State<DetailPondPage> {
                   maxLines: 1,
                 ),
                 Text(
-                  detailController.pond.shape! == "persegi"
-                      ? "${detailController.pond.length}m x ${detailController.pond.width}m"
-                      : "${detailController.pond.diameter}m\u00B2",
+                  detailController.pondController.selectedPond.value.shape! ==
+                          "persegi"
+                      ? "${detailController.pondController.selectedPond.value.length}m x ${detailController.pondController.selectedPond.value.width}m"
+                      : "${detailController.pondController.selectedPond.value.diameter}m\u00B2",
                   style: secondaryTextStyle.copyWith(
                     fontSize: 13,
                     fontWeight: medium,
@@ -287,7 +310,8 @@ class _DetailPondPageState extends State<DetailPondPage> {
             children: detailController.activations
                 .map(
                   (activation) => ActivationCard(
-                      activation: activation, pond: detailController.pond),
+                      activation: activation,
+                      pond: detailController.pondController.selectedPond.value),
                 )
                 .toList(),
           ));
@@ -299,14 +323,14 @@ class _DetailPondPageState extends State<DetailPondPage> {
           margin: EdgeInsets.only(right: defaultMargin, left: defaultMargin),
           child: Center(
             child: Column(children: [
-              const SizedBox(height: 35),
-              const Image(
+              SizedBox(height: 35),
+              Image(
                 image: AssetImage("assets/unavailable_icon.png"),
                 width: 100,
                 height: 100,
                 fit: BoxFit.fitWidth,
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Text(
                 "Kolam belum pernah\nmemulai musim budidaya",
                 style: primaryTextStyle.copyWith(
@@ -317,7 +341,7 @@ class _DetailPondPageState extends State<DetailPondPage> {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               Text(
                 "Silahkan memulai musim budidaya!",
                 style: secondaryTextStyle.copyWith(
@@ -352,7 +376,7 @@ class _DetailPondPageState extends State<DetailPondPage> {
                   detailController.activations.isEmpty
                       ? emptyListActivation()
                       : listActivation(),
-                  const SizedBox(
+                  SizedBox(
                     height: 10,
                   )
                 ],

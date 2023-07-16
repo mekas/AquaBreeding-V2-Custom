@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
+import 'new_fish_transfer_entry_page.dart';
+
 class FishTransferListPage extends StatefulWidget {
-  const FishTransferListPage({Key? key}) : super(key: key);
+  FishTransferListPage({Key? key}) : super(key: key);
 
   @override
   State<FishTransferListPage> createState() => _FishTransferListPageState();
@@ -23,6 +25,12 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
     //       pondId: controller.pond.id.toString());
     // });
     controller.getTransfertData(context);
+  }
+
+  @override
+  void dispose() {
+    controller.postDataLog(controller.fitur);
+    super.dispose();
   }
 
   @override
@@ -47,7 +55,7 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 5,
                 ),
               ],
@@ -79,14 +87,14 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
           margin: EdgeInsets.only(right: defaultMargin, left: defaultMargin),
           child: Center(
             child: Column(children: [
-              const SizedBox(height: 35),
-              const Image(
+              SizedBox(height: 35),
+              Image(
                 image: AssetImage("assets/unavailable_icon.png"),
                 width: 100,
                 height: 100,
                 fit: BoxFit.fitWidth,
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Text(
                 "Kolam belum pernah melakukan transfer ikan",
                 style: primaryTextStyle.copyWith(
@@ -97,7 +105,7 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               Text(
                 "Silahkan masukan transfer ikan",
                 style: secondaryTextStyle.copyWith(
@@ -117,10 +125,11 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
         return Scaffold(
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              Get.to(() => const FishTransferEntryPage(), arguments: {
+              Get.to(() => const NewFishTransferEntryPage(), arguments: {
                 "pond": controller.pond,
                 "activation": controller.activation
               });
+              controller.postDataLog(controller.fitur);
             },
             backgroundColor: primaryColor,
             child: const Icon(Icons.add),
@@ -132,7 +141,7 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
               controller.listTransfer.isEmpty
                   ? emptyListTransfer()
                   : listTransfer(),
-              const SizedBox(
+              SizedBox(
                 height: 10,
               )
             ],

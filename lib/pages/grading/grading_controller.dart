@@ -7,6 +7,8 @@ import 'package:fish/models/pond_model.dart';
 import 'package:fish/service/fish_grading_service.dart';
 import 'package:get/get.dart';
 
+import '../../service/logging_service.dart';
+
 class GradingController extends GetxController {
   final charNilaMerahData = <GradingChartData>[].obs;
   final charLeleData = <GradingChartData>[].obs;
@@ -63,8 +65,8 @@ class GradingController extends GetxController {
         charNilaHitamData.add(i);
       }
     }
-    // print("penanda");
-    // print(charLeleData);
+    print("penanda");
+    print(charLeleData);
     isLoading.value = false;
   }
 
@@ -75,5 +77,22 @@ class GradingController extends GetxController {
         .fetchFishGradings(activationId: activation_id);
     list_fishGrading.addAll(feedHistoryMonthly);
     // isLoading.value = false;
+  }
+
+  final DateTime startTime = DateTime.now();
+  late DateTime endTime;
+  final fitur = 'Grading';
+
+  Future<void> postDataLog(String fitur) async {
+    // print(buildJsonFish());
+    bool value =
+        await LoggingService().postLogging(startAt: startTime, fitur: fitur);
+    print(value);
+  }
+
+  @override
+  void dispose() {
+    postDataLog(fitur);
+    super.dispose();
   }
 }

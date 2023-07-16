@@ -1,3 +1,4 @@
+import 'package:fish/controllers/daily_water/daily_water_controller.dart';
 import 'package:fish/models/daily_water_model.dart';
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/dailywater/daily_water_detail_page.dart';
@@ -12,26 +13,27 @@ class DailyWaterCard extends StatelessWidget {
   final DailyWater? dailyWaterList;
   final Activation? activation;
   final Pond? pond;
-  const DailyWaterCard(
-      {Key? key, this.dailyWaterList, this.activation, this.pond})
+  final DailyWaterController water = Get.put(DailyWaterController());
+  DailyWaterCard({Key? key, this.dailyWaterList, this.activation, this.pond})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => const DailyWaterDetailPage(), arguments: {
+        Get.to(() => DailyWaterDetailPage(), arguments: {
           "dailywater": dailyWaterList,
           "activation": activation,
           "pond": pond,
         });
+        water.postDataLog('Daily Water Quality');
       },
       child: Container(
         width: double.infinity,
         margin: EdgeInsets.only(
           top: defaultMargin,
         ),
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: primaryColor),
@@ -88,7 +90,11 @@ class DailyWaterCard extends StatelessWidget {
                       maxLines: 1,
                     ),
                     Text(
+<<<<<<< HEAD
                       dailyWaterList!.ph_desc.toString(),
+=======
+                      dailyWaterList!.ph.toString(),
+>>>>>>> 376a24ff1f24bc5f91e6d48a775e2e6525edf55b
                       style: secondaryTextStyle.copyWith(
                         color: dailyWaterList!.ph_desc == "normal"
                             ? Colors.green
@@ -114,7 +120,11 @@ class DailyWaterCard extends StatelessWidget {
                       maxLines: 1,
                     ),
                     Text(
+<<<<<<< HEAD
                       dailyWaterList!.numDo_desc.toString(),
+=======
+                      dailyWaterList!.numDo.toString(),
+>>>>>>> 376a24ff1f24bc5f91e6d48a775e2e6525edf55b
                       style: secondaryTextStyle.copyWith(
                         color: dailyWaterList!.numDo_desc == "normal"
                             ? Colors.green

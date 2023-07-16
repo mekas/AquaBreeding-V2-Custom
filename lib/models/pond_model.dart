@@ -7,6 +7,8 @@ enum PondStatus {
   close,
 }
 
+class string {}
+
 class Pond {
   String? id;
   int? idInt;

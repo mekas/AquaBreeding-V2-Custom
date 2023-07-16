@@ -2,6 +2,7 @@ import 'package:fish/controllers/weeklywater/weekly_water_entry_controller.dart'
 import 'package:fish/controllers/weeklywater/weekly_water_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class WeeklyWaterEntryPage extends StatelessWidget {
@@ -29,12 +30,12 @@ class WeeklyWaterEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -45,6 +46,9 @@ class WeeklyWaterEntryPage extends StatelessWidget {
                 child: TextFormField(
                   style: primaryTextStyle,
                   keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
                   controller: controller.amoniaController,
                   decoration: InputDecoration.collapsed(
                     hintText: 'ex: 20',
@@ -72,12 +76,12 @@ class WeeklyWaterEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -88,6 +92,9 @@ class WeeklyWaterEntryPage extends StatelessWidget {
                 child: TextFormField(
                   style: primaryTextStyle,
                   keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
                   controller: controller.flocController,
                   decoration: InputDecoration.collapsed(
                     hintText: 'ex: 2',
@@ -115,12 +122,12 @@ class WeeklyWaterEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -131,6 +138,9 @@ class WeeklyWaterEntryPage extends StatelessWidget {
                 child: TextFormField(
                   style: primaryTextStyle,
                   keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
                   controller: controller.nitriteController,
                   decoration: InputDecoration.collapsed(
                     hintText: 'ex: 2',
@@ -158,12 +168,12 @@ class WeeklyWaterEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -174,6 +184,9 @@ class WeeklyWaterEntryPage extends StatelessWidget {
                 child: TextFormField(
                   style: primaryTextStyle,
                   keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
                   controller: controller.nitrateController,
                   decoration: InputDecoration.collapsed(
                     hintText: 'ex: 2',
@@ -201,12 +214,12 @@ class WeeklyWaterEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -217,6 +230,9 @@ class WeeklyWaterEntryPage extends StatelessWidget {
                 child: TextFormField(
                   style: primaryTextStyle,
                   keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
                   controller: controller.hardnessController,
                   decoration: InputDecoration.collapsed(
                     hintText: 'ex: 2',
@@ -252,7 +268,7 @@ class WeeklyWaterEntryPage extends StatelessWidget {
                       weeklyWaterControlller.getWeeklyWaterData(context);
                     },
                   );
-
+            controller.postDataLog(controller.fitur);
             // controller.getWeek();
           },
           style: TextButton.styleFrom(
@@ -304,7 +320,7 @@ class WeeklyWaterEntryPage extends StatelessWidget {
               nitrateInput(),
               hardnessInput(),
               submitButton(),
-              const SizedBox(
+              SizedBox(
                 height: 8,
               )
             ],

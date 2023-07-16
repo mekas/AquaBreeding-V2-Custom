@@ -1,3 +1,4 @@
+import 'package:fish/pages/treatment/treatment_detail_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
@@ -30,7 +31,7 @@ class DetailSortirPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 5,
                 ),
               ],
@@ -69,7 +70,7 @@ class DetailSortirPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
               ],
@@ -171,7 +172,7 @@ class DetailSortirPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -192,7 +193,7 @@ class DetailSortirPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -266,7 +267,7 @@ class DetailSortirPage extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -287,7 +288,7 @@ class DetailSortirPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
               ],
@@ -312,7 +313,7 @@ class DetailSortirPage extends StatelessWidget {
               titleRecap(),
               dataTreatment(),
               detailSortir(),
-              const SizedBox(
+              SizedBox(
                 height: 10,
               )
             ],

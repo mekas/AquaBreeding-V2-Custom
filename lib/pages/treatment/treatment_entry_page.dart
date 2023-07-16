@@ -1,16 +1,17 @@
-// ignore_for_file: use_build_context_synchronously
-
+import 'package:fish/models/fish_model.dart';
 import 'package:fish/pages/component/treatment_berat_input_card.dart';
 import 'package:fish/pages/treatment/treatment_entry_controller.dart';
 import 'package:fish/pages/treatment/treatment_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:fish/pages/pond/detail_pond_controller.dart';
 import 'package:fish/theme.dart';
 
+import 'package:fish/pages/component/deactivation_list_input.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class TreatmentEntryPage extends StatefulWidget {
-  const TreatmentEntryPage({Key? key}) : super(key: key);
+  TreatmentEntryPage({Key? key}) : super(key: key);
   @override
   State<TreatmentEntryPage> createState() => _TreatmentEntryPageState();
 }
@@ -32,6 +33,22 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
   }
 
   @override
+  void dispose() {
+    controller.postDataLog(controller.fitur);
+    controller.carbonController.clear();
+    controller.descController.clear();
+    controller.leleWeightController.clear();
+    controller.masWeightController.clear();
+    controller.nilaHitamWeightController.clear();
+    controller.nilaMerahWeightController.clear();
+    controller.patinWeightController.clear();
+    controller.saltController.clear();
+    controller.waterController.clear();
+    controller.probioticController.clear();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Widget descInput() {
       return Container(
@@ -47,12 +64,12 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -75,47 +92,47 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
       );
     }
 
-    // Widget carbonTypeNullInput() {
-    //   return Container(
-    //     margin: EdgeInsets.only(
-    //         top: defaultSpace, right: defaultMargin, left: defaultMargin),
-    //     child: Column(
-    //       crossAxisAlignment: CrossAxisAlignment.start,
-    //       children: [
-    //         Text(
-    //           'Deskripsi',
-    //           style: primaryTextStyle.copyWith(
-    //             fontSize: 16,
-    //             fontWeight: medium,
-    //           ),
-    //         ),
-    //         const SizedBox(
-    //           height: 12,
-    //         ),
-    //         Container(
-    //           height: 50,
-    //           padding: const EdgeInsets.symmetric(
-    //             horizontal: 16,
-    //           ),
-    //           decoration: BoxDecoration(
-    //             color: backgroundColor2,
-    //             borderRadius: BorderRadius.circular(12),
-    //           ),
-    //           child: Center(
-    //             child: TextFormField(
-    //               style: primaryTextStyle,
-    //               controller: controller.carbonTypeNullController,
-    //               decoration: InputDecoration.collapsed(
-    //                 hintText: 'ex: Ikan Sakit',
-    //                 hintStyle: subtitleTextStyle,
-    //               ),
-    //             ),
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   );
-    // }
+    Widget carbonTypeNullInput() {
+      return Container(
+        margin: EdgeInsets.only(
+            top: defaultSpace, right: defaultMargin, left: defaultMargin),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Deskripsi',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Container(
+              height: 50,
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              decoration: BoxDecoration(
+                color: backgroundColor2,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: TextFormField(
+                  style: primaryTextStyle,
+                  controller: controller.carbonTypeNullController,
+                  decoration: InputDecoration.collapsed(
+                    hintText: 'ex: Ikan Sakit',
+                    hintStyle: subtitleTextStyle,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
 
     Widget waterChangeInput() {
       return Container(
@@ -131,12 +148,12 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -145,6 +162,10 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
               ),
               child: Center(
                 child: TextFormField(
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
+                  keyboardType: TextInputType.number,
                   style: primaryTextStyle,
                   controller: controller.waterController,
                   decoration: InputDecoration.collapsed(
@@ -163,77 +184,42 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
       return Container(
         margin: EdgeInsets.only(
             top: defaultSpace, right: defaultMargin, left: defaultMargin),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Dosis Garam (Kg)',
-                  style: primaryTextStyle.copyWith(
-                    fontSize: 16,
-                    fontWeight: medium,
-                  ),
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width / 2.6,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                  ),
-                  decoration: BoxDecoration(
-                    color: backgroundColor2,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(
-                    child: TextFormField(
-                      style: primaryTextStyle,
-                      controller: controller.saltController,
-                      decoration: InputDecoration.collapsed(
-                        hintText: 'ex: 20',
-                        hintStyle: subtitleTextStyle,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            Text(
+              'Dosis Garam (Kg)',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Stok Garam',
-                  style: primaryTextStyle.copyWith(
-                    fontSize: 16,
-                    fontWeight: medium,
+            SizedBox(
+              height: 12,
+            ),
+            Container(
+              height: 50,
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              decoration: BoxDecoration(
+                color: backgroundColor2,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: TextFormField(
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
+                  keyboardType: TextInputType.number,
+                  style: primaryTextStyle,
+                  controller: controller.saltController,
+                  decoration: InputDecoration.collapsed(
+                    hintText: 'ex: 20',
+                    hintStyle: subtitleTextStyle,
                   ),
                 ),
-                const SizedBox(
-                  height: 12,
-                ),
-                Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width / 2.6,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                  ),
-                  decoration: BoxDecoration(
-                    color: backgroundColor2,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(
-                    child: Text(
-                      '100 gram',
-                      textAlign: TextAlign.start,
-                      style: headingText2,
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ],
         ),
@@ -254,12 +240,12 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -282,8 +268,7 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
                         );
                       }).toList(),
                       dropdownColor: backgroundColor5,
-                      decoration:
-                          const InputDecoration(border: InputBorder.none),
+                      decoration: InputDecoration(border: InputBorder.none),
                     )),
               ),
             ),
@@ -322,12 +307,12 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -338,7 +323,7 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
                 child: TextFormField(
                   style: primaryTextStyle,
                   inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
                   ],
                   keyboardType: TextInputType.number,
                   controller: controller.probioticController,
@@ -358,81 +343,42 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
       return Container(
         margin: EdgeInsets.only(
             top: defaultSpace, right: defaultMargin, left: defaultMargin),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Karbon (gram)',
-                  style: primaryTextStyle.copyWith(
-                    fontSize: 16,
-                    fontWeight: medium,
-                  ),
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width / 2.6,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                  ),
-                  decoration: BoxDecoration(
-                    color: backgroundColor2,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(
-                    child: TextFormField(
-                      style: primaryTextStyle,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                      keyboardType: TextInputType.number,
-                      controller: controller.carbonController,
-                      decoration: InputDecoration.collapsed(
-                        hintText: 'ex: 2',
-                        hintStyle: subtitleTextStyle,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            Text(
+              'Karbon (gram)',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Stok Karbon',
-                  style: primaryTextStyle.copyWith(
-                    fontSize: 16,
-                    fontWeight: medium,
+            SizedBox(
+              height: 12,
+            ),
+            Container(
+              height: 50,
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              decoration: BoxDecoration(
+                color: backgroundColor2,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: TextFormField(
+                  style: primaryTextStyle,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
+                  keyboardType: TextInputType.number,
+                  controller: controller.carbonController,
+                  decoration: InputDecoration.collapsed(
+                    hintText: 'ex: 2',
+                    hintStyle: subtitleTextStyle,
                   ),
                 ),
-                const SizedBox(
-                  height: 12,
-                ),
-                Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width / 2.6,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                  ),
-                  decoration: BoxDecoration(
-                    color: backgroundColor2,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(
-                    child: Text(
-                      '100 gram',
-                      textAlign: TextAlign.start,
-                      style: headingText2,
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ],
         ),
@@ -498,12 +444,12 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -516,18 +462,17 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
                           .setSelected(newValue!),
                       value: controller.carbonTypeController.selected.value,
                       items: controller.carbonTypeController.listCarbon
-                          .map((carbohydrateType) {
+                          .map((carbohydrate_type) {
                         return DropdownMenuItem<String>(
-                          value: carbohydrateType,
+                          value: carbohydrate_type,
                           child: Text(
-                            carbohydrateType,
+                            carbohydrate_type,
                             style: primaryTextStyle,
                           ),
                         );
                       }).toList(),
                       dropdownColor: backgroundColor5,
-                      decoration:
-                          const InputDecoration(border: InputBorder.none),
+                      decoration: InputDecoration(border: InputBorder.none),
                     )),
               ),
             ),
@@ -649,6 +594,7 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
                       treatmentTontroller.getTreatmentData(context);
                     },
                   );
+            controller.postDataLog(controller.fitur);
           },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
@@ -680,9 +626,10 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
               context,
               () {
                 Navigator.pop(context);
+                treatmentTontroller.getTreatmentData(context);
               },
             );
-            treatmentTontroller.getTreatmentData(context);
+            controller.postDataLog(controller.fitur);
           },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
@@ -747,7 +694,7 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
               controller.typeController.selected.value == "berat"
                   ? submitBeratButton()
                   : submitButton(),
-              const SizedBox(
+              SizedBox(
                 height: 8,
               )
             ],

@@ -1,16 +1,19 @@
-// ignore_for_file: unused_local_variable
-
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:fish/pages/treatment/carbon_type_controller.dart';
 import 'package:fish/service/fish_transfer_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../models/new_sortir_model.dart';
+import '../../service/logging_service.dart';
 import '../../service/pond_service.dart';
 import 'pond_list_item_controller.dart';
 import 'transfer_method_controller.dart';
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/models/activation_model.dart';
+
+import 'transfer_type_controller.dart';
 
 class FishTransferEntryController extends GetxController {
   var isLoading = false.obs;
@@ -26,6 +29,16 @@ class FishTransferEntryController extends GetxController {
   var leleAmount = 0.obs;
   var patinAmount = 0.obs;
   var masAmount = 0.obs;
+  RxInt nilamerahAmountChecker = 0.obs;
+  RxInt nilahitamAmountChecker = 0.obs;
+  RxInt leleAmountChecker = 0.obs;
+  RxInt patinAmountChecker = 0.obs;
+  RxInt masAmountChecker = 0.obs;
+  RxInt nilamerahAmountComparator = 0.obs;
+  RxInt nilahitamAmountComparator = 0.obs;
+  RxInt leleAmountComparator = 0.obs;
+  RxInt patinAmountComparator = 0.obs;
+  RxInt masAmountComparator = 0.obs;
   var nilamerahWeight = 0.obs;
   var nilahitamWeight = 0.obs;
   var leleWeight = 0.obs;
@@ -48,6 +61,8 @@ class FishTransferEntryController extends GetxController {
 //input transfer
   PondListController pondlistController = PondListController();
   TransferMethodController methodController = TransferMethodController();
+  TransferTypeController typeController = TransferTypeController();
+
   TextEditingController sampleWeightController =
       TextEditingController(text: '0');
 
@@ -130,26 +145,78 @@ class FishTransferEntryController extends GetxController {
   RxList<String> listPondName = List<String>.empty().obs;
   final pondSelected = <Pond>[].obs;
   var pondIdSelected = "";
+  RxList<String> pondIdList = <String>[].obs;
+  final listPond = <ListPondSortir>[].obs;
+  final listPondSelected = <ListPondSortir>[].obs;
+
+  Future<void> setData(List<ListPondSortir> value) async {
+    isLoading.value = true;
+    listPondSelected.value = value;
+    isLoading.value = false;
+  }
 
   Future<void> getPondsData(String method) async {
     isLoading.value = true;
     List<Pond> pondsData = await PondService().getPonds();
-    listPondName.clear();
+    listPond.clear();
     if (method == "kering") {
-      listPondName.add("pilih kolam");
       for (var i in pondsData) {
-        listPondName.add(i.alias.toString());
+        if (i.alias != pond.alias) {
+          ListPondSortir pond = ListPondSortir(
+              id: i.id, isInputed: false, name: i.alias, isActive: i.isActive);
+          listPond.add(pond);
+        }
       }
     } else {
-      listPondName.add("pilih kolam");
       for (var i in pondsData) {
-        if (i.isActive == true) {
-          listPondName.add(i.alias.toString());
+        if (i.alias != pond.alias) {
+          if (i.isActive == true) {
+            ListPondSortir pond = ListPondSortir(
+                id: i.id,
+                isInputed: false,
+                name: i.alias,
+                isActive: i.isActive);
+            listPond.add(pond);
+          }
         }
       }
     }
     isLoading.value = false;
   }
+  // Future<void> getPondsData(String method) async {
+  //   isLoading.value = true;
+  //   int index = 0;
+  //   List<Pond> pondsData = await PondService().getPonds();
+  //   listPondName.clear();
+  //   if (method == "kering") {
+  //     for (var i in pondsData) {
+  //       if (pondlistController.listPondSelected.isEmpty) {
+  //         listPondName.add(i.alias.toString());
+  //       } else {
+  //         if (i.id != pondlistController.listPondSelected[index].id) {
+  //           listPondName.add(i.alias.toString());
+  //         } else {
+  //           index++;
+  //         }
+  //       }
+  //     }
+  //   } else {
+  //     for (var i in pondsData) {
+  //       if (i.isActive == true) {
+  //         if (pondlistController.listPondSelected.isEmpty) {
+  //           listPondName.add(i.alias.toString());
+  //         } else {
+  //           if (i.id != pondlistController.listPondSelected[index].id) {
+  //             listPondName.add(i.alias.toString());
+  //           } else {
+  //             index++;
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  //   isLoading.value = false;
+  // }
 
   Future<void> getDestinationId(String alias) async {
     isLoading.value = true;
@@ -162,6 +229,8 @@ class FishTransferEntryController extends GetxController {
         pondIdSelected = i.id.toString();
       }
     }
+    print(pondIdSelected);
+    print(pondSelected);
     isLoading.value = false;
   }
 
@@ -176,6 +245,7 @@ class FishTransferEntryController extends GetxController {
         sample_long: sampleLongController.value.text,
         sample_weight: sampleweight.toString(),
         fish: buildJsonFish());
+    print(value);
     doInPost();
   }
 
@@ -183,18 +253,23 @@ class FishTransferEntryController extends GetxController {
     for (var i in activation.fishLive!) {
       if (i.type == 'lele') {
         isLele.value = true;
+        leleAmountChecker.value = i.amount!;
       }
       if (i.type == 'patin') {
         isPatin.value = true;
+        patinAmountChecker.value = i.amount!;
       }
       if (i.type == 'mas') {
         isMas.value = true;
+        masAmountChecker.value = i.amount!;
       }
       if (i.type == 'nila hitam') {
         isNilaHitam.value = true;
+        nilahitamAmountChecker.value = i.amount!;
       }
       if (i.type == 'nila merah') {
         isNilaMerah.value = true;
+        nilamerahAmountChecker.value = i.amount!;
       }
     }
   }
@@ -222,6 +297,8 @@ class FishTransferEntryController extends GetxController {
   List buildJsonFish() {
     var data = [];
     if (isNilaMerahInput.value == true) {
+      nilamerahAmountComparator +
+          int.parse(nilaMerahAmountController.value.text);
       var fishData = {
         "type": "nila merah",
         "amount": nilaMerahAmountController.value.text,
@@ -230,6 +307,8 @@ class FishTransferEntryController extends GetxController {
       data.add(jsonEncode(fishData));
     }
     if (isNilaHitamInput.value == true) {
+      nilahitamAmountComparator +
+          int.parse(nilaHitamAmountController.value.text);
       var fishData = {
         "type": "nila hitam",
         "amount": nilaHitamAmountController.value.text,
@@ -238,6 +317,7 @@ class FishTransferEntryController extends GetxController {
       data.add(jsonEncode(fishData));
     }
     if (isLeleInput.value == true) {
+      leleAmountComparator + int.parse(leleAmountController.value.text);
       var fishData = {
         "type": "lele",
         "amount": leleAmountController.value.text,
@@ -246,6 +326,7 @@ class FishTransferEntryController extends GetxController {
       data.add(jsonEncode(fishData));
     }
     if (isPatinInput.value == true) {
+      patinAmountComparator + int.parse(patinAmountController.value.text);
       var fishData = {
         "type": "patin",
         "amount": patinAmountController.value.text,
@@ -254,6 +335,7 @@ class FishTransferEntryController extends GetxController {
       data.add(jsonEncode(fishData));
     }
     if (isMasInput.value == true) {
+      masAmountComparator + int.parse(masAmountController.value.text);
       var fishData = {
         "type": "mas",
         "amount": masAmountController.value.text,
@@ -439,6 +521,7 @@ class FishTransferEntryController extends GetxController {
         fishstock: buildJsonFishActivation(),
         fishharvested: buildJsonFishDeactivation(),
         water_level: waterHeightController.value.text);
+    print(value);
     doInPost();
   }
 
@@ -560,5 +643,15 @@ class FishTransferEntryController extends GetxController {
 
   void valpatinWeightval() {
     validatepatinWeightval.value = true;
+  }
+
+  final DateTime startTime = DateTime.now();
+  late DateTime endTime;
+  final fitur = 'Fist Transfer(Sortir)';
+
+  Future<void> postDataLog(String fitur) async {
+    // print(buildJsonFish());
+    bool value =
+        await LoggingService().postLogging(startAt: startTime, fitur: fitur);
   }
 }

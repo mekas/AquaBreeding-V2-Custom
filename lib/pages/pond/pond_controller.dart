@@ -1,6 +1,5 @@
-// ignore_for_file: unused_local_variable
-
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/dashboard.dart';
@@ -16,7 +15,9 @@ class PondController extends GetxController {
   var isLoading = false.obs;
   final ponds = <Pond>[].obs;
   final pondFiltered = <Pond>[].obs;
+  late Rx<Pond> selectedPond;
   String token = '';
+  String identity = '';
   String status = "Tidak Aktif";
   bool chipSelected = false;
 
@@ -80,10 +81,24 @@ class PondController extends GetxController {
     validateHeight.value = true;
   }
 
+  Pond getSelectedPond() {
+    return ponds.firstWhere((pond) => pond.id == selectedPond.value);
+  }
+
+  void updateSelectedPond(pondid) {
+    try {
+      selectedPond.value = ponds.firstWhere((pond) => pond.id == pondid);
+    } catch (e) {
+      selectedPond = Rx<Pond>(ponds.firstWhere((pond) => pond.id == pondid));
+    }
+  }
+
   Future<void> getPondsData(BuildContext context) async {
     WidgetsFlutterBinding.ensureInitialized();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     token = prefs.getString('token').toString();
+    identity = prefs.getString('identity').toString();
+    log("ini prefs $identity");
     isLoading.value = true;
     ponds.clear();
     List<Pond> pondsData = await PondService().getPonds();
@@ -102,14 +117,17 @@ class PondController extends GetxController {
         width: widthController.text,
         diameter: diameterController.text,
         status: status,
-        height: heightController.text);
-    doInPost();
-    Get.to(() => const DashboardPage());
+        height: heightController.text,
+        doInPost: doInPost,
+        context: context);
+    print(value);
   }
 
   Future<void> getPondsFiltered(String statusFilter) async {
     isLoading.value = true;
     ponds.clear();
+    print(statusFilter);
+    print(statusFilter);
     List<Pond> filter = await PondService().getPonds();
     for (var i in filter) {
       if (i.status == statusFilter) {
@@ -117,11 +135,21 @@ class PondController extends GetxController {
         var testing = filter.where((element) => element.status == statusFilter);
         // print(testing.toString());
         ponds.addAll(testing);
+        print(pondFiltered);
       }
       if (statusFilter == 'all') {
         ponds.addAll(filter);
       }
     }
     isLoading.value = false;
+  }
+
+  late DateTime startTime;
+  late DateTime endTime;
+  final fitur = 'List Pond';
+
+  void onInit() {
+    startTime = DateTime.now();
+    super.onInit();
   }
 }

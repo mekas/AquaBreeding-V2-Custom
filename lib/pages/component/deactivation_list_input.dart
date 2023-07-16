@@ -1,8 +1,8 @@
 import 'package:fish/models/fish_model.dart';
-import 'package:fish/widgets/dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/pages/pond/deactivation_breed_controller.dart';
 import 'package:fish/theme.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class DeactivationListCard extends StatelessWidget {
@@ -19,7 +19,6 @@ class DeactivationListCard extends StatelessWidget {
       margin: EdgeInsets.only(
         top: defaultMargin / 2,
       ),
-      padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -29,11 +28,14 @@ class DeactivationListCard extends StatelessWidget {
             children: [
               Text(
                 fish.type!,
-                style: headingText2,
+                style: primaryTextStyle.copyWith(
+                  fontSize: 18,
+                  fontWeight: medium,
+                ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
-              const SizedBox(
+              SizedBox(
                 width: 6,
               ),
               Text(
@@ -47,12 +49,16 @@ class DeactivationListCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
-            height: 6,
+          Text(
+            'Berat Ikan Total (Kg)',
+            style: primaryTextStyle.copyWith(
+              fontSize: 12,
+              fontWeight: medium,
+            ),
           ),
           Container(
             height: 50,
-            padding: const EdgeInsets.symmetric(
+            padding: EdgeInsets.symmetric(
               horizontal: 16,
             ),
             decoration: BoxDecoration(
@@ -62,6 +68,9 @@ class DeactivationListCard extends StatelessWidget {
             child: Center(
               child: TextFormField(
                 style: primaryTextStyle,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.deny(RegExp(r'[-,\s]'))
+                ],
                 controller: fish.type! == "lele"
                     ? controller.leleWeightController
                     : fish.type! == "patin"
@@ -72,144 +81,14 @@ class DeactivationListCard extends StatelessWidget {
                                 ? controller.nilaMerahWeightController
                                 : controller.masWeightController,
                 decoration: InputDecoration.collapsed(
-                  hintText: 'Total Berat Ikan (Kg)',
+                  hintText: 'ex 2.3',
                   hintStyle: subtitleTextStyle,
                 ),
               ),
             ),
           ),
-          SizedBox(
-            height: 12,
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                'Harga',
-                style: headingText2,
-              ),
-              SizedBox(
-                width: 8,
-              ),
-              GestureDetector(
-                onTap: () {
-                  openDetailPriceDialog(context);
-                  print('hHH');
-                },
-                child: Icon(
-                  Icons.info_outline,
-                  color: Colors.grey,
-                  size: 18,
-                ),
-              )
-            ],
-          ),
-          Container(
-            height: 50,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-            ),
-            decoration: BoxDecoration(
-              color: backgroundColor1,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 12),
-                  child: Text(
-                    'Rp',
-                    style: hoverText.copyWith(
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    style: headingText3,
-                    enabled: false,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: '100,000.00 / ekor',
-                      hintStyle: hoverText.copyWith(
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
-    );
-  }
-
-  openDetailPriceDialog(BuildContext context) {
-    DialogWidget.open(
-      context,
-      [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: const CircleAvatar(
-                backgroundColor: Colors.red,
-                radius: 12,
-                child: Icon(
-                  Icons.close,
-                  size: 14,
-                  color: Colors.black,
-                ),
-              ),
-            )
-          ],
-        ),
-        Text(
-          'Harga Ikan',
-          style: headingText2,
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(
-          height: 24,
-        ),
-        Text(
-          'Harga ikan dihitung berdasarkan formula berikut.',
-          style: headingText3,
-        ),
-        SizedBox(
-          height: 14,
-        ),
-        Text(
-          '1. Harga Total',
-          style: headingText3,
-        ),
-        SizedBox(
-          height: 8,
-        ),
-        Text(
-          'Harga benih + harga pakan + (harga listrik / jumlah kolam) + harga bahan budidaya',
-          style: hoverText.copyWith(fontSize: 12),
-        ),
-        SizedBox(
-          height: 8,
-        ),
-        Text(
-          '2. Harga Individu (per ekor)',
-          style: headingText3,
-        ),
-        SizedBox(
-          height: 8,
-        ),
-        Text(
-          'Harga total / jumlah ikan hidup pada kolam',
-          style: hoverText.copyWith(fontSize: 12),
-        )
-      ],
     );
   }
 }

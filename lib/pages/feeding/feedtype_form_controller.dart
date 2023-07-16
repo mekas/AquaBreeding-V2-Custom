@@ -11,16 +11,16 @@ class FeedTypeFormController extends GetxController {
     selected.value = value;
   }
 
-  // Future<void> getData() async {
-  //   listFeedType.clear();
-  //   List<FeedType> feedtypes = await FeedTypeService().fetchFeedType();
-  //   listFeedType.addAll(feedtypes);
-  //   setSelected(listFeedType[0].type!);
-  //   super.onInit();
-  // }
+  Future<void> getData() async {
+    listFeedType.clear();
+    List<FeedType> feedtypes = await FeedTypeService().fetchFeedType();
+    listFeedType.addAll(feedtypes);
+    setSelected(listFeedType[0].type!);
+    super.onInit();
+  }
 
   String? getIdByName() {
-    // print(selected);
+    print(selected);
     for (FeedType feedType in listFeedType) {
       if (feedType.type == selected.value) {
         return feedType.id;

@@ -15,7 +15,7 @@ class FishListCard extends StatelessWidget {
       margin: EdgeInsets.only(
         top: defaultMargin / 2,
       ),
-      padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 25),
+      padding: EdgeInsets.symmetric(vertical: 7, horizontal: 25),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: primaryColor),

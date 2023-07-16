@@ -1,5 +1,3 @@
-// ignore_for_file: unrelated_type_equality_checks
-
 import 'package:fish/pages/fish/fish_death_entry_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
@@ -31,12 +29,12 @@ class FishDeathEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -48,7 +46,7 @@ class FishDeathEntryPage extends StatelessWidget {
                       onChanged: (newValue) =>
                           controller.fishTypeController.setSelected(newValue!),
                       value: controller.fishTypeController.selected.value,
-                      items: controller.fishTypeController.listFish.map((fish) {
+                      items: controller.listFishAlive.map((fish) {
                         return DropdownMenuItem<String>(
                           value: fish,
                           child: Text(
@@ -58,8 +56,7 @@ class FishDeathEntryPage extends StatelessWidget {
                         );
                       }).toList(),
                       dropdownColor: backgroundColor5,
-                      decoration:
-                          const InputDecoration(border: InputBorder.none),
+                      decoration: InputDecoration(border: InputBorder.none),
                     )),
               ),
             ),
@@ -82,12 +79,12 @@ class FishDeathEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -106,7 +103,7 @@ class FishDeathEntryPage extends StatelessWidget {
                   controller: controller.formDeathController,
                   decoration: controller.validatefishamount.value == true
                       ? controller.fishamount == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'jumlah ikan tidak boleh kosong',
                               isCollapsed: true)
                           : null
@@ -130,13 +127,20 @@ class FishDeathEntryPage extends StatelessWidget {
           onPressed: () async {
             controller.formDeathController.text == ""
                 ? null
-                : Navigator.pop(context);
-            controller.postFishDeath();
-            deathcontroller.getFishDeaths(
-                activation_id: controller.activation.id.toString());
+                : await controller.postFishDeath(
+                    context,
+                    () {
+                      deathcontroller.getFishDeaths(
+                          activation_id: controller.activation.id.toString());
+                      // Get.off(MyTabPondScreen(), arguments: {
+                      //   'pond': controller.pond,
+                      // });
+                    },
+                  );
+
             deathcontroller.getcharData(
                 activation_id: controller.activation.id.toString());
-            // print(deathcontroller.charData);
+            controller.postDataLog(controller.fitur);
           },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
@@ -168,7 +172,7 @@ class FishDeathEntryPage extends StatelessWidget {
               fishTypeInput(),
               fishDeathAmountInput(),
               submitButton(),
-              const SizedBox(
+              SizedBox(
                 height: 8,
               )
             ],

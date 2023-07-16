@@ -1,5 +1,3 @@
-// ignore_for_file: unused_local_variable
-
 import 'dart:async';
 import 'dart:convert';
 
@@ -8,6 +6,7 @@ import 'package:fish/service/treatment_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../service/logging_service.dart';
 import 'treatment_type_controller.dart';
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/models/activation_model.dart';
@@ -65,7 +64,7 @@ class TreatmentEntryController extends GetxController {
         carbohydrate_type: carbonTypeController.selected.value == "tidak ada"
             ? carbonTypeNullController.value.text
             : carbonTypeController.selected.value);
-    // print(value);
+    print(value);
     doInPost();
   }
 
@@ -173,7 +172,17 @@ class TreatmentEntryController extends GetxController {
         total_weight_harvested: getWeight(),
         isFinish: true,
         fish_harvested: buildJsonFish());
-    // print(value);
+    print(value);
     doInPost();
+  }
+
+  final DateTime startTime = DateTime.now();
+  late DateTime endTime;
+  final fitur = 'Pond Treatment';
+
+  Future<void> postDataLog(String fitur) async {
+    // print(buildJsonFish());
+    bool value =
+        await LoggingService().postLogging(startAt: startTime, fitur: fitur);
   }
 }

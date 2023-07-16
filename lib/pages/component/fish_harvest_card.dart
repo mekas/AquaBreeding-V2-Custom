@@ -1,3 +1,4 @@
+import 'package:fish/models/fish_model.dart';
 import 'package:fish/models/fish_harvested.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,7 @@ class FishHarvestCard extends StatelessWidget {
       margin: EdgeInsets.only(
         top: defaultMargin / 2,
       ),
-      padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 25),
+      padding: EdgeInsets.symmetric(vertical: 7, horizontal: 25),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: primaryColor),

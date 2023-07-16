@@ -1,5 +1,3 @@
-// ignore_for_file: unused_local_variable
-
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/grading/fish_type_controller.dart';
 import 'package:fish/service/fish_grading_service.dart';
@@ -7,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../models/activation_model.dart';
+import '../../service/logging_service.dart';
 
 class GradingEntryController extends GetxController {
   TextEditingController fishWeightController = TextEditingController(text: '');
@@ -21,6 +20,23 @@ class GradingEntryController extends GetxController {
   var isLoading = false.obs;
   Pond pond = Get.arguments['pond'];
   Activation activation = Get.arguments["activation"];
+  RxList<String> listFishAlive = List<String>.empty().obs;
+
+  Future<void> getFish() async {
+    isLoading.value = true;
+    listFishAlive.add("pilih ikan");
+    for (var i in activation.fishLive!) {
+      listFishAlive.add(i.type!);
+      print(listFishAlive);
+    }
+    isLoading.value = false;
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    getFish();
+  }
 
   final fishWeight = ''.obs;
   final validatefishWeight = false.obs;
@@ -93,6 +109,30 @@ class GradingEntryController extends GetxController {
       amountOver: oversizeController.value.text,
       amountUnder: undersizeController.value.text,
     );
-    // print(value);
+    print(value);
+  }
+
+  final DateTime startTime = DateTime.now();
+  late DateTime endTime;
+  final fitur = 'Grading';
+
+  Future<void> postDataLog(String fitur) async {
+    // print(buildJsonFish());
+    bool value =
+        await LoggingService().postLogging(startAt: startTime, fitur: fitur);
+
+    print(value);
+  }
+
+  @override
+  void dispose() {
+    postDataLog(fitur);
+    sampleAmountController.clear();
+    fishWeightController.clear();
+    fishLengthAvgController.clear();
+    normalsizeController.clear();
+    oversizeController.clear();
+    undersizeController.clear();
+    super.dispose();
   }
 }

@@ -1,11 +1,11 @@
-// ignore_for_file: unused_local_variable
-
 import 'dart:async';
 import 'package:fish/service/weekly_water_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/models/activation_model.dart';
+
+import '../../service/logging_service.dart';
 
 class WeeklyWaterEntryController extends GetxController {
   var isLoading = false.obs;
@@ -49,6 +49,7 @@ class WeeklyWaterEntryController extends GetxController {
             ? 0.toString()
             : hardnessController.value.text,
         week: getWeek().toString());
+    print(value);
     doInPost();
   }
   // @override
@@ -80,4 +81,25 @@ class WeeklyWaterEntryController extends GetxController {
   //   await getPondsData();
   //   Get.to(() => DashboardPage());
   // }
+  final DateTime startTime = DateTime.now();
+  late DateTime endTime;
+  final fitur = 'Weekly Water Quality';
+
+  @override
+  void dispose() {
+    flocController.clear();
+    hardnessController.clear();
+    amoniaController.clear();
+    nitrateController.clear();
+    nitriteController.clear();
+    postDataLog(fitur);
+    super.dispose();
+  }
+
+  Future<void> postDataLog(String fitur) async {
+    // print(buildJsonFish());
+    bool value =
+        await LoggingService().postLogging(startAt: startTime, fitur: fitur);
+    print(value);
+  }
 }

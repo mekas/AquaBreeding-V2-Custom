@@ -1,4 +1,8 @@
+import 'dart:developer';
+
 import 'package:fish/pages/component/activation_for_water_card.dart';
+import 'package:fish/pages/pond/deactivation_breed_page.dart';
+import 'package:fish/pages/pond/detail_pond_controller.dart';
 
 import 'package:fish/controllers/daily_water/daily_water_breed_list_controller.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +52,7 @@ class _DailyWaterDetailPondPageState extends State<DailyWaterDetailPondPage> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 5,
                 ),
                 Text(
@@ -151,7 +155,7 @@ class _DailyWaterDetailPondPageState extends State<DailyWaterDetailPondPage> {
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -184,7 +188,7 @@ class _DailyWaterDetailPondPageState extends State<DailyWaterDetailPondPage> {
                             maxLines: 1,
                           )
                         : Text(
-                            "${detailController.pond.pondTemp} " "°C",
+                            "${detailController.pond.pondTemp} " + "°C",
                             style: subtitleTextStyle.copyWith(
                               fontSize: 16,
                               fontWeight: bold,
@@ -259,7 +263,7 @@ class _DailyWaterDetailPondPageState extends State<DailyWaterDetailPondPage> {
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                   ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -324,14 +328,14 @@ class _DailyWaterDetailPondPageState extends State<DailyWaterDetailPondPage> {
           margin: EdgeInsets.only(right: defaultMargin, left: defaultMargin),
           child: Center(
             child: Column(children: [
-              const SizedBox(height: 35),
-              const Image(
+              SizedBox(height: 35),
+              Image(
                 image: AssetImage("assets/unavailable_icon.png"),
                 width: 100,
                 height: 100,
                 fit: BoxFit.fitWidth,
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Text(
                 "Kolam belum pernah\nmemulai musim budidaya",
                 style: primaryTextStyle.copyWith(
@@ -342,7 +346,7 @@ class _DailyWaterDetailPondPageState extends State<DailyWaterDetailPondPage> {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               Text(
                 "Silahkan memulai musim budidaya!",
                 style: secondaryTextStyle.copyWith(
@@ -377,7 +381,7 @@ class _DailyWaterDetailPondPageState extends State<DailyWaterDetailPondPage> {
                   detailController.activations.isEmpty
                       ? emptyListActivation()
                       : listActivation(),
-                  const SizedBox(
+                  SizedBox(
                     height: 10,
                   )
                 ],

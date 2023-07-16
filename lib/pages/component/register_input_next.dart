@@ -1,8 +1,9 @@
-// ignore_for_file: unrelated_type_equality_checks
-
+import 'package:fish/models/fish_model.dart';
+import 'package:fish/pages/authentication/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import '../../controllers/authentication/register_controller.dart';
 
 class RegisterNextInputCard extends StatelessWidget {
@@ -23,12 +24,12 @@ class RegisterNextInputCard extends StatelessWidget {
             BoxShadow(
               color: backgroundColor3,
               blurRadius: 4,
-              offset: const Offset(2, 8), // Shadow position
+              offset: Offset(2, 8), // Shadow position
             ),
           ],
         ),
         width: double.infinity,
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         child: Obx(() {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,17 +47,17 @@ class RegisterNextInputCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
-                  const SizedBox(
+                  SizedBox(
                     width: 6,
                   ),
                 ],
               ),
-              const SizedBox(
+              SizedBox(
                 height: 10,
               ),
               Container(
                 height: 50,
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 16,
                 ),
                 decoration: BoxDecoration(
@@ -82,13 +83,12 @@ class RegisterNextInputCard extends StatelessWidget {
                         );
                       }).toList(),
                       dropdownColor: backgroundColor5,
-                      decoration:
-                          const InputDecoration(border: InputBorder.none),
+                      decoration: InputDecoration(border: InputBorder.none),
                     );
                   }),
                 ),
               ),
-              const SizedBox(
+              SizedBox(
                 height: 10,
               ),
               controller.hasFarmController.selected.value == "Sudah"
@@ -105,25 +105,25 @@ class RegisterNextInputCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ),
-                        const SizedBox(
+                        SizedBox(
                           width: 6,
                         ),
                       ],
                     )
-                  : const SizedBox(
+                  : SizedBox(
                       height: 0,
                     ),
               controller.hasFarmController.selected.value == "Sudah"
-                  ? const SizedBox(
+                  ? SizedBox(
                       height: 10,
                     )
-                  : const SizedBox(
+                  : SizedBox(
                       height: 0,
                     ),
               controller.hasFarmController.selected.value == "Sudah"
                   ? Container(
                       height: 50,
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 16,
                       ),
                       decoration: BoxDecoration(
@@ -150,15 +150,15 @@ class RegisterNextInputCard extends StatelessWidget {
                             }).toList(),
                             dropdownColor: backgroundColor5,
                             decoration:
-                                const InputDecoration(border: InputBorder.none),
+                                InputDecoration(border: InputBorder.none),
                           );
                         }),
                       ),
                     )
-                  : const SizedBox(
+                  : SizedBox(
                       height: 0,
                     ),
-              const SizedBox(
+              SizedBox(
                 height: 10,
               ),
               controller.hasFarmController.selected.value == "Belum"
@@ -175,25 +175,25 @@ class RegisterNextInputCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ),
-                        const SizedBox(
+                        SizedBox(
                           width: 6,
                         ),
                       ],
                     )
-                  : const SizedBox(
+                  : SizedBox(
                       height: 0,
                     ),
               controller.hasFarmController.selected.value == "Belum"
-                  ? const SizedBox(
+                  ? SizedBox(
                       height: 10,
                     )
-                  : const SizedBox(
+                  : SizedBox(
                       height: 0,
                     ),
               controller.hasFarmController.selected.value == "Belum"
                   ? Container(
                       height: 42,
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 16,
                       ),
                       decoration: BoxDecoration(
@@ -208,7 +208,7 @@ class RegisterNextInputCard extends StatelessWidget {
                           controller: controller.farmnameController,
                           decoration: controller.validatefarmName.value == true
                               ? controller.farmName == ''
-                                  ? const InputDecoration(
+                                  ? InputDecoration(
                                       errorText: 'farmName tidak boleh kosong',
                                       isCollapsed: true)
                                   : null
@@ -216,14 +216,14 @@ class RegisterNextInputCard extends StatelessWidget {
                         );
                       })),
                     )
-                  : const SizedBox(
+                  : SizedBox(
                       height: 0,
                     ),
               controller.hasFarmController.selected.value == "Belum"
-                  ? const SizedBox(
+                  ? SizedBox(
                       height: 10,
                     )
-                  : const SizedBox(
+                  : SizedBox(
                       height: 0,
                     ),
               controller.hasFarmController.selected.value == "Belum"
@@ -240,25 +240,25 @@ class RegisterNextInputCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ),
-                        const SizedBox(
+                        SizedBox(
                           width: 6,
                         ),
                       ],
                     )
-                  : const SizedBox(
+                  : SizedBox(
                       height: 0,
                     ),
               controller.hasFarmController.selected.value == "Belum"
-                  ? const SizedBox(
+                  ? SizedBox(
                       height: 10,
                     )
-                  : const SizedBox(
+                  : SizedBox(
                       height: 0,
                     ),
               controller.hasFarmController.selected.value == "Belum"
                   ? Container(
                       height: 42,
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 16,
                       ),
                       decoration: BoxDecoration(
@@ -273,7 +273,7 @@ class RegisterNextInputCard extends StatelessWidget {
                           controller: controller.addressController,
                           decoration: controller.validateaddress.value == true
                               ? controller.address == ''
-                                  ? const InputDecoration(
+                                  ? InputDecoration(
                                       errorText: 'address tidak boleh kosong',
                                       isCollapsed: true)
                                   : null
@@ -281,14 +281,14 @@ class RegisterNextInputCard extends StatelessWidget {
                         );
                       })),
                     )
-                  : const SizedBox(
+                  : SizedBox(
                       height: 0,
                     ),
               controller.hasFarmController.selected.value == "Belum"
-                  ? const SizedBox(
+                  ? SizedBox(
                       height: 10,
                     )
-                  : const SizedBox(
+                  : SizedBox(
                       height: 0,
                     ),
               controller.hasFarmController.selected.value == "Belum"
@@ -305,25 +305,25 @@ class RegisterNextInputCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ),
-                        const SizedBox(
+                        SizedBox(
                           width: 6,
                         ),
                       ],
                     )
-                  : const SizedBox(
+                  : SizedBox(
                       height: 0,
                     ),
               controller.hasFarmController.selected.value == "Belum"
-                  ? const SizedBox(
+                  ? SizedBox(
                       height: 10,
                     )
-                  : const SizedBox(
+                  : SizedBox(
                       height: 0,
                     ),
               controller.hasFarmController.selected.value == "Belum"
                   ? Container(
                       height: 42,
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 16,
                       ),
                       decoration: BoxDecoration(
@@ -337,14 +337,14 @@ class RegisterNextInputCard extends StatelessWidget {
                         ),
                       ),
                     )
-                  : const SizedBox(
+                  : SizedBox(
                       height: 0,
                     ),
               controller.hasFarmController.selected.value == "Belum"
-                  ? const SizedBox(
+                  ? SizedBox(
                       height: 10,
                     )
-                  : const SizedBox(
+                  : SizedBox(
                       height: 0,
                     ),
               controller.hasFarmController.selected.value == "Belum"
@@ -361,25 +361,25 @@ class RegisterNextInputCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ),
-                        const SizedBox(
+                        SizedBox(
                           width: 6,
                         ),
                       ],
                     )
-                  : const SizedBox(
+                  : SizedBox(
                       height: 0,
                     ),
               controller.hasFarmController.selected.value == "Belum"
-                  ? const SizedBox(
+                  ? SizedBox(
                       height: 10,
                     )
-                  : const SizedBox(
+                  : SizedBox(
                       height: 0,
                     ),
               controller.hasFarmController.selected.value == "Belum"
                   ? Container(
                       height: 42,
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 16,
                       ),
                       decoration: BoxDecoration(
@@ -393,14 +393,14 @@ class RegisterNextInputCard extends StatelessWidget {
                         ),
                       ),
                     )
-                  : const SizedBox(
+                  : SizedBox(
                       height: 0,
                     ),
               controller.hasFarmController.selected.value == "Belum"
-                  ? const SizedBox(
+                  ? SizedBox(
                       height: 10,
                     )
-                  : const SizedBox(
+                  : SizedBox(
                       height: 0,
                     ),
               Container(
@@ -432,23 +432,41 @@ class RegisterNextInputCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10),
                     Expanded(
                       child: TextButton(
                         onPressed: () {
-                          controller.hasFarmController.selected.value ==
-                                      "Sudah" &&
-                                  controller
-                                          .farmlistController.selected.value ==
-                                      "Pilih Tempat Budidaya"
-                              ? null
-                              : controller.hasFarmController.selected.value ==
-                                              "Belum" &&
-                                          controller.farmnameController.text ==
-                                              '' ||
-                                      controller.addressController.text == ''
-                                  ? null
-                                  : registerfunc.call();
+                          // controller.hasFarmController.selected.value ==
+                          //             "Sudah" &&
+                          //         controller
+                          //                 .farmlistController.selected.value ==
+                          //             "Pilih Tempat Budidaya"
+                          //     ? null
+                          //     : controller.hasFarmController.selected.value ==
+                          //                     "Belum" &&
+                          //                 controller.farmnameController.text ==
+                          //                     '' ||
+                          //             controller.addressController.text == ''
+                          //         ? null
+                          //         : registerfunc.call();
+                          if (controller.hasFarmController.selected.value ==
+                                  'Sudah' &&
+                              controller.farmlistController.selected.value ==
+                                  'Pilih Tempat Budidaya') {
+                            return null;
+                          } else if (controller
+                                      .hasFarmController.selected.value ==
+                                  'Belum' &&
+                              controller.farmnameController.text == '') {
+                            return null;
+                          } else if (controller
+                                      .hasFarmController.selected.value ==
+                                  'Belum' &&
+                              controller.addressController.text == '') {
+                            return null;
+                          } else {
+                            registerfunc.call();
+                          }
                         },
                         style: TextButton.styleFrom(
                           backgroundColor: primaryColor,
@@ -468,7 +486,7 @@ class RegisterNextInputCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(
+              SizedBox(
                 height: 6,
               ),
             ],

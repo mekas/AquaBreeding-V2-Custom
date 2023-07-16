@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../models/activation_model.dart';
+import '../../service/logging_service.dart';
 
 class FeedEntryController extends GetxController {
   TextEditingController feedDosisController = TextEditingController(text: '');
@@ -68,5 +69,23 @@ class FeedEntryController extends GetxController {
     // });
 
     // print(value);
+  }
+
+  final DateTime startTime = DateTime.now();
+  late DateTime endTime;
+  final fitur = 'Feeding';
+
+  Future<void> postDataLog(String fitur) async {
+    // print(buildJsonFish());
+    bool value =
+        await LoggingService().postLogging(startAt: startTime, fitur: fitur);
+    print(value);
+  }
+
+  @override
+  void dispose() {
+    feedDosisController.clear();
+    postDataLog(fitur);
+    super.dispose();
   }
 }

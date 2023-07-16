@@ -44,6 +44,9 @@ class Urls {
   static String fishDeath(String? activationId) =>
       '$baseUrl/fishdeath/activation/$activationId';
 
+  // Add Fish
+  static const String addFish = '$baseUrl/addfish';
+
   //Treatment
   static const String treatment = '$baseUrl/pondtreatment';
   static String pondTreatment(String? activationId) =>
@@ -58,6 +61,7 @@ class Urls {
 
   //Fish Transfer
   static String fishtransfer = '$baseUrl/fishtransfer';
+  static String newfishtransfer = '$baseUrl/fishsort';
 
   //auth
   static String authentication = '$baseUrl/login';
@@ -79,4 +83,5 @@ class Urls {
   static String seedSch = '$baseUrl/history/inventory/seed';
   static String feedSch = '$baseUrl/history/inventory/feed';
   static String suplemenSch = '$baseUrl/history/inventory/suplemen';
+  static String logging = '$baseUrl/logging';
 }

@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/fish_live_model.dart';
+import '../../service/logging_service.dart';
 
 class FishRecapController extends GetxController {
   final list_fishDeath = <FishDeath>[].obs;
@@ -33,7 +34,7 @@ class FishRecapController extends GetxController {
     List<FishDeath> fishHistory =
         await FishDeathService().fetchFishDeaths(activationId: activation_id);
     list_fishDeath.addAll(fishHistory);
-    // print(list_fishDeath);
+    print(list_fishDeath);
   }
 
   Future<void> getcharData({required String activation_id}) async {
@@ -57,5 +58,22 @@ class FishRecapController extends GetxController {
     }
     inspect(charData);
     isLoading.value = false;
+  }
+
+  final DateTime startTime = DateTime.now();
+  late DateTime endTime;
+  final fitur = 'Fish Death';
+
+  Future<void> postDataLog(String fitur) async {
+    // print(buildJsonFish());
+    bool value =
+        await LoggingService().postLogging(startAt: startTime, fitur: fitur);
+    print(value);
+  }
+
+  @override
+  void dispose() {
+    postDataLog(fitur);
+    super.dispose();
   }
 }

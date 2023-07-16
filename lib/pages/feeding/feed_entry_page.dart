@@ -291,6 +291,7 @@ class _FeedEntryPageState extends State<FeedEntryPage> {
             feedcontroller.getChartFeed('Alami');
             feedcontroller.getWeeklyRecapFeedHistory(
                 activation_id: controller.activation.id.toString());
+            controller.postDataLog(controller.fitur);
           },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,

@@ -31,7 +31,7 @@ class DetailGradingPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 5,
                 ),
               ],
@@ -70,7 +70,7 @@ class DetailGradingPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Row(
@@ -101,7 +101,7 @@ class DetailGradingPage extends StatelessWidget {
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
+                      children: [
                         SizedBox(
                           width: 40,
                         ),
@@ -187,7 +187,7 @@ class DetailGradingPage extends StatelessWidget {
                   maxLines: 1,
                 ),
                 Text(
-                  controller.fishGrading.getDate(),
+                  "${controller.fishGrading.getDate()}",
                   style: secondaryTextStyle.copyWith(
                     fontSize: 13,
                     fontWeight: medium,
@@ -231,7 +231,7 @@ class DetailGradingPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -252,7 +252,7 @@ class DetailGradingPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -296,7 +296,7 @@ class DetailGradingPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -317,7 +317,7 @@ class DetailGradingPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -360,7 +360,7 @@ class DetailGradingPage extends StatelessWidget {
               titleRecap(),
               dataGrading(),
               detailGrading(),
-              const SizedBox(
+              SizedBox(
                 height: 10,
               )
             ],

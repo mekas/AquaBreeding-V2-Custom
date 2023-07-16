@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                       )),
                 ],
               ),
-              const SizedBox(
+              SizedBox(
                 height: 16,
               ),
               Row(
@@ -119,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                       )),
                 ],
               ),
-              const SizedBox(
+              SizedBox(
                 height: 16,
               ),
               Row(
@@ -130,14 +130,18 @@ class _HomePageState extends State<HomePage> {
                       flex: 1,
                       child: StatisticCard(
                         title: 'Panen',
-                        value: controller.statistic.value.fish_harvested,
+                        value: double.parse(controller
+                            .statistic.value.fish_harvested!
+                            .toStringAsFixed(1)),
                         unit: 'Kg',
                       )),
                   Expanded(
                       flex: 1,
                       child: StatisticCard(
                         title: 'Total Pakan',
-                        value: controller.statistic.value.total_feed_dose,
+                        value: double.parse(controller
+                            .statistic.value.total_feed_dose!
+                            .toStringAsFixed(1)),
                         unit: 'Kg',
                       )),
                 ],
@@ -146,65 +150,65 @@ class _HomePageState extends State<HomePage> {
           ));
     }
 
-    // Widget fishTitle() {
-    //   return Container(
-    //     margin: EdgeInsets.only(
-    //       top: defaultSpace,
-    //       left: defaultMargin,
-    //       right: defaultMargin,
-    //     ),
-    //     child: Column(
-    //       crossAxisAlignment: CrossAxisAlignment.start,
-    //       children: [
-    //         Text(
-    //           'Total Berat Ikan',
-    //           style: primaryTextStyle.copyWith(
-    //             fontSize: 24,
-    //             fontWeight: semiBold,
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   );
-    // }
+    Widget fishTitle() {
+      return Container(
+        margin: EdgeInsets.only(
+          top: defaultSpace,
+          left: defaultMargin,
+          right: defaultMargin,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Total Berat Ikan',
+              style: primaryTextStyle.copyWith(
+                fontSize: 24,
+                fontWeight: semiBold,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
 
-    // Widget fish() {
-    //   return Container(
-    //     margin: const EdgeInsets.only(top: 14),
-    //     child: SingleChildScrollView(
-    //       scrollDirection: Axis.horizontal,
-    //       child: Row(
-    //         children: [
-    //           SizedBox(
-    //             width: defaultMargin,
-    //           ),
-    //           Row(children: [
-    //             FishCard(
-    //               title: "Lele",
-    //               value: controller.statistic.value.fishes_weight_lele!,
-    //               image: "assets/lele.png",
-    //             ),
-    //             FishCard(
-    //               title: "Nila Merah",
-    //               value: controller.statistic.value.fishes_weight_nilamerah!,
-    //               image: "assets/nilamerah.png",
-    //             ),
-    //             FishCard(
-    //               title: "Nila Hitam",
-    //               value: controller.statistic.value.fishes_weight_nilahitam!,
-    //               image: "assets/nilahitam.png",
-    //             ),
-    //             FishCard(
-    //               title: "Mas",
-    //               value: controller.statistic.value.fishes_weight_mas!,
-    //               image: "assets/mas.png",
-    //             ),
-    //           ]),
-    //         ],
-    //       ),
-    //     ),
-    //   );
-    // }
+    Widget fish() {
+      return Container(
+        margin: EdgeInsets.only(top: 14),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              SizedBox(
+                width: defaultMargin,
+              ),
+              Row(children: [
+                FishCard(
+                  title: "Lele",
+                  value: controller.statistic.value.fishes_weight_lele!,
+                  image: "assets/lele.png",
+                ),
+                FishCard(
+                  title: "Nila Merah",
+                  value: controller.statistic.value.fishes_weight_nilamerah!,
+                  image: "assets/nilamerah.png",
+                ),
+                FishCard(
+                  title: "Nila Hitam",
+                  value: controller.statistic.value.fishes_weight_nilahitam!,
+                  image: "assets/nilahitam.png",
+                ),
+                FishCard(
+                  title: "Mas",
+                  value: controller.statistic.value.fishes_weight_mas!,
+                  image: "assets/mas.png",
+                ),
+              ]),
+            ],
+          ),
+        ),
+      );
+    }
 
     Widget waterTitle() {
       return Container(

@@ -1,17 +1,32 @@
-// ignore_for_file: unrelated_type_equality_checks
-
 import 'package:fish/pages/pond/pond_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-class AddPondPage extends StatelessWidget {
+class AddPondPage extends StatefulWidget {
   const AddPondPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final PondController controller = Get.put(PondController());
+  State<AddPondPage> createState() => _AddPondPageState();
+}
 
+class _AddPondPageState extends State<AddPondPage> {
+  final PondController controller = Get.put(PondController());
+
+  @override
+  void dispose() {
+    controller.aliasController.clear();
+    controller.diameterController.clear();
+    controller.heightController.clear();
+    controller.locationController.clear();
+    controller.lengthController.clear();
+    controller.widthController.clear();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     Widget aliasInput() {
       return Container(
         margin: EdgeInsets.only(
@@ -26,12 +41,12 @@ class AddPondPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -46,7 +61,7 @@ class AddPondPage extends StatelessWidget {
                   controller: controller.aliasController,
                   decoration: controller.validateAlias.value == true
                       ? controller.alias == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'tinggi tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -77,12 +92,12 @@ class AddPondPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -119,12 +134,12 @@ class AddPondPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -147,8 +162,7 @@ class AddPondPage extends StatelessWidget {
                         );
                       }).toList(),
                       dropdownColor: backgroundColor5,
-                      decoration:
-                          const InputDecoration(border: InputBorder.none),
+                      decoration: InputDecoration(border: InputBorder.none),
                     )),
               ),
             ),
@@ -171,12 +185,12 @@ class AddPondPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -185,8 +199,10 @@ class AddPondPage extends StatelessWidget {
               ),
               child: Center(
                 child: Obx(() => DropdownButtonFormField<String>(
-                      onChanged: (newValue) =>
-                          controller.shapeController.setSelected(newValue!),
+                      onChanged: (newValue) {
+                        return controller.shapeController
+                            .setSelected(newValue!);
+                      },
                       value: controller.shapeController.selected.value,
                       items:
                           controller.shapeController.listMaterial.map((shape) {
@@ -199,8 +215,7 @@ class AddPondPage extends StatelessWidget {
                         );
                       }).toList(),
                       dropdownColor: backgroundColor5,
-                      decoration:
-                          const InputDecoration(border: InputBorder.none),
+                      decoration: InputDecoration(border: InputBorder.none),
                     )),
               ),
             ),
@@ -223,12 +238,12 @@ class AddPondPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -239,12 +254,15 @@ class AddPondPage extends StatelessWidget {
                 return TextFormField(
                   style: primaryTextStyle,
                   keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
                   onChanged: controller.heightChanged,
                   onTap: controller.valHeight,
                   controller: controller.heightController,
                   decoration: controller.validateHeight.value == true
                       ? controller.height == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'tinggi tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -273,12 +291,12 @@ class AddPondPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -289,12 +307,15 @@ class AddPondPage extends StatelessWidget {
                 return TextFormField(
                   style: primaryTextStyle,
                   keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
                   onChanged: controller.lenghtChanged,
                   onTap: controller.valLenght,
                   controller: controller.lengthController,
                   decoration: controller.validatelenght.value == true
                       ? controller.lenght == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'Panjang tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -323,12 +344,12 @@ class AddPondPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -339,12 +360,15 @@ class AddPondPage extends StatelessWidget {
                 return TextFormField(
                   style: primaryTextStyle,
                   keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
                   onChanged: controller.widthChanged,
                   onTap: controller.valWidth,
                   controller: controller.widthController,
                   decoration: controller.validateWidth.value == true
                       ? controller.width == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'lebar tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -373,12 +397,12 @@ class AddPondPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -389,12 +413,15 @@ class AddPondPage extends StatelessWidget {
                 return TextFormField(
                   style: primaryTextStyle,
                   keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
                   onChanged: controller.diameterChanged,
                   onTap: controller.valDiameter,
                   controller: controller.diameterController,
                   decoration: controller.validatediameter.value == true
                       ? controller.diameter == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'diameter tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -417,32 +444,26 @@ class AddPondPage extends StatelessWidget {
             top: defaultSpace * 3, right: defaultMargin, left: defaultMargin),
         child: TextButton(
           onPressed: () async {
-            // Get.back();
-            controller.shapeController.selected.value == "persegi"
-                ? controller.aliasController.text == "" ||
-                        controller.heightController.text == "" ||
-                        controller.widthController.text == "" ||
-                        controller.lengthController.text == ""
-                    ? null
-                    : await controller.pondRegister(
-                        context,
-                        () {
-                          Navigator.pop(context);
-                          controller.getPondsData(context);
-                        },
-                      )
-                : controller.aliasController.text == "" ||
-                        controller.heightController.text == "" ||
-                        controller.diameterController.text == ""
-                    ? null
-                    : await controller.pondRegister(
-                        context,
-                        () {
-                          Navigator.pop(context);
-                          controller.getPondsData(context);
-                        },
-                      );
-
+            if (controller.shapeController.selected.value == 'persegi' &&
+                controller.widthController.text == '') {
+              return null;
+            }
+            if (controller.shapeController.selected.value == 'persegi' &&
+                controller.lengthController.text == '') {
+              return null;
+            }
+            if (controller.shapeController.selected.value == 'bundar' &&
+                controller.diameterController.text == '') {
+              print("ini masuk sini");
+              return null;
+            } else {
+              await controller.pondRegister(
+                context,
+                () {
+                  controller.getPondsData(context);
+                },
+              );
+            }
             // profilecontroller.getBreeder();
           },
           style: TextButton.styleFrom(
@@ -463,17 +484,19 @@ class AddPondPage extends StatelessWidget {
     }
 
     Widget persegiInput() {
-      return Column(
+      return Container(
+          child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [widthInput(), lengthInput()],
-      );
+      ));
     }
 
     Widget bundarInput() {
-      return Column(
+      return Container(
+          child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [diameterInput()],
-      );
+      ));
     }
 
     return Obx(() {
@@ -495,7 +518,7 @@ class AddPondPage extends StatelessWidget {
                   : bundarInput(),
               heightInput(),
               registerButton(),
-              const SizedBox(
+              SizedBox(
                 height: 8,
               )
             ],

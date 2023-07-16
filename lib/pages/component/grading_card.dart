@@ -1,6 +1,7 @@
 import 'package:fish/models/activation_model.dart';
 import 'package:fish/models/fish_grading_model.dart';
 import 'package:fish/models/pond_model.dart';
+import 'package:fish/pages/grading/grading_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/pages/grading/detail_grading_page.dart';
 import 'package:fish/theme.dart';
@@ -10,8 +11,9 @@ class GradingCard extends StatelessWidget {
   final Activation? activation;
   final Pond? pond;
   final FishGrading? fishGrading;
+  final GradingController gradecontroller = Get.put(GradingController());
 
-  const GradingCard({
+  GradingCard({
     Key? key,
     this.activation,
     this.pond,
@@ -22,18 +24,19 @@ class GradingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => const DetailGradingPage(), arguments: {
+        Get.to(() => DetailGradingPage(), arguments: {
           "activation": activation,
           "pond": pond,
           "fishGrading": fishGrading,
         });
+        gradecontroller.postDataLog("Grading");
       },
       child: Container(
         width: double.infinity,
         margin: EdgeInsets.only(
           top: defaultMargin,
         ),
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: primaryColor),

@@ -1,3 +1,4 @@
+import 'package:fish/controllers/weeklywater/weekly_water_controller.dart';
 import 'package:fish/models/weeklywater_model.dart';
 import 'package:fish/models/pond_model.dart';
 
@@ -12,26 +13,29 @@ class WeeklyWaterCard extends StatelessWidget {
   final WeeklyWater? weeklyWaterList;
   final Activation? activation;
   final Pond? pond;
-  const WeeklyWaterCard(
-      {Key? key, this.weeklyWaterList, this.activation, this.pond})
+
+  WeeklyWaterCard({Key? key, this.weeklyWaterList, this.activation, this.pond})
       : super(key: key);
+
+  final WeeklyWaterController weeklywater = Get.put(WeeklyWaterController());
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => const WeeklyWaterDetailPage(), arguments: {
+        Get.to(() => WeeklyWaterDetailPage(), arguments: {
           "weeklywater": weeklyWaterList,
           "activation": activation,
           "pond": pond,
         });
+        weeklywater.postDataLog("Weekly Water Quality");
       },
       child: Container(
         width: double.infinity,
         margin: EdgeInsets.only(
           top: defaultMargin,
         ),
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: primaryColor),
@@ -88,7 +92,7 @@ class WeeklyWaterCard extends StatelessWidget {
                       maxLines: 1,
                     ),
                     Text(
-                      weeklyWaterList!.floc_desc.toString(),
+                      weeklyWaterList!.floc.toString(),
                       style: secondaryTextStyle.copyWith(
                         color: weeklyWaterList!.floc_desc == "normal"
                             ? Colors.green
@@ -104,7 +108,7 @@ class WeeklyWaterCard extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
+                    Container(
                       height: 40,
                       width: 80,
                       // margin: EdgeInsets.only(

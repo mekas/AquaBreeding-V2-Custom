@@ -31,7 +31,7 @@ class WeeklyWaterDetailPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 5,
                 ),
               ],
@@ -70,7 +70,7 @@ class WeeklyWaterDetailPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
               ],
@@ -165,8 +165,8 @@ class WeeklyWaterDetailPage extends StatelessWidget {
                   maxLines: 1,
                 ),
                 Text(
-                  "${controller.weeklyWater.floc} "
-                  "(${controller.weeklyWater.floc_desc})",
+                  "${controller.weeklyWater.floc} " +
+                      "(${controller.weeklyWater.floc_desc})",
                   style: secondaryTextStyle.copyWith(
                     color: controller.weeklyWater.floc_desc == "normal"
                         ? Colors.green
@@ -177,7 +177,7 @@ class WeeklyWaterDetailPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -190,8 +190,8 @@ class WeeklyWaterDetailPage extends StatelessWidget {
                   maxLines: 1,
                 ),
                 Text(
-                  "${controller.weeklyWater.nitrite} "
-                  "(${controller.weeklyWater.nitrite_desc})",
+                  "${controller.weeklyWater.nitrite} " +
+                      "(${controller.weeklyWater.nitrite_desc})",
                   style: secondaryTextStyle.copyWith(
                     color: controller.weeklyWater.nitrite_desc == "aman"
                         ? Colors.green
@@ -204,7 +204,7 @@ class WeeklyWaterDetailPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -217,8 +217,8 @@ class WeeklyWaterDetailPage extends StatelessWidget {
                   maxLines: 1,
                 ),
                 Text(
-                  "${controller.weeklyWater.hardness} "
-                  "(${controller.weeklyWater.hardness_desc})",
+                  "${controller.weeklyWater.hardness} " +
+                      "(${controller.weeklyWater.hardness_desc})",
                   style: secondaryTextStyle.copyWith(
                     color: controller.weeklyWater.hardness_desc == "aman"
                         ? Colors.green
@@ -246,8 +246,8 @@ class WeeklyWaterDetailPage extends StatelessWidget {
                   maxLines: 1,
                 ),
                 Text(
-                  "${controller.weeklyWater.ammonia} "
-                  "(${controller.weeklyWater.ammonia_desc})",
+                  "${controller.weeklyWater.ammonia} " +
+                      "(${controller.weeklyWater.ammonia_desc})",
                   style: secondaryTextStyle.copyWith(
                     color: controller.weeklyWater.ammonia_desc == "aman"
                         ? Colors.green
@@ -260,7 +260,7 @@ class WeeklyWaterDetailPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -273,8 +273,8 @@ class WeeklyWaterDetailPage extends StatelessWidget {
                   maxLines: 1,
                 ),
                 Text(
-                  "${controller.weeklyWater.nitrate} "
-                  "(${controller.weeklyWater.nitrate_desc})",
+                  "${controller.weeklyWater.nitrate} " +
+                      "(${controller.weeklyWater.nitrate_desc})",
                   style: secondaryTextStyle.copyWith(
                     color: controller.weeklyWater.nitrate_desc == "aman"
                         ? Colors.green
@@ -309,7 +309,7 @@ class WeeklyWaterDetailPage extends StatelessWidget {
               titleRecap(),
               dataTreatment(),
               detailTreatment(),
-              const SizedBox(
+              SizedBox(
                 height: 10,
               )
             ],

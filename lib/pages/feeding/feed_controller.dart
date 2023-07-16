@@ -11,8 +11,11 @@ import 'package:fish/service/feed_history_service.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../service/logging_service.dart';
+
 class FeedController extends GetxController {
   final InventarisPakanState pakanState = Get.put(InventarisPakanState());
+
   final charData = <FeedChartData>[].obs;
   var isLoading = false.obs;
   Activation activation = Get.arguments["activation"];
@@ -23,6 +26,7 @@ class FeedController extends GetxController {
   void onInit() async {
     getWeeklyRecapFeedHistory(activation_id: activation.id!);
     getChartFeed('Alami');
+
     super.onInit();
   }
 
@@ -54,5 +58,22 @@ class FeedController extends GetxController {
 
     inspect(charData);
     isLoading.value = false;
+  }
+
+  final DateTime startTime = DateTime.now();
+  late DateTime endTime;
+  final fitur = 'Feeding';
+
+  Future<void> postDataLog(String fitur) async {
+    // print(buildJsonFish());
+    bool value =
+        await LoggingService().postLogging(startAt: startTime, fitur: fitur);
+    print(value);
+  }
+
+  @override
+  void dispose() {
+    postDataLog(fitur);
+    super.dispose();
   }
 }

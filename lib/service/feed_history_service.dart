@@ -11,28 +11,33 @@ import 'package:fish/service/url_api.dart';
 import 'package:http/http.dart' as http;
 
 class FeedHistoryService {
-  // Future<List<FeedChartData>> getChart({required String activation_id}) async {
-  //   var url = Uri.parse(Urls.feedChartApi(activation_id));
-  //   var headers = {'Content-Type': 'application/json'};
+  Future<List<FeedChartData>> getChart({required String activation_id}) async {
+    var url = Uri.parse(Urls.feedChartApi(activation_id));
+    print(url);
+    var headers = {'Content-Type': 'application/json'};
 
-  //   var response = await http.get(url, headers: headers);
+    var response = await http.get(url, headers: headers);
 
-  //   if (response.statusCode == 200) {
-  //     var data = jsonDecode(response.body);
-  //     // inspect(data);
-  //     List<FeedChartData> feedChartData = FeedChartData.fromJsonList(data);
-  //     return feedChartData;
-  //   } else {
-  //     throw Exception('Gagal Get Activation!');
-  //   }
-  // }
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      List<FeedChartData> feedChartData = FeedChartData.fromJsonList(data);
+      return feedChartData;
+    } else {
+      throw Exception('Gagal Get Activation!');
+    }
+  }
 
   Future<List<FeedHistoryMonthly>> getMonthlyRecap(
       {required String activation_id}) async {
     var url = Uri.parse(Urls.feedHistoryMonthly(activation_id));
+    print(url);
     var headers = {'Content-Type': 'application/json'};
 
     var response = await http.get(url, headers: headers);
+
+    print(response.body);
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -47,9 +52,12 @@ class FeedHistoryService {
   Future<List<FeedHistoryWeekly>> getWeeklyRecap(
       {required String activation_id, required String month}) async {
     var url = Uri.parse(Urls.feedHistoryWeekly(activation_id, month));
+    print(url);
     var headers = {'Content-Type': 'application/json'};
 
     var response = await http.get(url, headers: headers);
+
+    print(response.body);
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -64,9 +72,12 @@ class FeedHistoryService {
   Future<List<FeedHistoryDaily>> getDailyRecap(
       {required String activation_id, required String week}) async {
     var url = Uri.parse(Urls.feedHistoryDaily(activation_id, week));
+    print(url);
     var headers = {'Content-Type': 'application/json'};
 
     var response = await http.get(url, headers: headers);
+
+    print(response.body);
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -81,13 +92,15 @@ class FeedHistoryService {
   Future<List<FeedHistoryHourly>> getHourlyRecap(
       {required String activation_id, required String date}) async {
     var url = Uri.parse(Urls.feedHistory(activation_id, date));
+    print(url);
     var headers = {'Content-Type': 'application/json'};
 
     var response = await http.get(url, headers: headers);
 
+    print(response.body);
+
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      inspect(data);
       List<FeedHistoryHourly> feedHistoryHourly =
           FeedHistoryHourly.fromJsonList(data);
       return feedHistoryHourly;
@@ -115,8 +128,10 @@ class FeedHistoryService {
     );
 
     if (response.statusCode == 200) {
+      print(response.body);
       return true;
     } else {
+      print(response.body);
       return false;
     }
   }

@@ -1,15 +1,17 @@
-// ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks
-
 import 'dart:developer';
 
-import 'package:fish/pages/inventaris/inventaris_benih/inventaris_benih_state.dart';
 import 'package:fish/pages/pond/activation_breed_controller.dart';
 import 'package:fish/pages/pond/detail_pond_controller.dart';
+import 'package:fish/pages/pond/detail_pond_page.dart';
+import 'package:fish/service/pond_service.dart';
+import 'package:fish/service/activation_service.dart';
 import 'package:fish/widgets/text_field_widget.dart';
+import 'package:fish/pages/inventaris/inventaris_benih/inventaris_benih_state.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import '../component/detail_pond_tabview.dart';
 
 class ActivationBreedPage extends StatefulWidget {
   ActivationBreedPage({Key? key}) : super(key: key);
@@ -195,7 +197,7 @@ class _ActivationBreedPageState extends State<ActivationBreedPage> {
                 child: TextFormField(
                   style: primaryTextStyle,
                   inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
                   ],
                   keyboardType: TextInputType.number,
                   controller: controller.waterHeightController,
