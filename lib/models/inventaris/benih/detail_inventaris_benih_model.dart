@@ -26,9 +26,10 @@ class Data {
   String? fishType;
   String? brandName;
   int? amount;
-  int? weight;
+  double? weight;
   String? width;
   int? price;
+  int? totalPrice;
   String? image;
   String? createdAt;
   String? updatedAt;
@@ -43,6 +44,7 @@ class Data {
       this.weight,
       this.width,
       this.price,
+      this.totalPrice,
       this.image,
       this.createdAt,
       this.updatedAt});
@@ -57,6 +59,7 @@ class Data {
     weight = json['weight'];
     width = json['width'];
     price = json['price'];
+    totalPrice = json['total_price'];
     image = json['image'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
@@ -73,6 +76,7 @@ class Data {
     data['weight'] = this.weight;
     data['width'] = this.width;
     data['price'] = this.price;
+    data['total_price'] = this.totalPrice;
     data['image'] = this.image;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;

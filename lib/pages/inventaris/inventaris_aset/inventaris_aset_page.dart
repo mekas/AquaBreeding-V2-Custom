@@ -4,10 +4,12 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:fish/pages/inventaris/inventaris_aset/inventaris_aset_state.dart';
 import 'package:fish/theme.dart';
 import 'package:fish/widgets/bottom_sheet_widget.dart';
+import 'package:fish/widgets/convert_to_rupiah_widget.dart';
 import 'package:fish/widgets/dialog_widget.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class InventarisAsetPage extends StatefulWidget {
   const InventarisAsetPage({Key? key}) : super(key: key);
@@ -24,6 +26,8 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
   @override
   void initState() {
     super.initState();
+    initializeDateFormatting('id', null);
+    state.setSheetVariableEdit(false);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       state.getAllData(
@@ -148,6 +152,8 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
                               itemBuilder: ((context, index) {
                                 return GestureDetector(
                                   onTap: () async {
+                                    state.setSheetVariableEdit(false);
+
                                     await state.getDataByID(
                                         state.assetList.value.data![index]
                                             .idInt!, () {
@@ -185,13 +191,12 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
                                                 style: headingText3,
                                               ),
                                               Text(
-                                                state.assetList.value
-                                                    .data![index].createdAt!
-                                                    .toString()
-                                                    .split(' ')[0]
-                                                    .split('-')
-                                                    .reversed
-                                                    .join('-'),
+                                                state.dateFormat(state
+                                                    .assetList
+                                                    .value
+                                                    .data![index]
+                                                    .createdAt!
+                                                    .toString()),
                                                 style: headingText3,
                                               )
                                             ],
@@ -262,7 +267,7 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
                                                     ),
                                                   ),
                                                   Text(
-                                                    'Rp${state.assetList.value.data![index].price.toString()}',
+                                                    'Rp${ConvertToRupiah.formatToRupiah(state.assetList.value.data![index].price!)}',
                                                     style: headingText3,
                                                   )
                                                 ],
@@ -335,6 +340,7 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
         backgroundColor: Colors.green.shade600,
         onPressed: () {
           state.resetVariables();
+          state.setSheetVariableEdit(true);
           getBottomSheet(0, 0, false);
         },
         child: const Icon(
@@ -444,70 +450,80 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
                   ),
                 ],
               ),
-        TextFieldWidget(
-          label: 'Nama Aset',
-          controller: state.name,
-          hint: 'Ex: Filter Air',
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            TextFieldWidget(
-              label: 'Jumlah',
-              controller: state.amount,
-              isLong: false,
-              hint: 'Ex: 2',
-              suffixSection: Text(
-                'buah',
-                style: headingText3,
-              ),
-            ),
-            TextFieldWidget(
-              label: 'Harga Beli',
-              controller: state.price,
-              hint: 'Ex: 50000',
-              isLong: false,
-              prefixSection: Text(
-                'Rp',
-                style: headingText2,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        TextFieldWidget(
-          label: 'Deskripsi',
-          controller: state.desc,
-          isMoreText: true,
-          hint: 'Ex: memfilter air kolam',
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        Text(
-          'Gambar (Struk)',
-          style: headingText2,
-        ),
-        const SizedBox(
-          height: 12,
-        ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: Colors.grey,
-          ),
-          width: MediaQuery.of(context).size.width,
-          height: 300,
-          child: Image.network(
-            'https://lh3.googleusercontent.com/p/AF1QipPgPgQ17AeKRLeQWWb3sZYRtkyoJndsRMKE8rNc=w1080-h608-p-no-v0',
-            fit: BoxFit.cover,
+        Obx(
+          () => TextFieldWidget(
+            label: 'Nama Aset',
+            controller: state.name,
+            hint: 'Ex: Filter Air',
+            isEdit: state.nameEdit.value,
           ),
         ),
+        const SizedBox(
+          height: 16,
+        ),
+        Obx(
+          () => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextFieldWidget(
+                label: 'Jumlah',
+                controller: state.amount,
+                isLong: false,
+                hint: 'Ex: 2',
+                isEdit: state.amountEdit.value,
+                suffixSection: Text(
+                  'buah',
+                  style: headingText3,
+                ),
+              ),
+              TextFieldWidget(
+                label: 'Harga Beli',
+                controller: state.price,
+                hint: 'Ex: 50000',
+                isLong: false,
+                isEdit: state.priceEdit.value,
+                prefixSection: Text(
+                  'Rp',
+                  style: headingText2,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        Obx(
+          () => TextFieldWidget(
+            label: 'Deskripsi',
+            controller: state.desc,
+            isMoreText: true,
+            hint: 'Ex: memfilter air kolam',
+            isEdit: state.descEdit.value,
+          ),
+        ),
+        // const SizedBox(
+        //   height: 16,
+        // ),
+        // Text(
+        //   'Gambar (Struk)',
+        //   style: headingText2,
+        // ),
+        // const SizedBox(
+        //   height: 12,
+        // ),
+        // Container(
+        //   decoration: BoxDecoration(
+        //     borderRadius: BorderRadius.circular(12),
+        //     color: Colors.grey,
+        //   ),
+        //   width: MediaQuery.of(context).size.width,
+        //   height: 300,
+        //   child: Image.network(
+        //     'https://lh3.googleusercontent.com/p/AF1QipPgPgQ17AeKRLeQWWb3sZYRtkyoJndsRMKE8rNc=w1080-h608-p-no-v0',
+        //     fit: BoxFit.cover,
+        //   ),
+        // ),
         const SizedBox(
           height: 36,
         ),
@@ -515,55 +531,98 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: addButtonColor,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                    onPressed: () async {
-                      if (state.name.text == '' ||
-                          state.price.text == '' ||
-                          state.desc.text == '' ||
-                          state.amount.text == '' ||
-                          state.image.value == '') {
-                        Flushbar(
-                          message: "Gagal, Form tidak sesuai",
-                          duration: Duration(seconds: 3),
-                          leftBarIndicatorColor: Colors.red[400],
-                        ).show(context);
-                      } else {
-                        await state.updateData(
-                          id,
-                          () => {
-                            state.getAllData(
-                              state.pageIdentifier.value,
-                              state.firstDate.text,
-                              state.lastDate.text,
-                              () {},
-                            ),
-                            state.resetVariables(),
-                            Navigator.pop(context),
-                          },
-                        );
-                      }
-                    },
-                    child: Obx(
-                      () => state.isLoadingPost.value
-                          ? SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
+                  Obx(
+                    () => state.isSheetEditable.value
+                        ? ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: addButtonColor,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
-                            )
-                          : Text(
+                            ),
+                            onPressed: () async {
+                              if (state.name.text == '' ||
+                                  state.price.text == '' ||
+                                  state.desc.text == '' ||
+                                  state.amount.text == '' ||
+                                  state.image.value == '') {
+                                Flushbar(
+                                  message: "Gagal, Form tidak sesuai",
+                                  duration: Duration(seconds: 3),
+                                  leftBarIndicatorColor: Colors.red[400],
+                                ).show(context);
+                              } else {
+                                await state.updateData(
+                                  id,
+                                  () => {
+                                    state.getAllData(
+                                      state.pageIdentifier.value,
+                                      state.firstDate.text,
+                                      state.lastDate.text,
+                                      () {},
+                                    ),
+                                    state.resetVariables(),
+                                    Navigator.pop(context),
+                                  },
+                                );
+                              }
+                            },
+                            child: Obx(
+                              () => state.isLoadingPost.value
+                                  ? SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : Text(
+                                      'Simpan',
+                                      style: headingText2,
+                                    ),
+                            ),
+                          )
+                        : ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.orange.shade400,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),
+                            onPressed: () async {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text('Ubah Data'),
+                                      content: const Text(
+                                          'Apakah anda yakin ingin mengubah data ini?'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context, 'Tidak'),
+                                          child: const Text('Tidak'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () async {
+                                            state.setSheetVariableEdit(true);
+                                            if (context.mounted) {
+                                              Navigator.of(context).pop();
+                                            }
+                                          },
+                                          child: const Text('Ya'),
+                                        ),
+                                      ],
+                                    );
+                                  });
+                            },
+                            child: Text(
                               'Ubah',
                               style: headingText2,
                             ),
-                    ),
+                          ),
                   ),
                   const SizedBox(
                     height: 12,

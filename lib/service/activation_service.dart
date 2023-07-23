@@ -34,25 +34,25 @@ class ActivationService {
     }
   }
 
-  // Future<List<FishChartData>> getFishChart(
-  //     {required String activationId}) async {
-  //   var url = Uri.parse(Urls.fishChart(activationId));
-  //   var headers = {'Content-Type': 'application/json'};
+  Future<List<FishChartData>> getFishChart(
+      {required String activationId}) async {
+    var url = Uri.parse(Urls.fishChart(activationId));
+    var headers = {'Content-Type': 'application/json'};
 
-  //   var response = await http.get(url, headers: headers);
+    var response = await http.get(url, headers: headers);
 
-  //   // print(response.body);
+    // print(response.body);
 
-  //   if (response.statusCode == 200) {
-  //     var data = jsonDecode(response.body);
-  //     print(data);
-  //     List<FishChartData> fishDatas = FishChartData.fromJsonList(data);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      print(data);
+      List<FishChartData> fishDatas = FishChartData.fromJsonList(data);
 
-  //     return fishDatas;
-  //   } else {
-  //     throw Exception('Gagal Get fish chart!');
-  //   }
-  // }
+      return fishDatas;
+    } else {
+      throw Exception('Gagal Get fish chart!');
+    }
+  }
 
   Future<bool> postActivation(
       {required String? pondId,

@@ -18,6 +18,7 @@ class TextFieldWidget extends StatelessWidget {
     this.isEnableSwitch = false,
     this.switchValue = true,
     this.switchOnChange,
+    this.onChange,
   }) : super(key: key);
 
   final String label;
@@ -33,6 +34,7 @@ class TextFieldWidget extends StatelessWidget {
       switchValue;
   final TextStyle? styleHint;
   final Function(bool)? switchOnChange;
+  final Function(String)? onChange;
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +74,9 @@ class TextFieldWidget extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       color: isEdit ? inputColor : Colors.transparent,
+                      border: Border.all(
+                          width: 1,
+                          color: isEdit ? transparentColor : backgroundColor2),
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -84,6 +89,7 @@ class TextFieldWidget extends StatelessWidget {
                             : const SizedBox(),
                         Expanded(
                           child: TextFormField(
+                            onChanged: onChange,
                             minLines: isMoreText ? 5 : null,
                             maxLines: isMoreText ? null : 1,
                             controller: controller,

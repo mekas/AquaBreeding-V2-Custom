@@ -17,9 +17,15 @@ class _PakanCampuranPageState extends State<PakanCampuranPage> {
   @override
   void initState() {
     super.initState();
+    state.resetVariables();
+    state.setSheetVariableEdit(false);
+
     state.pageIdentifier.value = 'custom';
+    state.feedCategory.value = 'Custom';
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       state.getAllData('custom', () {});
+      state.getPakanNameData('custom');
     });
   }
 

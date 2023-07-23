@@ -7,6 +7,7 @@ import 'package:fish/service/url_api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class InventarisAsetState extends Urls {
   RxBool isLoadingPage = false.obs;
@@ -44,6 +45,12 @@ class InventarisAsetState extends Urls {
 
   TextEditingController firstDate = TextEditingController();
   TextEditingController lastDate = TextEditingController();
+
+  RxBool nameEdit = false.obs;
+  RxBool descEdit = false.obs;
+  RxBool amountEdit = false.obs;
+  RxBool priceEdit = false.obs;
+  RxBool isSheetEditable = false.obs;
 
   Future getAllData(
       String type, String first, String last, Function() doAfter) async {
@@ -161,6 +168,13 @@ class InventarisAsetState extends Urls {
     isLoadingDelete.value = false;
   }
 
+  String dateFormat(String dateString) {
+    DateTime dateTime = DateTime.parse(dateString);
+    var formatter = DateFormat('EEEE, d MMMM y | HH:mm', 'id');
+    var formattedDate = formatter.format(dateTime);
+    return formattedDate.split('|').join('| Jam');
+  }
+
   resetVariables() {
     name.clear();
     desc.clear();
@@ -168,5 +182,23 @@ class InventarisAsetState extends Urls {
     amount.clear();
     firstDate.clear();
     lastDate.clear();
+  }
+
+  setSheetVariableEdit(bool status) {
+    if (status) {
+      isSheetEditable.value = true;
+
+      nameEdit.value = true;
+      descEdit.value = true;
+      amountEdit.value = true;
+      priceEdit.value = true;
+    } else {
+      isSheetEditable.value = false;
+
+      nameEdit.value = false;
+      descEdit.value = false;
+      amountEdit.value = false;
+      priceEdit.value = false;
+    }
   }
 }

@@ -5,6 +5,7 @@ import 'package:fish/widgets/bottom_sheet_widget.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:fish/widgets/convert_to_rupiah_widget.dart';
 
 class PascabayarPage extends StatefulWidget {
   const PascabayarPage({super.key});
@@ -20,6 +21,8 @@ class _PascabayarPageState extends State<PascabayarPage> {
   void initState() {
     super.initState();
     state.pageIdentifier.value = 'pascabayar';
+    state.electricCategory.value = 'Pascabayar';
+    state.setSheetVariableEdit(false);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       state.getAllData(state.thisYear.year, 'pascabayar', () {});
@@ -55,6 +58,7 @@ class _PascabayarPageState extends State<PascabayarPage> {
                   itemBuilder: ((context, index) {
                     return GestureDetector(
                       onTap: () async {
+                        state.setSheetVariableEdit(false);
                         await state.getDataByID(
                             state.electricList.value.data![index].idInt!, () {
                           getBottomSheet(index,
@@ -89,98 +93,82 @@ class _PascabayarPageState extends State<PascabayarPage> {
                                     style: headingText3,
                                   ),
                                   Text(
-                                      state.electricList.value.data![index]
-                                          .createdAt
-                                          .toString()
-                                          .split(' ')[0]
-                                          .split('-')
-                                          .reversed
-                                          .join('-'),
+                                      state.dateFormat(state.electricList.value
+                                          .data![index].createdAt
+                                          .toString()),
                                       style: headingText3),
                                 ],
                               ),
                             ),
                             Container(
                               padding: const EdgeInsets.all(12),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                              child: Column(
                                 children: [
-                                  Column(
+                                  Row(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Text(
-                                        'Nama',
+                                        'Nama : ',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14,
                                         ),
                                       ),
-                                      SizedBox(height: 6),
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                3,
+                                      Expanded(
                                         child: Text(
-                                          state.electricList.value.data![index]
-                                              .name
-                                              .toString(),
+                                          '.' * 100,
+                                          maxLines: 1,
                                           style: TextStyle(
-                                            color: Colors.grey.shade500,
+                                            color: Colors.white,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 12,
+                                            fontSize: 14,
                                           ),
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        'Daya (kwh)',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                      SizedBox(height: 6),
                                       Text(
                                         state.electricList.value.data![index]
-                                                    .daya
-                                                    .toString() ==
-                                                ''
-                                            ? '-'
-                                            : state.electricList.value
-                                                .data![index].daya
-                                                .toString(),
-                                        style: TextStyle(
-                                          color: Colors.grey.shade500,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        'Harga',
+                                            .name
+                                            .toString(),
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14,
                                         ),
                                       ),
-                                      SizedBox(height: 6),
+                                    ],
+                                  ),
+                                  SizedBox(height: 8),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
                                       Text(
-                                        'Rp${state.electricList.value.data![index].price.toString()}',
+                                        'Harga : ',
                                         style: TextStyle(
-                                          color: Colors.grey.shade500,
+                                          color: Colors.white,
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 12,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          '.' * 100,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        'Rp${ConvertToRupiah.formatToRupiah(state.electricList.value.data![index].price!)}',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
                                         ),
                                       ),
                                     ],
@@ -238,112 +226,162 @@ class _PascabayarPageState extends State<PascabayarPage> {
         const SizedBox(
           height: 16,
         ),
-        TextFieldWidget(
-          label: 'Nama',
-          controller: state.name,
-          hint: 'Ex: Token50',
+        Obx(
+          () => TextFieldWidget(
+            label: 'Nama',
+            controller: state.name,
+            hint: 'Ex: Token50',
+            isEdit: state.nameEdit.value,
+          ),
         ),
         const SizedBox(
           height: 16,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            TextFieldWidget(
-              label: 'Daya',
-              controller: state.power,
-              isLong: false,
-              numberOutput: true,
-              hint: 'Ex: 450',
-              suffixSection: Text(
-                'kwh',
-                style: headingText3,
+        Obx(
+          () => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextFieldWidget(
+                label: 'Daya',
+                controller: state.power,
+                isLong: false,
+                numberOutput: true,
+                hint: 'Ex: 450',
+                isEdit: state.powerEdit.value,
+                suffixSection: Text(
+                  'kwh',
+                  style: headingText3,
+                ),
               ),
-            ),
-            TextFieldWidget(
-              label: 'Harga Beli',
-              controller: state.price,
-              numberOutput: true,
-              isLong: false,
-              hint: 'Ex: 10000',
-              prefixSection: Text(
-                'Rp',
-                style: headingText3,
+              TextFieldWidget(
+                label: 'Harga Beli',
+                controller: state.price,
+                numberOutput: true,
+                isLong: false,
+                hint: 'Ex: 10000',
+                isEdit: state.priceEdit.value,
+                prefixSection: Text(
+                  'Rp',
+                  style: headingText3,
+                ),
               ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        Text(
-          'Gambar (Struk)',
-          style: headingText2,
-        ),
-        const SizedBox(
-          height: 12,
-        ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: Colors.grey,
-          ),
-          width: MediaQuery.of(context).size.width,
-          height: 300,
-          child: Image.network(
-            'https://media.istockphoto.com/id/1183169839/vector/lightning-isolated-vector-icon-electric-bolt-flash-icon-power-energy-symbol-thunder-icon.jpg?s=612x612&w=0&k=20&c=kFdwoQHmrv8EzCofbdzL7EVW8vtgiHvhrGkOl0_N0io=',
-            fit: BoxFit.cover,
+            ],
           ),
         ),
+        // const SizedBox(
+        //   height: 16,
+        // ),
+        // Text(
+        //   'Gambar (Struk)',
+        //   style: headingText2,
+        // ),
+        // const SizedBox(
+        //   height: 12,
+        // ),
+        // Container(
+        //   decoration: BoxDecoration(
+        //     borderRadius: BorderRadius.circular(12),
+        //     color: Colors.grey,
+        //   ),
+        //   width: MediaQuery.of(context).size.width,
+        //   height: 300,
+        //   child: Image.network(
+        //     'https://media.istockphoto.com/id/1183169839/vector/lightning-isolated-vector-icon-electric-bolt-flash-icon-power-energy-symbol-thunder-icon.jpg?s=612x612&w=0&k=20&c=kFdwoQHmrv8EzCofbdzL7EVW8vtgiHvhrGkOl0_N0io=',
+        //     fit: BoxFit.cover,
+        //   ),
+        // ),
         const SizedBox(
           height: 36,
         ),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: addButtonColor,
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-          ),
-          onPressed: () async {
-            if (state.name.text == '' ||
-                state.power.text == '' ||
-                state.price.text == '') {
-              Flushbar(
-                message: "Gagal, Form tidak sesuai",
-                duration: Duration(seconds: 3),
-                leftBarIndicatorColor: Colors.red[400],
-              ).show(context);
-            } else {
-              await state.updateData(
-                id,
-                () => {
-                  state.getAllData(
-                    state.thisYear.year,
-                    state.pageIdentifier.value,
-                    () {},
-                  ),
-                  state.resetVariables(),
-                  Navigator.pop(context),
-                },
-              );
-            }
-          },
-          child: Obx(
-            () => state.isLoadingPost.value
-                ? SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
+        Obx(
+          () => state.isSheetEditable.value
+              ? ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: addButtonColor,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
-                  )
-                : Text(
+                  ),
+                  onPressed: () async {
+                    if (state.name.text == '' ||
+                        state.power.text == '' ||
+                        state.price.text == '') {
+                      Flushbar(
+                        message: "Gagal, Form tidak sesuai",
+                        duration: Duration(seconds: 3),
+                        leftBarIndicatorColor: Colors.red[400],
+                      ).show(context);
+                    } else {
+                      await state.updateData(
+                        id,
+                        () => {
+                          state.getAllData(
+                            state.thisYear.year,
+                            state.pageIdentifier.value,
+                            () {},
+                          ),
+                          state.resetVariables(),
+                          Navigator.pop(context),
+                        },
+                      );
+                    }
+                  },
+                  child: Obx(
+                    () => state.isLoadingPost.value
+                        ? SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          )
+                        : Text(
+                            'Simpan',
+                            style: headingText2,
+                          ),
+                  ),
+                )
+              : ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange.shade400,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  onPressed: () async {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Ubah Data'),
+                            content: const Text(
+                                'Apakah anda yakin ingin mengubah data ini?'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.pop(context, 'Tidak'),
+                                child: const Text('Tidak'),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  state.setSheetVariableEdit(true);
+                                  if (context.mounted) {
+                                    Navigator.of(context).pop();
+                                  }
+                                },
+                                child: const Text('Ya'),
+                              ),
+                            ],
+                          );
+                        });
+                  },
+                  child: Text(
                     'Ubah',
                     style: headingText2,
                   ),
-          ),
+                ),
         ),
         const SizedBox(
           height: 12,

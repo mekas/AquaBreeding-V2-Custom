@@ -11,7 +11,9 @@ import 'package:fish/widgets/bottom_sheet_widget.dart';
 import 'package:fish/widgets/dialog_widget.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class InventarisBahanBudidayaMainpage extends StatefulWidget {
   const InventarisBahanBudidayaMainpage({super.key});
@@ -30,9 +32,11 @@ class _InventarisBahanBudidayaMainpageState
   @override
   void initState() {
     super.initState();
-
+    initializeDateFormatting('id', null);
+    state.functionCategory.value = 'Obat';
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       state.getAllData('obat', () {});
+      state.getSuplemenNameData('Obat');
     });
   }
 
@@ -73,6 +77,7 @@ class _InventarisBahanBudidayaMainpageState
                       return GestureDetector(
                         onTap: () async {
                           setState(() {
+                            state.setSheetVariableEdit(false);
                             state.currIndexFilter.value = index + 1;
                             state.functionCategory.value = state
                                     .filterList[state.currIndexFilter.value - 1]
@@ -81,6 +86,8 @@ class _InventarisBahanBudidayaMainpageState
                                     .filterList[state.currIndexFilter.value - 1]
                                 ['key'];
                           });
+                          await state.getSuplemenNameData(
+                              state.functionCategory.value);
                           await state.getAllData(
                               state.pageIdentifier.value, () {});
                         },
@@ -156,101 +163,149 @@ class _InventarisBahanBudidayaMainpageState
                               itemBuilder: ((context, index) {
                                 return GestureDetector(
                                   onTap: () async {
+                                    state.setSheetVariableEdit(false);
                                     await state.getDataByID(
                                         state.suplemenList.value.data![index]
                                             .idInt!, () {
-                                      getBottomSheet(
+                                      getBottomSheetEdit(
                                           index,
                                           state.suplemenList.value.data![index]
-                                              .idInt!,
-                                          true);
+                                              .idInt!);
                                     });
                                   },
                                   child: Container(
                                     margin: const EdgeInsets.only(bottom: 14),
-                                    padding: const EdgeInsets.all(12),
                                     decoration: BoxDecoration(
                                       border: Border.all(
                                           width: 1, color: primaryColor),
-                                      borderRadius: BorderRadius.circular(14),
+                                      borderRadius: BorderRadius.circular(6),
                                     ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                    child: Column(
                                       children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Nama / Merek',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
+                                        Container(
+                                          padding: const EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color: primaryColor,
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'Tanggal :',
+                                                style: headingText3,
                                               ),
-                                            ),
-                                            SizedBox(height: 6),
-                                            Text(
-                                              state.suplemenList.value
-                                                  .data![index].name!,
-                                              style: TextStyle(
-                                                color: Colors.grey.shade500,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          ],
+                                              Text(
+                                                state.dateFormat(
+                                                  state.suplemenList.value
+                                                      .data![index].createdAt!
+                                                      .toString(),
+                                                ),
+                                                style: headingText3,
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                        Column(
-                                          children: [
-                                            Text(
-                                              'Jumlah',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            SizedBox(height: 6),
-                                            Text(
-                                              '${state.suplemenList.value.data![index].amount!.toStringAsFixed(2)} ${state.suplemenList.value.data![index].type!}',
-                                              style: TextStyle(
-                                                color: Colors.grey.shade500,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          ],
+                                        const SizedBox(
+                                          height: 12,
                                         ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Kadaluarsa',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 12,
+                                            right: 12,
+                                            bottom: 12,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    'Nama / Merek',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 14,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 6),
+                                                  Text(
+                                                    state.suplemenList.value
+                                                        .data![index].name!,
+                                                    style: TextStyle(
+                                                      color:
+                                                          Colors.grey.shade500,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                            ),
-                                            SizedBox(height: 6),
-                                            Text(
-                                              state.convertDaysToDate(
-                                                  currDate,
-                                                  state
-                                                      .suplemenList
-                                                      .value
-                                                      .data![index]
-                                                      .maxExpiredPeriod!),
-                                              style: TextStyle(
-                                                color: Colors.grey.shade500,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12,
+                                              Column(
+                                                children: [
+                                                  Text(
+                                                    'Jumlah',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 14,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 6),
+                                                  Text(
+                                                    '${state.suplemenList.value.data![index].amount!.toStringAsFixed(2)} ${state.suplemenList.value.data![index].type!}',
+                                                    style: TextStyle(
+                                                      color:
+                                                          Colors.grey.shade500,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                            ),
-                                          ],
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    'Kadaluarsa',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 14,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 6),
+                                                  Text(
+                                                    state.convertDaysToDate(
+                                                        currDate,
+                                                        state
+                                                            .suplemenList
+                                                            .value
+                                                            .data![index]
+                                                            .maxExpiredPeriod!),
+                                                    style: TextStyle(
+                                                      color:
+                                                          Colors.grey.shade500,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -264,18 +319,273 @@ class _InventarisBahanBudidayaMainpageState
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.green.shade600,
-        onPressed: () {
-          state.resetVariables();
-          getBottomSheet(0, 0, false);
-        },
-        child: const Icon(
-          Icons.add,
-          size: 32,
-        ),
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: Colors.green.shade600,
+      //   onPressed: () {
+      //     state.resetVariables();
+      //     getBottomSheet(0, 0, false);
+      //   },
+      //   child: const Icon(
+      //     Icons.add,
+      //     size: 32,
+      //   ),
+      // ),
+      floatingActionButton: SpeedDial(
+        icon: Icons.add,
+        backgroundColor: addButtonColor,
+        overlayColor: Colors.black,
+        overlayOpacity: 0.6,
+        spacing: 5,
+        spaceBetweenChildren: 4,
+        children: [
+          SpeedDialChild(
+            backgroundColor: Colors.green,
+            labelStyle: headingText3,
+            labelBackgroundColor: Colors.green,
+            label: 'Tambah Suplemen (+)',
+            onTap: () async {
+              state.resetVariables();
+              await state.getSuplemenNameData(state.functionCategory.value);
+              getBottomSheet(0, 0, false);
+            },
+          ),
+          SpeedDialChild(
+            backgroundColor: Colors.green,
+            labelStyle: headingText3,
+            labelBackgroundColor: Colors.green,
+            label: 'Tambah Merk (+)',
+            onTap: () {
+              state.resetVariables();
+              addNameBottomSheet();
+            },
+          ),
+        ],
       ),
     );
+  }
+
+  getListNameBottomSheet() {
+    state.resetVariables();
+
+    BottomSheetWidget.getBottomSheetWidget(context, [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: const CircleAvatar(
+              backgroundColor: Colors.red,
+              radius: 12,
+              child: Icon(
+                Icons.arrow_back_ios_new_rounded,
+                size: 14,
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(
+        height: 18,
+      ),
+      Text(
+        'List Semua Nama Suplemen',
+        style: headingText1,
+        textAlign: TextAlign.center,
+      ),
+      const SizedBox(
+        height: 54,
+      ),
+      Obx(
+        () => state.isLoadingDetail.value
+            ? Center(
+                child: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            : ListView.builder(
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: EdgeInsets.only(bottom: 8),
+                    decoration: BoxDecoration(
+                      color: backgroundColor2,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: ListTile(
+                      title: Text(
+                        state.suplemenNameList.value.data![index].name!,
+                        style: headingText3,
+                      ),
+                      trailing: IconButton(
+                        onPressed: () async {
+                          await state.deleteSuplemenName(
+                              state.suplemenNameList.value.data![index].idInt!,
+                              () async {
+                            Flushbar(
+                              message: "Nama berhasil dihapus",
+                              duration: Duration(seconds: 2),
+                              leftBarIndicatorColor: Colors.green,
+                            ).show(context);
+                            await state.getSuplemenNameData('');
+                          });
+                        },
+                        icon: Icon(
+                          Icons.delete,
+                          color: Colors.red.shade900,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                shrinkWrap: true,
+                // padding: const EdgeInsets.only(bottom: padding4XL),
+                itemCount: state.suplemenNameList.value.data!.length,
+              ),
+      )
+    ]);
+  }
+
+  addNameBottomSheet() {
+    state.resetVariables();
+    state.suplemenName.clear();
+    BottomSheetWidget.getBottomSheetWidget(context, [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: const CircleAvatar(
+              backgroundColor: Colors.red,
+              radius: 12,
+              child: Icon(
+                Icons.arrow_back_ios_new_rounded,
+                size: 14,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () async {
+              await state.getSuplemenNameData('');
+              getListNameBottomSheet();
+            },
+            child: const CircleAvatar(
+              backgroundColor: Colors.white,
+              radius: 12,
+              child: Icon(
+                Icons.list,
+                size: 14,
+                color: Colors.black,
+              ),
+            ),
+          )
+        ],
+      ),
+      const SizedBox(
+        height: 18,
+      ),
+      Text(
+        'Catat Nama Suplemen',
+        style: headingText1,
+        textAlign: TextAlign.center,
+      ),
+      const SizedBox(
+        height: 54,
+      ),
+      Text(
+        'Fungsi',
+        style: headingText2,
+      ),
+      const SizedBox(
+        height: 12,
+      ),
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: inputColor,
+        ),
+        child: StatefulBuilder(
+          builder: ((context, setState) {
+            return DropdownButtonHideUnderline(
+              child: DropdownButton(
+                onChanged: ((String? value) {
+                  setState(() {
+                    state.functionCategory.value = value!;
+                  });
+                  state.functionCategory.value = value!;
+                  state.resetVariables();
+                }),
+                value: state.functionCategory.value,
+                dropdownColor: inputColor,
+                items: state.dropdownList.map(
+                  (String val) {
+                    return DropdownMenuItem(
+                      value: val,
+                      child: Text(
+                        val,
+                        style: headingText3,
+                      ),
+                    );
+                  },
+                ).toList(),
+              ),
+            );
+          }),
+        ),
+      ),
+      const SizedBox(
+        height: 16,
+      ),
+      TextFieldWidget(
+        label: 'Nama Suplemen',
+        controller: state.suplemenName,
+        hint: 'Input nama suplemen',
+      ),
+      const SizedBox(
+        height: 36,
+      ),
+      ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: addButtonColor,
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        ),
+        onPressed: () async {
+          await state.postSuplemenNameData(() async {
+            Flushbar(
+              message: "Nama berhasil ditambahkan",
+              duration: Duration(seconds: 2),
+              leftBarIndicatorColor: Colors.green,
+            ).show(context);
+            await state.getSuplemenNameData('');
+          });
+        },
+        child: Obx(
+          () => state.isLoadingPost.value
+              ? SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                )
+              : Icon(
+                  Icons.add,
+                ),
+        ),
+      ),
+    ]);
   }
 
   getBottomSheet(int index, int id, bool editable) {
@@ -326,77 +636,131 @@ class _InventarisBahanBudidayaMainpageState
                 ],
               )
             : Container(),
-        TextFieldWidget(
-          label: 'Nama / Merek Bahan',
-          controller: state.name,
-          hint: 'Ex: Tepung',
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Fungsi',
+              style: headingText2,
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: inputColor,
+              ),
+              child: StatefulBuilder(
+                builder: ((context, setState) {
+                  return DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      onChanged: ((String? value) async {
+                        state.resetVariables();
+
+                        setState(() {
+                          state.functionCategory.value = value!;
+                        });
+                        state.functionCategory.value = value!;
+                        inspect(state.functionCategory.value);
+                        await state
+                            .getSuplemenNameData(state.functionCategory.value);
+                      }),
+                      value: state.functionCategory.value,
+                      dropdownColor: inputColor,
+                      items: state.dropdownList.map(
+                        (String val) {
+                          return DropdownMenuItem(
+                            value: val,
+                            child: Text(
+                              val,
+                              style: headingText3,
+                            ),
+                          );
+                        },
+                      ).toList(),
+                    ),
+                  );
+                }),
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+          ],
+        ),
+        Text(
+          'Nama Suplemen',
+          style: headingText2,
         ),
         const SizedBox(
-          height: 16,
+          height: 12,
         ),
-        editable
-            ? Container()
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    'Fungsi',
-                    style: headingText2,
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: inputColor,
-                    ),
-                    child: StatefulBuilder(
-                      builder: ((context, setState) {
-                        return DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            onChanged: ((String? value) {
-                              state.resetVariables();
 
-                              setState(() {
-                                state.functionCategory.value = value!;
-                              });
-                              state.functionCategory.value = value!;
-                            }),
-                            value: state.functionCategory.value,
-                            dropdownColor: inputColor,
-                            items: state.dropdownList.map(
-                              (String val) {
-                                return DropdownMenuItem(
-                                  value: val,
+        Obx(
+          () => state.isLoadingDetail.value
+              ? Center(
+                  child: SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              : state.listSuplemenName.isEmpty
+                  ? Center(
+                      child: Text(
+                        'Tidak ada data',
+                        style: headingText3.copyWith(
+                          color: Colors.red,
+                        ),
+                      ),
+                    )
+                  : Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: inputColor,
+                      ),
+                      child: StatefulBuilder(
+                        builder: ((context, setState) {
+                          return DropdownButtonHideUnderline(
+                            child: DropdownButton<Map<String, dynamic>>(
+                              onChanged: (value) async {
+                                setState(() {
+                                  state.selectedSuplemen.value = value!;
+                                });
+                                state.selectedSuplemen.value = value!;
+                                state.isSuplemenSelected.value = true;
+                                // state.name.text
+                                state.resetVariables();
+                              },
+                              value: state.selectedSuplemen.value,
+                              dropdownColor: inputColor,
+                              items: state.listSuplemenName
+                                  .map<DropdownMenuItem<Map<String, dynamic>>>(
+                                      (material) {
+                                return DropdownMenuItem<Map<String, dynamic>>(
+                                  value: material,
                                   child: Text(
-                                    val,
+                                    material['suplemen_name'],
                                     style: headingText3,
                                   ),
                                 );
-                              },
-                            ).toList(),
-                          ),
-                        );
-                      }),
+                              }).toList(),
+                            ),
+                          );
+                        }),
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                ],
-              ),
-        TextFieldWidget(
-          label: 'Deskripsi Bahan',
-          controller: state.desc,
-          isMoreText: true,
-          hint: 'Ex: Bahan kimia',
         ),
         const SizedBox(
           height: 16,
         ),
+
         SizedBox(
           child: Column(
             children: [
@@ -476,224 +840,538 @@ class _InventarisBahanBudidayaMainpageState
             ],
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            TextFieldWidget(
-              label: 'Min. Expired',
-              controller: state.minExp,
-              isLong: false,
-              numberOutput: true,
-              hint: 'Ex: 10',
-              suffixSection: Text(
-                'hari',
-                style: headingText3,
-              ),
-            ),
-            TextFieldWidget(
-              label: 'Max. Expired',
-              controller: state.maxExp,
-              isLong: false,
-              numberOutput: true,
-              hint: 'Ex: 10',
-              suffixSection: Text(
-                'hari',
-                style: headingText3,
-              ),
-            ),
-          ],
+        Obx(
+          () => TextFieldWidget(
+            isEnableSwitch: true,
+            switchOnChange: (v) {
+              state.descSwitchValue.value = v;
+            },
+            switchValue: state.descSwitchValue.value,
+            label: 'Deskripsi Bahan',
+            controller: state.desc,
+            isMoreText: true,
+            hint: 'Ex: Bahan kimia',
+          ),
         ),
         const SizedBox(
           height: 16,
         ),
+
+        Obx(
+          () => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextFieldWidget(
+                isEnableSwitch: true,
+                switchOnChange: (v) {
+                  state.minSwitchValue.value = v;
+                },
+                switchValue: state.minSwitchValue.value,
+                label: 'Min. Expired',
+                controller: state.minExp,
+                isLong: false,
+                numberOutput: true,
+                hint: 'Ex: 10',
+                suffixSection: Text(
+                  'hari',
+                  style: headingText3,
+                ),
+              ),
+              TextFieldWidget(
+                isEnableSwitch: true,
+                switchOnChange: (v) {
+                  state.maxSwitchValue.value = v;
+                },
+                switchValue: state.maxSwitchValue.value,
+                label: 'Max. Expired',
+                controller: state.maxExp,
+                isLong: false,
+                numberOutput: true,
+                hint: 'Ex: 10',
+                suffixSection: Text(
+                  'hari',
+                  style: headingText3,
+                ),
+              ),
+            ],
+          ),
+        ),
+        // const SizedBox(
+        //   height: 16,
+        // ),
+        // Text(
+        //   'Gambar (Struk)',
+        //   style: headingText2,
+        // ),
+        // const SizedBox(
+        //   height: 12,
+        // ),
+        // Container(
+        //   decoration: BoxDecoration(
+        //     borderRadius: BorderRadius.circular(12),
+        //     color: Colors.grey,
+        //   ),
+        //   width: MediaQuery.of(context).size.width,
+        //   height: 300,
+        //   child: Image.network(
+        //     'https://d1vbn70lmn1nqe.cloudfront.net/prod/wp-content/uploads/2021/06/28062837/vector_5.kesehatan-vitamin-dan-suplemen.jpg',
+        //     fit: BoxFit.cover,
+        //   ),
+        // ),
+        const SizedBox(
+          height: 36,
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: addButtonColor,
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
+          onPressed: () async {
+            if (state.listSuplemenName.isEmpty ||
+                state.price.text == '' ||
+                state.amount.text == '') {
+              Flushbar(
+                message: "Gagal, Form tidak sesuai",
+                duration: Duration(seconds: 3),
+                leftBarIndicatorColor: Colors.red[400],
+              ).show(context);
+            } else {
+              await state.postData(
+                () => {
+                  state.getAllData(
+                    state.pageIdentifier.value,
+                    () {},
+                  ),
+                  state.resetVariables(),
+                  Navigator.pop(context),
+                },
+              );
+            }
+          },
+          child: Obx(
+            () => state.isLoadingPost.value
+                ? SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  )
+                : Icon(
+                    Icons.add,
+                  ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  getBottomSheetEdit(int index, int id) {
+    BottomSheetWidget.getBottomSheetWidget(
+      context,
+      [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const CircleAvatar(
+                backgroundColor: Colors.red,
+                radius: 12,
+                child: Icon(
+                  Icons.close,
+                  size: 14,
+                  color: Colors.black,
+                ),
+              ),
+            )
+          ],
+        ),
+        const SizedBox(
+          height: 18,
+        ),
         Text(
-          'Gambar (Struk)',
+          'Edit Bahan',
+          style: headingText1,
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(
+          height: 54,
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Fungsi : ${state.functionCategory.value}',
+              style: headingText2,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+          ],
+        ),
+        Text(
+          'Nama Suplemen',
           style: headingText2,
         ),
         const SizedBox(
           height: 12,
         ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: Colors.grey,
-          ),
-          width: MediaQuery.of(context).size.width,
-          height: 300,
-          child: Image.network(
-            'https://d1vbn70lmn1nqe.cloudfront.net/prod/wp-content/uploads/2021/06/28062837/vector_5.kesehatan-vitamin-dan-suplemen.jpg',
-            fit: BoxFit.cover,
+        state.listSuplemenName.isEmpty
+            ? Center(
+                child: Text(
+                  'Tidak ada data',
+                  style: headingText3.copyWith(
+                    color: Colors.red,
+                  ),
+                ),
+              )
+            : Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: inputColor,
+                ),
+                child: StatefulBuilder(
+                  builder: ((context, setState) {
+                    return DropdownButtonHideUnderline(
+                      child: DropdownButton<Map<String, dynamic>>(
+                        onChanged: (value) async {
+                          setState(() {
+                            state.selectedSuplemen.value = value!;
+                          });
+                          state.selectedSuplemen.value = value!;
+                          state.isSuplemenSelected.value = true;
+                          // state.name.text
+                        },
+                        value: state.selectedSuplemen.value,
+                        dropdownColor: inputColor,
+                        items: state.listSuplemenName
+                            .map<DropdownMenuItem<Map<String, dynamic>>>(
+                                (material) {
+                          return DropdownMenuItem<Map<String, dynamic>>(
+                            value: material,
+                            child: Text(
+                              material['suplemen_name'],
+                              style: headingText3,
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  }),
+                ),
+              ),
+        const SizedBox(
+          height: 16,
+        ),
+        Obx(
+          () => TextFieldWidget(
+            label: 'Deskripsi Bahan',
+            controller: state.desc,
+            isMoreText: true,
+            hint: 'Ex: Bahan kimia',
+            isEdit: state.descEdit.value,
           ),
         ),
         const SizedBox(
-          height: 36,
+          height: 16,
         ),
-        editable
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+        Obx(
+          () => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: addButtonColor,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 6,
+                    child: TextFieldWidget(
+                      label: 'Jumlah',
+                      controller: state.amount,
+                      isLong: false,
+                      numberOutput: true,
+                      hint: 'Ex: 1',
+                      isEdit: state.amountEdit.value,
                     ),
-                    onPressed: () async {
-                      if (state.name.text == '' ||
-                          state.price.text == '' ||
-                          state.desc.text == '' ||
-                          state.amount.text == '' ||
-                          state.minExp.text == '' ||
-                          state.image.value == '') {
-                        Flushbar(
-                          message: "Gagal, Form tidak sesuai",
-                          duration: Duration(seconds: 3),
-                          leftBarIndicatorColor: Colors.red[400],
-                        ).show(context);
-                      } else {
-                        await state.updateData(
-                          id,
-                          () => {
-                            state.getAllData(
-                              state.pageIdentifier.value,
-                              () {},
-                            ),
-                            state.resetVariables(),
-                            Navigator.pop(context),
-                          },
+                  ),
+                  SizedBox(
+                    width: 6,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width / 5,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: inputColor,
+                    ),
+                    child: StatefulBuilder(
+                      builder: ((context, setState) {
+                        return DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            onChanged: ((String? value) {
+                              setState(() {
+                                state.typeCategory.value = value!;
+                              });
+                              state.typeCategory.value = value!;
+                            }),
+                            value: state.typeCategory.value,
+                            dropdownColor: inputColor,
+                            items: state.dropdownList2.map(
+                              (String val) {
+                                return DropdownMenuItem(
+                                  value: val,
+                                  child: Text(
+                                    val,
+                                    style: headingText3,
+                                  ),
+                                );
+                              },
+                            ).toList(),
+                          ),
                         );
-                      }
-                    },
-                    child: Obx(
-                      () => state.isLoadingPost.value
-                          ? SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                              ),
-                            )
-                          : Text(
-                              'Ubah',
-                              style: headingText2,
-                            ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Hapus Data'),
-                              content: const Text(
-                                  'Apakah anda yakin ingin menghapus data ini?'),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.pop(context, 'Cancel'),
-                                  child: const Text('Cancel'),
-                                ),
-                                TextButton(
-                                  onPressed: () async {
-                                    await state.deleteData(
-                                        state.suplemenList.value.data![index]
-                                            .idInt!,
-                                        () => {
-                                              state.getAllData(
-                                                state.pageIdentifier.value,
-                                                () {},
-                                              ),
-                                            });
-                                    if (context.mounted) {
-                                      Navigator.of(context).pop();
-                                    }
-                                    if (context.mounted) {
-                                      Navigator.of(context).pop();
-                                    }
-                                  },
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            );
-                          });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                    child: Obx(
-                      () => state.isLoadingDelete.value
-                          ? SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                              ),
-                            )
-                          : Text(
-                              'Hapus',
-                              style: headingText2,
-                            ),
+                      }),
                     ),
                   ),
                 ],
-              )
-            : ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: addButtonColor,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
-                onPressed: () async {
-                  if (state.name.text == '' ||
-                      state.price.text == '' ||
-                      state.desc.text == '' ||
-                      state.amount.text == '' ||
-                      state.minExp.text == '' ||
-                      state.image.value == '') {
-                    Flushbar(
-                      message: "Gagal, Form tidak sesuai",
-                      duration: Duration(seconds: 3),
-                      leftBarIndicatorColor: Colors.red[400],
-                    ).show(context);
-                  } else {
-                    await state.postData(
-                      () => {
-                        state.getAllData(
-                          state.pageIdentifier.value,
-                          () {},
-                        ),
-                        state.resetVariables(),
-                        Navigator.pop(context),
-                      },
-                    );
-                  }
-                },
-                child: Obx(
-                  () => state.isLoadingPost.value
-                      ? SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                          ),
-                        )
-                      : Icon(
-                          Icons.add,
-                        ),
+              ),
+              TextFieldWidget(
+                label: 'Harga Beli',
+                controller: state.price,
+                isLong: false,
+                hint: 'Ex: 100',
+                numberOutput: true,
+                isEdit: state.priceEdit.value,
+                prefixSection: Text(
+                  'Rp',
+                  style: headingText3,
                 ),
               ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        Obx(
+          () => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextFieldWidget(
+                label: 'Min. Expired',
+                controller: state.minExp,
+                isLong: false,
+                numberOutput: true,
+                isEdit: state.minExpEdit.value,
+                hint: 'Ex: 10',
+                suffixSection: Text(
+                  'hari',
+                  style: headingText3,
+                ),
+              ),
+              TextFieldWidget(
+                label: 'Max. Expired',
+                controller: state.maxExp,
+                isLong: false,
+                numberOutput: true,
+                hint: 'Ex: 10',
+                isEdit: state.maxExpEdit.value,
+                suffixSection: Text(
+                  'hari',
+                  style: headingText3,
+                ),
+              ),
+            ],
+          ),
+        ),
+        // const SizedBox(
+        //   height: 16,
+        // ),
+        // Text(
+        //   'Gambar (Struk)',
+        //   style: headingText2,
+        // ),
+        // const SizedBox(
+        //   height: 12,
+        // ),
+        // Container(
+        //   decoration: BoxDecoration(
+        //     borderRadius: BorderRadius.circular(12),
+        //     color: Colors.grey,
+        //   ),
+        //   width: MediaQuery.of(context).size.width,
+        //   height: 300,
+        //   child: Image.network(
+        //     'https://d1vbn70lmn1nqe.cloudfront.net/prod/wp-content/uploads/2021/06/28062837/vector_5.kesehatan-vitamin-dan-suplemen.jpg',
+        //     fit: BoxFit.cover,
+        //   ),
+        // ),
+        const SizedBox(
+          height: 36,
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Obx(
+              () => state.isSheetEditable.value
+                  ? ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: addButtonColor,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      onPressed: () async {
+                        if (state.listSuplemenName.isEmpty ||
+                            state.price.text == '' ||
+                            state.amount.text == '') {
+                          Flushbar(
+                            message: "Gagal, Form tidak sesuai",
+                            duration: Duration(seconds: 3),
+                            leftBarIndicatorColor: Colors.red[400],
+                          ).show(context);
+                        } else {
+                          await state.updateData(
+                            id,
+                            () => {
+                              state.getAllData(
+                                state.pageIdentifier.value,
+                                () {},
+                              ),
+                              state.resetVariables(),
+                              Navigator.pop(context),
+                            },
+                          );
+                        }
+                      },
+                      child: Obx(
+                        () => state.isLoadingPost.value
+                            ? SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              )
+                            : Text(
+                                'Simpan',
+                                style: headingText2,
+                              ),
+                      ),
+                    )
+                  : ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange.shade400,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      onPressed: () async {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('Ubah Data'),
+                                content: const Text(
+                                    'Apakah anda yakin ingin mengubah data ini?'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, 'Tidak'),
+                                    child: const Text('Tidak'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () async {
+                                      state.setSheetVariableEdit(true);
+                                      if (context.mounted) {
+                                        Navigator.of(context).pop();
+                                      }
+                                    },
+                                    child: const Text('Ya'),
+                                  ),
+                                ],
+                              );
+                            });
+                      },
+                      child: Text(
+                        'Ubah',
+                        style: headingText2,
+                      ),
+                    ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('Hapus Data'),
+                        content: const Text(
+                            'Apakah anda yakin ingin menghapus data ini?'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'Cancel'),
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              await state.deleteData(
+                                  state.suplemenList.value.data![index].idInt!,
+                                  () => {
+                                        state.getAllData(
+                                          state.pageIdentifier.value,
+                                          () {},
+                                        ),
+                                      });
+                              if (context.mounted) {
+                                Navigator.of(context).pop();
+                              }
+                              if (context.mounted) {
+                                Navigator.of(context).pop();
+                              }
+                            },
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      );
+                    });
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              child: Obx(
+                () => state.isLoadingDelete.value
+                    ? SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      )
+                    : Text(
+                        'Hapus',
+                        style: headingText2,
+                      ),
+              ),
+            ),
+          ],
+        )
       ],
     );
   }

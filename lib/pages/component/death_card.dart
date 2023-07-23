@@ -1,13 +1,13 @@
-import 'package:fish/models/fishDeath_model.dart';
+import 'package:fish/models/fish_death_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 
 class DeathCard extends StatelessWidget {
-  final FishDeath? fishDeath;
+  final FishDeath fishDeath;
 
   const DeathCard({
     Key? key,
-    this.fishDeath,
+    required this.fishDeath,
   }) : super(key: key);
 
   @override

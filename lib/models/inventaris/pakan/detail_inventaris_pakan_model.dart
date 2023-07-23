@@ -21,6 +21,7 @@ class DetailInventarisPakanModel {
 
 class Data {
   String? sId;
+  String? feedNameId;
   int? idInt;
   String? feedCategory;
   String? brandName;
@@ -38,6 +39,7 @@ class Data {
 
   Data(
       {this.sId,
+      this.feedNameId,
       this.idInt,
       this.feedCategory,
       this.brandName,
@@ -55,6 +57,7 @@ class Data {
 
   Data.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
+    feedNameId = json['feed_name_id'];
     idInt = json['id_int'];
     feedCategory = json['feed_category'];
     brandName = json['brand_name'];
@@ -74,6 +77,7 @@ class Data {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_id'] = this.sId;
+    data['feed_name_id'] = this.feedNameId;
     data['id_int'] = this.idInt;
     data['feed_category'] = this.feedCategory;
     data['brand_name'] = this.brandName;

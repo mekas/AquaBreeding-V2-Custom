@@ -8,6 +8,7 @@ import 'package:fish/service/url_api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class InventarisBenihState extends Urls {
   RxString pageIdentifier = 'benih'.obs;
@@ -93,16 +94,32 @@ class InventarisBenihState extends Urls {
   RxString seedCategory = 'Benih'.obs;
   RxString fishCategory = 'Lele'.obs;
   RxString sortSize = '1-2 cm'.obs;
-  TextEditingController fishName = TextEditingController();
+  RxString fishName = ''.obs;
   TextEditingController fishAmount = TextEditingController();
   TextEditingController fishWeight = TextEditingController();
-  TextEditingController fishPrice = TextEditingController();
+  TextEditingController fishPrice = TextEditingController(text: '0');
+  TextEditingController fishPriceTotal = TextEditingController(text: '0');
   RxString fishImage =
       'https://www.hepper.com/wp-content/uploads/2022/09/red-male-betta-fish-in-aquarium_Grigorii-Pisotscki-Shutterstock.jpg'
           .obs;
 
+  RxBool fishAmountEdit = false.obs;
+  RxBool fishWeightEdit = false.obs;
+  RxBool fishPriceEdit = false.obs;
+  RxBool fishPriceTotalEdit = false.obs;
+
+  RxBool isSheetEditable = false.obs;
+  RxBool isReversed = false.obs;
+
+  var nameHistoryList = [
+    '',
+  ];
+  RxString selectedNameHistory = ''.obs;
+
   Future getAllSeedData(String type) async {
     seedList.value.data!.clear();
+    nameHistoryList.clear();
+    nameHistoryList.add('Semua');
     listMas.clear();
     listNilaHitam.clear();
     listNilaMerah.clear();
@@ -118,6 +135,10 @@ class InventarisBenihState extends Urls {
             InventarisBenihModel.fromJson(jsonDecode(response.body));
 
         seedList.value = res;
+
+        for (var i in seedList.value.data!) {
+          nameHistoryList.add(i.brandName.toString());
+        }
 
         for (var i in seedList.value.data!) {
           if (i.fishType == 'Lele') {
@@ -166,6 +187,8 @@ class InventarisBenihState extends Urls {
             selectedMas.value = listMas[0];
           }
         }
+
+        selectedNameHistory.value = nameHistoryList[0];
       }
       // inspect(listLele);
     } catch (e) {
@@ -292,10 +315,13 @@ class InventarisBenihState extends Urls {
         seedCategory.value = res.data!.fishSeedCategory.toString();
         fishCategory.value = res.data!.fishType.toString();
         sortSize.value = res.data!.width.toString();
-        fishName.text = res.data!.brandName.toString();
+        fishName.value = seedCategory.value == 'Benih'
+            ? '${fishCategory.value}${sortSize.value.split(' ')[0].replaceAll('-', '')}'
+            : '${fishCategory.value}${fishWeight.text.split(' ')[0]}';
         fishAmount.text = res.data!.amount.toString();
-        fishWeight.text = res.data!.weight.toString();
+        fishWeight.text = res.data!.weight!.toStringAsFixed(2);
         fishPrice.text = res.data!.price.toString();
+        fishPriceTotal.text = res.data!.totalPrice.toString();
         fishImage.value = res.data!.image.toString();
       }
       doAfter();
@@ -310,14 +336,20 @@ class InventarisBenihState extends Urls {
 
     map['fish_seed_category'] = seedCategory.value;
     map['fish_type'] = fishCategory.value;
-    map['brand_name'] = fishName.text;
+    map['brand_name'] = seedCategory.value == 'Benih'
+        ? '${fishCategory.value.replaceAll(' ', '')}${sortSize.value.split(' ')[0]}'
+        : '${fishCategory.value.replaceAll(' ', '')}${fishWeight.text.replaceAll(',', '.').split('.')[0]}';
     map['amount'] = fishAmount.text == '' ? '0' : fishAmount.text;
-    map['weight'] = fishWeight.text == '' ? '0' : fishWeight.text;
+    map['weight'] =
+        fishWeight.text == '' ? '0' : fishWeight.text.replaceAll(',', '.');
     map['width'] = seedCategory.value == 'Benih' ? sortSize.value : "";
     map['price'] = fishPrice.text == '' ? '0' : fishPrice.text;
+    map['total_price'] = fishPriceTotal.text == '' ? '0' : fishPriceTotal.text;
     map['image'] = fishImage.value;
 
     isLoadingPost.value = true;
+
+    inspect(map);
 
     try {
       await http.post(
@@ -336,11 +368,15 @@ class InventarisBenihState extends Urls {
 
     map['fish_seed_category'] = seedCategory.value;
     map['fish_type'] = fishCategory.value;
-    map['brand_name'] = fishName.text;
+    map['brand_name'] = seedCategory.value == 'Benih'
+        ? '${fishCategory.value.replaceAll(' ', '')}${sortSize.value.split(' ')[0]}'
+        : '${fishCategory.value.replaceAll(' ', '')}${fishWeight.text.replaceAll(',', '.').split('.')[0]}';
     map['amount'] = fishAmount.text == '' ? '0' : fishAmount.text;
-    map['weight'] = fishWeight.text == '' ? '0' : fishWeight.text;
+    map['weight'] =
+        fishWeight.text == '' ? '0' : fishWeight.text.replaceAll(',', '.');
     map['width'] = seedCategory.value == 'Benih' ? sortSize.value : "";
     map['price'] = fishPrice.text == '' ? '0' : fishPrice.text;
+    map['total_price'] = fishPriceTotal.text == '' ? '0' : fishPriceTotal.text;
     map['image'] = fishImage.value;
 
     isLoadingPost.value = true;
@@ -401,20 +437,26 @@ class InventarisBenihState extends Urls {
     }
   }
 
-  Future getHistorySeedData(
-      String firstDate, String lastDate, Function() doAfter) async {
+  Future getHistorySeedData(bool isReversed, String firstDate, String lastDate,
+      String name, Function() doAfter) async {
     seedHistoryList.value.data!.clear();
     isLoadingHistory.value = true;
 
-    final response = await http.get(
-        Uri.parse('${Urls.seedSch}?start_date=$firstDate&end_date=$lastDate'));
+    final response = await http.get(Uri.parse(
+        '${Urls.seedSch}?start_date=$firstDate&end_date=$lastDate&name=$name'));
 
     try {
       if (response.statusCode == 200) {
         HistorySeedModel res =
             HistorySeedModel.fromJson(jsonDecode(response.body));
 
-        seedHistoryList.value = res;
+        if (isReversed) {
+          var temp = res;
+          seedHistoryList.value.data = temp.data!.reversed.toList();
+        } else {
+          var temp = res;
+          seedHistoryList.value.data = temp.data!;
+        }
 
         doAfter();
       }
@@ -445,9 +487,35 @@ class InventarisBenihState extends Urls {
     nilaMerahFishStock.value = '';
     nilaMerahFishWeigth.value = '';
 
-    fishName.clear();
+    fishName.value = '';
+    fishPriceTotal.clear();
     fishAmount.clear();
     fishWeight.clear();
     fishPrice.clear();
+  }
+
+  String dateFormat(String dateString) {
+    DateTime dateTime = DateTime.parse(dateString);
+    var formatter = DateFormat('EEEE, d MMMM y | HH:mm', 'id');
+    var formattedDate = formatter.format(dateTime);
+    return formattedDate.split('|').join('| Jam');
+  }
+
+  setSheetVariableEdit(bool status) {
+    if (status) {
+      isSheetEditable.value = true;
+
+      fishAmountEdit.value = true;
+      fishWeightEdit.value = true;
+      fishPriceEdit.value = true;
+      fishPriceTotalEdit.value = true;
+    } else {
+      isSheetEditable.value = false;
+
+      fishAmountEdit.value = false;
+      fishWeightEdit.value = false;
+      fishPriceEdit.value = false;
+      fishPriceTotalEdit.value = false;
+    }
   }
 }

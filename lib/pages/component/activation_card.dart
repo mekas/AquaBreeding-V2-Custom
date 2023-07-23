@@ -59,6 +59,7 @@ class ActivationCard extends StatelessWidget {
                       style: blackTextStyle.copyWith(
                         fontSize: 13,
                         fontWeight: heavy,
+                        color: Colors.white,
                       ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,

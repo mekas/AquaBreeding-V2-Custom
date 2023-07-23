@@ -17,9 +17,14 @@ class _PakanIndustriPageState extends State<PakanIndustriPage> {
   @override
   void initState() {
     super.initState();
+    state.resetVariables();
     state.pageIdentifier.value = 'industri';
+    state.feedCategory.value = 'Industri';
+    state.setSheetVariableEdit(false);
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       state.getAllData('industri', () {});
+      state.getPakanNameData('industri');
     });
   }
 

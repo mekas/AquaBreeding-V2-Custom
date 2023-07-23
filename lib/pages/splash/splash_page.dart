@@ -39,11 +39,7 @@ class SplashPage extends StatelessWidget {
               fontWeight: medium,
             ),
           ),
-<<<<<<< HEAD
-          const SizedBox(
-=======
           SizedBox(
->>>>>>> 376a24ff1f24bc5f91e6d48a775e2e6525edf55b
             height: 40,
           ),
           CircularProgressIndicator(

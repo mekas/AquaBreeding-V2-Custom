@@ -10,6 +10,7 @@ import 'package:fish/widgets/bottom_sheet_widget.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class InventarisBenihMainpage extends StatefulWidget {
   const InventarisBenihMainpage({super.key});
@@ -23,6 +24,13 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
   final InventarisBenihState state = Get.put(InventarisBenihState());
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initializeDateFormatting('id', null);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
@@ -30,7 +38,7 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
         backgroundColor: backgroundColor1,
         appBar: AppBar(
           centerTitle: true,
-          backgroundColor: backgroundColor1,
+          backgroundColor: backgroundColor2,
           elevation: 0,
           title: Text(
             'Benih',
@@ -48,11 +56,9 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
               ),
             )
           ],
-          bottom: TabBar(
-            indicator: BoxDecoration(
-              color: primaryColor,
-            ),
-            tabs: const [
+          bottom: const TabBar(
+            indicatorColor: Colors.white,
+            tabs: [
               Tab(
                 child: Text(
                   'Kelas Benih',
@@ -199,14 +205,14 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                     }),
                   ),
                 ),
-                const SizedBox(
-                  height: 16,
-                ),
-                TextFieldWidget(
-                  label: 'Nama',
-                  controller: state.fishName,
-                  hint: 'Ex: Ikan01',
-                ),
+                // const SizedBox(
+                //   height: 16,
+                // ),
+                // TextFieldWidget(
+                //   label: 'Nama',
+                //   controller: state.fishName,
+                //   hint: 'Ex: Ikan01',
+                // ),
                 const SizedBox(
                   height: 16,
                 ),
@@ -298,13 +304,13 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 TextFieldWidget(
-                                  label: 'Berat',
+                                  label: 'Berat / ekor',
                                   controller: state.fishWeight,
                                   isLong: false,
                                   hint: 'Ex: 100',
                                   numberOutput: true,
                                   suffixSection: Text(
-                                    'gram',
+                                    'kg',
                                     style: headingText3,
                                   ),
                                 ),
@@ -327,39 +333,94 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                           ],
                         ),
                 ),
-                TextFieldWidget(
-                  label: 'Harga Beli',
-                  controller: state.fishPrice,
-                  hint: 'Ex: 10000',
-                  isLong: true,
-                  numberOutput: true,
-                  prefixSection: Text(
-                    'Rp',
-                    style: headingText3,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextFieldWidget(
+                      label: 'Harga Beli Satuan',
+                      controller: state.fishPrice,
+                      hint: 'Ex: 10000',
+                      isLong: false,
+                      numberOutput: true,
+                      prefixSection: Text(
+                        'Rp',
+                        style: headingText3,
+                      ),
+                      onChange: (String v) {
+                        if (state.fishAmount.text == '') {
+                          state.fishPrice.clear();
+                          state.fishPriceTotal.clear();
+                          Flushbar(
+                            message: "Masukkan jumlah terlebih dahulu",
+                            duration: Duration(seconds: 3),
+                            leftBarIndicatorColor: Colors.red[400],
+                          ).show(context);
+                        } else {
+                          state.fishPriceTotal.text = (int.parse(
+                                      state.fishPrice.text == ''
+                                          ? '0'
+                                          : state.fishPrice.text) *
+                                  int.parse(state.fishAmount.text))
+                              .round()
+                              .toString();
+                        }
+                      },
+                    ),
+                    TextFieldWidget(
+                      label: 'Harga Beli Total',
+                      controller: state.fishPriceTotal,
+                      hint: 'Ex: 10000',
+                      isLong: false,
+                      numberOutput: true,
+                      prefixSection: Text(
+                        'Rp',
+                        style: headingText3,
+                      ),
+                      onChange: (String v) {
+                        if (state.fishAmount.text == '') {
+                          state.fishPrice.clear();
+                          state.fishPriceTotal.clear();
+                          Flushbar(
+                            message: "Masukkan jumlah terlebih dahulu",
+                            duration: Duration(seconds: 3),
+                            leftBarIndicatorColor: Colors.red[400],
+                          ).show(context);
+                        } else {
+                          state.fishPrice.text = (int.parse(
+                                      state.fishPriceTotal.text == ''
+                                          ? '0'
+                                          : state.fishPriceTotal.text) /
+                                  int.parse(state.fishAmount.text))
+                              .round()
+                              .toString();
+                        }
+                      },
+                    ),
+                  ],
                 ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Text(
-                  'Gambar',
-                  style: headingText2,
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.grey,
-                  ),
-                  width: MediaQuery.of(context).size.width,
-                  height: 300,
-                  child: Image.network(
-                    'https://www.hepper.com/wp-content/uploads/2022/09/red-male-betta-fish-in-aquarium_Grigorii-Pisotscki-Shutterstock.jpg',
-                    fit: BoxFit.cover,
-                  ),
-                ),
+
+                // const SizedBox(
+                //   height: 16,
+                // ),
+                // Text(
+                //   'Gambar',
+                //   style: headingText2,
+                // ),
+                // const SizedBox(
+                //   height: 12,
+                // ),
+                // Container(
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(12),
+                //     color: Colors.grey,
+                //   ),
+                //   width: MediaQuery.of(context).size.width,
+                //   height: 300,
+                //   child: Image.network(
+                //     'https://www.hepper.com/wp-content/uploads/2022/09/red-male-betta-fish-in-aquarium_Grigorii-Pisotscki-Shutterstock.jpg',
+                //     fit: BoxFit.cover,
+                //   ),
+                // ),
                 const SizedBox(
                   height: 36,
                 ),
@@ -372,9 +433,9 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                     ),
                   ),
                   onPressed: () async {
-                    if (state.fishName.text == '' ||
-                        state.fishAmount.text == '' ||
-                        state.fishPrice.text == '') {
+                    if (state.fishAmount.text == '' ||
+                        state.fishPrice.text == '' ||
+                        state.fishPriceTotal.text == '') {
                       Flushbar(
                         message: "Gagal, Form tidak sesuai",
                         duration: Duration(seconds: 3),

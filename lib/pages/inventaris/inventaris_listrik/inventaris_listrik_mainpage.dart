@@ -9,6 +9,7 @@ import 'package:fish/widgets/bottom_sheet_widget.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class InventarisListrikPage extends StatefulWidget {
   const InventarisListrikPage({Key? key}) : super(key: key);
@@ -21,6 +22,13 @@ class _InventarisListrikPageState extends State<InventarisListrikPage> {
   final InventarisListrikState state = Get.put(InventarisListrikState());
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initializeDateFormatting('id', null);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
@@ -28,7 +36,7 @@ class _InventarisListrikPageState extends State<InventarisListrikPage> {
         backgroundColor: backgroundColor1,
         appBar: AppBar(
           centerTitle: true,
-          backgroundColor: backgroundColor1,
+          backgroundColor: backgroundColor2,
           elevation: 0,
           title: Text(
             'Listrik',
@@ -42,11 +50,9 @@ class _InventarisListrikPageState extends State<InventarisListrikPage> {
               icon: const Icon(Icons.filter_list_rounded),
             ),
           ],
-          bottom: TabBar(
-            indicator: BoxDecoration(
-              color: primaryColor,
-            ),
-            tabs: const [
+          bottom: const TabBar(
+            indicatorColor: Colors.white,
+            tabs: [
               Tab(
                 child: Text(
                   'Prabayar',
@@ -62,8 +68,8 @@ class _InventarisListrikPageState extends State<InventarisListrikPage> {
             ],
           ),
         ),
-        body: TabBarView(
-          physics: const NeverScrollableScrollPhysics(),
+        body: const TabBarView(
+          physics: NeverScrollableScrollPhysics(),
           children: [
             PrabayarPage(),
             PascabayarPage(),
@@ -216,27 +222,27 @@ class _InventarisListrikPageState extends State<InventarisListrikPage> {
                           ],
                         ),
                 ),
-                Text(
-                  'Gambar (Struk)',
-                  style: headingText2,
-                ),
+                // Text(
+                //   'Gambar (Struk)',
+                //   style: headingText2,
+                // ),
+                // const SizedBox(
+                //   height: 12,
+                // ),
+                // Container(
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(12),
+                //     color: Colors.grey,
+                //   ),
+                //   width: MediaQuery.of(context).size.width,
+                //   height: 300,
+                //   child: Image.network(
+                //     'https://media.istockphoto.com/id/1183169839/vector/lightning-isolated-vector-icon-electric-bolt-flash-icon-power-energy-symbol-thunder-icon.jpg?s=612x612&w=0&k=20&c=kFdwoQHmrv8EzCofbdzL7EVW8vtgiHvhrGkOl0_N0io=',
+                //     fit: BoxFit.cover,
+                //   ),
+                // ),
                 const SizedBox(
                   height: 12,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.grey,
-                  ),
-                  width: MediaQuery.of(context).size.width,
-                  height: 300,
-                  child: Image.network(
-                    'https://media.istockphoto.com/id/1183169839/vector/lightning-isolated-vector-icon-electric-bolt-flash-icon-power-energy-symbol-thunder-icon.jpg?s=612x612&w=0&k=20&c=kFdwoQHmrv8EzCofbdzL7EVW8vtgiHvhrGkOl0_N0io=',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                const SizedBox(
-                  height: 36,
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(

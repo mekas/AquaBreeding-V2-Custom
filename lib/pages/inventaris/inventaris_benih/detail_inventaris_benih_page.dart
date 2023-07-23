@@ -4,6 +4,7 @@ import 'package:fish/widgets/dialog_widget.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class DetailInventarisBenihPage extends StatefulWidget {
   const DetailInventarisBenihPage({super.key});
@@ -21,7 +22,18 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
   @override
   void initState() {
     super.initState();
-    state.getHistorySeedData(state.firstDate.text, state.lastDate.text, () {});
+    initializeDateFormatting('id', null);
+    state.isReversed.value = false;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      state.getAllSeedData('');
+      state.getHistorySeedData(
+        false,
+        state.firstDate.text,
+        state.lastDate.text,
+        '',
+        () {},
+      );
+    });
   }
 
   @override
@@ -64,167 +76,292 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
                       style: headingText3,
                     ),
                   )
-                : Container(
-                    color: backgroundColor1,
-                    child: SafeArea(
-                      child: ListView.builder(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        itemCount: state.seedHistoryList.value.data!.length,
-                        physics: BouncingScrollPhysics(),
-                        itemBuilder: ((context, index) {
-                          return Container(
-                            margin: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-                            decoration: BoxDecoration(
-                              color: backgroundColor1,
-                              border: Border.all(width: 2, color: primaryColor),
-                              borderRadius: BorderRadius.circular(8),
+                : Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 1.3,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 4),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: inputColor,
+                                ),
+                                child: StatefulBuilder(
+                                  builder: ((context, setState) {
+                                    return DropdownButtonHideUnderline(
+                                      child: DropdownButton(
+                                        onChanged: ((String? value) async {
+                                          setState(() {
+                                            state.selectedNameHistory.value =
+                                                value!;
+                                          });
+
+                                          state.resetVariables();
+                                        }),
+                                        value: state.selectedNameHistory.value,
+                                        dropdownColor: inputColor,
+                                        items: state.nameHistoryList.map(
+                                          (String val) {
+                                            return DropdownMenuItem(
+                                              value: val,
+                                              child: Text(
+                                                val,
+                                                style: headingText3,
+                                              ),
+                                            );
+                                          },
+                                        ).toList(),
+                                      ),
+                                    );
+                                  }),
+                                ),
+                              ),
                             ),
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color: primaryColor,
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Tanggal :',
-                                        style: headingText3,
-                                      ),
-                                      Text(
-                                        state.seedHistoryList.value.data![index]
-                                            .createdAt!
-                                            .toString()
-                                            .split(' ')[0]
-                                            .split('-')
-                                            .reversed
-                                            .join('-'),
-                                        style: headingText3,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 12,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        children: [
-                                          Text(
-                                            'Tipe',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          SizedBox(height: 6),
-                                          Text(
-                                            state
-                                                .seedHistoryList
-                                                .value
-                                                .data![index]
-                                                .seed!
-                                                .fishSeedCategory
-                                                .toString(),
-                                            style: TextStyle(
-                                              color: Colors.grey.shade500,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            'Nama',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          SizedBox(height: 6),
-                                          Text(
-                                            state.seedHistoryList.value
-                                                .data![index].seed!.brandName
-                                                .toString(),
-                                            style: TextStyle(
-                                              color: Colors.grey.shade500,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            'Jumlah',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          SizedBox(height: 6),
-                                          Text(
-                                            '-${state.seedHistoryList.value.data![index].usage.toString()} ekor',
-                                            style: TextStyle(
-                                              color: Colors.red.shade900,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            'Kolam',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          SizedBox(height: 6),
-                                          Text(
-                                            state.seedHistoryList.value
-                                                .data![index].pond
-                                                .toString(),
-                                            style: TextStyle(
-                                              color: Colors.grey.shade500,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 12,
-                                ),
-                              ],
-                            ),
-                          );
-                        }),
+                            GestureDetector(
+                                onTap: () async {
+                                  await state.getHistorySeedData(
+                                    state.isReversed.value,
+                                    state.firstDate.text,
+                                    state.lastDate.text,
+                                    state.selectedNameHistory.value == 'Semua'
+                                        ? ''
+                                        : state.selectedNameHistory.value,
+                                    () {},
+                                  );
+                                },
+                                child: Icon(
+                                  Icons.search,
+                                  color: Colors.white,
+                                )),
+                          ],
+                        ),
                       ),
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Urutkan Data',
+                              style: headingText3,
+                            ),
+                            GestureDetector(
+                                onTap: () async {
+                                  state.isReversed.value =
+                                      !state.isReversed.value;
+                                  await state.getHistorySeedData(
+                                    state.isReversed.value,
+                                    state.firstDate.text,
+                                    state.lastDate.text,
+                                    state.selectedNameHistory.value == 'Semua'
+                                        ? ''
+                                        : state.selectedNameHistory.value,
+                                    () {},
+                                  );
+                                },
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      state.isReversed.value
+                                          ? Icons.arrow_upward_rounded
+                                          : Icons.arrow_downward_rounded,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text(
+                                      state.isReversed.value
+                                          ? 'Terbaru - Terlama'
+                                          : 'Terlama - Terbaru',
+                                      style: headingText3,
+                                    ),
+                                  ],
+                                )),
+                          ],
+                        ),
+                      ),
+                      Flexible(
+                        child: Container(
+                          color: backgroundColor1,
+                          child: SafeArea(
+                            child: ListView.builder(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              itemCount:
+                                  state.seedHistoryList.value.data!.length,
+                              physics: BouncingScrollPhysics(),
+                              itemBuilder: ((context, index) {
+                                return Container(
+                                  margin:
+                                      const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                                  decoration: BoxDecoration(
+                                    color: backgroundColor1,
+                                    border: Border.all(
+                                        width: 2, color: primaryColor),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color: primaryColor,
+                                          borderRadius:
+                                              BorderRadius.circular(6),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              'Tanggal :',
+                                              style: headingText3,
+                                            ),
+                                            Text(
+                                              state.dateFormat(state
+                                                  .seedHistoryList
+                                                  .value
+                                                  .data![index]
+                                                  .createdAt!
+                                                  .toString()),
+                                              style: headingText3,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 12,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  'Tipe',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 6),
+                                                Text(
+                                                  state
+                                                      .seedHistoryList
+                                                      .value
+                                                      .data![index]
+                                                      .seed!
+                                                      .fishSeedCategory
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    color: Colors.grey.shade500,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  'Nama',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 6),
+                                                Text(
+                                                  state
+                                                      .seedHistoryList
+                                                      .value
+                                                      .data![index]
+                                                      .seed!
+                                                      .brandName
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    color: Colors.grey.shade500,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  'Jumlah',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 6),
+                                                Text(
+                                                  '-${state.seedHistoryList.value.data![index].usage.toString()} ekor',
+                                                  style: TextStyle(
+                                                    color: Colors.red.shade900,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  'Kolam',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 6),
+                                                Text(
+                                                  state.seedHistoryList.value
+                                                      .data![index].pond
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    color: Colors.grey.shade500,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 12,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
       ),
     );
@@ -320,8 +457,10 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
           ),
           onPressed: () async {
             await state.getHistorySeedData(
+              state.isReversed.value,
               state.firstDate.text,
               state.lastDate.text,
+              '',
               () {
                 Navigator.pop(context);
               },

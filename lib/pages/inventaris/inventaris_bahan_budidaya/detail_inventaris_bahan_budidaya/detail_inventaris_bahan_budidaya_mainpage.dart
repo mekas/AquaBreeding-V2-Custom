@@ -23,8 +23,9 @@ class _DetailInventarisBahanBudidayaMainpageState
   @override
   void initState() {
     super.initState();
+    state.isReversed.value = false;
     state.getHistorySuplemenData(
-        state.firstDate.text, state.lastDate.text, () {});
+        false, state.firstDate.text, state.lastDate.text, () {});
   }
 
   @override
@@ -67,163 +68,222 @@ class _DetailInventarisBahanBudidayaMainpageState
                       style: headingText3,
                     ),
                   )
-                : Container(
-                    color: backgroundColor1,
-                    child: SafeArea(
-                      child: ListView.builder(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        itemCount: state.suplemenHistoryList.value.data!.length,
-                        physics: BouncingScrollPhysics(),
-                        itemBuilder: ((context, index) {
-                          return Container(
-                            margin: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-                            decoration: BoxDecoration(
-                              color: backgroundColor1,
-                              border: Border.all(width: 2, color: primaryColor),
-                              borderRadius: BorderRadius.circular(8),
+                : Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Urutkan Data',
+                              style: headingText3,
                             ),
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color: primaryColor,
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Tanggal :',
-                                        style: headingText3,
-                                      ),
-                                      Text(
-                                        state.suplemenHistoryList.value
-                                            .data![index].createdAt!
-                                            .toString()
-                                            .split(' ')[0]
-                                            .split('-')
-                                            .reversed
-                                            .join('-'),
-                                        style: headingText3,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 12,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        children: [
-                                          Text(
-                                            'Fungsi',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          SizedBox(height: 6),
-                                          Text(
-                                            state.suplemenHistoryList.value
-                                                .data![index].suplemen!.function
-                                                .toString(),
-                                            style: TextStyle(
-                                              color: Colors.grey.shade500,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            'Nama',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          SizedBox(height: 6),
-                                          Text(
-                                            state.suplemenHistoryList.value
-                                                .data![index].suplemen!.name
-                                                .toString(),
-                                            style: TextStyle(
-                                              color: Colors.grey.shade500,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            'Jumlah',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          SizedBox(height: 6),
-                                          Text(
-                                            '-${state.suplemenHistoryList.value.data![index].usage.toString()} ekor',
-                                            style: TextStyle(
-                                              color: Colors.red.shade900,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            'Kolam',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          SizedBox(height: 6),
-                                          Text(
-                                            state.suplemenHistoryList.value
-                                                .data![index].pond
-                                                .toString(),
-                                            style: TextStyle(
-                                              color: Colors.grey.shade500,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 12,
-                                ),
-                              ],
-                            ),
-                          );
-                        }),
+                            GestureDetector(
+                                onTap: () async {
+                                  state.isReversed.value =
+                                      !state.isReversed.value;
+                                  await state.getHistorySuplemenData(
+                                      state.isReversed.value,
+                                      state.firstDate.text,
+                                      state.lastDate.text,
+                                      () {});
+                                },
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      state.isReversed.value
+                                          ? Icons.arrow_upward_rounded
+                                          : Icons.arrow_downward_rounded,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text(
+                                      state.isReversed.value
+                                          ? 'Terbaru - Terlama'
+                                          : 'Terlama - Terbaru',
+                                      style: headingText3,
+                                    ),
+                                  ],
+                                )),
+                          ],
+                        ),
                       ),
-                    ),
+                      Flexible(
+                        child: Container(
+                          color: backgroundColor1,
+                          child: SafeArea(
+                            child: ListView.builder(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              itemCount:
+                                  state.suplemenHistoryList.value.data!.length,
+                              physics: BouncingScrollPhysics(),
+                              itemBuilder: ((context, index) {
+                                return Container(
+                                  margin:
+                                      const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                                  decoration: BoxDecoration(
+                                    color: backgroundColor1,
+                                    border: Border.all(
+                                        width: 2, color: primaryColor),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color: primaryColor,
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              'Tanggal :',
+                                              style: headingText3,
+                                            ),
+                                            Text(
+                                              state.dateFormat(state
+                                                  .suplemenHistoryList
+                                                  .value
+                                                  .data![index]
+                                                  .createdAt!
+                                                  .toString()),
+                                              style: headingText3,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 12,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  'Fungsi',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 6),
+                                                Text(
+                                                  state
+                                                      .suplemenHistoryList
+                                                      .value
+                                                      .data![index]
+                                                      .suplemen!
+                                                      .function
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    color: Colors.grey.shade500,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  'Nama',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 6),
+                                                Text(
+                                                  state
+                                                      .suplemenHistoryList
+                                                      .value
+                                                      .data![index]
+                                                      .suplemen!
+                                                      .name
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    color: Colors.grey.shade500,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  'Jumlah',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 6),
+                                                Text(
+                                                  '-${state.suplemenHistoryList.value.data![index].usage.toString()} kg',
+                                                  style: TextStyle(
+                                                    color: Colors.red.shade900,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  'Kolam',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 6),
+                                                Text(
+                                                  state.suplemenHistoryList
+                                                      .value.data![index].pond
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    color: Colors.grey.shade500,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 12,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
       ),
     );
@@ -319,6 +379,7 @@ class _DetailInventarisBahanBudidayaMainpageState
           ),
           onPressed: () async {
             await state.getHistorySuplemenData(
+              state.isReversed.value,
               state.firstDate.text,
               state.lastDate.text,
               () {

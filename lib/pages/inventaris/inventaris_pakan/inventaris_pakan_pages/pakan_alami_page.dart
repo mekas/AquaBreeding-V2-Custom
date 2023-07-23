@@ -17,9 +17,15 @@ class _PakanAlamiPageState extends State<PakanAlamiPage> {
   @override
   void initState() {
     super.initState();
+    state.resetVariables();
+    state.setSheetVariableEdit(false);
+
     state.pageIdentifier.value = 'alami';
+    state.feedCategory.value = 'Alami';
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       state.getAllData('alami', () {});
+      state.getPakanNameData('alami');
     });
   }
 

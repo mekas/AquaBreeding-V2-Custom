@@ -7,6 +7,7 @@ import 'package:fish/service/url_api.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class InventarisListrikState extends Urls {
   RxBool isLoadingPage = false.obs;
@@ -31,6 +32,11 @@ class InventarisListrikState extends Urls {
   RxString image =
       "https://media.istockphoto.com/id/1183169839/vector/lightning-isolated-vector-icon-electric-bolt-flash-icon-power-energy-symbol-thunder-icon.jpg?s=612x612&w=0&k=20&c=kFdwoQHmrv8EzCofbdzL7EVW8vtgiHvhrGkOl0_N0io="
           .obs;
+
+  RxBool isSheetEditable = false.obs;
+  RxBool nameEdit = false.obs;
+  RxBool priceEdit = false.obs;
+  RxBool powerEdit = false.obs;
 
   Future getAllData(int year, String type, Function() doAfter) async {
     electricList.value.data!.clear();
@@ -141,9 +147,32 @@ class InventarisListrikState extends Urls {
     isLoadingDelete.value = false;
   }
 
+  String dateFormat(String dateString) {
+    DateTime dateTime = DateTime.parse(dateString);
+    var formatter = DateFormat('EEEE, d MMMM y | HH:mm', 'id');
+    var formattedDate = formatter.format(dateTime);
+    return formattedDate.split('|').join('| Jam');
+  }
+
   resetVariables() {
     name.clear();
     price.clear();
     power.clear();
+  }
+
+  setSheetVariableEdit(bool status) {
+    if (status) {
+      isSheetEditable.value = true;
+
+      nameEdit.value = true;
+      priceEdit.value = true;
+      powerEdit.value = true;
+    } else {
+      isSheetEditable.value = false;
+
+      nameEdit.value = false;
+      priceEdit.value = false;
+      powerEdit.value = false;
+    }
   }
 }

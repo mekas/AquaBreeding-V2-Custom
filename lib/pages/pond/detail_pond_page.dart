@@ -87,11 +87,10 @@ class _DetailPondPageState extends State<DetailPondPage> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 // border: Border.all(color: detailController.pondController.selectedPond.getColor()),
-                border: Border.all(
-                    color: detailController.isPondActive.value
-                        ? Colors.green
-                        : Colors.red.shade300),
-                color: transparentColor,
+
+                color: detailController.isPondActive.value
+                    ? Colors.green
+                    : Colors.red.shade300,
               ),
               child: Center(
                 child: Text(
@@ -117,7 +116,11 @@ class _DetailPondPageState extends State<DetailPondPage> {
         height: 50,
         width: double.infinity,
         margin: EdgeInsets.only(
-            top: defaultSpace, right: defaultMargin, left: defaultMargin),
+          top: defaultSpace,
+          right: defaultMargin,
+          left: defaultMargin,
+          bottom: 12,
+        ),
         child: TextButton(
           onPressed: () {
             Get.to(() => ActivationBreedPage(), arguments: {
@@ -147,7 +150,11 @@ class _DetailPondPageState extends State<DetailPondPage> {
         height: 50,
         width: double.infinity,
         margin: EdgeInsets.only(
-            top: defaultSpace, right: defaultMargin, left: defaultMargin),
+          top: defaultSpace,
+          right: defaultMargin,
+          left: defaultMargin,
+          bottom: 12,
+        ),
         child: TextButton(
           onPressed: () {
             Get.defaultDialog(
@@ -175,6 +182,7 @@ class _DetailPondPageState extends State<DetailPondPage> {
             style: blackTextStyle.copyWith(
               fontSize: 16,
               fontWeight: medium,
+              color: Colors.white,
             ),
           ),
         ),
@@ -288,8 +296,8 @@ class _DetailPondPageState extends State<DetailPondPage> {
     Widget activationTitle() {
       return Container(
         width: double.infinity,
-        margin: EdgeInsets.only(
-            top: defaultSpace * 2, right: defaultMargin, left: defaultMargin),
+        margin:
+            EdgeInsets.only(right: defaultMargin, left: defaultMargin, top: 12),
         child: Text(
           "List Musim Budidaya",
           style: primaryTextStyle.copyWith(
@@ -368,10 +376,15 @@ class _DetailPondPageState extends State<DetailPondPage> {
             : ListView(
                 children: [
                   pondStatus(),
+                  detail(),
                   detailController.isPondActive.value == false
                       ? activationButton()
                       : deactivationButton(),
-                  detail(),
+                  Divider(
+                    color: Colors.white24,
+                    height: 30,
+                    thickness: 2,
+                  ),
                   activationTitle(),
                   detailController.activations.isEmpty
                       ? emptyListActivation()

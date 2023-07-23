@@ -33,6 +33,8 @@ class _HomePageState extends State<HomePage> {
 
   DateTime now = DateTime.now();
 
+  var scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     Widget title() {
@@ -172,43 +174,43 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    Widget fish() {
-      return Container(
-        margin: EdgeInsets.only(top: 14),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              SizedBox(
-                width: defaultMargin,
-              ),
-              Row(children: [
-                FishCard(
-                  title: "Lele",
-                  value: controller.statistic.value.fishes_weight_lele!,
-                  image: "assets/lele.png",
-                ),
-                FishCard(
-                  title: "Nila Merah",
-                  value: controller.statistic.value.fishes_weight_nilamerah!,
-                  image: "assets/nilamerah.png",
-                ),
-                FishCard(
-                  title: "Nila Hitam",
-                  value: controller.statistic.value.fishes_weight_nilahitam!,
-                  image: "assets/nilahitam.png",
-                ),
-                FishCard(
-                  title: "Mas",
-                  value: controller.statistic.value.fishes_weight_mas!,
-                  image: "assets/mas.png",
-                ),
-              ]),
-            ],
-          ),
-        ),
-      );
-    }
+    // Widget fish() {
+    //   return Container(
+    //     margin: EdgeInsets.only(top: 14),
+    //     child: SingleChildScrollView(
+    //       scrollDirection: Axis.horizontal,
+    //       child: Row(
+    //         children: [
+    //           SizedBox(
+    //             width: defaultMargin,
+    //           ),
+    //           Row(children: [
+    //             FishCard(
+    //               title: "Lele",
+    //               value: controller.statistic.value.fishes_weight_lele!,
+    //               image: "assets/lele.png",
+    //             ),
+    //             FishCard(
+    //               title: "Nila Merah",
+    //               value: controller.statistic.value.fishes_weight_nilamerah!,
+    //               image: "assets/nilamerah.png",
+    //             ),
+    //             FishCard(
+    //               title: "Nila Hitam",
+    //               value: controller.statistic.value.fishes_weight_nilahitam!,
+    //               image: "assets/nilahitam.png",
+    //             ),
+    //             FishCard(
+    //               title: "Mas",
+    //               value: controller.statistic.value.fishes_weight_mas!,
+    //               image: "assets/mas.png",
+    //             ),
+    //           ]),
+    //         ],
+    //       ),
+    //     ),
+    //   );
+    // }
 
     Widget waterTitle() {
       return Container(
@@ -297,15 +299,25 @@ class _HomePageState extends State<HomePage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor1,
             title: Text('Home'),
             centerTitle: true,
+            leading: IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.book_rounded),
+            ),
             actions: [
-              IconButton(onPressed: () {}, icon: Icon(Icons.book_rounded))
+              IconButton(
+                onPressed: () {
+                  scaffoldKey.currentState?.openEndDrawer();
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
             ],
           ),
-          drawer: Drawer(
+          endDrawer: Drawer(
             backgroundColor: backgroundColor1,
             child: Column(
               children: [

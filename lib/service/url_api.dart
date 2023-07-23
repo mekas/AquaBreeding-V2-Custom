@@ -1,5 +1,5 @@
 class Urls {
-  static const String baseUrl = 'https://c3f1-103-136-58-71.ngrok.io/api';
+  static const String baseUrl = 'https://4b66-103-136-58-71.ngrok-free.app/api';
   // static const String baseUrl = 'http://10.0.2.2:5000/api';
 
   // Home
@@ -18,6 +18,9 @@ class Urls {
       '$baseUrl/ponds/$pondId/closing';
   // Feed Type
   static const String feedType = '$baseUrl/feedtypes';
+  // fish chart
+  static String fishChart(String? activationId) =>
+      '$baseUrl/fishchart/$activationId';
 
   // Feed History
   static const String feedhistorys = '$baseUrl/feedhistorys';
@@ -79,9 +82,12 @@ class Urls {
   static String invElect = '$baseUrl/inventory/electric';
 
   // histories
-
   static String seedSch = '$baseUrl/history/inventory/seed';
   static String feedSch = '$baseUrl/history/inventory/feed';
   static String suplemenSch = '$baseUrl/history/inventory/suplemen';
   static String logging = '$baseUrl/logging';
+
+  // name list
+  static String feedNameList = '$baseUrl/inventory/feed/name';
+  static String suplemenNameList = '$baseUrl/inventory/suplemen/name';
 }

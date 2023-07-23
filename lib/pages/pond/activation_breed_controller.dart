@@ -86,65 +86,58 @@ class ActivationBreedController extends GetxController {
     var data = [];
 
     if (isNilaMerah.value == true) {
-       if (nilaMerahAmountController.text == "0" ||
+      if (nilaMerahAmountController.text == "0" ||
           nilaMerahWeightController.text == "0" ||
           nilaMerahAmountController.text == "" ||
           nilaMerahWeightController.text == "") {
         isNoFist.value = false;
       } else {
-       var fishData = {
-        "type": "nila merah",
-        "seed_id": nilaMerahSeedIDController.value,
-        "category": benihState.seedCategory.value,
-        "original_value": benihState.nilaMerahFishStock.value,
-        "amount": nilaMerahAmountController.value.text,
-        "weight": benihState.nilaMerahFishWeigth.value == '-'
-            ? '0'
-            : benihState.nilaMerahFishWeigth.value,
-        "size": benihState.nilaMerahFishSize.value == '-'
-            ? '-'
-            : benihState.nilaMerahFishSize.value,
-      };
-      fishTmp.add(fishData);
+        var fishData = {
+          "type": "nila merah",
+          "seed_id": nilaMerahSeedIDController.value,
+          "category": benihState.seedCategory.value,
+          "original_value": benihState.nilaMerahFishStock.value,
+          "amount": nilaMerahAmountController.value.text,
+          "weight": benihState.nilaMerahFishWeigth.value == '-'
+              ? '0'
+              : benihState.nilaMerahFishWeigth.value,
+          "size": benihState.nilaMerahFishSize.value == '-'
+              ? '-'
+              : benihState.nilaMerahFishSize.value,
+        };
+        fishTmp.add(fishData);
         isNoFist.value = false;
         isZeroInput.value = false;
 
-      data.add(jsonEncode(fishData));
-
-
+        data.add(jsonEncode(fishData));
       }
-      
     }
     if (isNilaHitam.value == true) {
-       if (nilaHitamAmountController.text == "0" ||
+      if (nilaHitamAmountController.text == "0" ||
           nilaHitamWeightController.text == "0" ||
           nilaHitamAmountController.text == "" ||
           nilaHitamWeightController.text == "") {
         isNoFist.value = false;
       } else {
-        
-
         var fishData = {
-        "type": "nila hitam",
-        "seed_id": nilaHitamSeedIDController.value,
-        "category": benihState.seedCategory.value,
-        "original_value": benihState.nilaHitamFishStock.value,
-        "amount": nilaHitamAmountController.value.text,
-        "weight": benihState.nilaHitamFishWeigth.value == '-'
-            ? '0'
-            : benihState.nilaHitamFishWeigth.value,
-        "size": benihState.nilaHitamFishSize.value == '-'
-            ? '-'
-            : benihState.nilaHitamFishSize.value,
-      };
-      fishTmp.add(fishData);
+          "type": "nila hitam",
+          "seed_id": nilaHitamSeedIDController.value,
+          "category": benihState.seedCategory.value,
+          "original_value": benihState.nilaHitamFishStock.value,
+          "amount": nilaHitamAmountController.value.text,
+          "weight": benihState.nilaHitamFishWeigth.value == '-'
+              ? '0'
+              : benihState.nilaHitamFishWeigth.value,
+          "size": benihState.nilaHitamFishSize.value == '-'
+              ? '-'
+              : benihState.nilaHitamFishSize.value,
+        };
+        fishTmp.add(fishData);
         isNoFist.value = false;
         isZeroInput.value = false;
 
         data.add(jsonEncode(fishData));
-
       }
-     
     }
     if (isLele.value == true) {
       if (leleAmountController.text == "0" ||
@@ -156,27 +149,25 @@ class ActivationBreedController extends GetxController {
         isNoFist.value = false;
         isZeroInput.value = false;
 
-       var fishData = {
-        "type": "lele",
-        "seed_id": leleSeedIDController.value,
-        "category": benihState.seedCategory.value,
-        "original_value": benihState.leleFishStock.value,
-        "amount": leleAmountController.value.text,
-        "weight": benihState.leleFishWeigth.value == '-'
-            ? '0'
-            : benihState.leleFishWeigth.value,
-        "size": benihState.leleFishSize.value == '-'
-            ? '-'
-            : benihState.leleFishSize.value,
-      };
-          fishTmp.add(fishData);
-      data.add(jsonEncode(fishData));
+        var fishData = {
+          "type": "lele",
+          "seed_id": leleSeedIDController.value,
+          "category": benihState.seedCategory.value,
+          "original_value": benihState.leleFishStock.value,
+          "amount": leleAmountController.value.text,
+          "weight": benihState.leleFishWeigth.value == '-'
+              ? '0'
+              : benihState.leleFishWeigth.value,
+          "size": benihState.leleFishSize.value == '-'
+              ? '-'
+              : benihState.leleFishSize.value,
+        };
+        fishTmp.add(fishData);
+        data.add(jsonEncode(fishData));
       }
-     
-    
     }
     if (isPatin.value == true) {
-       if (patinAmountController.text == "0" ||
+      if (patinAmountController.text == "0" ||
           patinWeightController.text == "0" ||
           patinAmountController.text == "" ||
           patinWeightController.text == "") {
@@ -185,26 +176,25 @@ class ActivationBreedController extends GetxController {
         isNoFist.value = false;
         isZeroInput.value = false;
 
-       var fishData = {
-        "type": "patin",
-        "seed_id": patinSeedIDController.value,
-        "category": benihState.seedCategory.value,
-        "original_value": benihState.patinFishStock.value,
-        "amount": patinAmountController.value.text,
-        "weight": benihState.patinFishWeigth.value == '-'
-            ? '0'
-            : benihState.patinFishWeigth.value,
-        "size": benihState.patinFishSize.value == '-'
-            ? '-'
-            : benihState.patinFishSize.value,
-      };
-      fishTmp.add(fishData);
-      data.add(jsonEncode(fishData));
+        var fishData = {
+          "type": "patin",
+          "seed_id": patinSeedIDController.value,
+          "category": benihState.seedCategory.value,
+          "original_value": benihState.patinFishStock.value,
+          "amount": patinAmountController.value.text,
+          "weight": benihState.patinFishWeigth.value == '-'
+              ? '0'
+              : benihState.patinFishWeigth.value,
+          "size": benihState.patinFishSize.value == '-'
+              ? '-'
+              : benihState.patinFishSize.value,
+        };
+        fishTmp.add(fishData);
+        data.add(jsonEncode(fishData));
       }
-     
     }
     if (isMas.value == true) {
-       if (masAmountController.text == "0" ||
+      if (masAmountController.text == "0" ||
           masWeightController.text == "0" ||
           masAmountController.text == "" ||
           masWeightController.text == "") {
@@ -213,53 +203,30 @@ class ActivationBreedController extends GetxController {
         isZeroInput.value = false;
 
         var fishData = {
-        "type": "mas",
-        "seed_id": masSeedIDController.value,
-        "category": benihState.seedCategory.value,
-        "original_value": benihState.masFishStock.value,
-        "amount": masAmountController.value.text,
-        "weight": benihState.masFishWeigth.value == '-'
-            ? '0'
-            : benihState.masFishWeigth.value,
-        "size": benihState.masFishSize.value == '-'
-            ? '-'
-            : benihState.masFishSize.value,
-      };
-      fishTmp.add(fishData);
-      data.add(jsonEncode(fishData));
- 
+          "type": "mas",
+          "seed_id": masSeedIDController.value,
+          "category": benihState.seedCategory.value,
+          "original_value": benihState.masFishStock.value,
+          "amount": masAmountController.value.text,
+          "weight": benihState.masFishWeigth.value == '-'
+              ? '0'
+              : benihState.masFishWeigth.value,
+          "size": benihState.masFishSize.value == '-'
+              ? '-'
+              : benihState.masFishSize.value,
+        };
+        fishTmp.add(fishData);
+        data.add(jsonEncode(fishData));
       }
     }
-     
 
     return data;
   }
 
-  Future<void> pondActivation(Function() doInPost) async {
-    // print(buildJsonFish());
-    isActivationProgress.value = true;
-
-    var buildFish = buildJsonFish();
-
-    try {
-      await service.postActivation(
-        pondId: pond.id,
-        fish: buildFish,
-        isWaterPreparation: false,
-        waterLevel: waterHeightController.value.text,
-      );
-      await benihState.postHistorySeedData(
-        pondName.value,
-        fishTmp,
-        () => null,
-      );
-      doInPost();
-    } catch (e) {
-      //
-    }
-    isActivationProgress.value = false;
   Future<void> pondActivation(BuildContext context, Function doInPost) async {
     // print(buildJsonFish());
+
+    var buildFish = buildJsonFish();
 
     List<dynamic> fish = buildJsonFish();
     if (isNoFist.value == true) {
@@ -312,10 +279,15 @@ class ActivationBreedController extends GetxController {
         try {
           await service.postActivation(
               pondId: pond.id,
-              fish: fish,
+              fish: buildFish,
               isWaterPreparation: false,
               waterLevel: waterHeightController.value.text,
               doInPost: doInPost);
+          await benihState.postHistorySeedData(
+            pondName.value,
+            fishTmp,
+            () => null,
+          );
           postDataLog(fitur);
         } catch (e) {
           //
@@ -334,8 +306,10 @@ class ActivationBreedController extends GetxController {
     // //         isActive: true,
     // //         pondStatus: PondStatus.active));
   }
-<<<<<<< HEAD
-=======
+
+  final DateTime startTime = DateTime.now();
+  late DateTime endTime;
+  final fitur = 'Activation';
 
   Future<void> postDataLog(String fitur) async {
     // print(buildJsonFish());
@@ -343,9 +317,4 @@ class ActivationBreedController extends GetxController {
         await LoggingService().postLogging(startAt: startTime, fitur: fitur);
     print(value);
   }
-
-  final DateTime startTime = DateTime.now();
-  late DateTime endTime;
-  final fitur = 'Activation';
->>>>>>> 376a24ff1f24bc5f91e6d48a775e2e6525edf55b
 }
