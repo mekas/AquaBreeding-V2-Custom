@@ -1,5 +1,6 @@
 import 'package:fish/pages/component/death_card.dart';
 import 'package:fish/pages/fish/fish_recap_controller.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/pages/fish/fish_death_entry_page.dart';
 import 'package:fish/theme.dart';
@@ -13,6 +14,8 @@ class FishRecapPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     final FishRecapController controller = Get.put(FishRecapController());
 
     Widget chartDeath() {
@@ -264,10 +267,20 @@ class FishRecapPage extends StatelessWidget {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Rekapitulasi Jumlah Kematian"),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  scaffoldKey.currentState?.openEndDrawer();
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
+            ],
           ),
+          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [

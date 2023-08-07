@@ -27,10 +27,12 @@ class InventarisListrikModel {
 class Data {
   String? sId;
   int? idInt;
+  String? type;
   String? name;
   String? daya;
-  String? type;
   int? price;
+  String? idToken;
+  String? month;
   String? image;
   String? createdAt;
   String? updatedAt;
@@ -38,10 +40,12 @@ class Data {
   Data(
       {this.sId,
       this.idInt,
+      this.type,
       this.name,
       this.daya,
-      this.type,
       this.price,
+      this.idToken,
+      this.month,
       this.image,
       this.createdAt,
       this.updatedAt});
@@ -49,10 +53,12 @@ class Data {
   Data.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     idInt = json['id_int'];
+    type = json['type'];
     name = json['name'];
     daya = json['daya'];
-    type = json['type'];
     price = json['price'];
+    idToken = json['id_token'];
+    month = json['month'];
     image = json['image'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
@@ -62,10 +68,12 @@ class Data {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_id'] = this.sId;
     data['id_int'] = this.idInt;
+    data['type'] = this.type;
     data['name'] = this.name;
     data['daya'] = this.daya;
-    data['type'] = this.type;
     data['price'] = this.price;
+    data['id_token'] = this.idToken;
+    data['month'] = this.month;
     data['image'] = this.image;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;

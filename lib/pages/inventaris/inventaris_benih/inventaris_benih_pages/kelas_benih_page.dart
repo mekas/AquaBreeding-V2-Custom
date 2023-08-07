@@ -92,6 +92,7 @@ class _KelasBenihPageState extends State<KelasBenihPage> {
                                         state.seedList.value.data![index]
                                             .createdAt!
                                             .toString(),
+                                        true,
                                       ),
                                       style: headingText3,
                                     )

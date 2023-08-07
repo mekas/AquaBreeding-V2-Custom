@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:fish/controllers/authentication/register_controller.dart';
 import 'package:fish/pages/dashboard.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,8 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     Widget logo() {
       return Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -225,6 +228,20 @@ class ProfilePage extends StatelessWidget {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
+          appBar: AppBar(
+            backgroundColor: backgroundColor1,
+            title: Text('Profil'),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  scaffoldKey.currentState?.openEndDrawer();
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
+            ],
+          ),
+          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor2,
           body: ListView(
             children: [

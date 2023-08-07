@@ -1,5 +1,6 @@
 import 'package:fish/controllers/daily_water/daily_water_entry_controller.dart';
 import 'package:fish/controllers/daily_water/daily_water_controller.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +18,8 @@ class DailyWaterEntryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     Widget doInput() {
       return Container(
         margin: EdgeInsets.only(
@@ -226,10 +229,20 @@ class DailyWaterEntryPage extends StatelessWidget {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Entry Kondisi Air Harian"),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  scaffoldKey.currentState?.openEndDrawer();
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
+            ],
           ),
+          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [

@@ -1,6 +1,7 @@
 import 'package:fish/pages/component/daily_water_card.dart';
 import 'package:fish/controllers/daily_water/daily_water_controller.dart';
 import 'package:fish/pages/dailywater/daily_water_entry_page.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
@@ -39,6 +40,8 @@ class _DailyWaterPageState extends State<DailyWaterPage> {
   @override
   Widget build(BuildContext context) {
     controller.startTime = DateTime.now();
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     print('ini build daily water');
     Widget fishDataRecap() {
       return Container(
@@ -172,6 +175,18 @@ class _DailyWaterPageState extends State<DailyWaterPage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
+          appBar: AppBar(
+            backgroundColor: backgroundColor1,
+            actions: [
+              IconButton(
+                onPressed: () {
+                  scaffoldKey.currentState?.openEndDrawer();
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
+            ],
+          ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               Get.to(() => DailyWaterEntryPage(), arguments: {
@@ -183,6 +198,7 @@ class _DailyWaterPageState extends State<DailyWaterPage> {
             backgroundColor: primaryColor,
             child: const Icon(Icons.add),
           ),
+          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [

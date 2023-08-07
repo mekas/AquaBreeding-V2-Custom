@@ -11,6 +11,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class InventarisBahanBudidayaState extends Urls {
   RxBool isLoadingPage = false.obs;
@@ -74,18 +75,55 @@ class InventarisBahanBudidayaState extends Urls {
   TextEditingController firstDate = TextEditingController();
   TextEditingController lastDate = TextEditingController();
 
-  final List listSuplemenName = [];
-  TextEditingController suplemenName = TextEditingController();
-  RxMap<String, dynamic> selectedSuplemen = <String, dynamic>{}.obs;
-  RxBool isSuplemenSelected = false.obs;
-
   RxBool isSheetEditable = false.obs;
   RxBool isReversed = false.obs;
+
+  final List listCultureProbiotik = [];
+  RxMap<String, dynamic> selectedCultureProbiotik = <String, dynamic>{}.obs;
+  RxDouble calculatedProbStock = 0.0.obs;
+  RxBool isProbLoading = false.obs;
+  RxBool isProbSelected = false.obs;
+  RxDouble probStock = 0.0.obs;
+  RxString probType = ''.obs;
+  RxString probID = ''.obs;
+
+  final List listCarbon = [];
+  RxMap<String, dynamic> selectedCarbon = <String, dynamic>{}.obs;
+  RxDouble calculatedCarbonStock = 0.0.obs;
+  RxDouble carbStock = 0.0.obs;
+  RxBool isCarbLoading = false.obs;
+  RxBool isCarbSelected = false.obs;
+  RxString carbType = ''.obs;
+  RxBool carbCheck = false.obs;
+  RxString carbID = ''.obs;
+
+  RxBool isSaltLoading = false.obs;
+  RxDouble calculatedSaltStock = 0.0.obs;
+  RxDouble saltStock = 0.0.obs;
+  var saltDetail = InventarisSuplemenModel(data: []).obs;
+  RxString saltID = ''.obs;
+
+  var listFeedAdditive = ['Molase', 'Tapioka', 'Terigu', 'Gula', 'Garam'];
+  RxString selectedFeedAdditive = 'Molase'.obs;
+  RxString selectedUsedDate = ''.obs;
+  TextEditingController showedUsedDate = TextEditingController(text: '');
 
   Future getAllData(String type, Function() doAfter) async {
     suplemenList.value.data!.clear();
     isLoadingPage.value = true;
-    final response = await http.get(Uri.parse('${Urls.invSup}?type=$type'));
+    isProbLoading.value = true;
+    isCarbLoading.value = true;
+    listCarbon.clear();
+    listCultureProbiotik.clear();
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+    var headers = {'Authorization': 'Bearer $token'};
+
+    final response = await http.get(
+      Uri.parse('${Urls.invSup}?type=$type'),
+      headers: headers,
+    );
 
     try {
       if (response.statusCode == 200) {
@@ -93,13 +131,41 @@ class InventarisBahanBudidayaState extends Urls {
             InventarisSuplemenModel.fromJson(jsonDecode(response.body));
 
         suplemenList.value = res;
-        inspect(suplemenList.value.data);
+        // inspect(suplemenList.value.data);
+
+        if (suplemenList.value.data!.isNotEmpty) {
+          for (var i in suplemenList.value.data!) {
+            if (type == 'Probiotik') {
+              listCultureProbiotik.add({
+                'id': i.idInt,
+                'suplemen_id': i.sId,
+                'suplemen_name': i.name,
+              });
+
+              selectedCultureProbiotik.value = listCultureProbiotik[0];
+            }
+            if (type == 'Feed Additive') {
+              listCarbon.add({
+                'id': i.idInt,
+                'suplemen_id': i.sId,
+                'suplemen_name': i.name,
+              });
+
+              selectedCarbon.value = listCarbon[0];
+            }
+          }
+        }
+
+        // inspect(listCultureProbiotik);
 
         doAfter();
       }
     } catch (e) {
+      inspect(e);
       throw Exception(e);
     }
+    isProbLoading.value = false;
+    isCarbLoading.value = false;
     isLoadingPage.value = false;
   }
 
@@ -118,13 +184,8 @@ class InventarisBahanBudidayaState extends Urls {
         // }
 
         functionCategory.value = res.data!.function!.toString();
-
-        for (var i in listSuplemenName) {
-          if (i['suplemen_name_id'] == res.data!.suplemenNameId) {
-            selectedSuplemen.value = i;
-          }
-        }
-
+        name.text = res.data!.name!.toString();
+        selectedFeedAdditive.value = res.data!.name!.toString();
         desc.text = res.data!.description.toString();
         price.text = res.data!.price.toString();
         amount.text = res.data!.amount!.toStringAsFixed(2);
@@ -138,6 +199,80 @@ class InventarisBahanBudidayaState extends Urls {
       throw Exception(e);
     }
     isLoadingDetail.value = false;
+  }
+
+  Future getProbDetail(int id, Function() doAfter) async {
+    isProbLoading.value = true;
+    isProbSelected.value = true;
+
+    final response = await http.get(Uri.parse('${Urls.invSup}/$id'));
+
+    try {
+      if (response.statusCode == 200) {
+        DetailInventarisSuplemenModel res =
+            DetailInventarisSuplemenModel.fromJson(jsonDecode(response.body));
+
+        probStock.value = double.parse(res.data!.amount!.toStringAsFixed(2));
+        calculatedProbStock.value =
+            double.parse(res.data!.amount!.toStringAsFixed(2));
+        probType.value = res.data!.type!.toString();
+      }
+      doAfter();
+    } catch (e) {
+      throw Exception(e);
+    }
+    isProbLoading.value = false;
+  }
+
+  Future getCarbDetail(int id, Function() doAfter) async {
+    isCarbLoading.value = true;
+    isCarbSelected.value = true;
+
+    final response = await http.get(Uri.parse('${Urls.invSup}/$id'));
+
+    try {
+      if (response.statusCode == 200) {
+        DetailInventarisSuplemenModel res =
+            DetailInventarisSuplemenModel.fromJson(jsonDecode(response.body));
+
+        carbStock.value = double.parse(res.data!.amount!.toStringAsFixed(2));
+        calculatedCarbonStock.value =
+            double.parse(res.data!.amount!.toStringAsFixed(2));
+        carbType.value = res.data!.type!.toString();
+      }
+      doAfter();
+    } catch (e) {
+      throw Exception(e);
+    }
+    isCarbLoading.value = false;
+  }
+
+  Future getSaltDetail(Function() doAfter) async {
+    isSaltLoading.value = true;
+    var named = 'Garam';
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+    var headers = {'Authorization': 'Bearer $token'};
+
+    final response = await http.get(Uri.parse('${Urls.invSup}?name=$named'),
+        headers: headers);
+
+    try {
+      if (response.statusCode == 200) {
+        InventarisSuplemenModel res =
+            InventarisSuplemenModel.fromJson(jsonDecode(response.body));
+
+        saltDetail.value = res;
+
+        doAfter();
+      }
+
+      doAfter();
+    } catch (e) {
+      throw Exception(e);
+    }
+    isSaltLoading.value = true;
   }
 
   String amountChecker(String text) {
@@ -155,9 +290,14 @@ class InventarisBahanBudidayaState extends Urls {
   Future postData(Function() doAfter) async {
     var map = <String, dynamic>{};
 
-    map['suplemen_name_id'] = selectedSuplemen.value['suplemen_name_id'];
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+    var headers = {'Authorization': 'Bearer $token'};
+
     map['function'] = functionCategory.value;
-    map['name'] = selectedSuplemen.value['suplemen_name'];
+    map['name'] = functionCategory.value == 'Feed Additive'
+        ? selectedFeedAdditive.value
+        : name.text;
     map['description'] = desc.text == '' ? '-' : desc.text;
     map['price'] = price.text;
     map['amount'] = amount.text.replaceAll(',', '.');
@@ -176,6 +316,7 @@ class InventarisBahanBudidayaState extends Urls {
       await http.post(
         Uri.parse(Urls.invSup),
         body: map,
+        headers: headers,
       );
       doAfter();
     } catch (e) {
@@ -189,9 +330,10 @@ class InventarisBahanBudidayaState extends Urls {
 
     inspect(id);
 
-    map['suplemen_name_id'] = selectedSuplemen.value['suplemen_name_id'];
     map['function'] = functionCategory.value;
-    map['name'] = selectedSuplemen.value['suplemen_name'];
+    map['name'] = functionCategory.value == 'Feed Additive'
+        ? selectedFeedAdditive.value
+        : name.text;
     map['description'] = desc.text == '' ? '-' : desc.text;
     map['price'] = price.text;
     map['amount'] = amount.text.replaceAll(',', '.');
@@ -236,23 +378,29 @@ class InventarisBahanBudidayaState extends Urls {
     isLoadingDelete.value = false;
   }
 
-  Future postHistorySuplemenData(
-      String pondName, List suplemen, Function() doAfter) async {
+  Future postHistorySuplemenData(String pondName, List suplemen,
+      String usedDate, Function() doAfter) async {
     var map = <String, dynamic>{};
 
-    map['pond'] = pondName;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+    var headers = {'Authorization': 'Bearer $token'};
 
-    // print('HEHE');
+    map['pond'] = pondName;
 
     for (var i = 0; i < suplemen.length; i++) {
       map['fish_suplemen_id'] = suplemen[i]['suplemen_id'];
       map['original_amount'] = suplemen[i]['original_value'];
       map['usage'] = suplemen[i]['amount'];
+      map['created_at'] = usedDate;
+
+      inspect(map);
 
       try {
         await http.post(
           Uri.parse(Urls.suplemenSch),
           body: map,
+          headers: headers,
         );
         doAfter();
       } catch (e) {
@@ -266,8 +414,14 @@ class InventarisBahanBudidayaState extends Urls {
     suplemenHistoryList.value.data!.clear();
     isLoadingHistory.value = true;
 
-    final response = await http.get(Uri.parse(
-        '${Urls.suplemenSch}?start_date=$firstDate&end_date=$lastDate'));
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+    var headers = {'Authorization': 'Bearer $token'};
+
+    final response = await http.get(
+      Uri.parse('${Urls.suplemenSch}?start_date=$firstDate&end_date=$lastDate'),
+      headers: headers,
+    );
 
     try {
       if (response.statusCode == 200) {
@@ -290,79 +444,81 @@ class InventarisBahanBudidayaState extends Urls {
     isLoadingHistory.value = false;
   }
 
-  Future getSuplemenNameData(String type) async {
-    suplemenNameList.value.data!.clear();
-    listSuplemenName.clear();
-    isLoadingDetail.value = true;
+  // Future getSuplemenNameData(String type) async {
+  //   suplemenNameList.value.data!.clear();
+  //   listSuplemenName.clear();
+  //   isLoadingDetail.value = true;
 
-    final response =
-        await http.get(Uri.parse('${Urls.suplemenNameList}?type=$type'));
+  //   final response =
+  //       await http.get(Uri.parse('${Urls.suplemenNameList}?type=$type'));
 
-    try {
-      if (response.statusCode == 200) {
-        InventarisSuplemenNameModel res =
-            InventarisSuplemenNameModel.fromJson(jsonDecode(response.body));
+  //   try {
+  //     if (response.statusCode == 200) {
+  //       InventarisSuplemenNameModel res =
+  //           InventarisSuplemenNameModel.fromJson(jsonDecode(response.body));
 
-        suplemenNameList.value = res;
+  //       suplemenNameList.value = res;
 
-        for (var i in suplemenNameList.value.data!) {
-          listSuplemenName.add({
-            'id': i.idInt,
-            'suplemen_name_id': i.sId,
-            'suplemen_name': i.name,
-          });
+  //       for (var i in suplemenNameList.value.data!) {
+  //         listSuplemenName.add({
+  //           'id': i.idInt,
+  //           'suplemen_name_id': i.sId,
+  //           'suplemen_name': i.name,
+  //         });
 
-          selectedSuplemen.value = listSuplemenName[0];
-        }
+  //         selectedSuplemen.value = listSuplemenName[0];
+  //       }
 
-        inspect(suplemenNameList.value);
-      }
-    } catch (e) {
-      throw Exception(e);
-    }
-    isLoadingDetail.value = false;
-  }
+  //       inspect(suplemenNameList.value);
+  //     }
+  //   } catch (e) {
+  //     throw Exception(e);
+  //   }
+  //   isLoadingDetail.value = false;
+  // }
 
-  Future postSuplemenNameData(Function() doAfter) async {
-    isLoadingPost.value = true;
-    var map = <String, dynamic>{};
+  // Future postSuplemenNameData(Function() doAfter) async {
+  //   isLoadingPost.value = true;
+  //   var map = <String, dynamic>{};
 
-    map['type'] = functionCategory.value;
-    map['name'] = suplemenName.text;
+  //   map['type'] = functionCategory.value;
+  //   map['name'] = suplemenName.text;
 
-    try {
-      await http.post(
-        Uri.parse(Urls.suplemenNameList),
-        body: map,
-      );
-      doAfter();
-    } catch (e) {
-      throw Exception(e);
-    }
-    isLoadingPost.value = false;
-  }
+  //   try {
+  //     await http.post(
+  //       Uri.parse(Urls.suplemenNameList),
+  //       body: map,
+  //     );
+  //     doAfter();
+  //   } catch (e) {
+  //     throw Exception(e);
+  //   }
+  //   isLoadingPost.value = false;
+  // }
 
-  Future deleteSuplemenName(int id, Function() doAfter) async {
-    isLoadingDelete.value = true;
-    try {
-      await http.delete(
-        Uri.parse(
-          '${Urls.suplemenNameList}/$id',
-        ),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-      );
-      doAfter();
-    } catch (e) {
-      throw Exception(e);
-    }
-    isLoadingDelete.value = false;
-  }
+  // Future deleteSuplemenName(int id, Function() doAfter) async {
+  //   isLoadingDelete.value = true;
+  //   try {
+  //     await http.delete(
+  //       Uri.parse(
+  //         '${Urls.suplemenNameList}/$id',
+  //       ),
+  //       headers: {
+  //         'Content-Type': 'application/json; charset=UTF-8',
+  //       },
+  //     );
+  //     doAfter();
+  //   } catch (e) {
+  //     throw Exception(e);
+  //   }
+  //   isLoadingDelete.value = false;
+  // }
 
-  String dateFormat(String dateString) {
+  String dateFormat(String dateString, bool includeHour) {
     DateTime dateTime = DateTime.parse(dateString);
-    var formatter = DateFormat('EEEE, d MMMM y | HH:mm', 'id');
+    var formatter = includeHour
+        ? DateFormat('EEEE, d MMMM y | HH:mm', 'id')
+        : DateFormat('EEEE, d MMMM y', 'id');
     var formattedDate = formatter.format(dateTime);
     return formattedDate.split('|').join('| Jam');
   }

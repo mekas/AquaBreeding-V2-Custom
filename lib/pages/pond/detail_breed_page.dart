@@ -9,6 +9,7 @@ import 'package:fish/pages/grading/grading_page.dart';
 import 'package:fish/pages/feeding/detail_feed_page.dart';
 
 import 'package:fish/pages/fish/fish_recap_page.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
@@ -19,6 +20,8 @@ class DetailBreedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     final BreedController controller = Get.put(BreedController());
     // final DetailPondController detailPondController =
     //     Get.put(DetailPondController());
@@ -575,7 +578,19 @@ class DetailBreedPage extends StatelessWidget {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
           backgroundColor: backgroundColor1,
+          // appBar: AppBar(
+          //   actions: [
+          //     IconButton(
+          //       onPressed: () {
+          //         scaffoldKey.currentState?.openEndDrawer();
+          //       },
+          //       icon: Icon(Icons.card_travel_rounded),
+          //     )
+          //   ],
+          // ),
+          // endDrawer: DrawerInvetarisList(),
           body: ListView(
             children: [
               breedDataRecap(),

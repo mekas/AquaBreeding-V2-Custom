@@ -4,6 +4,7 @@ import 'package:fish/pages/component/deactivation_list_input.dart';
 import 'package:fish/pages/dashboard.dart';
 import 'package:fish/pages/pond/deactivation_breed_controller.dart';
 import 'package:fish/pages/pond/detail_pond_controller.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
@@ -21,18 +22,34 @@ class _DeactivationBreedPageState extends State<DeactivationBreedPage> {
 
   final DetailPondController detailPondController =
       Get.put(DetailPondController());
+
+  var currDate = DateTime.now();
+
   @override
   void initState() {
     super.initState();
+
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
     //   await controller.getPondActivations(
     //       pondId: controller.pond.id.toString());
     // });
+    controller.getAllInventory(
+      controller.pond.lastActivationDate
+          .toString()
+          .split('-')
+          .reversed
+          .join('-'),
+      '2023-08-07',
+    );
+    // inspect(currDate);
+
     controller.getHarvestedBool(detailPondController.activations[0]);
   }
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     Widget activationButton() {
       return Container(
         height: 50,
@@ -45,7 +62,7 @@ class _DeactivationBreedPageState extends State<DeactivationBreedPage> {
             await controller.pondDeactivation(
               context,
               () {
-                detailPondController.getPondActivation(context);
+                detailPondController.getPondActivation();
               },
             );
             // detailPondController.isPondActive.value = false;
@@ -67,7 +84,7 @@ class _DeactivationBreedPageState extends State<DeactivationBreedPage> {
       );
     }
 
-    Widget DeactivationInput() {
+    Widget deactivationInput() {
       return Container(
         margin: EdgeInsets.only(
             top: defaultSpace, right: defaultMargin, left: defaultMargin),
@@ -352,15 +369,42 @@ class _DeactivationBreedPageState extends State<DeactivationBreedPage> {
     return Obx(() {
       if (controller.isDeactivationProgress.value == false) {
         return Scaffold(
+          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Panen"),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  scaffoldKey.currentState?.openEndDrawer();
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
+            ],
           ),
+          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
-              DeactivationInput(),
+              controller.isLoadingInventory.value
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 18),
+                      child: Center(
+                        child: CircularProgressIndicator(color: Colors.white),
+                      ),
+                    )
+                  : deactivationInput(),
               // waterHeightInput(),
+              SizedBox(
+                height: 8,
+              ),
+              Padding(
+                padding: EdgeInsets.all(8),
+                child: Divider(
+                  color: Colors.grey,
+                  thickness: 2,
+                ),
+              ),
               sampleAmountInput(),
               fishLengthAvgInput(),
               fishWightInput(),

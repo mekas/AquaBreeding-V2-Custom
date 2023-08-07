@@ -2,6 +2,7 @@ import 'package:fish/models/fish_death_model.dart';
 import 'package:fish/pages/component/treatment_card.dart';
 import 'package:fish/pages/treatment/treatment_controller.dart';
 import 'package:fish/pages/treatment/treatment_entry_page.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
@@ -34,6 +35,8 @@ class _TreatmentPageState extends State<TreatmentpPage> {
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     Widget fishDataRecap() {
       return Container(
         margin: EdgeInsets.only(
@@ -122,6 +125,18 @@ class _TreatmentPageState extends State<TreatmentpPage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
+          // appBar: AppBar(
+          //   actions: [
+          //     IconButton(
+          //       onPressed: () {
+          //         scaffoldKey.currentState?.openEndDrawer();
+          //       },
+          //       icon: Icon(Icons.card_travel_rounded),
+          //     )
+          //   ],
+          // ),
+          // endDrawer: DrawerInvetarisList(),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               Get.to(() => TreatmentEntryPage(), arguments: {

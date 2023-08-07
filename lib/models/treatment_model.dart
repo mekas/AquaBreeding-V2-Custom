@@ -10,6 +10,7 @@ class Treatment {
   num? probiotic;
   num? water;
   num? carbohydrate;
+  String? probiotic_name;
   String? carbohydrate_type;
   String? desc;
   String? treatmentAt;
@@ -19,6 +20,7 @@ class Treatment {
       this.salt,
       this.type,
       this.probiotic,
+      this.probiotic_name,
       this.water,
       this.carbohydrate,
       this.desc,
@@ -36,6 +38,7 @@ class Treatment {
         id: json['id'],
         salt: json['salt'],
         type: json['treatment_type'],
+        probiotic_name: json['probiotic_culture_name'],
         probiotic: json['probiotic_culture'],
         water: json['water_change'],
         desc: json['description'],

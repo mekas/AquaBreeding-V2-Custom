@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_state.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_state.dart';
 
 import 'package:fish/models/pond_model.dart';
@@ -10,6 +11,7 @@ import 'package:fish/pages/pond/pond_controller.dart';
 import 'package:fish/pages/pond/add_pond_page.dart';
 import 'package:fish/pages/pond/deactivation_breed_page.dart';
 import 'package:fish/pages/pond/detail_pond_controller.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
@@ -29,6 +31,8 @@ class _DetailPondPageState extends State<DetailPondPage> {
   // final feedEntryController = Get.put(FeedEntryController());
   final pondController = Get.put(PondController());
   final InventarisPakanState pakanState = Get.put(InventarisPakanState());
+  final InventarisBahanBudidayaState supState =
+      Get.put(InventarisBahanBudidayaState());
 
   @override
   void initState() {
@@ -37,15 +41,19 @@ class _DetailPondPageState extends State<DetailPondPage> {
     //   await controller.getPondActivations(
     //       pondId: controller.pond.id.toString());
     // });
-    detailController.getPondActivation(context);
+    detailController.getPondActivation();
     activationController.pondName.value =
         'kolam ${detailController.pondController.selectedPond.value.alias}';
     pakanState.pondName.value =
+        'kolam ${detailController.pondController.selectedPond.value.alias}';
+    supState.pondName.value =
         'kolam ${detailController.pondController.selectedPond.value.alias}';
   }
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     Widget pondStatus() {
       return Container(
         margin: EdgeInsets.only(
@@ -124,7 +132,7 @@ class _DetailPondPageState extends State<DetailPondPage> {
         child: TextButton(
           onPressed: () {
             Get.to(() => ActivationBreedPage(), arguments: {
-              'pond': detailController.pondController.selectedPond,
+              'pond': detailController.pondController.selectedPond.value,
             });
             detailController.postDataLog(detailController.fitur);
           },
@@ -138,7 +146,7 @@ class _DetailPondPageState extends State<DetailPondPage> {
             'Start Budidaya',
             style: primaryTextStyle.copyWith(
               fontSize: 16,
-              fontWeight: medium,
+              fontWeight: bold,
             ),
           ),
         ),
@@ -157,6 +165,7 @@ class _DetailPondPageState extends State<DetailPondPage> {
         ),
         child: TextButton(
           onPressed: () {
+            // detailController.getPondActivation();
             Get.defaultDialog(
                 title: 'Konfirmasi Panen!',
                 middleText: 'Apakah anda yakin ingin melakukan panen?',
@@ -167,7 +176,8 @@ class _DetailPondPageState extends State<DetailPondPage> {
                 textCancel: 'Tidak',
                 onConfirm: (() {
                   Get.to(() => DeactivationBreedPage(), arguments: {
-                    "pond": detailController.pondController.selectedPond,
+                    "pond": detailController.pondController.selectedPond.value,
+                    "activation": detailController.activations[0],
                   });
                 }));
           },

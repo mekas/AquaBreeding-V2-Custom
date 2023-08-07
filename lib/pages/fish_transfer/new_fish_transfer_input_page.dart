@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -90,6 +91,8 @@ class _NewFishTransferInputPageState extends State<NewFishTransferInputPage> {
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     Widget sampleWeightInput() {
       return Container(
         margin: EdgeInsets.only(
@@ -1959,10 +1962,20 @@ class _NewFishTransferInputPageState extends State<NewFishTransferInputPage> {
     }
 
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         backgroundColor: backgroundColor2,
         title: const Text("Entry Sortir"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              scaffoldKey.currentState?.openEndDrawer();
+            },
+            icon: Icon(Icons.card_travel_rounded),
+          )
+        ],
       ),
+      endDrawer: DrawerInvetarisList(),
       backgroundColor: backgroundColor1,
       body: Obx(() {
         return ListView(
@@ -1992,16 +2005,7 @@ class _NewFishTransferInputPageState extends State<NewFishTransferInputPage> {
     if (widget.pond.isInputed == true) {
       if (controller.isNilaMerahInput.value == true &&
           controller.nilamerahAmountChecker.value <
-              (controller.nilamerahAmountComparator.value -
-                      int.parse(widget.pond.fish?.firstWhereOrNull(
-                                  (element) => element.type == "nila merah") ==
-                              null
-                          ? "0"
-                          : widget.pond.fish!
-                              .firstWhereOrNull(
-                                  (element) => element.type == "nila merah")!
-                              .amount
-                              .toString())) +
+              (controller.nilamerahAmountComparator.value - int.parse(widget.pond.fish?.firstWhereOrNull((element) => element.type == "nila merah") == null ? "0" : widget.pond.fish!.firstWhereOrNull((element) => element.type == "nila merah")!.amount.toString())) +
                   int.parse(controller.nilaMerahAmountController.text)) {
         print(int.parse(widget.pond.fish?.firstWhereOrNull(
                     (element) => element.type == "nila merah") ==
@@ -2034,8 +2038,7 @@ class _NewFishTransferInputPageState extends State<NewFishTransferInputPage> {
       } else if (controller.isNilaHitamInput.value == true &&
           controller.nilahitamAmountChecker.value <
               (controller.nilahitamAmountComparator.value -
-                      int.parse(widget.pond.fish!.firstWhereOrNull(
-                                  (element) => element.type == "nila hitam") ==
+                      int.parse(widget.pond.fish!.firstWhereOrNull((element) => element.type == "nila hitam") ==
                               null
                           ? "0"
                           : widget.pond.fish!
@@ -2065,16 +2068,7 @@ class _NewFishTransferInputPageState extends State<NewFishTransferInputPage> {
                 ));
       } else if (controller.isMasInput.value == true &&
           controller.masAmountChecker.value <
-              (controller.masAmountComparator.value -
-                      int.parse(widget.pond.fish!.firstWhereOrNull(
-                                  (element) => element.type == "mas") ==
-                              null
-                          ? "0"
-                          : widget.pond.fish!
-                              .firstWhereOrNull(
-                                  (element) => element.type == "mas")!
-                              .amount
-                              .toString())) +
+              (controller.masAmountComparator.value - int.parse(widget.pond.fish!.firstWhereOrNull((element) => element.type == "mas") == null ? "0" : widget.pond.fish!.firstWhereOrNull((element) => element.type == "mas")!.amount.toString())) +
                   int.parse(controller.masAmountController.text)) {
         showDialog<String>(
             context: context,
@@ -2097,16 +2091,7 @@ class _NewFishTransferInputPageState extends State<NewFishTransferInputPage> {
                 ));
       } else if (controller.isLeleInput.value == true &&
           controller.leleAmountChecker.value <
-              (controller.leleAmountComparator.value -
-                      int.parse(widget.pond.fish!.firstWhereOrNull(
-                                  (element) => element.type == "lele") ==
-                              null
-                          ? "0"
-                          : widget.pond.fish!
-                              .firstWhereOrNull(
-                                  (element) => element.type == "lele")!
-                              .amount
-                              .toString())) +
+              (controller.leleAmountComparator.value - int.parse(widget.pond.fish!.firstWhereOrNull((element) => element.type == "lele") == null ? "0" : widget.pond.fish!.firstWhereOrNull((element) => element.type == "lele")!.amount.toString())) +
                   int.parse(controller.leleAmountController.text)) {
         showDialog<String>(
             context: context,
@@ -2130,15 +2115,7 @@ class _NewFishTransferInputPageState extends State<NewFishTransferInputPage> {
       } else if (controller.isPatinInput.value == true &&
           controller.patinAmountChecker.value <
               (controller.patinAmountComparator.value -
-                      int.parse(widget.pond.fish!.firstWhereOrNull(
-                                  (element) => element.type == "patin") ==
-                              null
-                          ? "0"
-                          : widget.pond.fish!
-                              .firstWhereOrNull(
-                                  (element) => element.type == "patin")!
-                              .amount
-                              .toString())) +
+                      int.parse(widget.pond.fish!.firstWhereOrNull((element) => element.type == "patin") == null ? "0" : widget.pond.fish!.firstWhereOrNull((element) => element.type == "patin")!.amount.toString())) +
                   int.parse(controller.patinAmountController.text)) {
         showDialog<String>(
             context: context,

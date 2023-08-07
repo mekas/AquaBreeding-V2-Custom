@@ -1,5 +1,6 @@
 import 'package:fish/pages/component/feed_hour_card.dart';
 import 'package:fish/pages/feeding/feed_daily_controller.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
@@ -9,6 +10,8 @@ class DetailFeedDailyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     final FeedDailyController controller = Get.put(FeedDailyController());
 
     Widget feedDailyRecap() {
@@ -300,10 +303,20 @@ class DetailFeedDailyPage extends StatelessWidget {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Detail Pakan Harian"),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  scaffoldKey.currentState?.openEndDrawer();
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
+            ],
           ),
+          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [

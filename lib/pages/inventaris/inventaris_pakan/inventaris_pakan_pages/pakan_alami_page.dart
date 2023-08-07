@@ -17,15 +17,18 @@ class _PakanAlamiPageState extends State<PakanAlamiPage> {
   @override
   void initState() {
     super.initState();
-    state.resetVariables();
-    state.setSheetVariableEdit(false);
+    state.resetFeedVariables();
+    state.resetNameVariables();
+    state.setSheetFeedVariableEdit(false);
+    state.setSheetNameVariableEdit(false);
 
     state.pageIdentifier.value = 'alami';
     state.feedCategory.value = 'Alami';
+    state.category.text = 'Alami';
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       state.getAllData('alami', () {});
-      state.getPakanNameData('alami');
+      state.getPakanNameData('alami', () {});
     });
   }
 
@@ -45,9 +48,7 @@ class _PakanAlamiPageState extends State<PakanAlamiPage> {
                     ),
                   ),
                 )
-              : RenderInventarisPakanListWidget(
-                  data: state.feedList.value,
-                ),
+              : RenderInventarisPakanListWidget(),
         ),
       ),
     );

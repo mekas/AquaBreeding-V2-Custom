@@ -225,12 +225,11 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
                                               style: headingText3,
                                             ),
                                             Text(
-                                              state.dateFormat(state
-                                                  .seedHistoryList
-                                                  .value
-                                                  .data![index]
-                                                  .createdAt!
-                                                  .toString()),
+                                              state.dateFormat(
+                                                  state.seedHistoryList.value
+                                                      .data![index].createdAt!
+                                                      .toString(),
+                                                  true),
                                               style: headingText3,
                                             )
                                           ],

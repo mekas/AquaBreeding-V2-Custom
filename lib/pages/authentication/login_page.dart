@@ -26,6 +26,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late SharedPreferences prefs;
   final LoginController controller = Get.put(LoginController());
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -38,6 +40,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void login() async {
+    setState(() {
+      isLoading = true;
+    });
     final response = await http.post(
       Uri.parse(Urls.authentication),
       headers: {
@@ -60,6 +65,9 @@ class _LoginPageState extends State<LoginPage> {
       );
       prefs.setString('identity', identity.toString());
       // prefs.setString('identity', identity);
+      setState(() {
+        isLoading = false;
+      });
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => DashboardPage()));
       controller.usernameController.clear();
@@ -248,7 +256,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.push(context,
+                  Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) => RegisterPage()));
                 },
                 child: Text(

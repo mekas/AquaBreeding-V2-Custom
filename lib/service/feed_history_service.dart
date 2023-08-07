@@ -9,6 +9,7 @@ import 'package:fish/models/feed_history_weekly.dart';
 import 'package:fish/models/feed_chart_model.dart';
 import 'package:fish/service/url_api.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FeedHistoryService {
   Future<List<FeedChartData>> getChart({required String activation_id}) async {
@@ -113,11 +114,16 @@ class FeedHistoryService {
     required String? pondId,
     required String? fishFeedId,
     required String? feedDose,
+    required Function() doAfter,
   }) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+
     final response = await http.post(
       Uri.parse(Urls.feedhistorys),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
+        'Authorization': 'Bearer $token'
       },
       encoding: Encoding.getByName('utf-8'),
       body: {
@@ -128,10 +134,14 @@ class FeedHistoryService {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
+      inspect(response.body);
+      doAfter();
+
       return true;
     } else {
-      print(response.body);
+      inspect(response.body);
+      doAfter();
+
       return false;
     }
   }

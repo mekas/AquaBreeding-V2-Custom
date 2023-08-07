@@ -17,15 +17,18 @@ class _PakanCampuranPageState extends State<PakanCampuranPage> {
   @override
   void initState() {
     super.initState();
-    state.resetVariables();
-    state.setSheetVariableEdit(false);
+    state.resetFeedVariables();
+    state.resetNameVariables();
+    state.setSheetFeedVariableEdit(false);
+    state.setSheetNameVariableEdit(false);
 
     state.pageIdentifier.value = 'custom';
     state.feedCategory.value = 'Custom';
+    state.category.text = 'Custom';
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       state.getAllData('custom', () {});
-      state.getPakanNameData('custom');
+      state.getPakanNameData('custom', () {});
     });
   }
 
@@ -45,9 +48,7 @@ class _PakanCampuranPageState extends State<PakanCampuranPage> {
                     ),
                   ),
                 )
-              : RenderInventarisPakanListWidget(
-                  data: state.feedList.value,
-                ),
+              : RenderInventarisPakanListWidget(),
         ),
       ),
     );

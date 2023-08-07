@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:fish/models/fish_death_model.dart';
 import 'package:fish/models/fish_live_model.dart';
+import 'package:fish/service/activation_service.dart';
 import 'package:fish/service/url_api.dart';
 import 'package:http/http.dart' as http;
 
@@ -46,6 +48,7 @@ class FishDeathService {
   Future<bool> postFishDeath({
     required String? pondId,
     required List fish,
+    required String? diagnosis,
   }) async {
     print({"pond_id": pondId, "fish_death_amount": fish});
     final response = await http.post(
@@ -57,15 +60,15 @@ class FishDeathService {
       body: {
         "pond_id": pondId,
         "fish_death_amount": fish.toString(),
-        "diagnosis": "mati karena sakit"
+        "diagnosis": diagnosis,
       },
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
+      inspect(response);
       return true;
     } else {
-      print(response.body);
+      inspect(response);
       return false;
     }
   }

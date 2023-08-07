@@ -54,11 +54,11 @@ class PondCard extends StatelessWidget {
                   height: 30,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    color: pond.getColor(),
+                    color: pond.isActive! ? Colors.green : Colors.red.shade300,
                   ),
                   child: Center(
                     child: Text(
-                      pond.pondStatusStr!,
+                      pond.isActive! ? 'Aktif' : 'Tidak Aktif',
                       style: blackTextStyle.copyWith(
                         fontSize: 14,
                         fontWeight: heavy,

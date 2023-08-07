@@ -7,6 +7,7 @@ import 'package:fish/pages/inventaris/inventaris_benih/inventaris_benih_pages/ke
 import 'package:fish/pages/inventaris/inventaris_benih/inventaris_benih_state.dart';
 import 'package:fish/theme.dart';
 import 'package:fish/widgets/bottom_sheet_widget.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,16 +26,18 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initializeDateFormatting('id', null);
   }
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        key: scaffoldKey,
         backgroundColor: backgroundColor1,
         appBar: AppBar(
           centerTitle: true,
@@ -45,6 +48,12 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
             style: headingText2,
           ),
           actions: [
+            IconButton(
+              onPressed: () {
+                scaffoldKey.currentState?.openEndDrawer();
+              },
+              icon: Icon(Icons.card_travel_rounded),
+            ),
             IconButton(
               onPressed: () async {
                 Navigator.push(context, MaterialPageRoute(builder: ((context) {
@@ -81,10 +90,10 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
             KelasPembesaranPage(),
           ],
         ),
+        endDrawer: DrawerInvetarisList(),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.green.shade600,
           onPressed: () {
-            state.resetVariables();
             BottomSheetWidget.getBottomSheetWidget(
               context,
               [
@@ -140,6 +149,7 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                             setState(() {
                               state.seedCategory.value = value!;
                             });
+                            state.fishCategory.value = 'Lele';
 
                             state.resetVariables();
                           }),
@@ -171,39 +181,76 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
                 const SizedBox(
                   height: 12,
                 ),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: inputColor,
-                  ),
-                  child: StatefulBuilder(
-                    builder: ((context, setState) {
-                      return DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          onChanged: ((String? value) {
-                            setState(() {
-                              state.fishCategory.value = value!;
-                            });
-                          }),
-                          value: state.fishCategory.value,
-                          dropdownColor: inputColor,
-                          items: state.dropdownList2.map(
-                            (String val) {
-                              return DropdownMenuItem(
-                                value: val,
-                                child: Text(
-                                  val,
-                                  style: headingText3,
+                Obx(
+                  () => state.seedCategory.value == 'Benih'
+                      ? Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 4),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: inputColor,
+                          ),
+                          child: StatefulBuilder(
+                            builder: ((context, setState) {
+                              return DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                  onChanged: ((String? value) {
+                                    setState(() {
+                                      state.fishCategory.value = value!;
+                                    });
+                                  }),
+                                  value: state.fishCategory.value,
+                                  dropdownColor: inputColor,
+                                  items: state.dropdownList22.map(
+                                    (String val) {
+                                      return DropdownMenuItem(
+                                        value: val,
+                                        child: Text(
+                                          val,
+                                          style: headingText3,
+                                        ),
+                                      );
+                                    },
+                                  ).toList(),
                                 ),
                               );
-                            },
-                          ).toList(),
+                            }),
+                          ),
+                        )
+                      : Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 4),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: inputColor,
+                          ),
+                          child: StatefulBuilder(
+                            builder: ((context, setState) {
+                              return DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                  onChanged: ((String? value) {
+                                    setState(() {
+                                      state.fishCategory.value = value!;
+                                    });
+                                  }),
+                                  value: state.fishCategory.value,
+                                  dropdownColor: inputColor,
+                                  items: state.dropdownList2.map(
+                                    (String val) {
+                                      return DropdownMenuItem(
+                                        value: val,
+                                        child: Text(
+                                          val,
+                                          style: headingText3,
+                                        ),
+                                      );
+                                    },
+                                  ).toList(),
+                                ),
+                              );
+                            }),
+                          ),
                         ),
-                      );
-                    }),
-                  ),
                 ),
                 // const SizedBox(
                 //   height: 16,

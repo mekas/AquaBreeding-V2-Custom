@@ -3,6 +3,7 @@ import 'package:fish/controllers/weeklywater/weekly_water_controller.dart';
 import 'package:fish/pages/component/weekly_water_card.dart';
 import 'package:fish/pages/weeklywater/weeklywater_avg.dart';
 import 'package:fish/pages/weeklywater/weeklywater_entry_page.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 // import 'package:fish/pages/dailywater/daily_water_entry_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
@@ -36,6 +37,8 @@ class _WeeklyWaterPageState extends State<WeeklyWaterPage> {
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     Widget fishDataRecap() {
       return Container(
         margin: EdgeInsets.only(
@@ -137,6 +140,19 @@ class _WeeklyWaterPageState extends State<WeeklyWaterPage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
+          appBar: AppBar(
+            backgroundColor: backgroundColor1,
+            actions: [
+              IconButton(
+                onPressed: () {
+                  scaffoldKey.currentState?.openEndDrawer();
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
+            ],
+          ),
+          endDrawer: DrawerInvetarisList(),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               Get.to(() => WeeklyWaterEntryPage(), arguments: {

@@ -1,5 +1,6 @@
 import 'package:fish/pages/component/feed_week_card.dart';
 import 'package:fish/pages/feeding/feed_monthly_controller.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
@@ -9,6 +10,8 @@ class DetailFeedMonthlyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     final FeedMonthlyController controller = Get.put(FeedMonthlyController());
 
     Widget feedMonthlyDataRecap() {
@@ -280,10 +283,20 @@ class DetailFeedMonthlyPage extends StatelessWidget {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Detail Pakan Bulanan"),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  scaffoldKey.currentState?.openEndDrawer();
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
+            ],
           ),
+          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [

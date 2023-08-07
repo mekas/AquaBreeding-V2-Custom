@@ -149,12 +149,14 @@ class _DetailInventarisBahanBudidayaMainpageState
                                               style: headingText3,
                                             ),
                                             Text(
-                                              state.dateFormat(state
-                                                  .suplemenHistoryList
-                                                  .value
-                                                  .data![index]
-                                                  .createdAt!
-                                                  .toString()),
+                                              state.dateFormat(
+                                                  state
+                                                      .suplemenHistoryList
+                                                      .value
+                                                      .data![index]
+                                                      .createdAt!
+                                                      .toString(),
+                                                  true),
                                               style: headingText3,
                                             )
                                           ],

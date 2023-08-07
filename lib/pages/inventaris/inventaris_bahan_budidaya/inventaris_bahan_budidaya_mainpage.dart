@@ -9,6 +9,7 @@ import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_state.da
 import 'package:fish/theme.dart';
 import 'package:fish/widgets/bottom_sheet_widget.dart';
 import 'package:fish/widgets/dialog_widget.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -36,17 +37,26 @@ class _InventarisBahanBudidayaMainpageState
     state.functionCategory.value = 'Obat';
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       state.getAllData('obat', () {});
-      state.getSuplemenNameData('Obat');
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     return Scaffold(
+      key: scaffoldKey,
+
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: backgroundColor1,
         actions: [
+          IconButton(
+            onPressed: () {
+              scaffoldKey.currentState?.openEndDrawer();
+            },
+            icon: Icon(Icons.card_travel_rounded),
+          ),
           IconButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: ((context) {
@@ -58,6 +68,8 @@ class _InventarisBahanBudidayaMainpageState
         ],
         title: const Text('Suplemen'),
       ),
+      endDrawer: DrawerInvetarisList(),
+
       body: Obx(
         () => Container(
           color: backgroundColor1,
@@ -86,8 +98,7 @@ class _InventarisBahanBudidayaMainpageState
                                     .filterList[state.currIndexFilter.value - 1]
                                 ['key'];
                           });
-                          await state.getSuplemenNameData(
-                              state.functionCategory.value);
+
                           await state.getAllData(
                               state.pageIdentifier.value, () {});
                         },
@@ -202,6 +213,7 @@ class _InventarisBahanBudidayaMainpageState
                                                   state.suplemenList.value
                                                       .data![index].createdAt!
                                                       .toString(),
+                                                  true,
                                                 ),
                                                 style: headingText3,
                                               )
@@ -330,263 +342,243 @@ class _InventarisBahanBudidayaMainpageState
       //     size: 32,
       //   ),
       // ),
-      floatingActionButton: SpeedDial(
-        icon: Icons.add,
-        backgroundColor: addButtonColor,
-        overlayColor: Colors.black,
-        overlayOpacity: 0.6,
-        spacing: 5,
-        spaceBetweenChildren: 4,
-        children: [
-          SpeedDialChild(
-            backgroundColor: Colors.green,
-            labelStyle: headingText3,
-            labelBackgroundColor: Colors.green,
-            label: 'Tambah Suplemen (+)',
-            onTap: () async {
-              state.resetVariables();
-              await state.getSuplemenNameData(state.functionCategory.value);
-              getBottomSheet(0, 0, false);
-            },
-          ),
-          SpeedDialChild(
-            backgroundColor: Colors.green,
-            labelStyle: headingText3,
-            labelBackgroundColor: Colors.green,
-            label: 'Tambah Merk (+)',
-            onTap: () {
-              state.resetVariables();
-              addNameBottomSheet();
-            },
-          ),
-        ],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          state.resetVariables();
+          getBottomSheet(0, 0, false);
+        },
+        backgroundColor: Colors.green.shade600,
+        child: Icon(
+          Icons.add,
+          size: 32,
+        ),
       ),
     );
   }
 
-  getListNameBottomSheet() {
-    state.resetVariables();
+  // getListNameBottomSheet() {
+  //   state.resetVariables();
 
-    BottomSheetWidget.getBottomSheetWidget(context, [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: const CircleAvatar(
-              backgroundColor: Colors.red,
-              radius: 12,
-              child: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                size: 14,
-                color: Colors.black,
-              ),
-            ),
-          ),
-        ],
-      ),
-      const SizedBox(
-        height: 18,
-      ),
-      Text(
-        'List Semua Nama Suplemen',
-        style: headingText1,
-        textAlign: TextAlign.center,
-      ),
-      const SizedBox(
-        height: 54,
-      ),
-      Obx(
-        () => state.isLoadingDetail.value
-            ? Center(
-                child: SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                  ),
-                ),
-              )
-            : ListView.builder(
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.only(bottom: 8),
-                    decoration: BoxDecoration(
-                      color: backgroundColor2,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: ListTile(
-                      title: Text(
-                        state.suplemenNameList.value.data![index].name!,
-                        style: headingText3,
-                      ),
-                      trailing: IconButton(
-                        onPressed: () async {
-                          await state.deleteSuplemenName(
-                              state.suplemenNameList.value.data![index].idInt!,
-                              () async {
-                            Flushbar(
-                              message: "Nama berhasil dihapus",
-                              duration: Duration(seconds: 2),
-                              leftBarIndicatorColor: Colors.green,
-                            ).show(context);
-                            await state.getSuplemenNameData('');
-                          });
-                        },
-                        icon: Icon(
-                          Icons.delete,
-                          color: Colors.red.shade900,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-                shrinkWrap: true,
-                // padding: const EdgeInsets.only(bottom: padding4XL),
-                itemCount: state.suplemenNameList.value.data!.length,
-              ),
-      )
-    ]);
-  }
+  //   BottomSheetWidget.getBottomSheetWidget(context, [
+  //     Row(
+  //       mainAxisAlignment: MainAxisAlignment.start,
+  //       children: [
+  //         GestureDetector(
+  //           onTap: () {
+  //             Navigator.pop(context);
+  //           },
+  //           child: const CircleAvatar(
+  //             backgroundColor: Colors.red,
+  //             radius: 12,
+  //             child: Icon(
+  //               Icons.arrow_back_ios_new_rounded,
+  //               size: 14,
+  //               color: Colors.black,
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //     const SizedBox(
+  //       height: 18,
+  //     ),
+  //     Text(
+  //       'List Semua Nama Suplemen',
+  //       style: headingText1,
+  //       textAlign: TextAlign.center,
+  //     ),
+  //     const SizedBox(
+  //       height: 54,
+  //     ),
+  //     Obx(
+  //       () => state.isLoadingDetail.value
+  //           ? Center(
+  //               child: SizedBox(
+  //                 width: 20,
+  //                 height: 20,
+  //                 child: CircularProgressIndicator(
+  //                   color: Colors.white,
+  //                 ),
+  //               ),
+  //             )
+  //           : ListView.builder(
+  //               itemBuilder: (context, index) {
+  //                 return Container(
+  //                   margin: EdgeInsets.only(bottom: 8),
+  //                   decoration: BoxDecoration(
+  //                     color: backgroundColor2,
+  //                     borderRadius: BorderRadius.circular(8),
+  //                   ),
+  //                   child: ListTile(
+  //                     title: Text(
+  //                       state.suplemenNameList.value.data![index].name!,
+  //                       style: headingText3,
+  //                     ),
+  //                     trailing: IconButton(
+  //                       onPressed: () async {
+  //                         await state.deleteSuplemenName(
+  //                             state.suplemenNameList.value.data![index].idInt!,
+  //                             () async {
+  //                           Flushbar(
+  //                             message: "Nama berhasil dihapus",
+  //                             duration: Duration(seconds: 2),
+  //                             leftBarIndicatorColor: Colors.green,
+  //                           ).show(context);
+  //                           await state.getSuplemenNameData('');
+  //                         });
+  //                       },
+  //                       icon: Icon(
+  //                         Icons.delete,
+  //                         color: Colors.red.shade900,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 );
+  //               },
+  //               shrinkWrap: true,
+  //               // padding: const EdgeInsets.only(bottom: padding4XL),
+  //               itemCount: state.suplemenNameList.value.data!.length,
+  //             ),
+  //     )
+  //   ]);
+  // }
 
-  addNameBottomSheet() {
-    state.resetVariables();
-    state.suplemenName.clear();
-    BottomSheetWidget.getBottomSheetWidget(context, [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: const CircleAvatar(
-              backgroundColor: Colors.red,
-              radius: 12,
-              child: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                size: 14,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () async {
-              await state.getSuplemenNameData('');
-              getListNameBottomSheet();
-            },
-            child: const CircleAvatar(
-              backgroundColor: Colors.white,
-              radius: 12,
-              child: Icon(
-                Icons.list,
-                size: 14,
-                color: Colors.black,
-              ),
-            ),
-          )
-        ],
-      ),
-      const SizedBox(
-        height: 18,
-      ),
-      Text(
-        'Catat Nama Suplemen',
-        style: headingText1,
-        textAlign: TextAlign.center,
-      ),
-      const SizedBox(
-        height: 54,
-      ),
-      Text(
-        'Fungsi',
-        style: headingText2,
-      ),
-      const SizedBox(
-        height: 12,
-      ),
-      Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: inputColor,
-        ),
-        child: StatefulBuilder(
-          builder: ((context, setState) {
-            return DropdownButtonHideUnderline(
-              child: DropdownButton(
-                onChanged: ((String? value) {
-                  setState(() {
-                    state.functionCategory.value = value!;
-                  });
-                  state.functionCategory.value = value!;
-                  state.resetVariables();
-                }),
-                value: state.functionCategory.value,
-                dropdownColor: inputColor,
-                items: state.dropdownList.map(
-                  (String val) {
-                    return DropdownMenuItem(
-                      value: val,
-                      child: Text(
-                        val,
-                        style: headingText3,
-                      ),
-                    );
-                  },
-                ).toList(),
-              ),
-            );
-          }),
-        ),
-      ),
-      const SizedBox(
-        height: 16,
-      ),
-      TextFieldWidget(
-        label: 'Nama Suplemen',
-        controller: state.suplemenName,
-        hint: 'Input nama suplemen',
-      ),
-      const SizedBox(
-        height: 36,
-      ),
-      ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: addButtonColor,
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-        ),
-        onPressed: () async {
-          await state.postSuplemenNameData(() async {
-            Flushbar(
-              message: "Nama berhasil ditambahkan",
-              duration: Duration(seconds: 2),
-              leftBarIndicatorColor: Colors.green,
-            ).show(context);
-            await state.getSuplemenNameData('');
-          });
-        },
-        child: Obx(
-          () => state.isLoadingPost.value
-              ? SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                  ),
-                )
-              : Icon(
-                  Icons.add,
-                ),
-        ),
-      ),
-    ]);
-  }
+  // addNameBottomSheet() {
+  //   state.resetVariables();
+  //   state.suplemenName.clear();
+  //   BottomSheetWidget.getBottomSheetWidget(context, [
+  //     Row(
+  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //       children: [
+  //         GestureDetector(
+  //           onTap: () {
+  //             Navigator.pop(context);
+  //           },
+  //           child: const CircleAvatar(
+  //             backgroundColor: Colors.red,
+  //             radius: 12,
+  //             child: Icon(
+  //               Icons.arrow_back_ios_new_rounded,
+  //               size: 14,
+  //               color: Colors.black,
+  //             ),
+  //           ),
+  //         ),
+  //         GestureDetector(
+  //           onTap: () async {
+  //             await state.getSuplemenNameData('');
+  //             getListNameBottomSheet();
+  //           },
+  //           child: const CircleAvatar(
+  //             backgroundColor: Colors.white,
+  //             radius: 12,
+  //             child: Icon(
+  //               Icons.list,
+  //               size: 14,
+  //               color: Colors.black,
+  //             ),
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //     const SizedBox(
+  //       height: 18,
+  //     ),
+  //     Text(
+  //       'Catat Nama Suplemen',
+  //       style: headingText1,
+  //       textAlign: TextAlign.center,
+  //     ),
+  //     const SizedBox(
+  //       height: 54,
+  //     ),
+  //     Text(
+  //       'Fungsi',
+  //       style: headingText2,
+  //     ),
+  //     const SizedBox(
+  //       height: 12,
+  //     ),
+  //     Container(
+  //       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+  //       decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.circular(8),
+  //         color: inputColor,
+  //       ),
+  //       child: StatefulBuilder(
+  //         builder: ((context, setState) {
+  //           return DropdownButtonHideUnderline(
+  //             child: DropdownButton(
+  //               onChanged: ((String? value) {
+  //                 setState(() {
+  //                   state.functionCategory.value = value!;
+  //                 });
+  //                 state.functionCategory.value = value!;
+  //                 state.resetVariables();
+  //               }),
+  //               value: state.functionCategory.value,
+  //               dropdownColor: inputColor,
+  //               items: state.dropdownList.map(
+  //                 (String val) {
+  //                   return DropdownMenuItem(
+  //                     value: val,
+  //                     child: Text(
+  //                       val,
+  //                       style: headingText3,
+  //                     ),
+  //                   );
+  //                 },
+  //               ).toList(),
+  //             ),
+  //           );
+  //         }),
+  //       ),
+  //     ),
+  //     const SizedBox(
+  //       height: 16,
+  //     ),
+  //     TextFieldWidget(
+  //       label: 'Nama Suplemen',
+  //       controller: state.suplemenName,
+  //       hint: 'Input nama suplemen',
+  //     ),
+  //     const SizedBox(
+  //       height: 36,
+  //     ),
+  //     ElevatedButton(
+  //       style: ElevatedButton.styleFrom(
+  //         backgroundColor: addButtonColor,
+  //         padding: const EdgeInsets.symmetric(vertical: 12),
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(8.0),
+  //         ),
+  //       ),
+  //       onPressed: () async {
+  //         await state.postSuplemenNameData(() async {
+  //           Flushbar(
+  //             message: "Nama berhasil ditambahkan",
+  //             duration: Duration(seconds: 2),
+  //             leftBarIndicatorColor: Colors.green,
+  //           ).show(context);
+  //           await state.getSuplemenNameData('');
+  //         });
+  //       },
+  //       child: Obx(
+  //         () => state.isLoadingPost.value
+  //             ? SizedBox(
+  //                 width: 20,
+  //                 height: 20,
+  //                 child: CircularProgressIndicator(
+  //                   color: Colors.white,
+  //                 ),
+  //               )
+  //             : Icon(
+  //                 Icons.add,
+  //               ),
+  //       ),
+  //     ),
+  //   ]);
+  // }
 
   getBottomSheet(int index, int id, bool editable) {
     BottomSheetWidget.getBottomSheetWidget(
@@ -664,8 +656,6 @@ class _InventarisBahanBudidayaMainpageState
                         });
                         state.functionCategory.value = value!;
                         inspect(state.functionCategory.value);
-                        await state
-                            .getSuplemenNameData(state.functionCategory.value);
                       }),
                       value: state.functionCategory.value,
                       dropdownColor: inputColor,
@@ -690,35 +680,55 @@ class _InventarisBahanBudidayaMainpageState
             ),
           ],
         ),
-        Text(
-          'Nama Suplemen',
-          style: headingText2,
-        ),
-        const SizedBox(
-          height: 12,
-        ),
-
+        // Container(
+        //   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        //   decoration: BoxDecoration(
+        //     borderRadius: BorderRadius.circular(8),
+        //     color: inputColor,
+        //   ),
+        //   child: StatefulBuilder(
+        //     builder: ((context, setState) {
+        //       return DropdownButtonHideUnderline(
+        //         child: DropdownButton<Map<String, dynamic>>(
+        //           onChanged: (value) async {
+        //             setState(() {
+        //               state.selectedSuplemen.value = value!;
+        //             });
+        //             state.selectedSuplemen.value = value!;
+        //             state.isSuplemenSelected.value = true;
+        //             // state.name.text
+        //             state.resetVariables();
+        //           },
+        //           value: state.selectedSuplemen.value,
+        //           dropdownColor: inputColor,
+        //           items: state.listSuplemenName
+        //               .map<DropdownMenuItem<Map<String, dynamic>>>((material) {
+        //             return DropdownMenuItem<Map<String, dynamic>>(
+        //               value: material,
+        //               child: Text(
+        //                 material['suplemen_name'],
+        //                 style: headingText3,
+        //               ),
+        //             );
+        //           }).toList(),
+        //         ),
+        //       );
+        //     }),
+        //   ),
+        // ),
         Obx(
-          () => state.isLoadingDetail.value
-              ? Center(
-                  child: SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
+          () => state.functionCategory.value == 'Feed Additive'
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      'Nama Suplemen',
+                      style: headingText2,
                     ),
-                  ),
-                )
-              : state.listSuplemenName.isEmpty
-                  ? Center(
-                      child: Text(
-                        'Tidak ada data',
-                        style: headingText3.copyWith(
-                          color: Colors.red,
-                        ),
-                      ),
-                    )
-                  : Container(
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 4),
                       decoration: BoxDecoration(
@@ -728,34 +738,39 @@ class _InventarisBahanBudidayaMainpageState
                       child: StatefulBuilder(
                         builder: ((context, setState) {
                           return DropdownButtonHideUnderline(
-                            child: DropdownButton<Map<String, dynamic>>(
-                              onChanged: (value) async {
+                            child: DropdownButton(
+                              onChanged: ((String? value) {
                                 setState(() {
-                                  state.selectedSuplemen.value = value!;
+                                  state.selectedFeedAdditive.value = value!;
                                 });
-                                state.selectedSuplemen.value = value!;
-                                state.isSuplemenSelected.value = true;
-                                // state.name.text
-                                state.resetVariables();
-                              },
-                              value: state.selectedSuplemen.value,
+                                state.selectedFeedAdditive.value = value!;
+                              }),
+                              value: state.selectedFeedAdditive.value,
                               dropdownColor: inputColor,
-                              items: state.listSuplemenName
-                                  .map<DropdownMenuItem<Map<String, dynamic>>>(
-                                      (material) {
-                                return DropdownMenuItem<Map<String, dynamic>>(
-                                  value: material,
-                                  child: Text(
-                                    material['suplemen_name'],
-                                    style: headingText3,
-                                  ),
-                                );
-                              }).toList(),
+                              items: state.listFeedAdditive.map(
+                                (String val) {
+                                  return DropdownMenuItem(
+                                    value: val,
+                                    child: Text(
+                                      val,
+                                      style: headingText3,
+                                    ),
+                                  );
+                                },
+                              ).toList(),
                             ),
                           );
                         }),
                       ),
-                    ),
+                    )
+                  ],
+                )
+              : TextFieldWidget(
+                  label: 'Nama Suplemen',
+                  controller: state.name,
+                  isLong: true,
+                  hint: 'Ex: garam',
+                ),
         ),
         const SizedBox(
           height: 16,
@@ -930,9 +945,7 @@ class _InventarisBahanBudidayaMainpageState
             ),
           ),
           onPressed: () async {
-            if (state.listSuplemenName.isEmpty ||
-                state.price.text == '' ||
-                state.amount.text == '') {
+            if (state.price.text == '' || state.amount.text == '') {
               Flushbar(
                 message: "Gagal, Form tidak sesuai",
                 duration: Duration(seconds: 3),
@@ -1015,59 +1028,62 @@ class _InventarisBahanBudidayaMainpageState
             ),
           ],
         ),
-        Text(
-          'Nama Suplemen',
-          style: headingText2,
-        ),
-        const SizedBox(
-          height: 12,
-        ),
-        state.listSuplemenName.isEmpty
-            ? Center(
-                child: Text(
-                  'Tidak ada data',
-                  style: headingText3.copyWith(
-                    color: Colors.red,
-                  ),
-                ),
-              )
-            : Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: inputColor,
-                ),
-                child: StatefulBuilder(
-                  builder: ((context, setState) {
-                    return DropdownButtonHideUnderline(
-                      child: DropdownButton<Map<String, dynamic>>(
-                        onChanged: (value) async {
-                          setState(() {
-                            state.selectedSuplemen.value = value!;
-                          });
-                          state.selectedSuplemen.value = value!;
-                          state.isSuplemenSelected.value = true;
-                          // state.name.text
-                        },
-                        value: state.selectedSuplemen.value,
-                        dropdownColor: inputColor,
-                        items: state.listSuplemenName
-                            .map<DropdownMenuItem<Map<String, dynamic>>>(
-                                (material) {
-                          return DropdownMenuItem<Map<String, dynamic>>(
-                            value: material,
-                            child: Text(
-                              material['suplemen_name'],
-                              style: headingText3,
+        Obx(
+          () => state.functionCategory.value == 'Feed Additive'
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      'Nama Suplemen',
+                      style: headingText2,
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: inputColor,
+                      ),
+                      child: StatefulBuilder(
+                        builder: ((context, setState) {
+                          return DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              onChanged: ((String? value) {
+                                setState(() {
+                                  state.selectedFeedAdditive.value = value!;
+                                });
+                                state.selectedFeedAdditive.value = value!;
+                              }),
+                              value: state.selectedFeedAdditive.value,
+                              dropdownColor: inputColor,
+                              items: state.listFeedAdditive.map(
+                                (String val) {
+                                  return DropdownMenuItem(
+                                    value: val,
+                                    child: Text(
+                                      val,
+                                      style: headingText3,
+                                    ),
+                                  );
+                                },
+                              ).toList(),
                             ),
                           );
-                        }).toList(),
+                        }),
                       ),
-                    );
-                  }),
+                    )
+                  ],
+                )
+              : TextFieldWidget(
+                  label: 'Nama Suplemen',
+                  controller: state.name,
+                  hint: 'Ex: garam',
+                  isEdit: state.nameEdit.value,
                 ),
-              ),
+        ),
         const SizedBox(
           height: 16,
         ),
@@ -1230,7 +1246,7 @@ class _InventarisBahanBudidayaMainpageState
                         ),
                       ),
                       onPressed: () async {
-                        if (state.listSuplemenName.isEmpty ||
+                        if (state.name.text == '' ||
                             state.price.text == '' ||
                             state.amount.text == '') {
                           Flushbar(

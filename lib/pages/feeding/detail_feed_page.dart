@@ -4,6 +4,7 @@ import 'package:fish/models/feed_chart_model.dart';
 import 'package:fish/pages/component/feed_month_card.dart';
 import 'package:fish/pages/feeding/feed_controller.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_state.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/pages/feeding/feed_entry_page.dart';
 import 'package:fish/theme.dart';
@@ -15,6 +16,8 @@ class DetailFeedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     final FeedController controller = Get.put(FeedController());
     final InventarisPakanState pakanState = Get.put(InventarisPakanState());
 
@@ -379,10 +382,20 @@ class DetailFeedPage extends StatelessWidget {
 
     return Obx(
       () => Scaffold(
+        key: scaffoldKey,
         appBar: AppBar(
           backgroundColor: backgroundColor2,
           title: const Text("Detail Pakan Permusim"),
+          actions: [
+            IconButton(
+              onPressed: () {
+                scaffoldKey.currentState?.openEndDrawer();
+              },
+              icon: Icon(Icons.card_travel_rounded),
+            )
+          ],
         ),
+        endDrawer: DrawerInvetarisList(),
         backgroundColor: backgroundColor1,
         body: controller.isLoading.value
             ? Center(

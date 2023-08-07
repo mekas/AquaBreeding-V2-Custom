@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:fish/models/history/history_feed_chart_model.dart';
 import 'package:fish/models/history/history_feed_model.dart';
 import 'package:fish/models/inventaris/pakan/detail_inventaris_pakan_model.dart';
+import 'package:fish/models/inventaris/pakan/detail_inventaris_pakan_name_model.dart';
 import 'package:fish/models/inventaris/pakan/inventaris_pakan_model.dart';
 import 'package:fish/models/inventaris/pakan/inventaris_pakan_name_model.dart';
 import 'package:fish/service/url_api.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class InventarisPakanState extends Urls {
   RxBool isLoadingPage = false.obs;
@@ -19,6 +21,8 @@ class InventarisPakanState extends Urls {
   RxBool isLoadingDetail = false.obs;
   RxBool isLoadingHistory = false.obs;
   RxBool isLoadingChart = false.obs;
+  RxBool isLoadingName = false.obs;
+  RxBool isLoadingNameDetail = false.obs;
 
   var feedList = InventarisPakanModel(data: []).obs;
   var feedHistoryList = HistoryFeedModel(data: []).obs;
@@ -35,12 +39,20 @@ class InventarisPakanState extends Urls {
 
   RxBool switchValue = false.obs;
 
-  RxString feedCategory = 'Alami'.obs;
-  TextEditingController name = TextEditingController();
-  TextEditingController desc = TextEditingController();
+  // Pakan Controller
   TextEditingController price = TextEditingController();
   TextEditingController amount = TextEditingController();
+
+  RxBool brandNameEdit = false.obs;
+  RxBool priceEdit = false.obs;
+  RxBool amountEdit = false.obs;
+
+  // Pakan Name Controller
+  RxString feedCategory = 'Alami'.obs;
+  TextEditingController category = TextEditingController();
+  TextEditingController name = TextEditingController();
   TextEditingController producer = TextEditingController();
+  TextEditingController desc = TextEditingController();
   TextEditingController protein = TextEditingController();
   TextEditingController carbo = TextEditingController();
   TextEditingController minExp = TextEditingController();
@@ -57,14 +69,16 @@ class InventarisPakanState extends Urls {
 
   RxBool nameEdit = false.obs;
   RxBool descEdit = false.obs;
-  RxBool priceEdit = false.obs;
-  RxBool amountEdit = false.obs;
   RxBool producerEdit = false.obs;
   RxBool proteinEdit = false.obs;
   RxBool carboEdit = false.obs;
   RxBool minExpEdit = false.obs;
   RxBool maxExpEdit = false.obs;
   RxBool imageEdit = false.obs;
+
+  final List listPakanName = [];
+  RxMap<String, dynamic> selectedPakan = <String, dynamic>{}.obs;
+  RxBool isPakanSelected = false.obs;
 
   TextEditingController firstDate = TextEditingController();
   TextEditingController lastDate = TextEditingController();
@@ -79,19 +93,36 @@ class InventarisPakanState extends Urls {
   RxBool isSheetEditable = false.obs;
 
   RxString pondName = ''.obs;
-
-  final List listPakanName = [];
-  TextEditingController pakanName = TextEditingController();
-  RxMap<String, dynamic> selectedPakan = <String, dynamic>{}.obs;
-  RxBool isPakanSelected = false.obs;
+  RxString selectedUsedDate = ''.obs;
+  TextEditingController showedUsedDate = TextEditingController();
 
   RxBool isReversed = false.obs;
+
+  String amountChecker(String text) {
+    var textList = text.split('');
+
+    for (var i = 0; i < textList.length; i++) {
+      if (textList[i] == ',') {
+        textList[i] = '.';
+      }
+    }
+
+    return textList.join('');
+  }
 
   Future getAllData(String type, Function() doAfter) async {
     feedList.value.data!.clear();
     selectedFeedList.clear();
     isLoadingPage.value = true;
-    final response = await http.get(Uri.parse('${Urls.invFeed}?type=$type'));
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+    var headers = {'Authorization': 'Bearer $token'};
+
+    final response = await http.get(
+      Uri.parse('${Urls.invFeed}?type=$type'),
+      headers: headers,
+    );
 
     try {
       if (response.statusCode == 200) {
@@ -100,17 +131,17 @@ class InventarisPakanState extends Urls {
 
         feedList.value = res;
 
-        // for (var i in feedList.value.data!) {
-        //   selectedFeedList.add({
-        //     'id': i.idInt,
-        //     'feed_id': i.sId,
-        //     'feed_name': i.brandName,
-        //   });
+        for (var i in feedList.value.data!) {
+          selectedFeedList.add({
+            'id': i.idInt,
+            'feed_id': i.sId,
+            'feed_name': i.brandName,
+          });
 
-        //   selectedFeedName.value = selectedFeedList[0];
-        // }
+          selectedFeedName.value = selectedFeedList[0];
+        }
 
-        // inspect(feedList.value.data);
+        inspect(feedList.value.data);
 
         doAfter();
       }
@@ -135,20 +166,20 @@ class InventarisPakanState extends Urls {
         feedCategory.value = res.data!.feedCategory!;
 
         for (var i in listPakanName) {
-          if (i['pakan_name_id'] == res.data!.feedNameId) {
+          if (i['feed_name_id'] == res.data!.feedNameId) {
             selectedPakan.value = i;
           }
         }
 
-        desc.text = res.data!.description.toString();
+        // desc.text = res.data!.description.toString();
         price.text = res.data!.price.toString();
         amount.text = res.data!.amount!.toStringAsFixed(2);
-        producer.text = res.data!.producer.toString();
-        protein.text = res.data!.protein.toString();
-        carbo.text = res.data!.carbohydrate.toString();
-        minExp.text = res.data!.minExpiredPeriod.toString();
-        maxExp.text = res.data!.maxExpiredPeriod.toString();
-        image.value = res.data!.image.toString();
+        producer.text = res.data!.feed!.producer.toString();
+        protein.text = res.data!.feed!.protein.toString();
+        carbo.text = res.data!.feed!.carbohydrate.toString();
+        minExp.text = res.data!.feed!.minExpiredPeriod.toString();
+        // maxExp.text = res.data!.maxExpiredPeriod.toString();
+        // image.value = res.data!.image.toString();
       }
       doAfter();
     } catch (e) {
@@ -158,39 +189,18 @@ class InventarisPakanState extends Urls {
     isLoadingFeedDetail.value = false;
   }
 
-  String amountChecker(String text) {
-    var textList = text.split('');
-
-    for (var i = 0; i < textList.length; i++) {
-      if (textList[i] == ',') {
-        textList[i] = '.';
-      }
-    }
-
-    return textList.join('');
-  }
-
   Future postData(Function() doAfter) async {
     var map = <String, dynamic>{};
 
+    map['feed_name_id'] = selectedPakan.value['feed_name_id'];
     map['feed_category'] = feedCategory.value;
-    map['feed_name_id'] = selectedPakan.value['pakan_name_id'];
-    map['brand_name'] = selectedPakan.value['pakan_name'];
-    map['description'] = desc.text == '' ? '-' : desc.text;
+    map['brand_name'] = selectedPakan.value['feed_name'];
     map['price'] = price.text;
     map['amount'] = amount.text.replaceAll(',', '.');
-    map['producer'] = producer.text;
-    map['protein'] = protein.text == '' ? '0' : protein.text;
-    map['carbohydrate'] = feedCategory.value == 'Industri'
-        ? '50'
-        : carbo.text == ''
-            ? '0'
-            : carbo.text;
-    map['min_expired_period'] = minExp.text == '' ? '0' : minExp.text;
-    map['max_expired_period'] = maxExp.text == ''
-        ? (int.parse(minExp.text == '' ? '0' : minExp.text) * 2).toString()
-        : maxExp.text;
-    map['image'] = image.value;
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+    var headers = {'Authorization': 'Bearer $token'};
 
     isLoadingPost.value = true;
 
@@ -200,6 +210,7 @@ class InventarisPakanState extends Urls {
       await http.post(
         Uri.parse(Urls.invFeed),
         body: map,
+        headers: headers,
       );
       doAfter();
     } catch (e) {
@@ -211,24 +222,11 @@ class InventarisPakanState extends Urls {
   Future updateData(int id, Function() doAfter) async {
     var map = <String, dynamic>{};
 
+    map['feed_name_id'] = selectedPakan.value['feed_name_id'];
     map['feed_category'] = feedCategory.value;
-    map['feed_name_id'] = selectedPakan.value['pakan_name_id'];
-    map['brand_name'] = selectedPakan.value['pakan_name'];
-    map['description'] = desc.text == '' ? '-' : desc.text;
+    map['brand_name'] = selectedPakan.value['feed_name'];
     map['price'] = price.text;
     map['amount'] = amount.text.replaceAll(',', '.');
-    map['producer'] = producer.text;
-    map['protein'] = protein.text == '' ? '0' : protein.text;
-    map['carbohydrate'] = feedCategory.value == 'Industri'
-        ? '50'
-        : carbo.text == ''
-            ? '0'
-            : carbo.text;
-    map['min_expired_period'] = minExp.text == '' ? '0' : minExp.text;
-    map['max_expired_period'] = maxExp.text == ''
-        ? (int.parse(minExp.text == '' ? '0' : minExp.text) * 2).toString()
-        : maxExp.text;
-    map['image'] = image.value;
 
     isLoadingPost.value = true;
 
@@ -268,20 +266,32 @@ class InventarisPakanState extends Urls {
     String feedId,
     String amount,
     String used,
+    String usedDate,
     Function() doAfter,
   ) async {
     var map = <String, dynamic>{};
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+    var headers = {'Authorization': 'Bearer $token'};
+
     map['pond'] = pondName;
     map['fish_feed_id'] = feedId;
     map['original_amount'] = amount;
-    map['usage'] = amountChecker(used);
+    map['usage'] = used.replaceAll(',', '.');
+    map['created_at'] = usedDate;
+
+    inspect(map);
 
     try {
-      await http.post(
+      final res = await http.post(
         Uri.parse(Urls.feedSch),
         body: map,
+        headers: headers,
       );
+      if (res.statusCode != 200) {
+        inspect(res);
+      }
       doAfter();
     } catch (e) {
       throw Exception(e);
@@ -293,8 +303,13 @@ class InventarisPakanState extends Urls {
     feedHistoryList.value.data!.clear();
     isLoadingHistory.value = true;
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+    var headers = {'Authorization': 'Bearer $token'};
+
     final response = await http.get(
-        Uri.parse('${Urls.feedSch}?start_date=$firstDate&end_date=$lastDate'));
+        Uri.parse('${Urls.feedSch}?start_date=$firstDate&end_date=$lastDate'),
+        headers: headers);
 
     try {
       if (response.statusCode == 200) {
@@ -340,13 +355,17 @@ class InventarisPakanState extends Urls {
     isLoadingChart.value = false;
   }
 
-  Future getPakanNameData(String type) async {
+  Future getPakanNameData(String type, Function() doAfter) async {
     feedNameList.value.data!.clear();
     listPakanName.clear();
-    isLoadingDetail.value = true;
+    isLoadingName.value = true;
 
-    final response =
-        await http.get(Uri.parse('${Urls.feedNameList}?type=$type'));
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+    var headers = {'Authorization': 'Bearer $token'};
+
+    final response = await http
+        .get(Uri.parse('${Urls.feedNameList}?type=$type'), headers: headers);
 
     try {
       if (response.statusCode == 200) {
@@ -355,38 +374,125 @@ class InventarisPakanState extends Urls {
 
         feedNameList.value = res;
 
-        for (var i in feedNameList.value.data!) {
-          listPakanName.add({
-            'id': i.idInt,
-            'pakan_name_id': i.sId,
-            'pakan_name': i.name,
-          });
+        if (feedNameList.value.data!.isNotEmpty) {
+          for (var i in feedNameList.value.data!) {
+            listPakanName.add({
+              'id': i.idInt,
+              'feed_name_id': i.sId,
+              'feed_name': i.name,
+            });
+          }
 
           selectedPakan.value = listPakanName[0];
         }
-
-        inspect(listPakanName);
       }
+      doAfter();
     } catch (e) {
       throw Exception(e);
     }
-    isLoadingDetail.value = false;
+    isLoadingName.value = false;
+  }
+
+  Future getDetailPakanNameData(int id, Function() doAfter) async {
+    isLoadingNameDetail.value = true;
+
+    final response = await http.get(Uri.parse('${Urls.feedNameList}/$id'));
+
+    try {
+      if (response.statusCode == 200) {
+        DetailInventarisPakanNameModel res =
+            DetailInventarisPakanNameModel.fromJson(jsonDecode(response.body));
+
+        feedCategory.value = res.data!.type.toString();
+        name.text = res.data!.name.toString();
+        producer.text = res.data!.producer.toString();
+        desc.text = res.data!.description.toString();
+        protein.text = res.data!.protein.toString();
+        carbo.text = res.data!.carbohydrate.toString();
+        minExp.text = res.data!.minExpiredPeriod.toString();
+        maxExp.text = res.data!.maxExpiredPeriod.toString();
+      }
+      doAfter();
+    } catch (e) {
+      throw Exception(e);
+    }
+    isLoadingNameDetail.value = false;
   }
 
   Future postPakanNameData(Function() doAfter) async {
+    var map = <String, dynamic>{};
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+    var headers = {'Authorization': 'Bearer $token'};
+
+    map['type'] = feedCategory.value;
+    map['name'] = name.text;
+    map['description'] = desc.text == '' ? '-' : desc.text;
+    // map['price'] = price.text;
+    // map['amount'] = amount.text.replaceAll(',', '.');
+    map['producer'] = producer.text;
+    map['protein'] = protein.text == '' ? '0' : protein.text;
+    map['carbohydrate'] = feedCategory.value == 'Industri'
+        ? '50'
+        : carbo.text == ''
+            ? '0'
+            : carbo.text;
+    map['min_expired_period'] = minExp.text == '' ? '0' : minExp.text;
+    map['max_expired_period'] = maxExp.text == ''
+        ? (int.parse(minExp.text == '' ? '0' : minExp.text) * 2).toString()
+        : maxExp.text;
+    map['image'] = image.value;
+
     isLoadingPost.value = true;
+
+    try {
+      inspect(map);
+      await http.post(
+        Uri.parse(Urls.feedNameList),
+        body: map,
+        headers: headers,
+      );
+      doAfter();
+    } catch (e) {
+      inspect(e);
+      throw Exception(e);
+    }
+    isLoadingPost.value = false;
+  }
+
+  Future updatePakanNameData(int id, Function() doAfter) async {
     var map = <String, dynamic>{};
 
     map['type'] = feedCategory.value;
-    map['name'] = pakanName.text;
+    map['name'] = name.text;
+    map['description'] = desc.text == '' ? '-' : desc.text;
+    // map['price'] = price.text;
+    // map['amount'] = amount.text.replaceAll(',', '.');
+    map['producer'] = producer.text;
+    map['protein'] = protein.text == '' ? '0' : protein.text;
+    map['carbohydrate'] = feedCategory.value == 'Industri'
+        ? '50'
+        : carbo.text == ''
+            ? '0'
+            : carbo.text;
+    map['min_expired_period'] = minExp.text == '' ? '0' : minExp.text;
+    map['max_expired_period'] = maxExp.text == ''
+        ? (int.parse(minExp.text == '' ? '0' : minExp.text) * 2).toString()
+        : maxExp.text;
+    map['image'] = image.value;
+
+    isLoadingPost.value = true;
 
     try {
-      await http.post(
-        Uri.parse(Urls.feedNameList),
+      inspect(map);
+      await http.put(
+        Uri.parse('${Urls.feedNameList}/$id'),
         body: map,
       );
       doAfter();
     } catch (e) {
+      inspect(e);
       throw Exception(e);
     }
     isLoadingPost.value = false;
@@ -410,11 +516,26 @@ class InventarisPakanState extends Urls {
     isLoadingDelete.value = false;
   }
 
-  resetVariables() {
+  convertDaysToDate(DateTime time, int days) {
+    DateTime newTime = time.add(Duration(days: days));
+    var formatter = DateFormat('d MMMM y', 'id');
+    var formattedDate = formatter.format(newTime);
+    return formattedDate;
+    // return newTime.toString().split(' ')[0].split('-').reversed.join('-');
+  }
+
+  String dateFormat(String dateString, bool includeHour) {
+    DateTime dateTime = DateTime.parse(dateString);
+    var formatter = includeHour
+        ? DateFormat('EEEE, d MMMM y | HH:mm', 'id')
+        : DateFormat('EEEE, d MMMM y', 'id');
+    var formattedDate = formatter.format(dateTime);
+    return formattedDate.split('|').join('| Jam');
+  }
+
+  resetNameVariables() {
     name.clear();
     desc.clear();
-    price.clear();
-    amount.clear();
     producer.clear();
     protein.clear();
     carbo.clear();
@@ -422,45 +543,48 @@ class InventarisPakanState extends Urls {
     maxExp.clear();
   }
 
-  convertDaysToDate(DateTime time, int days) {
-    DateTime newTime = time.add(Duration(days: days));
-    return newTime.toString().split(' ')[0].split('-').reversed.join('-');
+  resetFeedVariables() {
+    price.clear();
+    amount.clear();
   }
 
-  String dateFormat(String dateString) {
-    DateTime dateTime = DateTime.parse(dateString);
-    var formatter = DateFormat('EEEE, d MMMM y | HH:mm', 'id');
-    var formattedDate = formatter.format(dateTime);
-    return formattedDate.split('|').join('| Jam');
+  setSheetFeedVariableEdit(bool status) {
+    if (status) {
+      isSheetEditable.value = true;
+
+      brandNameEdit.value = true;
+      priceEdit.value = true;
+      amountEdit.value = true;
+    } else {
+      isSheetEditable.value = false;
+
+      brandNameEdit.value = false;
+      priceEdit.value = false;
+      amountEdit.value = false;
+    }
   }
 
-  setSheetVariableEdit(bool status) {
+  setSheetNameVariableEdit(bool status) {
     if (status) {
       isSheetEditable.value = true;
 
       nameEdit.value = true;
       descEdit.value = true;
-      priceEdit.value = true;
-      amountEdit.value = true;
       producerEdit.value = true;
       proteinEdit.value = true;
       carboEdit.value = true;
       minExpEdit.value = true;
       maxExpEdit.value = true;
-      imageEdit.value = true;
     } else {
       isSheetEditable.value = false;
 
       nameEdit.value = false;
       descEdit.value = false;
-      priceEdit.value = false;
-      amountEdit.value = false;
       producerEdit.value = false;
       proteinEdit.value = false;
       carboEdit.value = false;
       minExpEdit.value = false;
       maxExpEdit.value = false;
-      imageEdit.value = false;
     }
   }
 }

@@ -1,5 +1,5 @@
 class Urls {
-  static const String baseUrl = 'https://4b66-103-136-58-71.ngrok-free.app/api';
+  static const String baseUrl = 'https://55df-103-136-58-71.ngrok-free.app/api';
   // static const String baseUrl = 'http://10.0.2.2:5000/api';
 
   // Home
@@ -90,4 +90,7 @@ class Urls {
   // name list
   static String feedNameList = '$baseUrl/inventory/feed/name';
   static String suplemenNameList = '$baseUrl/inventory/suplemen/name';
+
+  // recap deactivation
+  static String deactivationRecap = '$baseUrl/recap/deactivation';
 }

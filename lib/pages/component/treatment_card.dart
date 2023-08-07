@@ -22,7 +22,11 @@ class TreatmentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => DetailTreatmentPage(), arguments: {});
+        Get.to(() => DetailTreatmentPage(), arguments: {
+          "activation": activation,
+          "pond": pond,
+          "treatment": treatmentList,
+        });
 
         treatmentController.postDataLog("Pond Treatment");
       },

@@ -93,6 +93,7 @@ class _KelasPembesaranPageState extends State<KelasPembesaranPage> {
                                         state.seedList.value.data![index]
                                             .createdAt!
                                             .toString(),
+                                        true,
                                       ),
                                       style: headingText3,
                                     )

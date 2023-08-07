@@ -6,10 +6,13 @@ import 'package:fish/pages/inventaris/inventaris_listrik/inventaris_listrik_page
 import 'package:fish/pages/inventaris/inventaris_listrik/inventaris_listrik_state.dart';
 import 'package:fish/theme.dart';
 import 'package:fish/widgets/bottom_sheet_widget.dart';
+import 'package:fish/widgets/dialog_widget.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 
 class InventarisListrikPage extends StatefulWidget {
   const InventarisListrikPage({Key? key}) : super(key: key);
@@ -30,9 +33,12 @@ class _InventarisListrikPageState extends State<InventarisListrikPage> {
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        key: scaffoldKey,
         backgroundColor: backgroundColor1,
         appBar: AppBar(
           centerTitle: true,
@@ -44,8 +50,14 @@ class _InventarisListrikPageState extends State<InventarisListrikPage> {
           ),
           actions: [
             IconButton(
+                onPressed: () {
+                  scaffoldKey.currentState?.openEndDrawer();
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              ),
+            IconButton(
               onPressed: () {
-                openYearDateFilter(context);
+                openDateDialogPicker(context);
               },
               icon: const Icon(Icons.filter_list_rounded),
             ),
@@ -75,6 +87,7 @@ class _InventarisListrikPageState extends State<InventarisListrikPage> {
             PascabayarPage(),
           ],
         ),
+        endDrawer: DrawerInvetarisList(),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.green.shade600,
           onPressed: () {
@@ -120,57 +133,103 @@ class _InventarisListrikPageState extends State<InventarisListrikPage> {
                 const SizedBox(
                   height: 16,
                 ),
+                Text(
+                  'Kategori',
+                  style: headingText2,
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width / 2.5,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: inputColor,
+                  ),
+                  child: StatefulBuilder(
+                    builder: ((context, setState) {
+                      return DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          onChanged: ((String? value) {
+                            setState(() {
+                              state.electricCategory.value = value!;
+                            });
+                            state.resetVariables();
+                          }),
+                          value: state.electricCategory.value,
+                          dropdownColor: inputColor,
+                          items: state.dropdownList.map(
+                            (String val) {
+                              return DropdownMenuItem(
+                                value: val,
+                                child: Text(
+                                  val,
+                                  style: headingText3,
+                                ),
+                              );
+                            },
+                          ).toList(),
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Kategori',
-                          style: headingText2,
-                        ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width / 2.5,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 4),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: inputColor,
-                          ),
-                          child: StatefulBuilder(
-                            builder: ((context, setState) {
-                              return DropdownButtonHideUnderline(
-                                child: DropdownButton(
-                                  onChanged: ((String? value) {
-                                    setState(() {
-                                      state.electricCategory.value = value!;
-                                    });
-                                    state.resetVariables();
-                                  }),
-                                  value: state.electricCategory.value,
-                                  dropdownColor: inputColor,
-                                  items: state.dropdownList.map(
-                                    (String val) {
-                                      return DropdownMenuItem(
-                                        value: val,
-                                        child: Text(
-                                          val,
-                                          style: headingText3,
-                                        ),
-                                      );
-                                    },
-                                  ).toList(),
+                    Obx(() => state.electricCategory.value == 'Prabayar'
+                        ? Column(
+                            children: [
+                              TextFieldWidget(
+                                label: 'Nomor Token',
+                                controller: state.idToken,
+                                hint: 'Ex: 1111',
+                                isLong: false,
+                                numberOutput: true,
+                              ),
+                            ],
+                          )
+                        : Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () async {
+                                  final DateTime? datePicker =
+                                      await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(1900),
+                                    lastDate: DateTime(2100),
+                                  );
+
+                                  if (datePicker != null) {
+                                    var dateTime =
+                                        DateTime.parse(datePicker.toString());
+                                    var formatter = DateFormat('MMMM', 'id');
+                                    var formattedDate =
+                                        formatter.format(dateTime);
+                                    state.monthPicked.text = formattedDate;
+                                  } else {
+                                    state.monthPicked.text = '';
+                                  }
+                                },
+                                child: TextFieldWidget(
+                                  label: 'Bulan Pembelian',
+                                  controller: state.monthPicked,
+                                  isLong: false,
+                                  isEdit: false,
+                                  suffixSection: Icon(
+                                    Icons.arrow_drop_down_circle_rounded,
+                                    color: Colors.white,
+                                  ),
                                 ),
-                              );
-                            }),
-                          ),
-                        ),
-                      ],
-                    ),
+                              ),
+                            ],
+                          )),
                     Obx(
                       () => state.electricCategory.value == 'Prabayar'
                           ? TextFieldWidget(
@@ -263,7 +322,8 @@ class _InventarisListrikPageState extends State<InventarisListrikPage> {
                       await state.postData(
                         () => {
                           state.getAllData(
-                            state.thisYear.year,
+                            state.firstDate.text,
+                            state.lastDate.text,
                             state.pageIdentifier.value,
                             () {},
                           ),
@@ -299,34 +359,110 @@ class _InventarisListrikPageState extends State<InventarisListrikPage> {
     );
   }
 
-  openYearDateFilter(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Pilih Tahun"),
-          content: SizedBox(
-            width: 300,
-            height: 300,
-            child: YearPicker(
-              firstDate: DateTime(2000),
-              lastDate: DateTime(2100),
-              initialDate: DateTime.now(),
-              selectedDate: state.thisYear,
-              onChanged: (DateTime dateTime) async {
-                state.thisYear = dateTime;
-                await state.getAllData(
-                  dateTime.year,
-                  state.pageIdentifier.value,
-                  () {
-                    Navigator.pop(context);
-                  },
-                );
+  openDateDialogPicker(BuildContext context) {
+    DialogWidget.open(
+      context,
+      [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
               },
+              child: Icon(
+                Icons.arrow_back_rounded,
+                size: 20,
+                color: Colors.white,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(right: 12),
+              child: Text(
+                'Pilih Tanggal',
+                style: headingText2,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Container(),
+          ],
+        ),
+        SizedBox(
+          height: 36,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GestureDetector(
+              onTap: () async {
+                final DateTime? datePicker = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime(2100),
+                );
+                state.firstDate.text = datePicker.toString().split(' ')[0];
+              },
+              child: TextFieldWidget(
+                label: 'Tanggal Awal',
+                controller: state.firstDate,
+                isLong: false,
+                isEdit: false,
+                suffixSection: Icon(
+                  Icons.arrow_drop_down_circle_rounded,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () async {
+                final DateTime? datePicker = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime(2100),
+                );
+                state.lastDate.text = datePicker.toString().split(' ')[0];
+              },
+              child: TextFieldWidget(
+                label: 'Tanggal Akhir',
+                controller: state.lastDate,
+                isLong: false,
+                isEdit: false,
+                suffixSection: Icon(
+                  Icons.arrow_drop_down_circle_rounded,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 16,
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: addButtonColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
             ),
           ),
-        );
-      },
+          onPressed: () async {
+            await state.getAllData(
+              state.firstDate.text,
+              state.lastDate.text,
+              state.pageIdentifier.value,
+              () {
+                Navigator.pop(context);
+              },
+            );
+          },
+          child: Icon(
+            Icons.navigate_next_rounded,
+            color: Colors.white,
+          ),
+        )
+      ],
     );
   }
 }

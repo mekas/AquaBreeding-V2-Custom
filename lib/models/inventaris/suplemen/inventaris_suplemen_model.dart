@@ -26,7 +26,6 @@ class InventarisSuplemenModel {
 
 class Data {
   String? sId;
-  String? suplemenNameId;
   int? idInt;
   String? function;
   String? name;
@@ -42,7 +41,6 @@ class Data {
 
   Data(
       {this.sId,
-      this.suplemenNameId,
       this.idInt,
       this.function,
       this.name,
@@ -58,7 +56,6 @@ class Data {
 
   Data.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
-    suplemenNameId = json['suplemen_name_id'];
     idInt = json['id_int'];
     function = json['function'];
     name = json['name'];
@@ -76,7 +73,6 @@ class Data {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_id'] = this.sId;
-    data['suplemen_name_id'] = this.suplemenNameId;
     data['id_int'] = this.idInt;
     data['function'] = this.function;
     data['name'] = this.name;

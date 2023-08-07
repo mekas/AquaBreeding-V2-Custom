@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class InventarisBenihState extends Urls {
   RxString pageIdentifier = 'benih'.obs;
@@ -76,6 +77,9 @@ class InventarisBenihState extends Urls {
     'Patin',
     'Mas',
   ];
+  var dropdownList22 = [
+    'Lele',
+  ];
   var dropdownList3 = [
     '1-2 cm',
     '2-3 cm',
@@ -110,6 +114,8 @@ class InventarisBenihState extends Urls {
 
   RxBool isSheetEditable = false.obs;
   RxBool isReversed = false.obs;
+  RxString selectedUsedDate = ''.obs;
+  TextEditingController showedUsedDate = TextEditingController(text: '');
 
   var nameHistoryList = [
     '',
@@ -117,6 +123,9 @@ class InventarisBenihState extends Urls {
   RxString selectedNameHistory = ''.obs;
 
   Future getAllSeedData(String type) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+
     seedList.value.data!.clear();
     nameHistoryList.clear();
     nameHistoryList.add('Semua');
@@ -127,7 +136,12 @@ class InventarisBenihState extends Urls {
     listLele.clear();
     resetVariables();
     isLoadingPage.value = true;
-    final response = await http.get(Uri.parse('${Urls.invSeed}?type=$type'));
+
+    var headers = {'Authorization': 'Bearer $token'};
+    final response = await http.get(
+      Uri.parse('${Urls.invSeed}?type=$type'),
+      headers: headers,
+    );
 
     try {
       if (response.statusCode == 200) {
@@ -197,110 +211,133 @@ class InventarisBenihState extends Urls {
     isLoadingPage.value = false;
   }
 
-  Future getFishSeedDetail(String type, int id, Function() doAfter) async {
-    resetVariables();
+  Future getLeleDetail(int id, Function() doAfter) async {
     final response = await http.get(Uri.parse('${Urls.invSeed}/$id'));
 
+    isLoadingLeleDetail.value = true;
+    isLeleSelected.value = true;
+
     try {
-      if (type == 'Lele') {
-        isLoadingLeleDetail.value = true;
-        isLeleSelected.value = true;
+      if (response.statusCode == 200) {
+        DetailInventarisBenihModel res =
+            DetailInventarisBenihModel.fromJson(jsonDecode(response.body));
 
-        if (response.statusCode == 200) {
-          DetailInventarisBenihModel res =
-              DetailInventarisBenihModel.fromJson(jsonDecode(response.body));
-
-          leleFishWeigth.value = res.data!.weight.toString() == '0'
-              ? '-'
-              : res.data!.weight.toString();
-          leleFishSize.value = res.data!.width.toString() == ''
-              ? '-'
-              : res.data!.width.toString();
-          leleFishStock.value = res.data!.amount.toString();
-        }
+        leleFishWeigth.value = res.data!.weight.toString() == '0'
+            ? '-'
+            : res.data!.weight.toString();
+        leleFishSize.value =
+            res.data!.width.toString() == '' ? '-' : res.data!.width.toString();
+        leleFishStock.value = res.data!.amount.toString();
       }
-
-      if (type == 'Mas') {
-        isLoadingMasDetail.value = true;
-        isMasSelected.value = true;
-
-        if (response.statusCode == 200) {
-          DetailInventarisBenihModel res =
-              DetailInventarisBenihModel.fromJson(jsonDecode(response.body));
-
-          masFishWeigth.value = res.data!.weight.toString() == '0'
-              ? '-'
-              : res.data!.weight.toString();
-          masFishSize.value = res.data!.width.toString() == ''
-              ? '-'
-              : res.data!.width.toString();
-          masFishStock.value = res.data!.amount.toString();
-        }
-      }
-
-      if (type == 'Patin') {
-        isLoadingPatinDetail.value = true;
-        isPatinSelected.value = true;
-
-        if (response.statusCode == 200) {
-          DetailInventarisBenihModel res =
-              DetailInventarisBenihModel.fromJson(jsonDecode(response.body));
-
-          patinFishWeigth.value = res.data!.weight.toString() == '0'
-              ? '-'
-              : res.data!.weight.toString();
-          patinFishSize.value = res.data!.width.toString() == ''
-              ? '-'
-              : res.data!.width.toString();
-          patinFishStock.value = res.data!.amount.toString();
-        }
-      }
-
-      if (type == 'Nila Hitam') {
-        isLoadingNilaHitamDetail.value = true;
-        isNilaHitamSelected.value = true;
-
-        if (response.statusCode == 200) {
-          DetailInventarisBenihModel res =
-              DetailInventarisBenihModel.fromJson(jsonDecode(response.body));
-
-          nilaHitamFishWeigth.value = res.data!.weight.toString() == '0'
-              ? '-'
-              : res.data!.weight.toString();
-          nilaHitamFishSize.value = res.data!.width.toString() == ''
-              ? '-'
-              : res.data!.width.toString();
-          nilaHitamFishStock.value = res.data!.amount.toString();
-        }
-      }
-
-      if (type == 'Nila Merah') {
-        isLoadingNilaMerahDetail.value = true;
-        isNilaMerahSelected.value = true;
-
-        if (response.statusCode == 200) {
-          DetailInventarisBenihModel res =
-              DetailInventarisBenihModel.fromJson(jsonDecode(response.body));
-
-          nilaMerahFishWeigth.value = res.data!.weight.toString() == '0'
-              ? '-'
-              : res.data!.weight.toString();
-          nilaMerahFishSize.value = res.data!.width.toString() == ''
-              ? '-'
-              : res.data!.width.toString();
-          nilaMerahFishStock.value = res.data!.amount.toString();
-        }
-      }
-
       doAfter();
-      isLoadingLeleDetail.value = false;
-      isLoadingNilaHitamDetail.value = false;
-      isLoadingNilaMerahDetail.value = false;
-      isLoadingPatinDetail.value = false;
-      isLoadingMasDetail.value = false;
     } catch (e) {
       throw Exception(e);
     }
+    isLoadingLeleDetail.value = false;
+  }
+
+  Future getMasDetail(int id, Function() doAfter) async {
+    final response = await http.get(Uri.parse('${Urls.invSeed}/$id'));
+
+    isLoadingMasDetail.value = true;
+    isMasSelected.value = true;
+
+    try {
+      if (response.statusCode == 200) {
+        DetailInventarisBenihModel res =
+            DetailInventarisBenihModel.fromJson(jsonDecode(response.body));
+
+        masFishWeigth.value = res.data!.weight.toString() == '0'
+            ? '-'
+            : res.data!.weight.toString();
+        masFishSize.value =
+            res.data!.width.toString() == '' ? '-' : res.data!.width.toString();
+        masFishStock.value = res.data!.amount.toString();
+      }
+      doAfter();
+    } catch (e) {
+      throw Exception(e);
+    }
+
+    isLoadingMasDetail.value = false;
+  }
+
+  Future getPatinDetail(int id, Function() doAfter) async {
+    final response = await http.get(Uri.parse('${Urls.invSeed}/$id'));
+
+    isLoadingPatinDetail.value = true;
+    isPatinSelected.value = true;
+
+    try {
+      if (response.statusCode == 200) {
+        DetailInventarisBenihModel res =
+            DetailInventarisBenihModel.fromJson(jsonDecode(response.body));
+
+        patinFishWeigth.value = res.data!.weight.toString() == '0'
+            ? '-'
+            : res.data!.weight.toString();
+        patinFishSize.value =
+            res.data!.width.toString() == '' ? '-' : res.data!.width.toString();
+        patinFishStock.value = res.data!.amount.toString();
+      }
+      doAfter();
+    } catch (e) {
+      throw Exception(e);
+    }
+
+    isLoadingPatinDetail.value = false;
+  }
+
+  Future getNilaHitamDetail(int id, Function() doAfter) async {
+    final response = await http.get(Uri.parse('${Urls.invSeed}/$id'));
+
+    isLoadingNilaHitamDetail.value = true;
+    isNilaHitamSelected.value = true;
+
+    try {
+      if (response.statusCode == 200) {
+        DetailInventarisBenihModel res =
+            DetailInventarisBenihModel.fromJson(jsonDecode(response.body));
+
+        nilaHitamFishWeigth.value = res.data!.weight.toString() == '0'
+            ? '-'
+            : res.data!.weight.toString();
+        nilaHitamFishSize.value =
+            res.data!.width.toString() == '' ? '-' : res.data!.width.toString();
+        nilaHitamFishStock.value = res.data!.amount.toString();
+      }
+      doAfter();
+    } catch (e) {
+      throw Exception(e);
+    }
+
+    isLoadingNilaHitamDetail.value = false;
+  }
+
+  Future getNilaMerahDetail(int id, Function() doAfter) async {
+    final response = await http.get(Uri.parse('${Urls.invSeed}/$id'));
+
+    isLoadingNilaMerahDetail.value = true;
+    isNilaMerahSelected.value = true;
+
+    try {
+      if (response.statusCode == 200) {
+        DetailInventarisBenihModel res =
+            DetailInventarisBenihModel.fromJson(jsonDecode(response.body));
+
+        nilaMerahFishWeigth.value = res.data!.weight.toString() == '0'
+            ? '-'
+            : res.data!.weight.toString();
+        nilaMerahFishSize.value =
+            res.data!.width.toString() == '' ? '-' : res.data!.width.toString();
+        nilaMerahFishStock.value = res.data!.amount.toString();
+      }
+      doAfter();
+    } catch (e) {
+      throw Exception(e);
+    }
+
+    isLoadingNilaMerahDetail.value = false;
   }
 
   Future getSeedDataByID(int id, Function() doAfter) async {
@@ -334,6 +371,10 @@ class InventarisBenihState extends Urls {
   Future postSeedData(Function() doAfter) async {
     var map = <String, dynamic>{};
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+    var headers = {'Authorization': 'Bearer $token'};
+
     map['fish_seed_category'] = seedCategory.value;
     map['fish_type'] = fishCategory.value;
     map['brand_name'] = seedCategory.value == 'Benih'
@@ -355,6 +396,7 @@ class InventarisBenihState extends Urls {
       await http.post(
         Uri.parse(Urls.invSeed),
         body: map,
+        headers: headers,
       );
       doAfter();
     } catch (e) {
@@ -413,10 +455,14 @@ class InventarisBenihState extends Urls {
   }
 
   Future postHistorySeedData(
-      String pondName, List fish, Function() doAfter) async {
+      String pondName, List fish, String usedDate, Function() doAfter) async {
     var map = <String, dynamic>{};
 
     map['pond'] = pondName;
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+    var headers = {'Authorization': 'Bearer $token'};
 
     // print('HEHE');
 
@@ -424,11 +470,13 @@ class InventarisBenihState extends Urls {
       map['fish_seed_id'] = fish[i]['seed_id'];
       map['original_amount'] = fish[i]['original_value'];
       map['usage'] = fish[i]['amount'];
+      map['created_at'] = usedDate;
 
       try {
         await http.post(
           Uri.parse(Urls.seedSch),
           body: map,
+          headers: headers,
         );
         doAfter();
       } catch (e) {
@@ -442,8 +490,15 @@ class InventarisBenihState extends Urls {
     seedHistoryList.value.data!.clear();
     isLoadingHistory.value = true;
 
-    final response = await http.get(Uri.parse(
-        '${Urls.seedSch}?start_date=$firstDate&end_date=$lastDate&name=$name'));
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+    var headers = {'Authorization': 'Bearer $token'};
+
+    final response = await http.get(
+      Uri.parse(
+          '${Urls.seedSch}?start_date=$firstDate&end_date=$lastDate&name=$name'),
+      headers: headers,
+    );
 
     try {
       if (response.statusCode == 200) {
@@ -494,9 +549,11 @@ class InventarisBenihState extends Urls {
     fishPrice.clear();
   }
 
-  String dateFormat(String dateString) {
+  String dateFormat(String dateString, bool includeHour) {
     DateTime dateTime = DateTime.parse(dateString);
-    var formatter = DateFormat('EEEE, d MMMM y | HH:mm', 'id');
+    var formatter = includeHour
+        ? DateFormat('EEEE, d MMMM y | HH:mm', 'id')
+        : DateFormat('EEEE, d MMMM y', 'id');
     var formattedDate = formatter.format(dateTime);
     return formattedDate.split('|').join('| Jam');
   }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:fish/models/grading_chart_model.dart';
 import 'package:fish/pages/component/grading_card.dart';
 import 'package:fish/pages/grading/grading_controller.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/pages/grading/grading_constanta_edit_page.dart';
 import 'package:fish/pages/grading/grading_entry_page.dart';
@@ -15,6 +16,8 @@ class GradingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     final GradingController controller = Get.put(GradingController());
 
     Widget chartGrading() {
@@ -432,10 +435,20 @@ class GradingPage extends StatelessWidget {
       if (controller.isLoading.value == false) {
         print('object');
         return Scaffold(
+          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Rekapitulasi Grading"),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  scaffoldKey.currentState?.openEndDrawer();
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
+            ],
           ),
+          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [

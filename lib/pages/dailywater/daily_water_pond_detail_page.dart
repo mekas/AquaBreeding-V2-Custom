@@ -5,6 +5,7 @@ import 'package:fish/pages/pond/deactivation_breed_page.dart';
 import 'package:fish/pages/pond/detail_pond_controller.dart';
 
 import 'package:fish/controllers/daily_water/daily_water_breed_list_controller.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
@@ -32,6 +33,8 @@ class _DailyWaterDetailPondPageState extends State<DailyWaterDetailPondPage> {
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     Widget pondStatus() {
       return Container(
         margin: EdgeInsets.only(
@@ -362,7 +365,20 @@ class _DailyWaterDetailPondPageState extends State<DailyWaterDetailPondPage> {
     }
 
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: backgroundColor1,
+      // appBar: AppBar(
+      //   backgroundColor: backgroundColor1,
+      //   actions: [
+      //     IconButton(
+      //       onPressed: () {
+      //         scaffoldKey.currentState?.openEndDrawer();
+      //       },
+      //       icon: Icon(Icons.card_travel_rounded),
+      //     )
+      //   ],
+      // ),
+      // endDrawer: DrawerInvetarisList(),
       body: Obx(
         () => detailController.isLoading.value
             ? Center(

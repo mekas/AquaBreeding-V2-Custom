@@ -2,6 +2,7 @@ import 'package:fish/pages/component/daily_water_avg_card.dart';
 import 'package:fish/pages/component/daily_water_card.dart';
 import 'package:fish/controllers/weeklywater/weekly_water_avg_controller.dart';
 import 'package:fish/pages/dailywater/daily_water_entry_page.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
@@ -31,6 +32,8 @@ class _WeeklyWaterAvgPageState extends State<WeeklyWaterAvgPage> {
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     Widget fishDataRecap() {
       return Container(
         margin: EdgeInsets.only(
@@ -119,11 +122,21 @@ class _WeeklyWaterAvgPageState extends State<WeeklyWaterAvgPage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Kondisi Air Rata-Rata/Minggu"),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  scaffoldKey.currentState?.openEndDrawer();
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
+            ],
           ),
           backgroundColor: backgroundColor1,
+          endDrawer: DrawerInvetarisList(),
           body: ListView(
             children: [
               fishDataRecap(),

@@ -44,8 +44,15 @@ class ActivationBreedController extends GetxController {
   RxString masSeedIDController = ''.obs;
   RxString patinSeedIDController = ''.obs;
 
+  RxInt calculatedNilaHitamStock = 0.obs;
+  RxInt calculatedNilaMerahStock = 0.obs;
+  RxInt calculatedLeleStock = 0.obs;
+  RxInt calculatedMasStock = 0.obs;
+  RxInt calculatedPatinStock = 0.obs;
+
   RxString pondName = ''.obs;
   List fishTmp = [];
+  RxBool checkUsedDate = false.obs;
 
   final InventarisBenihState benihState = Get.put(InventarisBenihState());
 
@@ -82,219 +89,181 @@ class ActivationBreedController extends GetxController {
   }
 
   List buildJsonFish() {
-    isNoFist.value = true;
     var data = [];
 
     if (isNilaMerah.value == true) {
-      if (nilaMerahAmountController.text == "0" ||
-          nilaMerahWeightController.text == "0" ||
-          nilaMerahAmountController.text == "" ||
-          nilaMerahWeightController.text == "") {
-        isNoFist.value = false;
-      } else {
-        var fishData = {
-          "type": "nila merah",
-          "seed_id": nilaMerahSeedIDController.value,
-          "category": benihState.seedCategory.value,
-          "original_value": benihState.nilaMerahFishStock.value,
-          "amount": nilaMerahAmountController.value.text,
-          "weight": benihState.nilaMerahFishWeigth.value == '-'
-              ? '0'
-              : benihState.nilaMerahFishWeigth.value,
-          "size": benihState.nilaMerahFishSize.value == '-'
-              ? '-'
-              : benihState.nilaMerahFishSize.value,
-        };
-        fishTmp.add(fishData);
-        isNoFist.value = false;
-        isZeroInput.value = false;
-
-        data.add(jsonEncode(fishData));
-      }
+      var fishData = {
+        "type": "nila merah",
+        "seed_id": benihState.selectedNilaMerah.value['seed_id'],
+        "category": breedOptionController.selected.value,
+        "original_value": benihState.nilaMerahFishStock.value,
+        "amount": nilaMerahAmountController.value.text,
+        "weight": benihState.nilaMerahFishWeigth.value == '-'
+            ? '0'
+            : benihState.nilaMerahFishWeigth.value,
+        "size": benihState.nilaMerahFishSize.value == '-'
+            ? '-'
+            : benihState.nilaMerahFishSize.value,
+      };
+      fishTmp.add(fishData);
+      data.add(jsonEncode(fishData));
     }
     if (isNilaHitam.value == true) {
-      if (nilaHitamAmountController.text == "0" ||
-          nilaHitamWeightController.text == "0" ||
-          nilaHitamAmountController.text == "" ||
-          nilaHitamWeightController.text == "") {
-        isNoFist.value = false;
-      } else {
-        var fishData = {
-          "type": "nila hitam",
-          "seed_id": nilaHitamSeedIDController.value,
-          "category": benihState.seedCategory.value,
-          "original_value": benihState.nilaHitamFishStock.value,
-          "amount": nilaHitamAmountController.value.text,
-          "weight": benihState.nilaHitamFishWeigth.value == '-'
-              ? '0'
-              : benihState.nilaHitamFishWeigth.value,
-          "size": benihState.nilaHitamFishSize.value == '-'
-              ? '-'
-              : benihState.nilaHitamFishSize.value,
-        };
-        fishTmp.add(fishData);
-        isNoFist.value = false;
-        isZeroInput.value = false;
-
-        data.add(jsonEncode(fishData));
-      }
+      var fishData = {
+        "type": "nila hitam",
+        "seed_id": benihState.selectedNilaHitam.value['seed_id'],
+        "category": breedOptionController.selected.value,
+        "original_value": benihState.nilaHitamFishStock.value,
+        "amount": nilaHitamAmountController.value.text,
+        "weight": benihState.nilaHitamFishWeigth.value == '-'
+            ? '0'
+            : benihState.nilaHitamFishWeigth.value,
+        "size": benihState.nilaHitamFishSize.value == '-'
+            ? '-'
+            : benihState.nilaHitamFishSize.value,
+      };
+      fishTmp.add(fishData);
+      data.add(jsonEncode(fishData));
     }
     if (isLele.value == true) {
-      if (leleAmountController.text == "0" ||
-          leleWeightController.text == "0" ||
-          leleAmountController.text == "" ||
-          leleWeightController.text == "") {
-        isNoFist.value = false;
-      } else {
-        isNoFist.value = false;
-        isZeroInput.value = false;
-
-        var fishData = {
-          "type": "lele",
-          "seed_id": leleSeedIDController.value,
-          "category": benihState.seedCategory.value,
-          "original_value": benihState.leleFishStock.value,
-          "amount": leleAmountController.value.text,
-          "weight": benihState.leleFishWeigth.value == '-'
-              ? '0'
-              : benihState.leleFishWeigth.value,
-          "size": benihState.leleFishSize.value == '-'
-              ? '-'
-              : benihState.leleFishSize.value,
-        };
-        fishTmp.add(fishData);
-        data.add(jsonEncode(fishData));
-      }
+      var fishData = {
+        "type": "lele",
+        "seed_id": benihState.selectedLele.value['seed_id'],
+        "category": breedOptionController.selected.value,
+        "original_value": benihState.leleFishStock.value,
+        "amount": leleAmountController.value.text,
+        "weight": benihState.leleFishWeigth.value == '-'
+            ? '0'
+            : benihState.leleFishWeigth.value,
+        "size": benihState.leleFishSize.value == '-'
+            ? '-'
+            : benihState.leleFishSize.value,
+      };
+      fishTmp.add(fishData);
+      data.add(jsonEncode(fishData));
     }
     if (isPatin.value == true) {
-      if (patinAmountController.text == "0" ||
-          patinWeightController.text == "0" ||
-          patinAmountController.text == "" ||
-          patinWeightController.text == "") {
-        isNoFist.value = false;
-      } else {
-        isNoFist.value = false;
-        isZeroInput.value = false;
-
-        var fishData = {
-          "type": "patin",
-          "seed_id": patinSeedIDController.value,
-          "category": benihState.seedCategory.value,
-          "original_value": benihState.patinFishStock.value,
-          "amount": patinAmountController.value.text,
-          "weight": benihState.patinFishWeigth.value == '-'
-              ? '0'
-              : benihState.patinFishWeigth.value,
-          "size": benihState.patinFishSize.value == '-'
-              ? '-'
-              : benihState.patinFishSize.value,
-        };
-        fishTmp.add(fishData);
-        data.add(jsonEncode(fishData));
-      }
+      var fishData = {
+        "type": "patin",
+        "seed_id": benihState.selectedPatin.value['seed_id'],
+        "category": breedOptionController.selected.value,
+        "original_value": benihState.patinFishStock.value,
+        "amount": patinAmountController.value.text,
+        "weight": benihState.patinFishWeigth.value == '-'
+            ? '0'
+            : benihState.patinFishWeigth.value,
+        "size": benihState.patinFishSize.value == '-'
+            ? '-'
+            : benihState.patinFishSize.value,
+      };
+      fishTmp.add(fishData);
+      data.add(jsonEncode(fishData));
     }
     if (isMas.value == true) {
-      if (masAmountController.text == "0" ||
-          masWeightController.text == "0" ||
-          masAmountController.text == "" ||
-          masWeightController.text == "") {
-        isNoFist.value = false;
-      } else {
-        isZeroInput.value = false;
-
-        var fishData = {
-          "type": "mas",
-          "seed_id": masSeedIDController.value,
-          "category": benihState.seedCategory.value,
-          "original_value": benihState.masFishStock.value,
-          "amount": masAmountController.value.text,
-          "weight": benihState.masFishWeigth.value == '-'
-              ? '0'
-              : benihState.masFishWeigth.value,
-          "size": benihState.masFishSize.value == '-'
-              ? '-'
-              : benihState.masFishSize.value,
-        };
-        fishTmp.add(fishData);
-        data.add(jsonEncode(fishData));
-      }
+      var fishData = {
+        "type": "mas",
+        "seed_id": benihState.selectedMas.value['seed_id'],
+        "category": breedOptionController.selected.value,
+        "original_value": benihState.masFishStock.value,
+        "amount": masAmountController.value.text,
+        "weight": benihState.masFishWeigth.value == '-'
+            ? '0'
+            : benihState.masFishWeigth.value,
+        "size": benihState.masFishSize.value == '-'
+            ? '-'
+            : benihState.masFishSize.value,
+      };
+      fishTmp.add(fishData);
+      data.add(jsonEncode(fishData));
     }
 
     return data;
   }
 
-  Future<void> pondActivation(BuildContext context, Function doInPost) async {
+  Future<void> pondActivation(BuildContext context, Function() doInPost) async {
     // print(buildJsonFish());
 
     var buildFish = buildJsonFish();
 
-    List<dynamic> fish = buildJsonFish();
-    if (isNoFist.value == true) {
-      showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-                title: const Text('Input Error',
-                    style: TextStyle(color: Colors.red)),
-                content: const Text(
-                  'Wajib Pilih Salah 1 Ikan',
-                  style: TextStyle(color: Colors.white),
-                ),
-                backgroundColor: backgroundColor1,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(16.0))),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, 'OK'),
-                    child: const Text('OK'),
-                  ),
-                ],
-              ));
-    } else {
-      if (isZeroInput.value == true ||
-          waterHeightController.value.text == '' ||
-          waterHeightController.value.text == '0') {
-        showDialog<String>(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Input Error',
-                      style: TextStyle(color: Colors.red)),
-                  content: const Text(
-                    'Input Tidak boleh 0/Kosong',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  backgroundColor: backgroundColor1,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(16.0))),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, 'OK'),
-                      child: const Text('OK'),
-                    ),
-                  ],
-                ));
-      } else {
-        print("masuk ini");
-        isActivationProgress.value = true;
+    // List<dynamic> fish = buildJsonFish();
 
-        try {
-          await service.postActivation(
-              pondId: pond.id,
-              fish: buildFish,
-              isWaterPreparation: false,
-              waterLevel: waterHeightController.value.text,
-              doInPost: doInPost);
-          await benihState.postHistorySeedData(
-            pondName.value,
-            fishTmp,
-            () => null,
-          );
-          postDataLog(fitur);
-        } catch (e) {
-          //
-        }
-        isActivationProgress.value = false;
-      }
+    isActivationProgress.value = true;
+
+    inspect({
+      "pondId": pond.id,
+      "fish": buildFish,
+      "isWaterPreparation": false,
+      "waterLevel": waterHeightController.value.text,
+    });
+
+    try {
+      await service.postActivation(
+        pondId: pond.id,
+        fish: buildFish,
+        isWaterPreparation: false,
+        waterLevel: waterHeightController.value.text,
+        doInPost: doInPost,
+      );
+      await benihState.postHistorySeedData(
+        pondName.value,
+        fishTmp,
+        benihState.selectedUsedDate.value,
+        () => null,
+      );
+      postDataLog(fitur);
+    } catch (e) {
+      //
     }
+    // doInPost();
+    isActivationProgress.value = false;
+    // if (isNoFist.value == true) {
+    //   showDialog<String>(
+    //       context: context,
+    //       builder: (BuildContext context) => AlertDialog(
+    //             title: const Text('Input Error',
+    //                 style: TextStyle(color: Colors.red)),
+    //             content: const Text(
+    //               'Wajib Pilih Salah 1 Ikan',
+    //               style: TextStyle(color: Colors.white),
+    //             ),
+    //             backgroundColor: backgroundColor1,
+    //             shape: RoundedRectangleBorder(
+    //                 borderRadius: BorderRadius.all(Radius.circular(16.0))),
+    //             actions: <Widget>[
+    //               TextButton(
+    //                 onPressed: () => Navigator.pop(context, 'OK'),
+    //                 child: const Text('OK'),
+    //               ),
+    //             ],
+    //           ));
+    // } else {
+    //   if (isZeroInput.value == true ||
+    //       waterHeightController.value.text == '' ||
+    //       waterHeightController.value.text == '0') {
+    //     showDialog<String>(
+    //         context: context,
+    //         builder: (BuildContext context) => AlertDialog(
+    //               title: const Text('Input Error',
+    //                   style: TextStyle(color: Colors.red)),
+    //               content: const Text(
+    //                 'Input Tidak boleh 0/Kosong',
+    //                 style: TextStyle(color: Colors.white),
+    //               ),
+    //               backgroundColor: backgroundColor1,
+    //               shape: RoundedRectangleBorder(
+    //                   borderRadius: BorderRadius.all(Radius.circular(16.0))),
+    //               actions: <Widget>[
+    //                 TextButton(
+    //                   onPressed: () => Navigator.pop(context, 'OK'),
+    //                   child: const Text('OK'),
+    //                 ),
+    //               ],
+    //             ));
+    //   } else {
+    //     print("masuk ini");
+
+    //   }
+    // }
     // // Get.to(() => DetailPondPage(),
     // //     arguments: Pond(
     // //         id: pond.id,

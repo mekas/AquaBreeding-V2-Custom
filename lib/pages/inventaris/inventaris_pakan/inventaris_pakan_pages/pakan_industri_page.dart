@@ -17,14 +17,17 @@ class _PakanIndustriPageState extends State<PakanIndustriPage> {
   @override
   void initState() {
     super.initState();
-    state.resetVariables();
+    state.resetFeedVariables();
+    state.resetNameVariables();
+    state.setSheetFeedVariableEdit(false);
+    state.setSheetNameVariableEdit(false);
     state.pageIdentifier.value = 'industri';
     state.feedCategory.value = 'Industri';
-    state.setSheetVariableEdit(false);
+    state.category.text = 'Industri';
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       state.getAllData('industri', () {});
-      state.getPakanNameData('industri');
+      state.getPakanNameData('industri', () {});
     });
   }
 
@@ -44,9 +47,7 @@ class _PakanIndustriPageState extends State<PakanIndustriPage> {
                     ),
                   ),
                 )
-              : RenderInventarisPakanListWidget(
-                  data: state.feedList.value,
-                ),
+              : RenderInventarisPakanListWidget(),
         ),
       ),
     );

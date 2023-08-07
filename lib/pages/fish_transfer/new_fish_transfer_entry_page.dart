@@ -2,6 +2,7 @@ import 'package:fish/controllers/fish_transfer/fish_transfer_entry_controller.da
 import 'package:fish/controllers/fish_transfer/pond_list_item_controller.dart';
 import 'package:fish/pages/fish_transfer/new_fish_transfer_input_page.dart';
 import 'package:fish/service/fish_transfer_service.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
@@ -84,6 +85,8 @@ class _NewFishTransferEntryPageState extends State<NewFishTransferEntryPage> {
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     Widget sampleWeightInput() {
       return Container(
         margin: EdgeInsets.only(
@@ -2049,10 +2052,20 @@ class _NewFishTransferEntryPageState extends State<NewFishTransferEntryPage> {
     }
 
     return Scaffold(
+        key: scaffoldKey,
         appBar: AppBar(
           backgroundColor: backgroundColor2,
           title: const Text("Entry Sortir"),
+          actions: [
+            IconButton(
+              onPressed: () {
+                scaffoldKey.currentState?.openEndDrawer();
+              },
+              icon: Icon(Icons.card_travel_rounded),
+            )
+          ],
         ),
+        endDrawer: DrawerInvetarisList(),
         backgroundColor: backgroundColor1,
         body: PageView(
           physics: const NeverScrollableScrollPhysics(),

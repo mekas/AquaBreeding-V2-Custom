@@ -6,6 +6,7 @@ import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fish/widgets/convert_to_rupiah_widget.dart';
+import 'package:intl/intl.dart';
 
 class PascabayarPage extends StatefulWidget {
   const PascabayarPage({super.key});
@@ -25,7 +26,8 @@ class _PascabayarPageState extends State<PascabayarPage> {
     state.setSheetVariableEdit(false);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      state.getAllData(state.thisYear.year, 'pascabayar', () {});
+      state.getAllData(
+          state.firstDate.text, state.lastDate.text, 'pascabayar', () {});
     });
   }
 
@@ -253,24 +255,57 @@ class _PascabayarPageState extends State<PascabayarPage> {
                   style: headingText3,
                 ),
               ),
-              TextFieldWidget(
-                label: 'Harga Beli',
-                controller: state.price,
-                numberOutput: true,
-                isLong: false,
-                hint: 'Ex: 10000',
-                isEdit: state.priceEdit.value,
-                prefixSection: Text(
-                  'Rp',
-                  style: headingText3,
+              GestureDetector(
+                onTap: () async {
+                  if (state.monthPickedEdit.value) {
+                    final DateTime? datePicker = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime(2100),
+                    );
+
+                    if (datePicker != null) {
+                      var dateTime = DateTime.parse(datePicker.toString());
+                      var formatter = DateFormat('MMMM', 'id');
+                      var formattedDate = formatter.format(dateTime);
+                      state.monthPicked.text = formattedDate;
+                    } else {
+                      state.monthPicked.text = state.monthPicked.text;
+                    }
+                  }
+                },
+                child: TextFieldWidget(
+                  label: 'Bulan Pembelian',
+                  controller: state.monthPicked,
+                  isLong: false,
+                  isEdit: false,
+                  suffixSection: Icon(
+                    Icons.arrow_drop_down_circle_rounded,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ],
           ),
         ),
-        // const SizedBox(
-        //   height: 16,
-        // ),
+
+        const SizedBox(
+          height: 16,
+        ),
+        Obx(
+          () => TextFieldWidget(
+            label: 'Harga Beli',
+            controller: state.price,
+            numberOutput: true,
+            hint: 'Ex: 10000',
+            isEdit: state.priceEdit.value,
+            prefixSection: Text(
+              'Rp',
+              style: headingText3,
+            ),
+          ),
+        ),
         // Text(
         //   'Gambar (Struk)',
         //   style: headingText2,
@@ -317,7 +352,8 @@ class _PascabayarPageState extends State<PascabayarPage> {
                         id,
                         () => {
                           state.getAllData(
-                            state.thisYear.year,
+                            state.firstDate.text,
+                            state.lastDate.text,
                             state.pageIdentifier.value,
                             () {},
                           ),
@@ -406,7 +442,8 @@ class _PascabayarPageState extends State<PascabayarPage> {
                               state.electricList.value.data![index].idInt!,
                               () => {
                                     state.getAllData(
-                                      state.thisYear.year,
+                                      state.firstDate.text,
+                                      state.lastDate.text,
                                       state.pageIdentifier.value,
                                       () {},
                                     ),

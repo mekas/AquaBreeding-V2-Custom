@@ -1,6 +1,7 @@
 import 'package:fish/pages/component/statistic_card.dart';
 import 'package:fish/pages/component/water_card.dart';
 import 'package:fish/controllers/home/home_controller.dart';
+import 'package:fish/pages/deactivation_recap/deactivation_recap_page.dart';
 import 'package:fish/pages/inventaris/inventaris_aset/inventaris_aset_page.dart';
 import 'package:fish/pages/inventaris/inventaris_aset/inventaris_aset_state.dart';
 import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_mainpage.dart';
@@ -9,6 +10,7 @@ import 'package:fish/pages/inventaris/inventaris_benih/inventaris_benih_mainpage
 import 'package:fish/pages/inventaris/inventaris_listrik/inventaris_listrik_mainpage.dart';
 import 'package:fish/pages/inventaris/inventaris_listrik/inventaris_listrik_state.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_mainpage.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:fish/widgets/main_inventaris_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,16 +24,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final InventarisBahanBudidayaState stateA =
-      Get.put(InventarisBahanBudidayaState());
-
-  final InventarisAsetState stateB = Get.put(InventarisAsetState());
-
-  final InventarisListrikState stateC = Get.put(InventarisListrikState());
-
   final HomeController controller = Get.put(HomeController(), permanent: false);
-
-  DateTime now = DateTime.now();
 
   var scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -305,7 +298,13 @@ class _HomePageState extends State<HomePage> {
             title: Text('Home'),
             centerTitle: true,
             leading: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) {
+                    return DeactivationRecapPage();
+                  },
+                ));
+              },
               icon: Icon(Icons.book_rounded),
             ),
             actions: [
@@ -317,77 +316,7 @@ class _HomePageState extends State<HomePage> {
               )
             ],
           ),
-          endDrawer: Drawer(
-            backgroundColor: backgroundColor1,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 24,
-                ),
-                const Text(
-                  'Inventaris',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(
-                  height: 54,
-                ),
-                MainInvetarisButton(
-                  title: 'Pakan',
-                  doOnTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const InventarisPakanMainpage();
-                    }));
-                  },
-                ),
-                MainInvetarisButton(
-                  title: 'Suplemen',
-                  doOnTap: () {
-                    stateA.currIndexFilter.value = 1;
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const InventarisBahanBudidayaMainpage();
-                    }));
-                  },
-                ),
-                MainInvetarisButton(
-                  title: 'Listrik',
-                  doOnTap: () {
-                    stateC.thisYear = now;
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const InventarisListrikPage();
-                    }));
-                  },
-                ),
-                MainInvetarisButton(
-                  title: 'Benih',
-                  doOnTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const InventarisBenihMainpage();
-                    }));
-                  },
-                ),
-                MainInvetarisButton(
-                  title: 'Aset',
-                  doOnTap: () {
-                    stateB.currIndexFilter.value = 1;
-                    stateB.firstDate.text = '';
-                    stateB.lastDate.text = '';
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const InventarisAsetPage();
-                    }));
-                  },
-                ),
-              ],
-            ),
-          ),
+          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [

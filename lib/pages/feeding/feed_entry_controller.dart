@@ -3,6 +3,7 @@
 import 'dart:developer';
 
 import 'package:fish/models/pond_model.dart';
+import 'package:fish/pages/feeding/feed_controller.dart';
 import 'package:fish/pages/feeding/feedtype_form_controller.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_state.dart';
 import 'package:fish/service/feed_history_service.dart';
@@ -13,15 +14,18 @@ import '../../models/activation_model.dart';
 import '../../service/logging_service.dart';
 
 class FeedEntryController extends GetxController {
-  TextEditingController feedDosisController = TextEditingController(text: '');
-  RxString fishFeedID = ''.obs;
+  TextEditingController feedDosisController = TextEditingController();
+  FeedController feedController = Get.put(FeedController());
   final InventarisPakanState pakanState = Get.put(InventarisPakanState());
+  RxDouble calculatedStock = 0.0.obs;
 
   var isLoading = false.obs;
   Pond pond = Get.arguments['pond'];
   Activation activation = Get.arguments["activation"];
   final dose = ''.obs;
   final validatedose = false.obs;
+
+  RxBool checkBoxState = false.obs;
 
   void doseChanged(String val) {
     dose.value = val;
@@ -31,33 +35,22 @@ class FeedEntryController extends GetxController {
     validatedose.value = true;
   }
 
-  // @override
-  // void onInit() async {
-  //   isLoading = false.obs;
-  //   await feedTypeFormController.getData();
-  //   isLoading = true.obs;
-  //   super.onInit();
-  // }
-
   Future<void> postFeedHistory() async {
     bool value = await FeedHistoryService().postFeedHistory(
-      // feedTypeId: feedTypeFormController.getIdByName(),
-      pondId: pond.id,
-      fishFeedId: fishFeedID.value,
-      feedDose: pakanState.amountChecker(feedDosisController.text),
-    );
-
-    // inspect({
-    //   "pondId": pond.id,
-    //   "fishFeedId": fishFeedID.value,
-    //   "feedDose": pakanState.amountChecker(feedDosisController.text),
-    // });
+        pondId: pond.id,
+        fishFeedId: pakanState.selectedFeedName.value['feed_id'],
+        feedDose: pakanState.amountChecker(feedDosisController.text),
+        doAfter: () async {
+          await feedController.getWeeklyRecapFeedHistory(
+              activation_id: activation.id.toString());
+        });
 
     await pakanState.postHistoryFeedData(
       pakanState.pondName.value,
-      fishFeedID.value,
+      pakanState.selectedFeedName.value['feed_id'],
       pakanState.amount.text,
       pakanState.amountChecker(feedDosisController.text),
+      pakanState.selectedUsedDate.value,
       () => null,
     );
 

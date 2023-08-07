@@ -1,5 +1,6 @@
 import 'package:fish/pages/pond/add_fish_controller.dart';
 import 'package:fish/theme.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -12,6 +13,8 @@ class AddFish extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     final controller = Get.put(AddFishController());
     Widget checkBoxFish() {
       return Container(
@@ -563,7 +566,7 @@ class AddFish extends StatelessWidget {
               context,
               () {},
             );
-            await controller.detailPondController.getPondActivation(context);
+            await controller.detailPondController.getPondActivation();
             await controller.breedController.getFishChart(
                 activation_id: controller
                     .detailPondController.selectedActivation.value.id!);
@@ -590,6 +593,7 @@ class AddFish extends StatelessWidget {
     }
 
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: backgroundColor1,
       appBar: AppBar(
         backgroundColor: backgroundColor2,
@@ -600,7 +604,16 @@ class AddFish extends StatelessWidget {
             Get.back();
           },
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              scaffoldKey.currentState?.openEndDrawer();
+            },
+            icon: Icon(Icons.card_travel_rounded),
+          )
+        ],
       ),
+      endDrawer: DrawerInvetarisList(),
       body: Obx(
         (() => ListView(
               children: [

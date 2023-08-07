@@ -1,5 +1,6 @@
 import 'package:fish/controllers/daily_water/daily_water_detail_controller.dart';
 import 'package:fish/pages/dailywater/daily_water_edit_page.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
@@ -39,6 +40,8 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     Widget treatmentDataRecap() {
       return Container(
         margin: EdgeInsets.only(
@@ -315,6 +318,7 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Detail Kondisi Air Harian"),
@@ -326,7 +330,16 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
                 Navigator.pop(context);
               },
             ),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  scaffoldKey.currentState?.openEndDrawer();
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
+            ],
           ),
+          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [

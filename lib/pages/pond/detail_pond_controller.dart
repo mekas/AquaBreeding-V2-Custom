@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class DetailPondController extends GetxController {
-  final PondController pondController = Get.find();
+  final PondController pondController = Get.put(PondController());
   final ActivationService service = ActivationService();
   final RxList activations = List<Activation>.empty().obs;
   late Rx<Activation> selectedActivation;
@@ -20,6 +20,7 @@ class DetailPondController extends GetxController {
 
   @override
   void onInit() async {
+    // getPondActivation();
     super.onInit();
   }
 
@@ -33,12 +34,13 @@ class DetailPondController extends GetxController {
     }
   }
 
-  Future<void> getPondActivation(BuildContext context) async {
+  Future<void> getPondActivation() async {
     isLoading.value = true;
     activations.clear();
 
     List<Activation> result = await service.getActivations(
         pondId: pondController.selectedPond.value.id.toString());
+    inspect(result);
     activations.addAll(result);
     print('masuk ke actvation');
     // activationData = result[0];

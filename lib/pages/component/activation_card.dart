@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fish/models/activation_model.dart';
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/component/tabview.dart';
@@ -18,6 +20,7 @@ class ActivationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // inspect(activation);
     final DetailPondController detailPondController = Get.find();
     return GestureDetector(
       onTap: () {

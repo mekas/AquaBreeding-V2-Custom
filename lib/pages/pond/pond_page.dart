@@ -11,6 +11,7 @@ import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_mainpage
 
 import 'package:fish/pages/pond/add_pond_page.dart';
 import 'package:fish/pages/pond/pond_controller.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:fish/widgets/main_inventaris_button.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
@@ -163,6 +164,8 @@ class _PondPageState extends State<PondPage> {
           ));
     }
 
+    // var scaffoldKey = GlobalKey<ScaffoldState>();
+
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
@@ -179,78 +182,8 @@ class _PondPageState extends State<PondPage> {
               )
             ],
           ),
+          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
-          endDrawer: Drawer(
-            backgroundColor: backgroundColor1,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 24,
-                ),
-                const Text(
-                  'Inventaris',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(
-                  height: 54,
-                ),
-                MainInvetarisButton(
-                  title: 'Pakan',
-                  doOnTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const InventarisPakanMainpage();
-                    }));
-                  },
-                ),
-                MainInvetarisButton(
-                  title: 'Suplemen',
-                  doOnTap: () {
-                    stateA.currIndexFilter.value = 1;
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const InventarisBahanBudidayaMainpage();
-                    }));
-                  },
-                ),
-                MainInvetarisButton(
-                  title: 'Listrik',
-                  doOnTap: () {
-                    stateC.thisYear = now;
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const InventarisListrikPage();
-                    }));
-                  },
-                ),
-                MainInvetarisButton(
-                  title: 'Benih',
-                  doOnTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const InventarisBenihMainpage();
-                    }));
-                  },
-                ),
-                MainInvetarisButton(
-                  title: 'Aset',
-                  doOnTap: () {
-                    stateB.currIndexFilter.value = 1;
-                    stateB.firstDate.text = '';
-                    stateB.lastDate.text = '';
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const InventarisAsetPage();
-                    }));
-                  },
-                ),
-              ],
-            ),
-          ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               Get.to(() => AddPondPage());

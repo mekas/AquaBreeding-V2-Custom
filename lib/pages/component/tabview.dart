@@ -6,6 +6,7 @@ import 'package:fish/pages/treatment/treatment_controller.dart';
 import 'package:fish/pages/treatment/treatment_page.dart';
 import 'package:fish/pages/fish_transfer/fish_transfer_list_page.dart';
 import 'package:fish/theme.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fish/models/activation_model.dart';
@@ -80,8 +81,11 @@ class MyTabScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     final MyTabs _tabs = Get.put(MyTabs());
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         backgroundColor: backgroundColor2,
         title: const Text('Detail Musim Budidaya'),
@@ -98,7 +102,16 @@ class MyTabScreen extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              scaffoldKey.currentState?.openEndDrawer();
+            },
+            icon: Icon(Icons.card_travel_rounded),
+          )
+        ],
       ),
+      endDrawer: DrawerInvetarisList(),
       body: TabBarView(
         controller: _tabs.controller,
         children: [DetailBreedPage(), TreatmentpPage(), FishTransferListPage()],

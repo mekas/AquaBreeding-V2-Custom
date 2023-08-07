@@ -74,9 +74,10 @@ class TextFieldWidget extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       color: isEdit ? inputColor : Colors.transparent,
-                      border: Border.all(
-                          width: 1,
-                          color: isEdit ? transparentColor : backgroundColor2),
+                      // border: Border.all(
+                      //     width: 1,
+                      //     color:
+                      //         isEdit ? transparentColor : Colors.transparent),
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,

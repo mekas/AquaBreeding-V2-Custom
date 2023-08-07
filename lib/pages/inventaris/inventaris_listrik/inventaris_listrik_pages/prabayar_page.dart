@@ -25,7 +25,8 @@ class _PrabayarPageState extends State<PrabayarPage> {
     state.setSheetVariableEdit(false);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      state.getAllData(state.thisYear.year, 'prabayar', () {});
+      state.getAllData(
+          state.firstDate.text, state.lastDate.text, 'prabayar', () {});
     });
   }
 
@@ -239,19 +240,31 @@ class _PrabayarPageState extends State<PrabayarPage> {
         const SizedBox(
           height: 16,
         ),
-        Obx(
-          () => TextFieldWidget(
-            label: 'Harga Beli',
-            controller: state.price,
-            hint: 'Ex: 10000',
-            numberOutput: true,
-            isEdit: state.priceEdit.value,
-            prefixSection: Text(
-              'Rp',
-              style: headingText3,
-            ),
-          ),
-        ),
+        Obx(() => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextFieldWidget(
+                  label: 'Nomor Token',
+                  controller: state.idToken,
+                  hint: 'Ex: 1111',
+                  isLong: false,
+                  numberOutput: true,
+                  isEdit: state.idTokenEdit.value,
+                ),
+                TextFieldWidget(
+                  label: 'Harga Beli',
+                  controller: state.price,
+                  hint: 'Ex: 10000',
+                  isLong: false,
+                  numberOutput: true,
+                  isEdit: state.priceEdit.value,
+                  prefixSection: Text(
+                    'Rp',
+                    style: headingText3,
+                  ),
+                ),
+              ],
+            )),
         // const SizedBox(
         //   height: 16,
         // ),
@@ -299,7 +312,8 @@ class _PrabayarPageState extends State<PrabayarPage> {
                         id,
                         () => {
                           state.getAllData(
-                            state.thisYear.year,
+                            state.firstDate.text,
+                            state.lastDate.text,
                             state.pageIdentifier.value,
                             () {},
                           ),
@@ -388,7 +402,8 @@ class _PrabayarPageState extends State<PrabayarPage> {
                               state.electricList.value.data![index].idInt!,
                               () => {
                                     state.getAllData(
-                                      state.thisYear.year,
+                                      state.firstDate.text,
+                                      state.lastDate.text,
                                       state.pageIdentifier.value,
                                       () {},
                                     ),

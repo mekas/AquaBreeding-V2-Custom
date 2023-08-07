@@ -1,4 +1,5 @@
 import 'package:fish/controllers/weeklywater/weekly_water_detail_controller.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,8 @@ class WeeklyWaterDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     final WeeklyWaterDetailController controller =
         Get.put(WeeklyWaterDetailController());
 
@@ -297,11 +300,21 @@ class WeeklyWaterDetailPage extends StatelessWidget {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Detail Kondisi Air Harian"),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  scaffoldKey.currentState?.openEndDrawer();
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
+            ],
           ),
           backgroundColor: backgroundColor1,
+          endDrawer: DrawerInvetarisList(),
           body: ListView(
             children: [
               treatmentDataRecap(),

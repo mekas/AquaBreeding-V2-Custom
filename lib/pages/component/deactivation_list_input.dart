@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:fish/models/fish_model.dart';
+import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/pages/pond/deactivation_breed_controller.dart';
 import 'package:fish/theme.dart';
@@ -14,6 +17,7 @@ class DeactivationListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // inspect(fish);
     return Container(
       width: double.infinity,
       margin: EdgeInsets.only(
@@ -49,44 +53,47 @@ class DeactivationListCard extends StatelessWidget {
               ),
             ],
           ),
-          Text(
-            'Berat Ikan Total (Kg)',
-            style: primaryTextStyle.copyWith(
-              fontSize: 12,
-              fontWeight: medium,
+          TextFieldWidget(
+            hint: 'ex: 2.3',
+            suffixSection: Text(
+              'kg',
+              style: headingText3,
             ),
+            label: 'Berat Ikan Total',
+            controller: fish.type! == "lele"
+                ? controller.leleWeightController
+                : fish.type! == "patin"
+                    ? controller.patinWeightController
+                    : fish.type! == "nila hitam"
+                        ? controller.nilaHitamWeightController
+                        : fish.type == "nila merah"
+                            ? controller.nilaMerahWeightController
+                            : controller.masWeightController,
           ),
-          Container(
-            height: 50,
-            padding: EdgeInsets.symmetric(
-              horizontal: 16,
-            ),
-            decoration: BoxDecoration(
-              color: backgroundColor2,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Center(
-              child: TextFormField(
-                style: primaryTextStyle,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.deny(RegExp(r'[-,\s]'))
-                ],
-                controller: fish.type! == "lele"
-                    ? controller.leleWeightController
-                    : fish.type! == "patin"
-                        ? controller.patinWeightController
-                        : fish.type! == "nila hitam"
-                            ? controller.nilaHitamWeightController
-                            : fish.type == "nila merah"
-                                ? controller.nilaMerahWeightController
-                                : controller.masWeightController,
-                decoration: InputDecoration.collapsed(
-                  hintText: 'ex 2.3',
-                  hintStyle: subtitleTextStyle,
-                ),
-              ),
-            ),
+          SizedBox(
+            height: 12,
           ),
+          TextFieldWidget(
+            prefixSection: Text(
+              'Rp',
+              style: headingText3,
+            ),
+            suffixSection: Text(
+              '/ ekor',
+              style: headingText3,
+            ),
+            label: 'Harga Ikan',
+            controller: fish.type! == "lele"
+                ? controller.lelePriceController
+                : fish.type! == "patin"
+                    ? controller.patinPriceController
+                    : fish.type! == "nila hitam"
+                        ? controller.nilaHitamPriceController
+                        : fish.type == "nila merah"
+                            ? controller.nilaMerahPriceController
+                            : controller.masPriceController,
+            isEdit: false,
+          )
         ],
       ),
     );

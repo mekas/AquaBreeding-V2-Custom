@@ -1,10 +1,10 @@
-class DetailInventarisPakanModel {
+class DetailInventarisPakanNameModel {
   String? status;
   Data? data;
 
-  DetailInventarisPakanModel({this.status, this.data});
+  DetailInventarisPakanNameModel({this.status, this.data});
 
-  DetailInventarisPakanModel.fromJson(Map<String, dynamic> json) {
+  DetailInventarisPakanNameModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
@@ -21,61 +21,6 @@ class DetailInventarisPakanModel {
 
 class Data {
   String? sId;
-  String? feedNameId;
-  int? idInt;
-  String? feedCategory;
-  String? brandName;
-  int? price;
-  double? amount;
-  String? createdAt;
-  String? updatedAt;
-  Feed? feed;
-
-  Data(
-      {this.sId,
-      this.feedNameId,
-      this.idInt,
-      this.feedCategory,
-      this.brandName,
-      this.price,
-      this.amount,
-      this.createdAt,
-      this.updatedAt,
-      this.feed});
-
-  Data.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    feedNameId = json['feed_name_id'];
-    idInt = json['id_int'];
-    feedCategory = json['feed_category'];
-    brandName = json['brand_name'];
-    price = json['price'];
-    amount = json['amount'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    feed = json['feed'] != null ? new Feed.fromJson(json['feed']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['feed_name_id'] = this.feedNameId;
-    data['id_int'] = this.idInt;
-    data['feed_category'] = this.feedCategory;
-    data['brand_name'] = this.brandName;
-    data['price'] = this.price;
-    data['amount'] = this.amount;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    if (this.feed != null) {
-      data['feed'] = this.feed!.toJson();
-    }
-    return data;
-  }
-}
-
-class Feed {
-  String? sId;
   int? idInt;
   String? type;
   String? name;
@@ -87,8 +32,9 @@ class Feed {
   int? maxExpiredPeriod;
   String? image;
   String? createdAt;
+  String? updatedAt;
 
-  Feed(
+  Data(
       {this.sId,
       this.idInt,
       this.type,
@@ -100,9 +46,10 @@ class Feed {
       this.minExpiredPeriod,
       this.maxExpiredPeriod,
       this.image,
-      this.createdAt});
+      this.createdAt,
+      this.updatedAt});
 
-  Feed.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     idInt = json['id_int'];
     type = json['type'];
@@ -115,6 +62,7 @@ class Feed {
     maxExpiredPeriod = json['max_expired_period'];
     image = json['image'];
     createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
   }
 
   Map<String, dynamic> toJson() {
@@ -131,6 +79,7 @@ class Feed {
     data['max_expired_period'] = this.maxExpiredPeriod;
     data['image'] = this.image;
     data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
     return data;
   }
 }

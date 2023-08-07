@@ -6,6 +6,7 @@ import 'package:fish/theme.dart';
 import 'package:fish/widgets/bottom_sheet_widget.dart';
 import 'package:fish/widgets/convert_to_rupiah_widget.dart';
 import 'package:fish/widgets/dialog_widget.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -37,12 +38,21 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         backgroundColor: backgroundColor1,
         centerTitle: true,
         title: Text('Aset'),
         actions: [
+          IconButton(
+            onPressed: () {
+              scaffoldKey.currentState?.openEndDrawer();
+            },
+            icon: Icon(Icons.card_travel_rounded),
+          ),
           IconButton(
             onPressed: () {
               openDateDialogPicker(context);
@@ -51,6 +61,7 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
           )
         ],
       ),
+      endDrawer: DrawerInvetarisList(),
       body: Obx(
         () => Container(
           color: backgroundColor1,
@@ -224,7 +235,7 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
                                                   ),
                                                   Expanded(
                                                     child: Text(
-                                                      '.' * 100,
+                                                      '.' * 100000,
                                                       maxLines: 1,
                                                       style: TextStyle(
                                                         color: Colors.white,
@@ -256,7 +267,7 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
                                                   ),
                                                   Expanded(
                                                     child: Text(
-                                                      '.' * 100,
+                                                      '.' * 100000,
                                                       maxLines: 1,
                                                       style: TextStyle(
                                                         color: Colors.white,
@@ -286,7 +297,7 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
                                                   ),
                                                   Expanded(
                                                     child: Text(
-                                                      '.' * 100,
+                                                      '.' * 100000,
                                                       maxLines: 1,
                                                       style: TextStyle(
                                                         color: Colors.white,
@@ -305,19 +316,76 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
                                               const SizedBox(
                                                 height: 12,
                                               ),
-                                              Text(
-                                                'Fungsi :',
-                                                style: headingText3,
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    'Umur Aset : ',
+                                                    style: headingText3,
+                                                  ),
+                                                  Expanded(
+                                                    child: Text(
+                                                      '.' * 100000,
+                                                      maxLines: 1,
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    state.findDateRange(
+                                                        currDate,
+                                                        state
+                                                            .assetList
+                                                            .value
+                                                            .data![index]
+                                                            .createdAt
+                                                            .toString()),
+                                                    style: headingText3,
+                                                  )
+                                                ],
                                               ),
                                               const SizedBox(
                                                 height: 12,
                                               ),
                                               Text(
-                                                state.assetList.value
-                                                    .data![index].description
-                                                    .toString(),
-                                                style: hoverText,
-                                              )
+                                                'Deskripsi :',
+                                                style: headingText3,
+                                              ),
+                                              const SizedBox(
+                                                height: 12,
+                                              ),
+                                              Container(
+                                                width: double.infinity,
+                                                padding: EdgeInsets.all(12),
+                                                decoration: BoxDecoration(
+                                                  color: backgroundColor2,
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                                child: Text(
+                                                  state
+                                                              .assetList
+                                                              .value
+                                                              .data![index]
+                                                              .description
+                                                              .toString() ==
+                                                          ''
+                                                      ? '-'
+                                                      : state
+                                                          .assetList
+                                                          .value
+                                                          .data![index]
+                                                          .description
+                                                          .toString(),
+                                                  style: headingText3,
+                                                ),
+                                              ),
                                             ],
                                           ),
                                         ),
@@ -544,7 +612,6 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
                             onPressed: () async {
                               if (state.name.text == '' ||
                                   state.price.text == '' ||
-                                  state.desc.text == '' ||
                                   state.amount.text == '' ||
                                   state.image.value == '') {
                                 Flushbar(
@@ -703,7 +770,6 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
                 onPressed: () async {
                   if (state.name.text == '' ||
                       state.price.text == '' ||
-                      state.desc.text == '' ||
                       state.amount.text == '' ||
                       state.image.value == '') {
                     Flushbar(

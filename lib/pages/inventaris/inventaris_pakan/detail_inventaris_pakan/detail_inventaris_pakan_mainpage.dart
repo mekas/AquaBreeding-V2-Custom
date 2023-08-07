@@ -155,12 +155,11 @@ class _DetailInventarisPakanMainpageState
                                               style: headingText3,
                                             ),
                                             Text(
-                                              state.dateFormat(state
-                                                  .feedHistoryList
-                                                  .value
-                                                  .data![index]
-                                                  .createdAt
-                                                  .toString()),
+                                              state.dateFormat(
+                                                  state.feedHistoryList.value
+                                                      .data![index].createdAt
+                                                      .toString(),
+                                                  true),
                                               style: headingText3,
                                             )
                                           ],
