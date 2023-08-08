@@ -24,8 +24,8 @@ class _KelasBenihPageState extends State<KelasBenihPage> {
     state.seedCategory.value = 'Benih';
     state.setSheetVariableEdit(false);
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      state.getAllSeedData('benih');
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await state.getAllSeedData('benih');
     });
   }
 

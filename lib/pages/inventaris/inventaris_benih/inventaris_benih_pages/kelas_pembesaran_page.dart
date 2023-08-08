@@ -24,8 +24,8 @@ class _KelasPembesaranPageState extends State<KelasPembesaranPage> {
     state.seedCategory.value = 'Pembesaran';
     state.setSheetVariableEdit(false);
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      state.getAllSeedData('pembesaran');
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await state.getAllSeedData('pembesaran');
     });
   }
 

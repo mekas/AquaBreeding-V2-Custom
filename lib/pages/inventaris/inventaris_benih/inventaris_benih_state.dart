@@ -543,10 +543,10 @@ class InventarisBenihState extends Urls {
     nilaMerahFishWeigth.value = '';
 
     fishName.value = '';
-    fishPriceTotal.clear();
-    fishAmount.clear();
-    fishWeight.clear();
-    fishPrice.clear();
+    // fishPriceTotal.clear();
+    // fishAmount.clear();
+    // fishWeight.clear();
+    // fishPrice.clear();
   }
 
   String dateFormat(String dateString, bool includeHour) {

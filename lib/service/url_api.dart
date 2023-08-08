@@ -1,5 +1,5 @@
 class Urls {
-  static const String baseUrl = 'https://55df-103-136-58-71.ngrok-free.app/api';
+  static const String baseUrl = 'https://006c-103-8-12-43.ngrok-free.app/api';
   // static const String baseUrl = 'http://10.0.2.2:5000/api';
 
   // Home

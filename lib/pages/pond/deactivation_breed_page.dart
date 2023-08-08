@@ -39,7 +39,7 @@ class _DeactivationBreedPageState extends State<DeactivationBreedPage> {
           .split('-')
           .reversed
           .join('-'),
-      '2023-08-07',
+      currDate.toString().split(' ')[0],
     );
     // inspect(currDate);
 
