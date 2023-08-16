@@ -202,6 +202,7 @@ class ActivationBreedController extends GetxController {
         fish: buildFish,
         isWaterPreparation: false,
         waterLevel: waterHeightController.value.text,
+        activeDate: benihState.selectedUsedDate.value,
         doInPost: doInPost,
       );
       await benihState.postHistorySeedData(

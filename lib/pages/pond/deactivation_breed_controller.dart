@@ -444,7 +444,9 @@ class DeactivationBreedController extends GetxController {
       throw Exception(e);
     }
 
-    isLoadingInventory.value = false;
+    Future.delayed(const Duration(seconds: 2), () {
+      isLoadingInventory.value = false;
+    });
   }
 
   Future<void> getHarvestedBool(Activation activation) async {

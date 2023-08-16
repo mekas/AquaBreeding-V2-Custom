@@ -411,7 +411,15 @@ class _DeactivationBreedPageState extends State<DeactivationBreedPage> {
               normalsizeInput(),
               undersizeInput(),
               oversizeInput(),
-              activationButton(),
+              controller.isLoadingInventory.value
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 18),
+                      child: Center(
+                        child: CircularProgressIndicator(color: Colors.white),
+                      ),
+                    )
+                  : activationButton(),
+
               SizedBox(
                 height: 8,
               )

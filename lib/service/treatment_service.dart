@@ -48,26 +48,14 @@ class TreatmentService {
     String? carbohydrate,
     String? carbohydrate_type,
   }) async {
-    inspect({
-      "pond_id": pondId.toString(),
-      "probiotic_culture_id": prob_id,
-      "carbon_id": carb_id,
-      "salt_id": salt_id,
-      "salt": salt,
-      "treatment_type": type,
-      "probiotic_culture_name": probiotic_name,
-      "probiotic_culture": probiotic,
-      "water_change": water,
-      "description": desc,
-      "carbohydrate": carbohydrate,
-      "carbohydrate_type": carbohydrate_type,
-    });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
 
     var body = {
       "pond_id": pondId,
       "probiotic_culture_id": prob_id,
+      "carbon_id": carb_id,
+      "salt_id": salt_id,
       "salt": salt,
       "treatment_type": type,
       "probiotic_culture_name": probiotic_name,
@@ -78,16 +66,12 @@ class TreatmentService {
       "carbohydrate_type": carbohydrate_type,
     };
 
-    if (carb_id != '') {
-      body['carb_id'] = carb_id;
-    }
-    if (salt_id != '') {
-      body['salt_id'] = salt_id;
-    }
-    if (carb_id != '' && salt_id != '') {
-      body['carb_id'] = carb_id;
-      body['salt_id'] = salt_id;
-    }
+    // if (carb_id != '') {}
+    // if (salt_id != '') {}
+    // if (carb_id != '' && salt_id != '') {
+    //   body['carb_id'] = carb_id;
+    //   body['salt_id'] = salt_id;
+    // }
 
     final response = await http.post(
       Uri.parse(Urls.treatment),

@@ -1,4 +1,4 @@
-package com.example.fish
+package com.example.fishtwo
 
 import io.flutter.embedding.android.FlutterActivity
 

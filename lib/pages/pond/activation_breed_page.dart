@@ -1416,6 +1416,13 @@ class _ActivationBreedPageState extends State<ActivationBreedPage> {
             top: defaultSpace * 3, right: defaultMargin, left: defaultMargin),
         child: TextButton(
           onPressed: () async {
+            if (benihState.seedList.value.data!.isEmpty) {
+              Flushbar(
+                message: "Tidak ada ikan",
+                duration: Duration(seconds: 3),
+                leftBarIndicatorColor: Colors.red[400],
+              ).show(context);
+            }
             if (controller.waterHeightController.text == '') {
               Flushbar(
                 message: "Gagal, Masukkan tinggi air",
