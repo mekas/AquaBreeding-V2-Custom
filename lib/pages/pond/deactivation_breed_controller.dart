@@ -66,6 +66,8 @@ class DeactivationBreedController extends GetxController {
   TextEditingController nilaHitamPriceController = TextEditingController();
   TextEditingController nilaMerahPriceController = TextEditingController();
 
+  RxString pondName = ''.obs;
+
   var isLoading = false.obs;
   var isNilaMerah = false.obs;
   var isNilaHitam = false.obs;
@@ -189,18 +191,19 @@ class DeactivationBreedController extends GetxController {
   Future getHistorySuplemenData(
     String firstDate,
     String lastDate,
+    String pondName,
     Function() doAfter,
   ) async {
     suplemenHistoryList.value.data!.clear();
     var suplemenPrice = 0;
-    var totalUsage = 0.0;
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
     var headers = {'Authorization': 'Bearer $token'};
 
     final response = await http.get(
-      Uri.parse('${Urls.suplemenSch}?start_date=$firstDate&end_date=$lastDate'),
+      Uri.parse(
+          '${Urls.suplemenSch}?start_date=$firstDate&end_date=$lastDate&pond_name=$pondName'),
       headers: headers,
     );
 
@@ -213,12 +216,8 @@ class DeactivationBreedController extends GetxController {
 
         if (suplemenHistoryList.value.data!.isNotEmpty) {
           for (var i in suplemenHistoryList.value.data!) {
-            totalUsage += i.usage!;
-          }
-
-          for (var i in suplemenHistoryList.value.data!) {
             suplemenPrice +=
-                ((totalUsage / i.originalAmount!) * i.suplemen!.price!).round();
+                ((i.usage! / i.originalAmount!) * i.suplemen!.price!).round();
           }
         }
 
@@ -231,18 +230,18 @@ class DeactivationBreedController extends GetxController {
     return suplemenPrice;
   }
 
-  Future getHistoryFeedData(
-      String firstDate, String lastDate, Function() doAfter) async {
+  Future getHistoryFeedData(String firstDate, String lastDate, String pondName,
+      Function() doAfter) async {
     feedHistoryList.value.data!.clear();
     var feedPrice = 0;
-    var totalUsage = 0.0;
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
     var headers = {'Authorization': 'Bearer $token'};
 
     final response = await http.get(
-        Uri.parse('${Urls.feedSch}?start_date=$firstDate&end_date=$lastDate'),
+        Uri.parse(
+            '${Urls.feedSch}?start_date=$firstDate&end_date=$lastDate&pond_name=$pondName'),
         headers: headers);
 
     try {
@@ -254,12 +253,8 @@ class DeactivationBreedController extends GetxController {
 
         if (feedHistoryList.value.data!.isNotEmpty) {
           for (var i in feedHistoryList.value.data!) {
-            totalUsage += i.usage!;
-          }
-
-          for (var i in feedHistoryList.value.data!) {
             feedPrice +=
-                ((totalUsage / i.originalAmount!) * i.feed!.price!).round();
+                ((i.usage! / i.originalAmount!) * i.feed!.price!).round();
           }
         }
 
@@ -271,22 +266,17 @@ class DeactivationBreedController extends GetxController {
     return feedPrice;
   }
 
-  Future getHistorySeedData(
-      String firstDate, String lastDate, Function() doAfter) async {
+  Future getHistorySeedData(String firstDate, String lastDate, String pondName,
+      Function() doAfter) async {
     seedHistoryList.value.data!.clear();
-
-    var leleUsed = 0;
-    var masUsed = 0;
-    var patinUsed = 0;
-    var nilaMerahUsed = 0;
-    var nilaHitamUsed = 0;
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
     var headers = {'Authorization': 'Bearer $token'};
 
     final response = await http.get(
-      Uri.parse('${Urls.seedSch}?start_date=$firstDate&end_date=$lastDate'),
+      Uri.parse(
+          '${Urls.seedSch}?start_date=$firstDate&end_date=$lastDate&pond_name=$pondName'),
       headers: headers,
     );
 
@@ -299,55 +289,64 @@ class DeactivationBreedController extends GetxController {
 
         if (seedHistoryList.value.data!.isNotEmpty) {
           for (var i in activation.fishLive!) {
-            for (var j in seedHistoryList.value.data!) {
-              if (i.fishId == j.fishSeedId) {
-                if (i.type == "patin") {
-                  patinUsed += j.usage!;
-                }
-                if (i.type == "lele") {
-                  leleUsed += j.usage!;
-                }
-                if (i.type == "mas") {
-                  masUsed += j.usage!;
-                }
-                if (i.type == "nila hitam") {
-                  nilaHitamUsed += j.usage!;
-                }
-                if (i.type == "nila merah") {
-                  nilaMerahUsed += j.usage!;
-                }
-              }
-            }
+            // for (var j in seedHistoryList.value.data!) {
+            //   if (i.fishId == j.fishSeedId) {
+            //     if (i.type == "patin") {
+            //       patinUsed += j.usage!;
+            //     }
+            //     if (i.type == "lele") {
+            //       leleUsed += j.usage!;
+            //     }
+            //     if (i.type == "mas") {
+            //       masUsed += j.usage!;
+            //     }
+            //     if (i.type == "nila hitam") {
+            //       nilaHitamUsed += j.usage!;
+            //     }
+            //     if (i.type == "nila merah") {
+            //       nilaMerahUsed += j.usage!;
+            //     }
+            //   }
+            // }
 
             for (var j in seedHistoryList.value.data!) {
               if (i.fishId == j.fishSeedId) {
                 if (i.type == "patin") {
-                  patinPrice.value =
-                      ((patinUsed / j.originalAmount!) * j.seed!.price!)
-                          .round();
+                  patinPrice.value += ((j.usage! / j.originalAmount!) *
+                          j.seed!.price! *
+                          j.originalAmount!)
+                      .round();
                 }
                 if (i.type == "lele") {
-                  lelePrice.value =
-                      ((leleUsed / j.originalAmount!) * j.seed!.price!).round();
+                  lelePrice.value += ((j.usage! / j.originalAmount!) *
+                          j.seed!.price! *
+                          j.originalAmount!)
+                      .round();
                 }
                 if (i.type == "mas") {
-                  masPrice.value =
-                      ((masUsed / j.originalAmount!) * j.seed!.price!).round();
+                  masPrice.value += ((j.usage! / j.originalAmount!) *
+                          j.seed!.price! *
+                          j.originalAmount!)
+                      .round();
                 }
                 if (i.type == "nila hitam") {
-                  nilaHitamPrice.value =
-                      ((nilaHitamUsed / j.originalAmount!) * j.seed!.price!)
-                          .round();
+                  nilaHitamPrice.value += ((j.usage! / j.originalAmount!) *
+                          j.seed!.price! *
+                          j.originalAmount!)
+                      .round();
                 }
                 if (i.type == "nila merah") {
-                  nilaMerahPrice.value =
-                      ((nilaMerahUsed / j.originalAmount!) * j.seed!.price!)
-                          .round();
+                  nilaMerahPrice.value += ((j.usage! / j.originalAmount!) *
+                          j.seed!.price! *
+                          j.originalAmount!)
+                      .round();
                 }
               }
             }
           }
         }
+
+        inspect(seedHistoryList.value.data!);
 
         doAfter();
       }
@@ -381,16 +380,19 @@ class DeactivationBreedController extends GetxController {
       var valueC = await getHistorySuplemenData(
         firstDate,
         lastDate,
+        pondName.value,
         () => null,
       );
       var valueD = await getHistoryFeedData(
         firstDate,
         lastDate,
+        pondName.value,
         () => null,
       );
       await getHistorySeedData(
         firstDate,
         lastDate,
+        pondName.value,
         () => null,
       );
 
@@ -441,6 +443,7 @@ class DeactivationBreedController extends GetxController {
         }
       }
     } catch (e) {
+      inspect(e);
       throw Exception(e);
     }
 

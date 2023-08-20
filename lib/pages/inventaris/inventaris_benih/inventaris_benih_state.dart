@@ -393,11 +393,12 @@ class InventarisBenihState extends Urls {
     inspect(map);
 
     try {
-      await http.post(
+      final res = await http.post(
         Uri.parse(Urls.invSeed),
         body: map,
         headers: headers,
       );
+      inspect(res);
       doAfter();
     } catch (e) {
       throw Exception(e);

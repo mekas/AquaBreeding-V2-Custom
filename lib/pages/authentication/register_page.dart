@@ -91,6 +91,7 @@ class _RegisterPageState extends State<RegisterPage> {
       controller.farmnameController.clear();
       controller.nikController.clear();
     } else {
+      // inspect(response);
       showDialog<String>(
           context: context,
           builder: (BuildContext context) => AlertDialog(

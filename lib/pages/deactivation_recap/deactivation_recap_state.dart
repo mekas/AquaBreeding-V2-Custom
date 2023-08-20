@@ -32,7 +32,7 @@ class DeactivationRecapState extends GetxController {
 
     final response = await http.get(
       Uri.parse(
-          '${Urls.deactivationRecap}?type=$type&start_date=$startDate&end_date=$endDate'),
+          '${Urls.deactivationRecap}?start_date=$startDate&end_date=$endDate'),
       headers: headers,
     );
 

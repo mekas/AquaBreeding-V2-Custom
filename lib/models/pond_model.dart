@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -137,6 +139,7 @@ class Pond {
   }
 
   String getGmtToNormalDate() {
+    // inspect(lastActivationDate);
     String stringDate = buildAt!;
     DateTime dateTime = DateFormat("yyyy-MM-dd hh:mm:ss").parse(stringDate);
     String newStringDate = DateFormat("dd-MM-yyyy").format(dateTime);

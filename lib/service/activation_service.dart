@@ -111,6 +111,7 @@ class ActivationService {
       print('sukses deaktifasi');
       doInPost();
       Navigator.pop(context);
+      Navigator.pop(context);
 
       return true;
     } else {

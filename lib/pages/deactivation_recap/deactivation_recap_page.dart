@@ -24,7 +24,7 @@ class _DeactivationRecapPageState extends State<DeactivationRecapPage> {
     initializeDateFormatting('id', null);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      state.getRecap('benih', state.firstDate.text, state.lastDate.text, () {});
+      state.getRecap('', state.firstDate.text, state.lastDate.text, () {});
     });
   }
 
@@ -62,47 +62,6 @@ class _DeactivationRecapPageState extends State<DeactivationRecapPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  margin: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: inputColor,
-                  ),
-                  child: StatefulBuilder(
-                    builder: ((context, setState) {
-                      return DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          onChanged: ((String? value) async {
-                            setState(() {
-                              state.selectedType.value = value!;
-                            });
-                            state.selectedType.value = value!;
-                            await state.getRecap(
-                                state.selectedType.value,
-                                state.firstDate.text,
-                                state.lastDate.text,
-                                () => null);
-                          }),
-                          value: state.selectedType.value,
-                          dropdownColor: inputColor,
-                          items: state.dropdownType.map(
-                            (String val) {
-                              return DropdownMenuItem(
-                                value: val,
-                                child: Text(
-                                  val,
-                                  style: headingText3,
-                                ),
-                              );
-                            },
-                          ).toList(),
-                        ),
-                      );
-                    }),
-                  ),
-                ),
                 state.isLoadingPage.value
                     ? Padding(
                         padding: EdgeInsets.only(
@@ -216,41 +175,6 @@ class _DeactivationRecapPageState extends State<DeactivationRecapPage> {
                                                     ),
                                                     Text(
                                                       '${state.deactRecapList.value.data![index].pondDetail!.alias}',
-                                                      style: headingText3,
-                                                    )
-                                                  ],
-                                                ),
-                                                const SizedBox(
-                                                  height: 12,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      'Kategori : ',
-                                                      style: headingText3,
-                                                    ),
-                                                    Expanded(
-                                                      child: Text(
-                                                        '.' * 100000,
-                                                        maxLines: 1,
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 14,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      state
-                                                          .deactRecapList
-                                                          .value
-                                                          .data![index]
-                                                          .fishCategory
-                                                          .toString(),
                                                       style: headingText3,
                                                     )
                                                   ],
@@ -486,7 +410,7 @@ class _DeactivationRecapPageState extends State<DeactivationRecapPage> {
           ),
           onPressed: () async {
             await state.getRecap(
-              state.selectedType.value,
+              '',
               state.firstDate.text,
               state.lastDate.text,
               () {
