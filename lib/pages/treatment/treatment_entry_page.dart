@@ -1090,6 +1090,8 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
                           value: controller.checkUsedDate.value,
                           onChanged: (v) {
                             controller.checkUsedDate.value = v!;
+                            supState.selectedUsedDate.value = '';
+                            supState.showedUsedDate.clear();
                           },
                         ),
                         Column(

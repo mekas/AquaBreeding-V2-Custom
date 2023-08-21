@@ -6,6 +6,7 @@ import 'package:fish/pages/dashboard.dart';
 import 'package:fish/service/pond_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'material_controller.dart';
@@ -40,6 +41,10 @@ class PondController extends GetxController {
   final validateWidth = false.obs;
   final validateAlias = false.obs;
   final validateHeight = false.obs;
+
+  RxBool checkUsedDate = false.obs;
+  RxString selectedUsedDate = ''.obs;
+  TextEditingController showedUsedDate = TextEditingController(text: '');
 
   void heightChanged(String val) {
     height.value = val;
@@ -81,6 +86,15 @@ class PondController extends GetxController {
     validateHeight.value = true;
   }
 
+  String dateFormat(String dateString, bool includeHour) {
+    DateTime dateTime = DateTime.parse(dateString);
+    var formatter = includeHour
+        ? DateFormat('EEEE, d MMMM y | HH:mm', 'id')
+        : DateFormat('EEEE, d MMMM y', 'id');
+    var formattedDate = formatter.format(dateTime);
+    return formattedDate.split('|').join('| Jam');
+  }
+
   Pond getSelectedPond() {
     return ponds.firstWhere((pond) => pond.id == selectedPond.value);
   }
@@ -119,6 +133,7 @@ class PondController extends GetxController {
         status: status,
         height: heightController.text,
         doInPost: doInPost,
+        buildAt: selectedUsedDate.value,
         context: context);
     print(value);
   }

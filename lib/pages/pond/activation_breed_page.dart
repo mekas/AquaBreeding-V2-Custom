@@ -1518,6 +1518,8 @@ class _ActivationBreedPageState extends State<ActivationBreedPage> {
                                     value: controller.checkUsedDate.value,
                                     onChanged: (v) {
                                       controller.checkUsedDate.value = v!;
+                                      benihState.selectedUsedDate.value = '';
+                                      benihState.showedUsedDate.clear();
                                     },
                                   ),
                                   Column(

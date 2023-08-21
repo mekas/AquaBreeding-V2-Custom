@@ -51,7 +51,8 @@ class DeactivationRecapState extends GetxController {
     isLoadingPage.value = false;
   }
 
-  Future postRecap(String pondId, List fishs, Function() doAfter) async {
+  Future postRecap(
+      String pondId, List fishs, String date, Function() doAfter) async {
     var map = <String, dynamic>{};
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -59,6 +60,7 @@ class DeactivationRecapState extends GetxController {
     var headers = {'Authorization': 'Bearer $token'};
 
     map['pond_id'] = pondId;
+    map['deactivated_at'] = date;
 
     isLoadingPost.value = true;
 

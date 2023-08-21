@@ -5,10 +5,12 @@ import 'package:fish/pages/dashboard.dart';
 import 'package:fish/pages/pond/deactivation_breed_controller.dart';
 import 'package:fish/pages/pond/detail_pond_controller.dart';
 import 'package:fish/widgets/drawer_inventaris_list.dart';
+import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class DeactivationBreedPage extends StatefulWidget {
   DeactivationBreedPage({Key? key}) : super(key: key);
@@ -411,6 +413,106 @@ class _DeactivationBreedPageState extends State<DeactivationBreedPage> {
               normalsizeInput(),
               undersizeInput(),
               oversizeInput(),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Checkbox(
+                          value: controller.checkUsedDate.value,
+                          onChanged: (v) {
+                            controller.checkUsedDate.value = v!;
+                            controller.selectedUsedDate.value = '';
+                            controller.showedUsedDate.clear();
+                          },
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              'Aktifkan tanggal input pakan manual',
+                              style: headingText3,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    controller.checkUsedDate.value
+                        ? GestureDetector(
+                            onTap: () async {
+                              final DateTime? datePicker = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime(2100),
+                              );
+
+                              // ignore: use_build_context_synchronously
+                              if (datePicker != null) {
+                                final TimeOfDay? selectedTime =
+                                    await showTimePicker(
+                                  context: context,
+                                  initialTime:
+                                      TimeOfDay.fromDateTime(datePicker!),
+                                  builder: (context, child) {
+                                    return MediaQuery(
+                                      data: MediaQuery.of(context).copyWith(
+                                          alwaysUse24HourFormat: true),
+                                      child: child!,
+                                    );
+                                  },
+                                );
+
+                                if (selectedTime != null) {
+                                  // Define the format for parsing
+
+                                  // Define the format for parsing the input date and time string
+                                  String inputFormatStr =
+                                      'EEEE, d MMMM yyyy | \'Jam\' HH:mm:ss.SSS';
+                                  DateTime dateTime =
+                                      DateFormat(inputFormatStr, 'id_ID').parse(
+                                          '${controller.dateFormat(datePicker.toString(), false)} | Jam ${selectedTime!.hour < 10 ? '0${selectedTime.hour}' : selectedTime.hour}:${selectedTime.minute < 10 ? '0${selectedTime.minute}' : selectedTime.minute}:00.000');
+
+                                  // Define the format for formatting the date into the desired format
+                                  String outputFormatStr =
+                                      'yyyy-MM-ddTHH:mm:ss.SSS';
+                                  String formattedDateTime =
+                                      DateFormat(outputFormatStr)
+                                          .format(dateTime);
+
+                                  controller.selectedUsedDate.value =
+                                      datePicker == null
+                                          ? ''
+                                          : '$formattedDateTime +0000';
+
+                                  controller.showedUsedDate.text = datePicker ==
+                                          null
+                                      ? ''
+                                      : '${controller.dateFormat(datePicker.toString(), false)} | Jam ${selectedTime!.hour < 10 ? '0${selectedTime.hour}' : selectedTime.hour}:${selectedTime.minute < 10 ? '0${selectedTime.minute}' : selectedTime.minute}';
+                                }
+                              }
+                            },
+                            child: TextFieldWidget(
+                              label: 'Pilih Tanggal',
+                              controller: controller.showedUsedDate,
+                              isLong: true,
+                              isEdit: false,
+                              suffixSection: Icon(
+                                Icons.arrow_drop_down_circle_rounded,
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        : Container(),
+                  ],
+                ),
+              ),
               controller.isLoadingInventory.value
                   ? Padding(
                       padding: const EdgeInsets.only(top: 18),

@@ -366,6 +366,8 @@ class _FeedEntryPageState extends State<FeedEntryPage> {
                   value: controller.checkBoxState.value,
                   onChanged: (v) {
                     controller.checkBoxState.value = v!;
+                    pakanState.selectedUsedDate.value = '';
+                    pakanState.showedUsedDate.clear();
                   },
                 ),
                 Column(
@@ -466,7 +468,7 @@ class _FeedEntryPageState extends State<FeedEntryPage> {
             controller.postFeedHistory();
             // feedcontroller.getChartFeed(
             //     activation_id: controller.activation.id.toString());
-            feedcontroller.getChartFeed('Alami');
+            feedcontroller.getChartFeed(pakanState.selectedFeedType.value);
             feedcontroller.getWeeklyRecapFeedHistory(
                 activation_id: controller.activation.id.toString());
             controller.postDataLog(controller.fitur);

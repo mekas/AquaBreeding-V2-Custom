@@ -85,6 +85,7 @@ class ActivationService {
       {required String? pondId,
       required num? total_fish_harvested,
       required String? total_weight_harvested,
+      String? date,
       List? fish_harvested,
       bool? isFinish,
       required Function doInPost,
@@ -104,7 +105,8 @@ class ActivationService {
         body: {
           "total_weight_harvested": total_weight_harvested.toString(),
           "total_fish_harvested": total_fish_harvested.toString(),
-          "fish": fish_harvested.toString()
+          "fish": fish_harvested.toString(),
+          "deactivated_at": date,
         });
 
     if (response.statusCode == 200) {

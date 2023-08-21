@@ -112,6 +112,7 @@ class TreatmentEntryController extends GetxController {
       probiotic: probioticController.value.text,
       desc: descController.value.text,
       water: waterController.value.text,
+      date: supState.selectedUsedDate.value,
       carbohydrate:
           supState.carbCheck.value ? carbonController.value.text : '0',
       carbohydrate_type: supState.carbCheck.value

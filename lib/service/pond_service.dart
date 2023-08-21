@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:math';
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/service/url_api.dart';
@@ -68,6 +69,7 @@ class PondService {
       required String? diameter,
       required String? height,
       required String? status,
+      required String? buildAt,
       required Function doInPost,
       required BuildContext context}) async {
     if (diameter!.isNotEmpty) {
@@ -93,6 +95,7 @@ class PondService {
     WidgetsFlutterBinding.ensureInitialized();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
+    inspect(buildAt);
     final response = await http.post(
       Uri.parse(Urls.ponds),
       headers: {
@@ -110,6 +113,7 @@ class PondService {
         "width": width,
         "diameter": diameter,
         "height": height,
+        "build_at": buildAt,
       },
     );
 

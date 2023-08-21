@@ -105,6 +105,10 @@ class DeactivationBreedController extends GetxController {
   var feedHistoryList = HistoryFeedModel(data: []).obs;
   var seedHistoryList = HistorySeedModel(data: []).obs;
 
+  RxBool checkUsedDate = false.obs;
+  RxString selectedUsedDate = ''.obs;
+  TextEditingController showedUsedDate = TextEditingController(text: '');
+
   Future getAllAssetData(
     String first,
     String last,
@@ -793,6 +797,15 @@ class DeactivationBreedController extends GetxController {
     return data;
   }
 
+  String dateFormat(String dateString, bool includeHour) {
+    DateTime dateTime = DateTime.parse(dateString);
+    var formatter = includeHour
+        ? DateFormat('EEEE, d MMMM y | HH:mm', 'id')
+        : DateFormat('EEEE, d MMMM y', 'id');
+    var formattedDate = formatter.format(dateTime);
+    return formattedDate.split('|').join('| Jam');
+  }
+
   Future<void> pondDeactivation(BuildContext context, Function doInPost) async {
     var fishDataRecap = buildJsonFishRecap();
 
@@ -830,12 +843,14 @@ class DeactivationBreedController extends GetxController {
           total_weight_harvested: getWeight().toString(),
           isFinish: true,
           fish_harvested: buildJsonFish(),
+          date: selectedUsedDate.value,
           doInPost: doInPost,
           context: context,
         );
         await deactivationRecapState.postRecap(
           pond.id.toString(),
           fishDataRecap,
+          selectedUsedDate.value,
           () => null,
         );
         doInPost();

@@ -114,6 +114,7 @@ class FeedHistoryService {
     required String? pondId,
     required String? fishFeedId,
     required String? feedDose,
+    required String? date,
     required Function() doAfter,
   }) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -130,6 +131,7 @@ class FeedHistoryService {
         "pond_id": pondId,
         "fish_feed_id": fishFeedId,
         "feed_dose": feedDose,
+        "created_at": date,
       },
     );
 

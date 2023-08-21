@@ -40,6 +40,7 @@ class FeedEntryController extends GetxController {
         pondId: pond.id,
         fishFeedId: pakanState.selectedFeedName.value['feed_id'],
         feedDose: pakanState.amountChecker(feedDosisController.text),
+        date: pakanState.selectedUsedDate.value,
         doAfter: () async {
           await feedController.getWeeklyRecapFeedHistory(
               activation_id: activation.id.toString());

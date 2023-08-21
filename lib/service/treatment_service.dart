@@ -46,6 +46,7 @@ class TreatmentService {
     String? water,
     String? desc,
     String? carbohydrate,
+    String? date,
     String? carbohydrate_type,
   }) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -64,6 +65,7 @@ class TreatmentService {
       "description": desc.toString(),
       "carbohydrate": carbohydrate,
       "carbohydrate_type": carbohydrate_type,
+      "created_at": date,
     };
 
     // if (carb_id != '') {}
