@@ -113,7 +113,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     borderRadius: BorderRadius.all(Radius.circular(16.0))),
                 actions: <Widget>[
                   TextButton(
-                    onPressed: () => Navigator.pop(context, 'OK'),
+                    onPressed: () {
+                      Navigator.pop(context, 'OK');
+                      setState(() {
+                        isLoading = false;
+                      });
+                    },
                     child: const Text('OK'),
                   ),
                 ],

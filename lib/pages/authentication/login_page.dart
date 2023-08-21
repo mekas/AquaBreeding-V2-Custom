@@ -87,7 +87,12 @@ class _LoginPageState extends State<LoginPage> {
                     borderRadius: BorderRadius.all(Radius.circular(16.0))),
                 actions: <Widget>[
                   TextButton(
-                    onPressed: () => Navigator.pop(context, 'OK'),
+                    onPressed: () {
+                      Navigator.pop(context, 'OK');
+                      setState(() {
+                        isLoading = false;
+                      });
+                    },
                     child: const Text('OK'),
                   ),
                 ],
