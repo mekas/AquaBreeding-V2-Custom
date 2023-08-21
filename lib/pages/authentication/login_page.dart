@@ -191,6 +191,7 @@ class _LoginPageState extends State<LoginPage> {
           itemBuilder: ((context, index) {
             return LoginInputCard(
               loginfunc: login,
+              isLoading: isLoading,
             );
           }),
           itemCount: 1,

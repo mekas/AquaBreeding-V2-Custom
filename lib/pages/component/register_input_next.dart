@@ -10,9 +10,13 @@ class RegisterNextInputCard extends StatelessWidget {
   final VoidCallback registerfunc;
   final PageController pageController;
   RegisterNextInputCard(
-      {Key? key, required this.registerfunc, required this.pageController})
+      {Key? key,
+      required this.registerfunc,
+      required this.pageController,
+      required this.isLoading})
       : super(key: key);
   final RegisterController controller = Get.put(RegisterController());
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -474,13 +478,21 @@ class RegisterNextInputCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: Text(
-                          'Register',
-                          style: primaryTextStyle.copyWith(
-                            fontSize: 16,
-                            fontWeight: medium,
-                          ),
-                        ),
+                        child: isLoading
+                            ? SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              )
+                            : Text(
+                                'Register',
+                                style: primaryTextStyle.copyWith(
+                                  fontSize: 16,
+                                  fontWeight: medium,
+                                ),
+                              ),
                       ),
                     )
                   ],
