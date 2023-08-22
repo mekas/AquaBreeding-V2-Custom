@@ -370,29 +370,29 @@ class DeactivationBreedController extends GetxController {
     try {
       // var valueA = 0; // Rumus 1 (Aset)
 
-      var valueA = await getAllAssetData(
-        firstDate,
-        lastDate,
-        () => null,
-      ); // Rumus 2 (Aset)
+      // var valueA = await getAllAssetData(
+      //   firstDate,
+      //   lastDate,
+      //   () => null,
+      // ); // Rumus 2 (Aset)
 
-      var valueB = await getAllElectricData(
-        '$currYear-$currMonth-01',
-        '$currYear-$currMonth-$lastday',
-        () => null,
-      );
-      var valueC = await getHistorySuplemenData(
-        firstDate,
-        lastDate,
-        pondName.value,
-        () => null,
-      );
-      var valueD = await getHistoryFeedData(
-        firstDate,
-        lastDate,
-        pondName.value,
-        () => null,
-      );
+      // var valueB = await getAllElectricData(
+      //   '$currYear-$currMonth-01',
+      //   '$currYear-$currMonth-$lastday',
+      //   () => null,
+      // );
+      // var valueC = await getHistorySuplemenData(
+      //   firstDate,
+      //   lastDate,
+      //   pondName.value,
+      //   () => null,
+      // );
+      // var valueD = await getHistoryFeedData(
+      //   firstDate,
+      //   lastDate,
+      //   pondName.value,
+      //   () => null,
+      // );
       await getHistorySeedData(
         firstDate,
         lastDate,
@@ -400,60 +400,51 @@ class DeactivationBreedController extends GetxController {
         () => null,
       );
 
-      inspect({
-        'first_date': firstDate,
-        'last_date': lastDate,
-        'asset': valueA,
-        'listrik': valueB,
-        'sup': valueC,
-        'feed': valueD,
-      });
+      // inspect({
+      //   'first_date': firstDate,
+      //   'last_date': lastDate,
+      //   'asset': valueA,
+      //   'listrik': valueB,
+      //   'sup': valueC,
+      //   'feed': valueD,
+      // });
 
       for (var i in activation.fishLive!) {
         if (i.type == 'lele') {
           lelePriceController.text = ConvertToRupiah.formatToRupiah(
-            ((valueA + valueB + valueC + valueD + lelePrice.value) /
-                    activation.fishAmount!)
+            ((0 + 0 + 0 + 0 + lelePrice.value) / activation.fishAmount!)
                 .round(),
           );
         }
         if (i.type == 'mas') {
           masPriceController.text = ConvertToRupiah.formatToRupiah(
-            ((valueA + valueB + valueC + valueD + masPrice.value) /
-                    activation.fishAmount!)
-                .round(),
+            ((0 + 0 + 0 + 0 + masPrice.value) / activation.fishAmount!).round(),
           );
         }
         if (i.type == 'patin') {
           patinPriceController.text = ConvertToRupiah.formatToRupiah(
-            ((valueA + valueB + valueC + valueD + patinPrice.value) /
-                    activation.fishAmount!)
+            ((0 + 0 + 0 + 0 + patinPrice.value) / activation.fishAmount!)
                 .round(),
           );
         }
         if (i.type == 'nila hitam') {
           nilaHitamPriceController.text = ConvertToRupiah.formatToRupiah(
-            ((valueA + valueB + valueC + valueD + nilaHitamPrice.value) /
-                    activation.fishAmount!)
+            ((0 + 0 + 0 + 0 + nilaHitamPrice.value) / activation.fishAmount!)
                 .round(),
           );
         }
         if (i.type == 'nila merah') {
           nilaMerahPriceController.text = ConvertToRupiah.formatToRupiah(
-            ((valueA + valueB + valueC + valueD + nilaMerahPrice.value) /
-                    activation.fishAmount!)
+            ((0 + 0 + 0 + 0 + nilaMerahPrice.value) / activation.fishAmount!)
                 .round(),
           );
         }
       }
     } catch (e) {
-      inspect(e);
       throw Exception(e);
     }
 
-    Future.delayed(const Duration(seconds: 2), () {
-      isLoadingInventory.value = false;
-    });
+    isLoadingInventory.value = false;
   }
 
   Future<void> getHarvestedBool(Activation activation) async {

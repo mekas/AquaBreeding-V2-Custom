@@ -4,6 +4,8 @@ import 'package:fish/models/activation_model.dart';
 import 'package:fish/models/fish_live_model.dart';
 import 'package:fish/models/fishchart_model.dart';
 import 'package:fish/models/pond_model.dart';
+import 'package:fish/pages/dashboard.dart';
+import 'package:fish/pages/deactivation_recap/deactivation_recap_page.dart';
 import 'package:fish/service/url_api.dart';
 import 'package:fish/theme.dart';
 import 'package:flutter/material.dart';
@@ -97,6 +99,8 @@ class ActivationService {
       }
     }
 
+    inspect(date);
+
     final response = await http.post(Uri.parse(Urls.pondDeactivation(pondId)),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -112,12 +116,10 @@ class ActivationService {
     if (response.statusCode == 200) {
       print('sukses deaktifasi');
       doInPost();
-      Navigator.pop(context);
-      Navigator.pop(context);
-
       return true;
     } else {
-      print(response);
+      print(response.body);
+      inspect(response);
       return false;
     }
   }
