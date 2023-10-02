@@ -6,16 +6,22 @@ import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
+import '../../widgets/new_Menu_widget.dart';
 import '../component/tabviewwater.dart';
 
-class DailyWaterEntryPage extends StatelessWidget {
+class DailyWaterEntryPage extends StatefulWidget {
   DailyWaterEntryPage({Key? key}) : super(key: key);
 
+  @override
+  State<DailyWaterEntryPage> createState() => _DailyWaterEntryPageState();
+}
+
+class _DailyWaterEntryPageState extends State<DailyWaterEntryPage> {
   final DailyWaterEntryController controller =
       Get.put(DailyWaterEntryController());
 
   final DailyWaterController water = Get.put(DailyWaterController());
-
+  var isMenuTapped = false.obs;
   @override
   Widget build(BuildContext context) {
     var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -236,7 +242,10 @@ class DailyWaterEntryPage extends StatelessWidget {
             actions: [
               IconButton(
                 onPressed: () {
-                  scaffoldKey.currentState?.openEndDrawer();
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
                 },
                 icon: Icon(Icons.card_travel_rounded),
               )
@@ -246,6 +255,13 @@ class DailyWaterEntryPage extends StatelessWidget {
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               phInput(),
               doInput(),
               temperatureInput(),

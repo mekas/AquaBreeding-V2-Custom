@@ -5,9 +5,17 @@ import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-class ConstantaGradingPage extends StatelessWidget {
+import '../../widgets/new_Menu_widget.dart';
+
+class ConstantaGradingPage extends StatefulWidget {
   const ConstantaGradingPage({Key? key}) : super(key: key);
 
+  @override
+  State<ConstantaGradingPage> createState() => _ConstantaGradingPageState();
+}
+
+class _ConstantaGradingPageState extends State<ConstantaGradingPage> {
+  var isMenuTapped = false.obs;
   @override
   Widget build(BuildContext context) {
     var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -144,7 +152,10 @@ class ConstantaGradingPage extends StatelessWidget {
             actions: [
               IconButton(
                 onPressed: () {
-                  scaffoldKey.currentState?.openEndDrawer();
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
                 },
                 icon: Icon(Icons.card_travel_rounded),
               )
@@ -154,6 +165,13 @@ class ConstantaGradingPage extends StatelessWidget {
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               oversizeInput(),
               undersizeInput(),
               activationButton(),

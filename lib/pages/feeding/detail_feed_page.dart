@@ -11,9 +11,17 @@ import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class DetailFeedPage extends StatelessWidget {
+import '../../widgets/new_Menu_widget.dart';
+
+class DetailFeedPage extends StatefulWidget {
   const DetailFeedPage({Key? key}) : super(key: key);
 
+  @override
+  State<DetailFeedPage> createState() => _DetailFeedPageState();
+}
+
+class _DetailFeedPageState extends State<DetailFeedPage> {
+  var isMenuTapped = false.obs;
   @override
   Widget build(BuildContext context) {
     var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -389,7 +397,10 @@ class DetailFeedPage extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () {
-                scaffoldKey.currentState?.openEndDrawer();
+                // scaffoldKey.currentState?.openEndDrawer();
+                setState(() {
+                  isMenuTapped.value = !isMenuTapped.value;
+                });
               },
               icon: Icon(Icons.card_travel_rounded),
             )
@@ -405,6 +416,13 @@ class DetailFeedPage extends StatelessWidget {
               )
             : ListView(
                 children: [
+                  if (isMenuTapped.value)
+                    Column(
+                      children: [
+                        newMenu(),
+                        SizedBox(height: 10,),
+                      ],
+                    ),
                   feedCatDropdown(),
                   chartFeed(),
                   feedDataRecap(),

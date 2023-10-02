@@ -1,14 +1,21 @@
 import 'package:another_flushbar/flushbar.dart';
+import 'package:fish/pages/inventaris/inventaris_listrik/add_or_edit_electricity_usage/edit_electricity_usage.dart';
 import 'package:fish/pages/inventaris/inventaris_listrik/inventaris_listrik_state.dart';
 import 'package:fish/theme.dart';
 import 'package:fish/widgets/bottom_sheet_widget.dart';
 import 'package:fish/widgets/convert_to_rupiah_widget.dart';
+import 'package:fish/widgets/new_Menu_widget.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PrabayarPage extends StatefulWidget {
-  const PrabayarPage({super.key});
+  bool isMenuTapped;
+
+  PrabayarPage({
+    Key? key,
+    required this.isMenuTapped,
+  }) : super(key: key);
 
   @override
   State<PrabayarPage> createState() => _PrabayarPageState();
@@ -44,145 +51,169 @@ class _PrabayarPageState extends State<PrabayarPage> {
               ),
             )
           : state.electricList.value.data!.isEmpty
-              ? Center(
-                  child: Text(
-                    'Tidak ada data',
-                    style: headingText3,
-                  ),
+              ? Column(
+                  children: [
+                    if (widget.isMenuTapped) newMenu(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Center(
+                      child: Text(
+                        'Tidak ada data',
+                        style: headingText3,
+                      ),
+                    ),
+                  ],
                 )
               : Container(
                   margin: const EdgeInsets.fromLTRB(16, 20, 16, 20),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: state.electricList.value.data!.length,
-                    physics: BouncingScrollPhysics(),
-                    padding: const EdgeInsets.only(bottom: padding4XL),
-                    itemBuilder: ((context, index) {
-                      return GestureDetector(
-                        onTap: () async {
-                          state.setSheetVariableEdit(false);
-                          await state.getDataByID(
-                              state.electricList.value.data![index].idInt!, () {
-                            getBottomSheet(index,
-                                state.electricList.value.data![index].idInt!);
-                          });
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: 14),
-                          decoration: BoxDecoration(
-                            border: Border.all(width: 1, color: primaryColor),
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(8),
+                  child: Column(
+                    children: [
+                      if (widget.isMenuTapped) newMenu(),
+                      Container(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: state.electricList.value.data!.length,
+                          physics: BouncingScrollPhysics(),
+                          padding: const EdgeInsets.only(bottom: padding4XL),
+                          itemBuilder: ((context, index) {
+                            return GestureDetector(
+                              onTap: () async {
+                                state.setSheetVariableEdit(false);
+                                await state.getDataByID(
+                                    state.electricList.value.data![index]
+                                        .idInt!, () {
+                                  // getBottomSheet(
+                                  //     index,
+                                  //     state.electricList.value.data![index]
+                                  //         .idInt!);
+                                  Get.to(() => EditElectricityUsage(index: index, id: state.electricList.value.data![index]
+                                      .idInt!));
+                                });
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(bottom: 14),
                                 decoration: BoxDecoration(
                                   border:
                                       Border.all(width: 1, color: primaryColor),
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(12),
-                                    topRight: Radius.circular(12),
-                                  ),
-                                  color: primaryColor,
+                                  borderRadius: BorderRadius.circular(14),
                                 ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Tanggal :',
-                                      style: headingText3,
-                                    ),
-                                    Text(
-                                        state.dateFormat(state.electricList
-                                            .value.data![index].createdAt
-                                            .toString()),
-                                        style: headingText3),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(12),
                                 child: Column(
                                   children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          'Nama : ',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                          ),
+                                    Container(
+                                      padding: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 1, color: primaryColor),
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(12),
+                                          topRight: Radius.circular(12),
                                         ),
-                                        Expanded(
-                                          child: Text(
-                                            '.' * 100,
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                            ),
+                                        color: primaryColor,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Tanggal :',
+                                            style: headingText3,
                                           ),
-                                        ),
-                                        Text(
-                                          state.electricList.value.data![index]
-                                              .name
-                                              .toString(),
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ],
+                                          Text(
+                                              state.dateFormat(state
+                                                  .electricList
+                                                  .value
+                                                  .data![index]
+                                                  .createdAt
+                                                  .toString()),
+                                              style: headingText3),
+                                        ],
+                                      ),
                                     ),
-                                    SizedBox(height: 8),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          'Harga : ',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
+                                    Container(
+                                      padding: const EdgeInsets.all(12),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                'Nama : ',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Text(
+                                                  '.' * 100,
+                                                  maxLines: 1,
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ),
+                                              Text(
+                                                state.electricList.value
+                                                    .data![index].name
+                                                    .toString(),
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            '.' * 100,
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                            ),
+                                          SizedBox(height: 8),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                'Harga : ',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Text(
+                                                  '.' * 100,
+                                                  maxLines: 1,
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ),
+                                              Text(
+                                                'Rp${ConvertToRupiah.formatToRupiah(state.electricList.value.data![index].price!)}',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                        Text(
-                                          'Rp${ConvertToRupiah.formatToRupiah(state.electricList.value.data![index].price!)}',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
-                            ],
-                          ),
+                            );
+                          }),
                         ),
-                      );
-                    }),
+                      )
+                    ],
                   ),
                 ),
     );

@@ -68,6 +68,8 @@ class TreatmentService {
       "created_at": date,
     };
 
+    print("body: $body");
+
     // if (carb_id != '') {}
     // if (salt_id != '') {}
     // if (carb_id != '' && salt_id != '') {
@@ -85,10 +87,13 @@ class TreatmentService {
       body: body,
     );
 
+    print("url: ${Uri.parse(Urls.treatment)}");
+
     if (response.statusCode == 200) {
       inspect(response);
       return true;
     } else {
+      print("error: ${response.body}");
       inspect(response);
       return false;
     }

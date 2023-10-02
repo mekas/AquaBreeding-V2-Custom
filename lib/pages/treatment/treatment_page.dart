@@ -7,14 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
-class TreatmentpPage extends StatefulWidget {
-  TreatmentpPage({Key? key}) : super(key: key);
+import '../../widgets/new_Menu_widget.dart';
+
+class TreatmentPage extends StatefulWidget {
+  bool isMenuTapped;
+  TreatmentPage({
+    Key? key,
+    required this.isMenuTapped,
+  }) : super(key: key);
 
   @override
-  State<TreatmentpPage> createState() => _TreatmentPageState();
+  State<TreatmentPage> createState() => _TreatmentPageState();
 }
 
-class _TreatmentPageState extends State<TreatmentpPage> {
+class _TreatmentPageState extends State<TreatmentPage> {
   final TreatmentController controller = Get.put(TreatmentController());
 
   @override
@@ -151,6 +157,13 @@ class _TreatmentPageState extends State<TreatmentpPage> {
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (widget.isMenuTapped)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               fishDataRecap(),
               controller.listTreatmentTest.isEmpty
                   ? emptyListTreatment()

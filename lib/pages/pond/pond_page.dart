@@ -13,6 +13,7 @@ import 'package:fish/pages/pond/add_pond_page.dart';
 import 'package:fish/pages/pond/pond_controller.dart';
 import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:fish/widgets/main_inventaris_button.dart';
+import 'package:fish/widgets/new_Menu_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
@@ -33,7 +34,7 @@ class _PondPageState extends State<PondPage> {
   final InventarisListrikState stateC = Get.put(InventarisListrikState());
 
   DateTime now = DateTime.now();
-
+  var isMenuTapped = false.obs;
   int? _value = null;
   final chip = ["Aktif", "Panen", "Tidak Aktif"];
   @override
@@ -176,7 +177,10 @@ class _PondPageState extends State<PondPage> {
             actions: [
               IconButton(
                 onPressed: () {
-                  scaffoldKey.currentState?.openEndDrawer();
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
                 },
                 icon: Icon(Icons.card_travel_rounded),
               )
@@ -194,6 +198,8 @@ class _PondPageState extends State<PondPage> {
           body: ListView(
             children: [
               // title(),
+              if (isMenuTapped.value)
+                newMenu(),
               filter(),
               controller.ponds.isEmpty ? emptyListPond() : pondList(),
               SizedBox(

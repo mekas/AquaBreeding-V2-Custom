@@ -55,9 +55,16 @@ class MyTabsPond extends GetxController with GetSingleTickerProviderStateMixin {
   }
 }
 
-class MyTabPondScreen extends StatelessWidget {
+class MyTabPondScreen extends StatefulWidget {
   MyTabPondScreen({Key? key}) : super(key: key);
+
+  @override
+  State<MyTabPondScreen> createState() => _MyTabPondScreenState();
+}
+
+class _MyTabPondScreenState extends State<MyTabPondScreen> {
   final pondController = Get.put(PondController());
+  var isMenuTapped = false.obs;
   @override
   Widget build(BuildContext context) {
     var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -86,7 +93,10 @@ class MyTabPondScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              scaffoldKey.currentState?.openEndDrawer();
+              // scaffoldKey.currentState?.openEndDrawer();
+              setState(() {
+                isMenuTapped.value = !isMenuTapped.value;
+              });
             },
             icon: Icon(Icons.card_travel_rounded),
           )
@@ -95,7 +105,7 @@ class MyTabPondScreen extends StatelessWidget {
       endDrawer: DrawerInvetarisList(),
       body: TabBarView(
         controller: _tabs.controller,
-        children: [DetailPondPage(), DailyWaterDetailPondPage()],
+        children: [DetailPondPage(isMenuTapped: isMenuTapped.value,), DailyWaterDetailPondPage(isMenuTapped: isMenuTapped.value,)],
       ),
     );
   }

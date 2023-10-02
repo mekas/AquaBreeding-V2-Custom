@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+import '../../widgets/new_Menu_widget.dart';
+
 class DeactivationRecapPage extends StatefulWidget {
   const DeactivationRecapPage({super.key});
 
@@ -17,7 +19,7 @@ class DeactivationRecapPage extends StatefulWidget {
 
 class _DeactivationRecapPageState extends State<DeactivationRecapPage> {
   final DeactivationRecapState state = Get.put(DeactivationRecapState());
-
+  var isMenuTapped = false.obs;
   @override
   void initState() {
     super.initState();
@@ -41,7 +43,10 @@ class _DeactivationRecapPageState extends State<DeactivationRecapPage> {
         actions: [
           IconButton(
             onPressed: () {
-              scaffoldKey.currentState?.openEndDrawer();
+              // scaffoldKey.currentState?.openEndDrawer();
+              setState(() {
+                isMenuTapped.value = !isMenuTapped.value;
+              });
             },
             icon: Icon(Icons.card_travel_rounded),
           ),
@@ -82,233 +87,258 @@ class _DeactivationRecapPageState extends State<DeactivationRecapPage> {
                             padding: EdgeInsets.only(
                               top: MediaQuery.of(context).size.width / 2,
                             ),
-                            child: Center(
-                              child: Text(
-                                'Tidak ada data',
-                                style: headingText3,
-                              ),
+                            child: Column(
+                              children: [
+                                if (isMenuTapped.value)
+                                  Column(
+                                    children: [
+                                      SizedBox(height: 10,),
+                                      newMenu(),
+                                      SizedBox(height: 10,),
+                                    ],
+                                  ),
+                                Center(
+                                  child: Text(
+                                    'Tidak ada data',
+                                    style: headingText3,
+                                  ),
+                                ),
+                              ],
                             ),
                           )
                         : Flexible(
                             child: Container(
                               margin: const EdgeInsets.fromLTRB(4, 8, 4, 20),
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                padding:
-                                    const EdgeInsets.only(bottom: padding4XL),
-                                itemCount:
-                                    state.deactRecapList.value.data!.length,
-                                physics: BouncingScrollPhysics(),
-                                itemBuilder: ((context, index) {
-                                  return GestureDetector(
-                                    onTap: () async {},
-                                    child: Container(
-                                      margin: const EdgeInsets.fromLTRB(
-                                          16, 8, 16, 12),
-                                      decoration: BoxDecoration(
-                                        color: backgroundColor1,
-                                        border: Border.all(
-                                            width: 2, color: primaryColor),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.all(8),
+                              child: Column(
+                                children: [
+                                  if (isMenuTapped.value)
+                                    Column(
+                                      children: [
+                                        newMenu(),
+                                        SizedBox(height: 10,),
+                                      ],
+                                    ),
+                                  Container(
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      padding:
+                                      const EdgeInsets.only(bottom: padding4XL),
+                                      itemCount:
+                                      state.deactRecapList.value.data!.length,
+                                      physics: BouncingScrollPhysics(),
+                                      itemBuilder: ((context, index) {
+                                        return GestureDetector(
+                                          onTap: () async {},
+                                          child: Container(
+                                            margin: const EdgeInsets.fromLTRB(
+                                                16, 8, 16, 12),
                                             decoration: BoxDecoration(
-                                              color: primaryColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(6),
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  'Tanggal Panen :',
-                                                  style: headingText3,
-                                                ),
-                                                Text(
-                                                  state.dateFormat(state
-                                                      .deactRecapList
-                                                      .value
-                                                      .data![index]
-                                                      .createdAt!
-                                                      .toString()),
-                                                  style: headingText3,
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 12,
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 12,
+                                              color: backgroundColor1,
+                                              border: Border.all(
+                                                  width: 2, color: primaryColor),
+                                              borderRadius: BorderRadius.circular(8),
                                             ),
                                             child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      'Nama Kolam : ',
-                                                      style: headingText3,
-                                                    ),
-                                                    Expanded(
-                                                      child: Text(
-                                                        '.' * 100000,
-                                                        maxLines: 1,
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 14,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      '${state.deactRecapList.value.data![index].pondDetail!.alias}',
-                                                      style: headingText3,
-                                                    )
-                                                  ],
-                                                ),
-                                                const SizedBox(
-                                                  height: 12,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      'Tipe Ikan : ',
-                                                      style: headingText3,
-                                                    ),
-                                                    Expanded(
-                                                      child: Text(
-                                                        '.' * 100000,
-                                                        maxLines: 1,
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 14,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      state.deactRecapList.value
-                                                          .data![index].fishType
-                                                          .toString(),
-                                                      style: headingText3,
-                                                    )
-                                                  ],
-                                                ),
-                                                const SizedBox(
-                                                  height: 12,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      'Total Berat : ',
-                                                      style: headingText3,
-                                                    ),
-                                                    Expanded(
-                                                      child: Text(
-                                                        '.' * 100000,
-                                                        maxLines: 1,
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 14,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      '${state.deactRecapList.value.data![index].fishWeight} kg',
-                                                      style: headingText3,
-                                                    )
-                                                  ],
-                                                ),
-                                                const SizedBox(
-                                                  height: 12,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      'Jumlah : ',
-                                                      style: headingText3,
-                                                    ),
-                                                    Expanded(
-                                                      child: Text(
-                                                        '.' * 100000,
-                                                        maxLines: 1,
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 14,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      '${state.deactRecapList.value.data![index].fishAmount} ekor',
-                                                      style: headingText3,
-                                                    )
-                                                  ],
-                                                ),
-                                                const SizedBox(
-                                                  height: 12,
-                                                ),
                                                 Container(
+                                                  padding: const EdgeInsets.all(8),
                                                   decoration: BoxDecoration(
-                                                    color: backgroundColor2,
+                                                    color: primaryColor,
                                                     borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
+                                                    BorderRadius.circular(6),
                                                   ),
-                                                  padding: EdgeInsets.all(8),
                                                   child: Row(
                                                     mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                     children: [
                                                       Text(
-                                                        'Harga Ikan : ',
+                                                        'Tanggal Panen :',
                                                         style: headingText3,
                                                       ),
                                                       Text(
-                                                        'Rp${ConvertToRupiah.formatToRupiah(state.deactRecapList.value.data![index].fishPrice!)} / ekor',
+                                                        state.dateFormat(state
+                                                            .deactRecapList
+                                                            .value
+                                                            .data![index]
+                                                            .createdAt!
+                                                            .toString()),
                                                         style: headingText3,
                                                       )
                                                     ],
                                                   ),
                                                 ),
+                                                const SizedBox(
+                                                  height: 12,
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.symmetric(
+                                                    horizontal: 12,
+                                                  ),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                        children: [
+                                                          Text(
+                                                            'Nama Kolam : ',
+                                                            style: headingText3,
+                                                          ),
+                                                          Expanded(
+                                                            child: Text(
+                                                              '.' * 100000,
+                                                              maxLines: 1,
+                                                              style: TextStyle(
+                                                                color: Colors.white,
+                                                                fontWeight:
+                                                                FontWeight.bold,
+                                                                fontSize: 14,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            '${state.deactRecapList.value.data![index].pondDetail!.alias}',
+                                                            style: headingText3,
+                                                          )
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 12,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                        children: [
+                                                          Text(
+                                                            'Tipe Ikan : ',
+                                                            style: headingText3,
+                                                          ),
+                                                          Expanded(
+                                                            child: Text(
+                                                              '.' * 100000,
+                                                              maxLines: 1,
+                                                              style: TextStyle(
+                                                                color: Colors.white,
+                                                                fontWeight:
+                                                                FontWeight.bold,
+                                                                fontSize: 14,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            state.deactRecapList.value
+                                                                .data![index].fishType
+                                                                .toString(),
+                                                            style: headingText3,
+                                                          )
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 12,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                        children: [
+                                                          Text(
+                                                            'Total Berat : ',
+                                                            style: headingText3,
+                                                          ),
+                                                          Expanded(
+                                                            child: Text(
+                                                              '.' * 100000,
+                                                              maxLines: 1,
+                                                              style: TextStyle(
+                                                                color: Colors.white,
+                                                                fontWeight:
+                                                                FontWeight.bold,
+                                                                fontSize: 14,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            '${state.deactRecapList.value.data![index].fishWeight} kg',
+                                                            style: headingText3,
+                                                          )
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 12,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                        children: [
+                                                          Text(
+                                                            'Jumlah : ',
+                                                            style: headingText3,
+                                                          ),
+                                                          Expanded(
+                                                            child: Text(
+                                                              '.' * 100000,
+                                                              maxLines: 1,
+                                                              style: TextStyle(
+                                                                color: Colors.white,
+                                                                fontWeight:
+                                                                FontWeight.bold,
+                                                                fontSize: 14,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            '${state.deactRecapList.value.data![index].fishAmount} ekor',
+                                                            style: headingText3,
+                                                          )
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 12,
+                                                      ),
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                          color: backgroundColor2,
+                                                          borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                        ),
+                                                        padding: EdgeInsets.all(8),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              'Harga Ikan : ',
+                                                              style: headingText3,
+                                                            ),
+                                                            Text(
+                                                              'Rp${ConvertToRupiah.formatToRupiah(state.deactRecapList.value.data![index].fishPrice!)} / ekor',
+                                                              style: headingText3,
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 12,
+                                                ),
                                               ],
                                             ),
                                           ),
-                                          const SizedBox(
-                                            height: 12,
-                                          ),
-                                        ],
-                                      ),
+                                        );
+                                      }),
                                     ),
-                                  );
-                                }),
+                                  )
+                                ],
                               ),
                             ),
                           ),

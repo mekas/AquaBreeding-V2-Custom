@@ -1,9 +1,11 @@
 import 'package:another_flushbar/flushbar.dart';
+import 'package:fish/pages/inventaris/inventaris_pakan/add_name_and_feed_screens/add_custom_feed.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/detail_inventaris_pakan/detail_inventaris_pakan_mainpage.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_pages/pakan_alami_page.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_pages/pakan_campuran_page.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_pages/pakan_industri_page.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_state.dart';
+import 'package:fish/pages/inventaris/inventaris_pakan/pakan_custom_controller.dart';
 import 'package:fish/theme.dart';
 import 'package:fish/widgets/bottom_sheet_widget.dart';
 import 'package:fish/widgets/drawer_inventaris_list.dart';
@@ -12,6 +14,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
+
+import '../../treatment/treatment_entry_controller.dart';
+import 'add_name_and_feed_screens/add_feed.dart';
+import 'add_name_and_feed_screens/add_feed_name.dart';
+import 'inventaris_pakan_pages/new_pakan_campuran_page.dart';
 
 class InventarisPakanMainpage extends StatefulWidget {
   const InventarisPakanMainpage({super.key});
@@ -23,12 +30,54 @@ class InventarisPakanMainpage extends StatefulWidget {
 
 class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
   InventarisPakanState state = Get.put(InventarisPakanState());
+  final PakanCustomController controller =
+  Get.put(PakanCustomController());
+  var isMenuTapped = false.obs;
+  var page = ''.obs;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     initializeDateFormatting('id', null);
+    state.isProbSelected.value = false;
+    state.isCarbSelected.value = false;
+    state.carbCheck.value = false;
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      state.getAllSuplementData('obat', () {});
+      state.getAllSuplementData('Probiotik', () {
+        if (state.listCultureProbiotik.isNotEmpty) {
+          state.getProbDetail(
+            state.selectedCultureProbiotik.value['id'],
+                () => null,
+          );
+          state.probID.value =
+          state.selectedCultureProbiotik.value['suplemen_id'];
+        }
+      });
+
+      state.getAllSuplementData('Feed Additive', () {
+        if (state.listCarbon.isNotEmpty) {
+          state.getCarbDetail(
+            state.selectedCarbon.value['id'],
+                () => null,
+          );
+          state.carbID.value = state.selectedCarbon.value['suplemen_id'];
+        }
+      });
+
+      state.getSaltDetail(() {
+        if (state.saltDetail.value.data!.isNotEmpty) {
+          state.calculatedSaltStock.value = double.parse(
+              state.saltDetail.value.data![0].amount!.toStringAsFixed(2));
+          state.saltStock.value = double.parse(
+              state.saltDetail.value.data![0].amount!.toStringAsFixed(2));
+          state.saltID.value =
+              state.saltDetail.value.data![0].sId.toString();
+        }
+      });
+    });
   }
 
   @override
@@ -46,7 +95,10 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
           actions: [
             IconButton(
               onPressed: () {
-                scaffoldKey.currentState?.openEndDrawer();
+                // scaffoldKey.currentState?.openEndDrawer();
+                setState(() {
+                  isMenuTapped.value = !isMenuTapped.value;
+                });
               },
               icon: Icon(Icons.card_travel_rounded),
             ),
@@ -60,15 +112,20 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
             ),
           ],
           title: const Text('Pakan'),
-          bottom: const TabBar(
+          bottom: TabBar(
             indicatorColor: Colors.white,
+            onTap: (value) {
+              setState(() {
+                page.value = state.pageList[value];
+              });
+              print("page: ${page.value}");
+            },
             tabs: [
               Tab(
-                child: Text(
-                  'Industri',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
+                  child: Text(
+                'Industri',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              )),
               Tab(
                 child: Text(
                   'Alami',
@@ -85,12 +142,18 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
           ),
         ),
         endDrawer: DrawerInvetarisList(),
-        body: const TabBarView(
+        body: TabBarView(
           physics: NeverScrollableScrollPhysics(),
           children: [
-            PakanIndustriPage(),
-            PakanAlamiPage(),
-            PakanCampuranPage(),
+            PakanIndustriPage(
+              isMenuTapped: isMenuTapped.value,
+            ),
+            PakanAlamiPage(
+              isMenuTapped: isMenuTapped.value,
+            ),
+            NewPakanCampuranPage(
+              isMenuTapped: isMenuTapped.value,
+            ),
           ],
         ),
         floatingActionButton: SpeedDial(
@@ -107,29 +170,40 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
               labelBackgroundColor: Colors.green,
               label: 'Tambah Pakan (+)',
               onTap: () async {
+                print("current_page: ${page.value}");
                 state.resetFeedVariables();
                 state.resetNameVariables();
-                await state.getPakanNameData(state.category.text, () async {
-                  await state.getDetailPakanNameData(
-                      state.selectedPakan.value['id'], () => null);
-                });
-                addFeedBottomSheet();
+                if (page.value == "Custom") {
+                  print("mengambil data pakan industri...");
+                  await state.getPakanNameData('industri', () async {
+                    await state.getDetailPakanNameData(
+                        state.selectedPakan.value['id'], () => null);
+                  });
+                  Get.to(() => AddCustomFeed());
+                } else {
+                  await state.getPakanNameData(state.category.text, () async {
+                    await state.getDetailPakanNameData(
+                        state.selectedPakan.value['id'], () => null);
+                  });
+                  Get.to(() => AddFeed());
+                }
               },
             ),
-            SpeedDialChild(
-              backgroundColor: Colors.green,
-              labelStyle: headingText3,
-              labelBackgroundColor: Colors.green,
-              label: 'Tambah Merk (+)',
-              onTap: () {
-                state.resetNameVariables();
-                state.descSwitchValue.value = false;
-                state.proteinSwitchValue.value = false;
-                state.carbSwitchValue.value = false;
-                state.maxSwitchValue.value = false;
-                addNameBottomSheet();
-              },
-            ),
+            if (page.value != "Custom")
+              SpeedDialChild(
+                backgroundColor: Colors.green,
+                labelStyle: headingText3,
+                labelBackgroundColor: Colors.green,
+                label: 'Tambah Merk (+)',
+                onTap: () {
+                  state.resetNameVariables();
+                  state.descSwitchValue.value = false;
+                  state.proteinSwitchValue.value = false;
+                  state.carbSwitchValue.value = false;
+                  state.maxSwitchValue.value = false;
+                  Get.to(() => AddFeedName());
+                },
+              ),
           ],
         ),
       ),
@@ -486,6 +560,309 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
     ]);
   }
 
+  // addCustomFeedBottomSheet() {
+  //   state.resetFeedVariables();
+  //   BottomSheetWidget.getBottomSheetWidget(context, [
+  //     Row(
+  //       mainAxisAlignment: MainAxisAlignment.end,
+  //       children: [
+  //         GestureDetector(
+  //           onTap: () {
+  //             Navigator.pop(context);
+  //           },
+  //           child: const CircleAvatar(
+  //             backgroundColor: Colors.red,
+  //             radius: 12,
+  //             child: Icon(
+  //               Icons.close,
+  //               size: 14,
+  //               color: Colors.black,
+  //             ),
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //     const SizedBox(
+  //       height: 18,
+  //     ),
+  //     Text(
+  //       'Catat Pakan',
+  //       style: headingText1,
+  //       textAlign: TextAlign.center,
+  //     ),
+  //     const SizedBox(
+  //       height: 54,
+  //     ),
+  //     // Text(
+  //     //   'Kategori Pakan',
+  //     //   style: headingText2,
+  //     // ),
+  //     // const SizedBox(
+  //     //   height: 12,
+  //     // ),
+  //     // Container(
+  //     //   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+  //     //   decoration: BoxDecoration(
+  //     //     borderRadius: BorderRadius.circular(8),
+  //     //     color: inputColor,
+  //     //   ),
+  //     //   child: StatefulBuilder(
+  //     //     builder: ((context, setState) {
+  //     //       return DropdownButtonHideUnderline(
+  //     //         child: DropdownButton(
+  //     //           onChanged: ((String? value) async {
+  //     //             setState(() {
+  //     //               state.feedCategory.value = value!;
+  //     //             });
+  //     //             state.feedCategory.value = value!;
+  //     //             state.resetFeedVariables();
+  //     //           }),
+  //     //           value: state.feedCategory.value,
+  //     //           dropdownColor: inputColor,
+  //     //           items: state.dropdownList.map(
+  //     //             (String val) {
+  //     //               return DropdownMenuItem(
+  //     //                 value: val,
+  //     //                 child: Text(
+  //     //                   val,
+  //     //                   style: headingText3,
+  //     //                 ),
+  //     //               );
+  //     //             },
+  //     //           ).toList(),
+  //     //         ),
+  //     //       );
+  //     //     }),
+  //     //   ),
+  //     // ),
+  //     TextFieldWidget(
+  //       label: 'Kategori Pakan',
+  //       controller: state.category,
+  //       isEdit: false,
+  //     ),
+  //     const SizedBox(
+  //       height: 16,
+  //     ),
+  //     Text(
+  //       'List Pakan Industri',
+  //       style: headingText2,
+  //     ),
+  //     const SizedBox(
+  //       height: 12,
+  //     ),
+  //     Obx(
+  //       () => state.isLoadingNameDetail.value
+  //           ? Center(
+  //               child: SizedBox(
+  //                 width: 20,
+  //                 height: 20,
+  //                 child: CircularProgressIndicator(
+  //                   color: Colors.white,
+  //                 ),
+  //               ),
+  //             )
+  //           : state.listPakanName.isEmpty
+  //               ? Center(
+  //                   child: Text(
+  //                     'Tidak ada data',
+  //                     style: headingText3.copyWith(
+  //                       color: Colors.red,
+  //                     ),
+  //                   ),
+  //                 )
+  //               : Container(
+  //                   padding:
+  //                       const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+  //                   decoration: BoxDecoration(
+  //                     borderRadius: BorderRadius.circular(8),
+  //                     color: inputColor,
+  //                   ),
+  //                   child: StatefulBuilder(
+  //                     builder: ((context, setState) {
+  //                       return DropdownButtonHideUnderline(
+  //                         child: DropdownButton<Map<String, dynamic>>(
+  //                           onChanged: (value) async {
+  //                             setState(() {
+  //                               state.selectedPakan.value = value!;
+  //                             });
+  //                             state.selectedPakan.value = value!;
+  //                             state.isPakanSelected.value = true;
+  //                             // state.name.text
+  //
+  //                             state.resetFeedVariables();
+  //                             await state.getDetailPakanNameData(
+  //                                 state.selectedPakan.value['id'], () => null);
+  //                           },
+  //                           value: state.selectedPakan.value,
+  //                           dropdownColor: inputColor,
+  //                           items: state.listPakanName
+  //                               .map<DropdownMenuItem<Map<String, dynamic>>>(
+  //                                   (material) {
+  //                             return DropdownMenuItem<Map<String, dynamic>>(
+  //                               value: material,
+  //                               child: Text(
+  //                                 material['feed_name'],
+  //                                 style: headingText3,
+  //                               ),
+  //                             );
+  //                           }).toList(),
+  //                         ),
+  //                       );
+  //                     }),
+  //                   ),
+  //                 ),
+  //     ),
+  //     const SizedBox(
+  //       height: 12,
+  //     ),
+  //     TextFieldWidget(
+  //       label: 'Jumlah',
+  //       controller: state.amount,
+  //       isLong: false,
+  //       numberOutput: true,
+  //       hint: 'Ex: 1.5',
+  //       suffixSection: Text(
+  //         'kg',
+  //         style: headingText3,
+  //       ),
+  //     ),
+  //     const SizedBox(
+  //       height: 12,
+  //     ),
+  //     state.isProbLoading.value
+  //         ? Padding(
+  //       padding: const EdgeInsets.only(top: 24.0),
+  //       child: Center(
+  //         child: SizedBox(
+  //           width: 30,
+  //           height: 30,
+  //           child: CircularProgressIndicator(
+  //             color: Colors.white,
+  //           ),
+  //         ),
+  //       ),
+  //     )
+  //         : probioticInput(),
+  //     carbonTypeInput(),
+  //     state.carbCheck.value
+  //         ? state.isCarbLoading.value
+  //         ? Padding(
+  //       padding: const EdgeInsets.only(top: 24.0),
+  //       child: Center(
+  //         child: SizedBox(
+  //           width: 30,
+  //           height: 30,
+  //           child: CircularProgressIndicator(
+  //             color: Colors.white,
+  //           ),
+  //         ),
+  //       ),
+  //     )
+  //         : carbonInput()
+  //         : Container(),
+  //     saltDosisInput(),
+  //     const SizedBox(
+  //       height: 16,
+  //     ),
+  //     state.listPakanName.isEmpty
+  //         ? Container()
+  //         : Obx(
+  //             () => state.isLoadingNameDetail.value
+  //                 ? Center(
+  //                     child: SizedBox(
+  //                     child: CircularProgressIndicator(color: Colors.white),
+  //                     width: 50,
+  //                     height: 50,
+  //                   ))
+  //                 : Column(
+  //                     crossAxisAlignment: CrossAxisAlignment.stretch,
+  //                     children: [
+  //                       const SizedBox(
+  //                         height: 16,
+  //                       ),
+  //                       Row(
+  //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                         children: [
+  //                           TextFieldWidget(
+  //                             label: 'Min. Expired',
+  //                             controller: state.minExp,
+  //                             isLong: false,
+  //                             numberOutput: true,
+  //                             hint: 'Ex: 10',
+  //                             isEdit: false,
+  //                             suffixSection: Text(
+  //                               'hari',
+  //                               style: headingText3,
+  //                             ),
+  //                           ),
+  //                           TextFieldWidget(
+  //                             label: 'Max. Expired',
+  //                             controller: state.maxExp,
+  //                             isLong: false,
+  //                             numberOutput: true,
+  //                             hint: 'Ex: 10',
+  //                             isEdit: false,
+  //                             suffixSection: Text(
+  //                               'hari',
+  //                               style: headingText3,
+  //                             ),
+  //                           ),
+  //                         ],
+  //                       ),
+  //                     ],
+  //                   ),
+  //           ),
+  //     const SizedBox(
+  //       height: 36,
+  //     ),
+  //     ElevatedButton(
+  //       style: ElevatedButton.styleFrom(
+  //         backgroundColor: addButtonColor,
+  //         padding: const EdgeInsets.symmetric(vertical: 12),
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(8.0),
+  //         ),
+  //       ),
+  //       onPressed: () async {
+  //         if (state.listPakanName.isEmpty ||
+  //             state.price.text == '' ||
+  //             state.amount.text == '') {
+  //           Flushbar(
+  //             message: "Gagal, Form tidak sesuai",
+  //             duration: Duration(seconds: 3),
+  //             leftBarIndicatorColor: Colors.red[400],
+  //           ).show(context);
+  //         } else {
+  //           await state.postData(() async {
+  //             Flushbar(
+  //               message: "Pakan berhasil ditambahkan",
+  //               duration: Duration(seconds: 2),
+  //               leftBarIndicatorColor: Colors.green,
+  //             ).show(context);
+  //             await state.getAllData(state.feedCategory.value, () {
+  //               Navigator.pop(context);
+  //               Navigator.pop(context);
+  //             });
+  //           });
+  //         }
+  //       },
+  //       child: Obx(
+  //         () => state.isLoadingPost.value
+  //             ? SizedBox(
+  //                 width: 20,
+  //                 height: 20,
+  //                 child: CircularProgressIndicator(
+  //                   color: Colors.white,
+  //                 ),
+  //               )
+  //             : Icon(
+  //                 Icons.add,
+  //               ),
+  //       ),
+  //     ),
+  //   ]);
+  // }
+
   addNameBottomSheet() {
     BottomSheetWidget.getBottomSheetWidget(
       context,
@@ -727,4 +1104,5 @@ class _InventarisPakanMainpageState extends State<InventarisPakanMainpage> {
       ],
     );
   }
+
 }

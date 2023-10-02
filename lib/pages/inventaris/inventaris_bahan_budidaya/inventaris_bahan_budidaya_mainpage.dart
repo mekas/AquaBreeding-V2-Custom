@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:another_flushbar/flushbar.dart';
+import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/add_or_edit_bahan_budidaya/add_bahan_budidaya.dart';
 import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/detail_inventaris_bahan_budidaya/detail_inventaris_bahan_budidaya_mainpage.dart';
 import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_state.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/detail_inventaris_pakan/detail_inventaris_pakan_mainpage.dart';
@@ -10,11 +11,14 @@ import 'package:fish/theme.dart';
 import 'package:fish/widgets/bottom_sheet_widget.dart';
 import 'package:fish/widgets/dialog_widget.dart';
 import 'package:fish/widgets/drawer_inventaris_list.dart';
+import 'package:fish/widgets/new_Menu_widget.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
+
+import 'add_or_edit_bahan_budidaya/edit_bahan_budidaya.dart';
 
 class InventarisBahanBudidayaMainpage extends StatefulWidget {
   const InventarisBahanBudidayaMainpage({super.key});
@@ -29,6 +33,7 @@ class _InventarisBahanBudidayaMainpageState
   InventarisBahanBudidayaState state = Get.put(InventarisBahanBudidayaState());
 
   DateTime currDate = DateTime.now();
+  var isMenuTapped = false.obs;
 
   @override
   void initState() {
@@ -53,7 +58,10 @@ class _InventarisBahanBudidayaMainpageState
         actions: [
           IconButton(
             onPressed: () {
-              scaffoldKey.currentState?.openEndDrawer();
+              // scaffoldKey.currentState?.openEndDrawer();
+              setState(() {
+                isMenuTapped.value = !isMenuTapped.value;
+              });
             },
             icon: Icon(Icons.card_travel_rounded),
           ),
@@ -77,6 +85,13 @@ class _InventarisBahanBudidayaMainpageState
           child: SafeArea(
             child: Column(
               children: [
+                if (isMenuTapped.value)
+                  Column(
+                    children: [
+                      newMenu(),
+                      SizedBox(height: 10,),
+                    ],
+                  ),
                 Container(
                   margin: EdgeInsets.only(left: 16),
                   height: 35,
@@ -178,10 +193,12 @@ class _InventarisBahanBudidayaMainpageState
                                     await state.getDataByID(
                                         state.suplemenList.value.data![index]
                                             .idInt!, () {
-                                      getBottomSheetEdit(
-                                          index,
-                                          state.suplemenList.value.data![index]
-                                              .idInt!);
+                                      // getBottomSheetEdit(
+                                      //     index,
+                                      //     state.suplemenList.value.data![index]
+                                      //         .idInt!);
+                                      Get.to(() => EditBahanBudidaya(index: index, id: state.suplemenList.value.data![index]
+                                          .idInt!, isEditable: true));
                                     });
                                   },
                                   child: Container(
@@ -345,7 +362,9 @@ class _InventarisBahanBudidayaMainpageState
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           state.resetVariables();
-          getBottomSheet(0, 0, false);
+          // getBottomSheet(0, 0, false);
+          Get.to(() => AddBahanBudidaya(index: 0, id: 0, isEditable: false));
+
         },
         backgroundColor: Colors.green.shade600,
         child: Icon(

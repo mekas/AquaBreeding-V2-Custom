@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
+import '../../widgets/new_Menu_widget.dart';
 import '../component/weekly_water_avg_card.dart';
 
 class WeeklyWaterAvgPage extends StatefulWidget {
@@ -19,7 +20,7 @@ class WeeklyWaterAvgPage extends StatefulWidget {
 class _WeeklyWaterAvgPageState extends State<WeeklyWaterAvgPage> {
   final WeeklyWaterAvgController controller =
       Get.put(WeeklyWaterAvgController());
-
+  var isMenuTapped = false.obs;
   @override
   void initState() {
     super.initState();
@@ -129,7 +130,10 @@ class _WeeklyWaterAvgPageState extends State<WeeklyWaterAvgPage> {
             actions: [
               IconButton(
                 onPressed: () {
-                  scaffoldKey.currentState?.openEndDrawer();
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
                 },
                 icon: Icon(Icons.card_travel_rounded),
               )
@@ -139,6 +143,13 @@ class _WeeklyWaterAvgPageState extends State<WeeklyWaterAvgPage> {
           endDrawer: DrawerInvetarisList(),
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               fishDataRecap(),
               controller.listWeeklyWater.isEmpty
                   ? emptyList()

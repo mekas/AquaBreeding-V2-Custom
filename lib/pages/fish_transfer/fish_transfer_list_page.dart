@@ -6,10 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
+import '../../models/activation_model.dart';
+import '../../widgets/new_Menu_widget.dart';
 import 'new_fish_transfer_entry_page.dart';
 
 class FishTransferListPage extends StatefulWidget {
-  FishTransferListPage({Key? key}) : super(key: key);
+  bool isMenuTapped;
+  FishTransferListPage({
+    Key? key,
+    required this.isMenuTapped,
+  }) : super(key: key);
 
   @override
   State<FishTransferListPage> createState() => _FishTransferListPageState();
@@ -17,7 +23,7 @@ class FishTransferListPage extends StatefulWidget {
 
 class _FishTransferListPageState extends State<FishTransferListPage> {
   final TransferController controller = Get.put(TransferController());
-
+  Activation activation = Get.arguments["activation"];
   @override
   void initState() {
     super.initState();
@@ -25,6 +31,7 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
     //   await controller.getPondActivations(
     //       pondId: controller.pond.id.toString());
     // });
+
     controller.getTransfertData(context);
   }
 
@@ -143,7 +150,7 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
             onPressed: () {
               Get.to(() => const NewFishTransferEntryPage(), arguments: {
                 "pond": controller.pond,
-                "activation": controller.activation
+                "activation": activation
               });
               controller.postDataLog(controller.fitur);
             },
@@ -153,6 +160,13 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (widget.isMenuTapped)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               fishDataRecap(),
               controller.listTransfer.isEmpty
                   ? emptyListTransfer()

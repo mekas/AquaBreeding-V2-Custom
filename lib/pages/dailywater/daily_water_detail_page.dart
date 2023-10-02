@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 
 import '../../controllers/daily_water/daily_water_controller.dart';
 import '../../models/daily_water_model.dart';
+import '../../widgets/new_Menu_widget.dart';
 
 class DailyWaterDetailPage extends StatefulWidget {
   const DailyWaterDetailPage({Key? key}) : super(key: key);
@@ -20,7 +21,7 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
   final DailyWaterDetailController controller =
       Get.put(DailyWaterDetailController());
   final DailyWaterController watercontroller = Get.put(DailyWaterController());
-
+  var isMenuTapped = false.obs;
   @override
   void initState() {
     super.initState();
@@ -333,7 +334,10 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
             actions: [
               IconButton(
                 onPressed: () {
-                  scaffoldKey.currentState?.openEndDrawer();
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
                 },
                 icon: Icon(Icons.card_travel_rounded),
               )
@@ -343,6 +347,13 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               treatmentDataRecap(),
               detail(),
               titleRecap(),

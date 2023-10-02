@@ -14,6 +14,7 @@ import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import '../../widgets/new_Menu_widget.dart';
 import '../component/detail_pond_tabview.dart';
 
 class ActivationBreedPage extends StatefulWidget {
@@ -33,7 +34,7 @@ class _ActivationBreedPageState extends State<ActivationBreedPage> {
   final InventarisBenihState benihState = Get.put(InventarisBenihState());
 
   TextEditingController dump = TextEditingController();
-
+  var isMenuTapped = false.obs;
   @override
   void initState() {
     // TODO: implement initState
@@ -1465,7 +1466,10 @@ class _ActivationBreedPageState extends State<ActivationBreedPage> {
             actions: [
               IconButton(
                 onPressed: () {
-                  scaffoldKey.currentState?.openEndDrawer();
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
                 },
                 icon: Icon(Icons.card_travel_rounded),
               )
@@ -1475,6 +1479,13 @@ class _ActivationBreedPageState extends State<ActivationBreedPage> {
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               waterHeightInput(),
               breedOptionInput(),
 

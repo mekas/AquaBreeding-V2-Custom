@@ -5,9 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
-class DetailFeedDailyPage extends StatelessWidget {
+import '../../widgets/new_Menu_widget.dart';
+
+class DetailFeedDailyPage extends StatefulWidget {
   const DetailFeedDailyPage({Key? key}) : super(key: key);
 
+  @override
+  State<DetailFeedDailyPage> createState() => _DetailFeedDailyPageState();
+}
+
+class _DetailFeedDailyPageState extends State<DetailFeedDailyPage> {
+  var isMenuTapped = false.obs;
   @override
   Widget build(BuildContext context) {
     var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -310,7 +318,10 @@ class DetailFeedDailyPage extends StatelessWidget {
             actions: [
               IconButton(
                 onPressed: () {
-                  scaffoldKey.currentState?.openEndDrawer();
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
                 },
                 icon: Icon(Icons.card_travel_rounded),
               )
@@ -320,6 +331,13 @@ class DetailFeedDailyPage extends StatelessWidget {
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               feedDailyRecap(),
               // detail(),
               recapTitle(),

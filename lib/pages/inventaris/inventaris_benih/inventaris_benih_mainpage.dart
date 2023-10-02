@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:another_flushbar/flushbar.dart';
+import 'package:fish/pages/inventaris/inventaris_benih/add_seed.dart';
 import 'package:fish/pages/inventaris/inventaris_benih/detail_inventaris_benih_page.dart';
 import 'package:fish/pages/inventaris/inventaris_benih/inventaris_benih_pages/kelas_benih_page.dart';
 import 'package:fish/pages/inventaris/inventaris_benih/inventaris_benih_pages/kelas_pembesaran_page.dart';
@@ -23,7 +24,7 @@ class InventarisBenihMainpage extends StatefulWidget {
 
 class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
   final InventarisBenihState state = Get.put(InventarisBenihState());
-
+  var isMenuTapped = false.obs;
   @override
   void initState() {
     super.initState();
@@ -50,7 +51,10 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
           actions: [
             IconButton(
               onPressed: () {
-                scaffoldKey.currentState?.openEndDrawer();
+                // scaffoldKey.currentState?.openEndDrawer();
+                setState(() {
+                  isMenuTapped.value = !isMenuTapped.value;
+                });
               },
               icon: Icon(Icons.card_travel_rounded),
             ),
@@ -86,8 +90,8 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
         body: TabBarView(
           physics: const NeverScrollableScrollPhysics(),
           children: [
-            KelasBenihPage(),
-            KelasPembesaranPage(),
+            KelasBenihPage(isMenuTapped: isMenuTapped.value,),
+            KelasPembesaranPage(isMenuTapped: isMenuTapped.value,),
           ],
         ),
         endDrawer: DrawerInvetarisList(),
@@ -98,7 +102,8 @@ class _InventarisBenihMainpageState extends State<InventarisBenihMainpage> {
             state.fishWeight.clear();
             state.fishPrice.clear();
             state.fishPriceTotal.clear();
-            getBottomSheet();
+            // getBottomSheet();
+            Get.to(() => AddSeed());
           },
           child: const Icon(
             Icons.add,

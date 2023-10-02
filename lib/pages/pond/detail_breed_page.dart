@@ -15,9 +15,20 @@ import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class DetailBreedPage extends StatelessWidget {
-  const DetailBreedPage({Key? key}) : super(key: key);
+import '../../widgets/new_Menu_widget.dart';
 
+class DetailBreedPage extends StatefulWidget {
+  bool isMenuTapped;
+  DetailBreedPage({
+    Key? key,
+    required this.isMenuTapped,
+  }) : super(key: key);
+
+  @override
+  State<DetailBreedPage> createState() => _DetailBreedPageState();
+}
+
+class _DetailBreedPageState extends State<DetailBreedPage> {
   @override
   Widget build(BuildContext context) {
     var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -86,10 +97,10 @@ class DetailBreedPage extends StatelessWidget {
             top: defaultSpace, right: defaultMargin, left: defaultMargin),
         child: TextButton(
           onPressed: () {
-            // Get.to(() => DailyWaterEditPage(), arguments: {
-            //   'pond': controller.pondController.selectedPond.value,
-            //   'activation': controller.detailPondController.selectedActivation.value,
-            // });
+            Get.to(() => DailyWaterEditPage(), arguments: {
+              'pond': controller.pondController.selectedPond.value,
+              'activation': controller.detailPondController.selectedActivation.value,
+            });
           },
           style: TextButton.styleFrom(
             fixedSize: const Size(300, 40),
@@ -149,10 +160,10 @@ class DetailBreedPage extends StatelessWidget {
             top: defaultSpace, right: defaultMargin, left: defaultMargin),
         child: TextButton(
           onPressed: () {
-            // Get.to(() => DailyWaterEditPage(), arguments: {
-            //   'pond': controller.pondController.selectedPond.value,
-            //   'activation': controller.detailPondController.selectedActivation.value,
-            // });
+            Get.to(() => DailyWaterEditPage(), arguments: {
+              'pond': controller.pondController.selectedPond.value,
+              'activation': controller.detailPondController.selectedActivation.value,
+            });
           },
           style: TextButton.styleFrom(
             fixedSize: const Size(300, 40),
@@ -593,6 +604,13 @@ class DetailBreedPage extends StatelessWidget {
           // endDrawer: DrawerInvetarisList(),
           body: ListView(
             children: [
+              if (widget.isMenuTapped)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               breedDataRecap(),
               detail(),
               fishChart(),

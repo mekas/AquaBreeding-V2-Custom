@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
+import '../../widgets/new_Menu_widget.dart';
 import 'feed_controller.dart';
 
 class FeedEntryPage extends StatefulWidget {
@@ -26,7 +27,7 @@ class _FeedEntryPageState extends State<FeedEntryPage> {
   final FeedEntryController controller = Get.put(FeedEntryController());
   final FeedController feedcontroller = Get.put(FeedController());
   final InventarisPakanState pakanState = Get.put(InventarisPakanState());
-
+  var isMenuTapped = false.obs;
   @override
   void initState() {
     // TODO: implement initState
@@ -500,7 +501,10 @@ class _FeedEntryPageState extends State<FeedEntryPage> {
             actions: [
               IconButton(
                 onPressed: () {
-                  scaffoldKey.currentState?.openEndDrawer();
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
                 },
                 icon: Icon(Icons.card_travel_rounded),
               )
@@ -527,6 +531,13 @@ class _FeedEntryPageState extends State<FeedEntryPage> {
                     )
                   : Column(
                       children: [
+                        if (isMenuTapped.value)
+                          Column(
+                            children: [
+                              newMenu(),
+                              SizedBox(height: 10,),
+                            ],
+                          ),
                         feedList(),
                         pakanState.isLoadingFeedDetail.value
                             ? Padding(

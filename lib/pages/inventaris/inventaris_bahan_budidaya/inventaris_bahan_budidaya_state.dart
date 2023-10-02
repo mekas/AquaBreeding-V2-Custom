@@ -124,13 +124,14 @@ class InventarisBahanBudidayaState extends Urls {
       Uri.parse('${Urls.invSup}?type=$type'),
       headers: headers,
     );
-
+    print("GET URL: ${Uri.parse('${Urls.invSup}?type=$type')}");
     try {
       if (response.statusCode == 200) {
         InventarisSuplemenModel res =
             InventarisSuplemenModel.fromJson(jsonDecode(response.body));
 
         suplemenList.value = res;
+        print("INVENTARIS BAHAN BUDIDAYA: ${res.data}");
         // inspect(suplemenList.value.data);
 
         if (suplemenList.value.data!.isNotEmpty) {

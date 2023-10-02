@@ -76,9 +76,15 @@ class MyTabs extends GetxController with GetSingleTickerProviderStateMixin {
   }
 }
 
-class MyTabScreen extends StatelessWidget {
+class MyTabScreen extends StatefulWidget {
   MyTabScreen({Key? key}) : super(key: key);
 
+  @override
+  State<MyTabScreen> createState() => _MyTabScreenState();
+}
+
+class _MyTabScreenState extends State<MyTabScreen> {
+  var isMenuTapped = false.obs;
   @override
   Widget build(BuildContext context) {
     var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -105,7 +111,10 @@ class MyTabScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              scaffoldKey.currentState?.openEndDrawer();
+              // scaffoldKey.currentState?.openEndDrawer();
+              setState(() {
+                isMenuTapped.value = !isMenuTapped.value;
+              });
             },
             icon: Icon(Icons.card_travel_rounded),
           )
@@ -114,7 +123,7 @@ class MyTabScreen extends StatelessWidget {
       endDrawer: DrawerInvetarisList(),
       body: TabBarView(
         controller: _tabs.controller,
-        children: [DetailBreedPage(), TreatmentpPage(), FishTransferListPage()],
+        children: [DetailBreedPage(isMenuTapped: isMenuTapped.value,), TreatmentPage(isMenuTapped: isMenuTapped.value,), FishTransferListPage(isMenuTapped: isMenuTapped.value,)],
       ),
     );
   }

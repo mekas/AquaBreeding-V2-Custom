@@ -11,10 +11,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../controllers/authentication/profile_controller.dart';
 import 'login_page.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   ProfilePage({Key? key}) : super(key: key);
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   @override
   final ProfileController controller = Get.put(ProfileController());
+
+  var isMenuTapped = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -235,7 +243,10 @@ class ProfilePage extends StatelessWidget {
             actions: [
               IconButton(
                 onPressed: () {
-                  scaffoldKey.currentState?.openEndDrawer();
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
                 },
                 icon: Icon(Icons.card_travel_rounded),
               )

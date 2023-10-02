@@ -7,8 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fish/widgets/convert_to_rupiah_widget.dart';
 
+import '../../../../widgets/new_Menu_widget.dart';
+
 class KelasPembesaranPage extends StatefulWidget {
-  KelasPembesaranPage({super.key});
+  bool isMenuTapped;
+
+  KelasPembesaranPage({
+    Key? key,
+    required this.isMenuTapped,
+  }) : super(key: key);
 
   @override
   State<KelasPembesaranPage> createState() => _KelasPembesaranPageState();
@@ -43,220 +50,243 @@ class _KelasPembesaranPageState extends State<KelasPembesaranPage> {
               ),
             )
           : state.seedList.value.data!.isEmpty
-              ? Center(
-                  child: Text(
-                    'Tidak ada data',
-                    style: headingText3,
-                  ),
+              ? Column(
+                  children: [
+                    if (widget.isMenuTapped) newMenu(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Center(
+                      child: Text(
+                        'Tidak ada data',
+                        style: headingText3,
+                      ),
+                    ),
+                  ],
                 )
               : Container(
                   margin: const EdgeInsets.fromLTRB(16, 20, 16, 20),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.only(bottom: padding4XL),
-                    itemCount: state.seedList.value.data!.length,
-                    itemBuilder: ((context, index) {
-                      return GestureDetector(
-                        onTap: () async {
-                          state.setSheetVariableEdit(false);
-                          await state.getSeedDataByID(
-                              state.seedList.value.data![index].idInt!, () {
-                            getBottomSheet(index,
-                                state.seedList.value.data![index].idInt!);
-                          });
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: 14),
-                          decoration: BoxDecoration(
-                            border: Border.all(width: 1, color: primaryColor),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Column(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        if (widget.isMenuTapped)
+                          Column(
                             children: [
-                              Container(
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: primaryColor,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Tanggal :',
-                                      style: headingText3,
-                                    ),
-                                    Text(
-                                      state.dateFormat(
-                                        state.seedList.value.data![index]
-                                            .createdAt!
-                                            .toString(),
-                                        true,
-                                      ),
-                                      style: headingText3,
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Tahun',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            SizedBox(height: 6),
-                                            Text(
-                                              state.seedList.value.data![index]
-                                                  .createdAt
-                                                  .toString()
-                                                  .split('-')[0],
-                                              style: TextStyle(
-                                                color: Colors.grey.shade500,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Column(
-                                          children: [
-                                            Text(
-                                              'Jenis Ikan',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            SizedBox(height: 6),
-                                            Text(
-                                              state.seedList.value.data![index]
-                                                  .fishType
-                                                  .toString(),
-                                              style: TextStyle(
-                                                color: Colors.grey.shade500,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Column(
-                                          children: [
-                                            Text(
-                                              'Berat',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            SizedBox(height: 6),
-                                            Text(
-                                              '${state.seedList.value.data![index].weight} kg',
-                                              style: TextStyle(
-                                                color: Colors.grey.shade500,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Column(
-                                          children: [
-                                            Text(
-                                              'Jumlah',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            SizedBox(height: 6),
-                                            Text(
-                                              '${state.seedList.value.data![index].amount} ekor',
-                                              style: TextStyle(
-                                                color: Colors.grey.shade500,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 8),
-                                    Divider(color: Colors.white),
-                                    SizedBox(height: 6),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Harga Satuan : ',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Rp${ConvertToRupiah.formatToRupiah(state.seedList.value.data![index].price!)} / ekor',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 6),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Harga Total : ',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Rp${ConvertToRupiah.formatToRupiah(state.seedList.value.data![index].totalPrice!)}',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              newMenu(),
+                              SizedBox(height: 10,),
                             ],
                           ),
-                        ),
-                      );
-                    }),
+                        Container(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: const BouncingScrollPhysics(),
+                            padding: const EdgeInsets.only(bottom: padding4XL),
+                            itemCount: state.seedList.value.data!.length,
+                            itemBuilder: ((context, index) {
+                              return GestureDetector(
+                                onTap: () async {
+                                  state.setSheetVariableEdit(false);
+                                  await state.getSeedDataByID(
+                                      state.seedList.value.data![index].idInt!, () {
+                                    getBottomSheet(index,
+                                        state.seedList.value.data![index].idInt!);
+                                  });
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.only(bottom: 14),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(width: 1, color: primaryColor),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color: primaryColor,
+                                          borderRadius: BorderRadius.circular(4),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              'Tanggal :',
+                                              style: headingText3,
+                                            ),
+                                            Text(
+                                              state.dateFormat(
+                                                state.seedList.value.data![index]
+                                                    .createdAt!
+                                                    .toString(),
+                                                true,
+                                              ),
+                                              style: headingText3,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Column(
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Tahun',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 6),
+                                                    Text(
+                                                      state.seedList.value.data![index]
+                                                          .createdAt
+                                                          .toString()
+                                                          .split('-')[0],
+                                                      style: TextStyle(
+                                                        color: Colors.grey.shade500,
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 12,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Column(
+                                                  children: [
+                                                    Text(
+                                                      'Jenis Ikan',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 6),
+                                                    Text(
+                                                      state.seedList.value.data![index]
+                                                          .fishType
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                        color: Colors.grey.shade500,
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 12,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Column(
+                                                  children: [
+                                                    Text(
+                                                      'Berat',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 6),
+                                                    Text(
+                                                      '${state.seedList.value.data![index].weight} kg',
+                                                      style: TextStyle(
+                                                        color: Colors.grey.shade500,
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 12,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Column(
+                                                  children: [
+                                                    Text(
+                                                      'Jumlah',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 6),
+                                                    Text(
+                                                      '${state.seedList.value.data![index].amount} ekor',
+                                                      style: TextStyle(
+                                                        color: Colors.grey.shade500,
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 12,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 8),
+                                            Divider(color: Colors.white),
+                                            SizedBox(height: 6),
+                                            Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Text(
+                                                  'Harga Satuan : ',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'Rp${ConvertToRupiah.formatToRupiah(state.seedList.value.data![index].price!)} / ekor',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 6),
+                                            Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Text(
+                                                  'Harga Total : ',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'Rp${ConvertToRupiah.formatToRupiah(state.seedList.value.data![index].totalPrice!)}',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
     );

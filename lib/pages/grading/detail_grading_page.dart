@@ -4,9 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
-class DetailGradingPage extends StatelessWidget {
+import '../../widgets/new_Menu_widget.dart';
+
+class DetailGradingPage extends StatefulWidget {
   const DetailGradingPage({Key? key}) : super(key: key);
 
+  @override
+  State<DetailGradingPage> createState() => _DetailGradingPageState();
+}
+
+class _DetailGradingPageState extends State<DetailGradingPage> {
+  var isMenuTapped = false.obs;
   @override
   Widget build(BuildContext context) {
     var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -64,7 +72,18 @@ class DetailGradingPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                Text(
+                if (controller.activation.getStringDeactivationDate() == "-")
+                  Text(
+                    "${controller.activation.getStringActivationDate()} sampai ${DateTime.now().toString().split(" ")[0]}",
+                    style: secondaryTextStyle.copyWith(
+                      fontSize: 13,
+                      fontWeight: medium,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                if (controller.activation.getStringDeactivationDate() != "-")
+                  Text(
                   "${controller.activation.getStringActivationDate()} sampai ${controller.activation.getStringDeactivationDate()}",
                   style: secondaryTextStyle.copyWith(
                     fontSize: 13,
@@ -358,7 +377,10 @@ class DetailGradingPage extends StatelessWidget {
             actions: [
               IconButton(
                 onPressed: () {
-                  scaffoldKey.currentState?.openEndDrawer();
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
                 },
                 icon: Icon(Icons.card_travel_rounded),
               )
@@ -368,6 +390,13 @@ class DetailGradingPage extends StatelessWidget {
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               gradingDataRecap(),
               detail(),
               titleRecap(),

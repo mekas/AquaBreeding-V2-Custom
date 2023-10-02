@@ -11,9 +11,17 @@ import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class GradingPage extends StatelessWidget {
+import '../../widgets/new_Menu_widget.dart';
+
+class GradingPage extends StatefulWidget {
   const GradingPage({Key? key}) : super(key: key);
 
+  @override
+  State<GradingPage> createState() => _GradingPageState();
+}
+
+class _GradingPageState extends State<GradingPage> {
+  var isMenuTapped = false.obs;
   @override
   Widget build(BuildContext context) {
     var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -442,7 +450,10 @@ class GradingPage extends StatelessWidget {
             actions: [
               IconButton(
                 onPressed: () {
-                  scaffoldKey.currentState?.openEndDrawer();
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
                 },
                 icon: Icon(Icons.card_travel_rounded),
               )
@@ -452,6 +463,13 @@ class GradingPage extends StatelessWidget {
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               chartGrading(),
               gradingDataRecap(),
               // detail(),

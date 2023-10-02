@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
+import '../../widgets/new_Menu_widget.dart';
+
 class WeeklyWaterPage extends StatefulWidget {
   WeeklyWaterPage({Key? key}) : super(key: key);
 
@@ -18,7 +20,7 @@ class WeeklyWaterPage extends StatefulWidget {
 
 class _WeeklyWaterPageState extends State<WeeklyWaterPage> {
   final WeeklyWaterController controller = Get.put(WeeklyWaterController());
-
+  var isMenuTapped = false.obs;
   @override
   void initState() {
     super.initState();
@@ -146,7 +148,10 @@ class _WeeklyWaterPageState extends State<WeeklyWaterPage> {
             actions: [
               IconButton(
                 onPressed: () {
-                  scaffoldKey.currentState?.openEndDrawer();
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
                 },
                 icon: Icon(Icons.card_travel_rounded),
               )
@@ -167,6 +172,13 @@ class _WeeklyWaterPageState extends State<WeeklyWaterPage> {
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               fishDataRecap(),
               controller.listWeeklyWater.isEmpty
                   ? emptyList()

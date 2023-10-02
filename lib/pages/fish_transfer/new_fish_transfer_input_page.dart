@@ -1,4 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
+import 'package:fish/service/activation_service.dart';
 import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,10 +10,12 @@ import 'package:get/get.dart';
 import 'package:fish/controllers/fish_transfer/fish_transfer_entry_controller.dart';
 import 'package:fish/controllers/fish_transfer/pond_list_item_controller.dart';
 import 'package:fish/theme.dart';
+import 'package:intl/intl.dart';
 
 import '../../controllers/fish_transfer/fish_transfer_list_controller.dart';
 import '../../models/fish_model.dart';
 import '../../models/new_sortir_model.dart';
+import '../../widgets/new_Menu_widget.dart';
 import '../component/deactivation_with_fish_transfer_input.dart';
 
 class NewFishTransferInputPage extends StatefulWidget {
@@ -29,6 +34,7 @@ class NewFishTransferInputPage extends StatefulWidget {
 class _NewFishTransferInputPageState extends State<NewFishTransferInputPage> {
   final FishTransferEntryController controller =
       Get.put(FishTransferEntryController());
+  var isMenuTapped = false.obs;
 
   // final TransferController fishTransferController =
   //     Get.put(TransferController());
@@ -37,6 +43,7 @@ class _NewFishTransferInputPageState extends State<NewFishTransferInputPage> {
       Get.put(PondListController());
 
   final pageController = PageController(initialPage: 0);
+  var currDate = DateTime.now();
   @override
   void dispose() {
     controller.descController.clear();
@@ -86,7 +93,25 @@ class _NewFishTransferInputPageState extends State<NewFishTransferInputPage> {
     // });
     // controller.getHarvestedBool(controller.activation);
     controller.getPondsData(controller.methodController.toString());
-    controller.getHarvestedBool(controller.activation);
+    ActivationService().getActivations(pondId: controller.pond.id.toString()).then((value){
+      if (value != null){
+        for (var activation in value){
+          if (!activation.isFinish!){
+            controller.getAllInventory(
+                controller.pond.lastActivationDate
+                    .toString()
+                    .split('-')
+                    .reversed
+                    .join('-'),
+                currDate.toString().split(' ')[0],
+                activation
+            );
+            controller.getHarvestedBool(activation);
+          }
+        }
+      }
+    });
+
   }
 
   @override
@@ -480,6 +505,8 @@ class _NewFishTransferInputPageState extends State<NewFishTransferInputPage> {
                           value: controller.isNilaHitamInput.value,
                           onChanged: (bool? value) {
                             controller.setInputNilaHitam(value!);
+                            print("fish seed nila hitam: ${controller.fishSeed.value}");
+                            print("fish category nila hitam: ${controller.fishCategory.value}");
                             print(controller.isNilaHitamInput.value);
                           },
                         ),
@@ -502,6 +529,8 @@ class _NewFishTransferInputPageState extends State<NewFishTransferInputPage> {
                           value: controller.isNilaMerahInput.value,
                           onChanged: (bool? value) {
                             controller.setInputNilaMerah(value!);
+                            print("fish seed nila merah: ${controller.fishSeed.value}");
+                            print("fish category nila merah: ${controller.fishCategory.value}");
                           },
                         ),
                       )
@@ -523,6 +552,9 @@ class _NewFishTransferInputPageState extends State<NewFishTransferInputPage> {
                           value: controller.isLeleInput.value,
                           onChanged: (bool? value) {
                             controller.setInputLele(value!);
+                            print("fish seed lele: ${controller.fishSeed.value}");
+                            print("fish category lele: ${controller.fishCategory.value}");
+
                           },
                         ),
                       )
@@ -544,6 +576,8 @@ class _NewFishTransferInputPageState extends State<NewFishTransferInputPage> {
                           value: controller.isPatinInput.value,
                           onChanged: (bool? value) {
                             controller.setInputPatin(value!);
+                            print("fish seed patin: ${controller.fishSeed.value}");
+                            print("fish category patin: ${controller.fishCategory.value}");
                           },
                         ),
                       )
@@ -565,6 +599,8 @@ class _NewFishTransferInputPageState extends State<NewFishTransferInputPage> {
                           value: controller.isMasInput.value,
                           onChanged: (bool? value) {
                             controller.setInputMas(value!);
+                            print("fish seed mas: ${controller.fishSeed.value}");
+                            print("fish category mas: ${controller.fishCategory.value}");
                           },
                         ),
                       )
@@ -1595,8 +1631,88 @@ class _NewFishTransferInputPageState extends State<NewFishTransferInputPage> {
             //     // fishTransferController.getTransfertData(context);
             //   },
             // );
-            createData();
-            controller.postDataLog(controller.fitur);
+           if (controller.lelePriceController.text.isNotEmpty){
+             print("lele price controller ---------- : ${controller.lelePriceController.text}");
+             controller.finalLelePrice.value = int.parse(controller.lelePriceController.text.toString().replaceAll('.', "").split(',')[0]);
+           }
+
+            if (controller.nilaMerahPriceController.text.isNotEmpty){
+              controller.finalNilaMerahPrice.value = int.parse(controller.nilaMerahPriceController.text.toString().replaceAll('.', "").split(',')[0]);
+            }
+
+            if (controller.nilaHitamPriceController.text.isNotEmpty){
+              controller.finalNilaHitamPrice.value = int.parse(controller.nilaHitamPriceController.text.toString().replaceAll('.', "").split(',')[0]);
+              print("nila hitam price: ${controller.finalNilaHitamPrice.value}");
+            }
+
+            if (controller.masPriceController.text.isNotEmpty){
+              controller.finalMasPrice.value = int.parse(controller.masPriceController.text.toString().replaceAll('.', "").split(',')[0]);
+            }
+
+            if (controller.patinPriceController.text.isNotEmpty){
+              controller.finalPatinPrice.value = int.parse(controller.patinPriceController.text.toString().replaceAll('.', "").split(',')[0]);
+            }
+
+            if (controller.finalLelePrice.value != 0 && controller.finalLeleTotalPrice.value != 0){
+              var formatHarga = NumberFormat("#,###");
+              var temp = '${formatHarga.format(controller.finalLelePrice.value)}';
+              var temp2 = '${formatHarga.format(controller.finalLeleTotalPrice.value)}';
+              var harga = temp.replaceAll(',', '');
+              var totalHarga = temp2.replaceAll(',', '');
+              print("price each lele: ${harga}");
+              print("total price lele: ${totalHarga }");
+              print("lele price new_fish_transfer_input_page: ${controller.lelePriceController.text}");
+              createData();
+              controller.postDataLog(controller.fitur);
+            } else if (controller.finalNilaMerahPrice.value != 0 && controller.finalNilaMerahTotalPrice.value != 0){
+              var formatHarga = NumberFormat("#,###");
+              var temp = '${formatHarga.format(controller.finalNilaMerahPrice.value)}';
+              var temp2 = '${formatHarga.format(controller.finalNilaMerahTotalPrice.value)}';
+              var harga = temp.replaceAll(',', '');
+              var totalHarga = temp2.replaceAll(',', '');
+              print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+              print("price each nila merah: ${harga}");
+              print("total price nila merah: ${totalHarga }");
+              print("nila merah price new_fish_transfer_input_page: ${controller.nilaMerahPriceController.text}");
+              createData();
+              controller.postDataLog(controller.fitur);
+            } else if (controller.finalNilaHitamPrice.value != 0 && controller.finalNilaHitamTotalPrice.value != 0){
+              var formatHarga = NumberFormat("#,###");
+              var temp = '${formatHarga.format(controller.finalNilaHitamPrice.value)}';
+              var temp2 = '${formatHarga.format(controller.finalNilaHitamTotalPrice.value)}';
+              var harga = temp.replaceAll(',', '');
+              var totalHarga = temp2.replaceAll(',', '');
+              print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+              print("price each nila hitam: ${harga}");
+              print("total price nila hitam: ${totalHarga }");
+              print("nila hitam price new_fish_transfer_input_page: ${controller.nilaMerahPriceController.text}");
+              createData();
+              controller.postDataLog(controller.fitur);
+            } else if (controller.finalPatinPrice.value != 0 && controller.finalPatinTotalPrice.value != 0){
+              var formatHarga = NumberFormat("#,###");
+              var temp = '${formatHarga.format(controller.finalPatinPrice.value)}';
+              var temp2 = '${formatHarga.format(controller.finalPatinTotalPrice.value)}';
+              var harga = temp.replaceAll(',', '');
+              var totalHarga = temp2.replaceAll(',', '');
+              print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+              print("price each patin: ${harga}");
+              print("total price patin: ${totalHarga }");
+              print("patin price new_fish_transfer_input_page: ${controller.nilaMerahPriceController.text}");
+              createData();
+              controller.postDataLog(controller.fitur);
+            } else if (controller.finalMasPrice.value != 0 && controller.finalMasTotalPrice.value != 0){
+              var formatHarga = NumberFormat("#,###");
+              var temp = '${formatHarga.format(controller.finalMasPrice.value)}';
+              var temp2 = '${formatHarga.format(controller.finalMasTotalPrice.value)}';
+              var harga = temp.replaceAll(',', '');
+              var totalHarga = temp2.replaceAll(',', '');
+              print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+              print("price each mas: ${harga}");
+              print("total price mas: ${totalHarga }");
+              print("mas price new_fish_transfer_input_page: ${controller.nilaMerahPriceController.text}");
+              createData();
+              controller.postDataLog(controller.fitur);
+            }
           },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
@@ -1969,7 +2085,10 @@ class _NewFishTransferInputPageState extends State<NewFishTransferInputPage> {
         actions: [
           IconButton(
             onPressed: () {
-              scaffoldKey.currentState?.openEndDrawer();
+              // scaffoldKey.currentState?.openEndDrawer();
+              setState(() {
+                isMenuTapped.value = !isMenuTapped.value;
+              });
             },
             icon: Icon(Icons.card_travel_rounded),
           )
@@ -1978,8 +2097,21 @@ class _NewFishTransferInputPageState extends State<NewFishTransferInputPage> {
       endDrawer: DrawerInvetarisList(),
       backgroundColor: backgroundColor1,
       body: Obx(() {
-        return ListView(
+        return controller.isLoadingInventory.value
+            ? Padding(
+          padding: const EdgeInsets.only(top: 18),
+          child: Center(
+            child: CircularProgressIndicator(color: Colors.white),
+          ),
+        ) : ListView(
           children: [
+            if (isMenuTapped.value)
+              Column(
+                children: [
+                  newMenu(),
+                  SizedBox(height: 10,),
+                ],
+              ),
             transferTypeInput(),
             checkBoxFishTransfer(),
             controller.isNilaHitamInput == true
@@ -2163,7 +2295,6 @@ class _NewFishTransferInputPageState extends State<NewFishTransferInputPage> {
         replaceItemInArray(controller.listPondSelected, widget.index, item);
       }
     } else {
-      print("disini euy");
       if (controller.isNilaMerahInput.value == true &&
           controller.nilamerahAmountChecker.value <
               controller.nilamerahAmountComparator.value +
@@ -2281,21 +2412,85 @@ class _NewFishTransferInputPageState extends State<NewFishTransferInputPage> {
                 ));
       } else {
         final fish = controller.buildJsonFish();
+        var price = ''.obs;
+        var totalPrice = ''.obs;
+        print("fish new_fish_transfer_input_page: ${fish}");
+        for (var eachItem in fish){
+          if (jsonDecode(eachItem.toString())["type"] == "lele"){
+            var formatHarga = NumberFormat("#,###");
+            var temp = '${formatHarga.format(controller.finalLelePrice.value)}';
+            var temp2 = '${formatHarga.format(controller.finalLeleTotalPrice.value)}';
+            setState(() {
+              price.value = temp.replaceAll(',', '');
+              totalPrice.value = temp2.replaceAll(',', '');
+            });
+            print("price each lele: ${ price.value}");
+            print("total price lele: ${totalPrice.value }");
+          } else if (jsonDecode(eachItem.toString())["type"] == "nila hitam"){
+            var formatHarga = NumberFormat("#,###");
+            var temp = '${formatHarga.format(controller.finalNilaHitamPrice.value)}';
+            var temp2 = '${formatHarga.format(controller.finalNilaHitamTotalPrice.value)}';
+            setState(() {
+              price.value = temp.replaceAll(',', '');
+              totalPrice.value = temp2.replaceAll(',', '');
+            });
+            print("price each nila hitam: ${ price.value}");
+            print("total price nila hitam: ${totalPrice.value }");
+          } else if (jsonDecode(eachItem.toString())["type"] == "nila merah"){
+            var formatHarga = NumberFormat("#,###");
+            var temp = '${formatHarga.format(controller.finalNilaMerahPrice.value)}';
+            var temp2 = '${formatHarga.format(controller.finalNilaMerahTotalPrice.value)}';
+            setState(() {
+              price.value = temp.replaceAll(',', '');
+              totalPrice.value = temp2.replaceAll(',', '');
+            });
+            print("------------------------------------------------");
+            print("price each nila merah: ${price.value}");
+            print("total price nila merah: ${totalPrice.value }");
+            print("lele price new_fish_transfer_input_page: ${controller.nilaMerahPriceController.text}");
+          } else if (jsonDecode(eachItem.toString())["type"] == "patin"){
+            var formatHarga = NumberFormat("#,###");
+            var temp = '${formatHarga.format(controller.finalPatinPrice.value)}';
+            var temp2 = '${formatHarga.format(controller.finalPatinTotalPrice.value)}';
+            setState(() {
+              price.value = temp.replaceAll(',', '');
+              totalPrice.value = temp2.replaceAll(',', '');
+            });
+            print("price each patin: ${price.value}");
+            print("total price patin: ${totalPrice.value }");
+          } else if (jsonDecode(eachItem.toString())["type"] == "mas"){
+            var formatHarga = NumberFormat("#,###");
+            var temp = '${formatHarga.format(controller.finalMasPrice.value)}';
+            var temp2 = '${formatHarga.format(controller.finalMasTotalPrice.value)}';
+            setState(() {
+              price.value = temp.replaceAll(',', '');
+              totalPrice.value = temp2.replaceAll(',', '');
+            });
+            print("price each mas: ${ price.value}");
+            print("total price mas: ${totalPrice.value }");
+          }
+        }
+
+        print("FINAL PRICE: ${price.value}");
         final data = {
           "destination_pond_id": widget.pond.id,
           "status":
               widget.pond.isActive == true ? "isActivated" : "isNotActivated",
           "fish": fish,
+          "fish_seed": controller.fishSeed.value,
+          "fish_category": controller.fishCategory.value,
           "sample_weight": controller.sampleWeightController.text,
           "sample_long": controller.sampleLongController.text,
           "transfer_type": controller.typeController.selected.value,
+          "price" : int.parse(price.value),
+          "total_price" : int.parse(totalPrice.value),
           if (widget.pond.isActive == false) ...{
             "water_level": controller.waterHeightController.text
           }
         };
         List<Fish> inputedFish = Fish.createList(fish);
         // print(inputedFish[0].amount);
-        print(data);
+        print("data hasil input di page new_fish_transfer_input_page: ${data}");
         ListPondSortir item = ListPondSortir(
             id: widget.pond.id,
             isInputed: true,

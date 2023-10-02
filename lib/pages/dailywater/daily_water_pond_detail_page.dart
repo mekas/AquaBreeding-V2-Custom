@@ -10,8 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
+import '../../widgets/new_Menu_widget.dart';
+
 class DailyWaterDetailPondPage extends StatefulWidget {
-  const DailyWaterDetailPondPage({Key? key}) : super(key: key);
+  bool isMenuTapped;
+  DailyWaterDetailPondPage({
+    Key? key,
+    required this.isMenuTapped,
+  }) : super(key: key);
 
   @override
   State<DailyWaterDetailPondPage> createState() =>
@@ -388,6 +394,13 @@ class _DailyWaterDetailPondPageState extends State<DailyWaterDetailPondPage> {
               )
             : ListView(
                 children: [
+                  if (widget.isMenuTapped)
+                    Column(
+                      children: [
+                        newMenu(),
+                        SizedBox(height: 10,),
+                      ],
+                    ),
                   pondStatus(),
                   // detailController.isPondActive.value == false
                   //     ? activationButton()

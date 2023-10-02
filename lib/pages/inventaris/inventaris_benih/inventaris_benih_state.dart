@@ -142,14 +142,14 @@ class InventarisBenihState extends Urls {
       Uri.parse('${Urls.invSeed}?type=$type'),
       headers: headers,
     );
-
+    print ("GET URL : ${Uri.parse('${Urls.invSeed}?type=$type')}");
     try {
       if (response.statusCode == 200) {
         InventarisBenihModel res =
             InventarisBenihModel.fromJson(jsonDecode(response.body));
 
         seedList.value = res;
-
+        print("SEED RES = ${response.body}");
         for (var i in seedList.value.data!) {
           nameHistoryList.add(i.brandName.toString());
         }

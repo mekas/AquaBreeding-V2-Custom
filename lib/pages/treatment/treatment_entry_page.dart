@@ -15,6 +15,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../widgets/new_Menu_widget.dart';
+
 class TreatmentEntryPage extends StatefulWidget {
   TreatmentEntryPage({Key? key}) : super(key: key);
   @override
@@ -30,7 +32,7 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
 
   final InventarisBahanBudidayaState supState =
       Get.put(InventarisBahanBudidayaState());
-
+  var isMenuTapped = false.obs;
   @override
   void initState() {
     super.initState();
@@ -730,52 +732,6 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
         // ),
       );
     }
-
-    // Widget carbonTypeInput() {
-    //   return Container(
-    //     margin: EdgeInsets.only(
-    //         top: defaultSpace, right: defaultMargin, left: defaultMargin),
-    //     child: Column(
-    //       crossAxisAlignment: CrossAxisAlignment.start,
-    //       children: [
-    //         Text(
-    //           'Jenis Karbon',
-    //           style: primaryTextStyle.copyWith(
-    //             fontSize: 16,
-    //             fontWeight: medium,
-    //           ),
-    //         ),
-    //         SizedBox(
-    //           height: 12,
-    //         ),
-    //         Container(
-    //           height: 50,
-    //           padding: EdgeInsets.symmetric(
-    //             horizontal: 16,
-    //           ),
-    //           decoration: BoxDecoration(
-    //             color: backgroundColor2,
-    //             borderRadius: BorderRadius.circular(12),
-    //           ),
-    //           child: Center(
-    //             child: TextFormField(
-    //               style: primaryTextStyle,
-    //               inputFormatters: <TextInputFormatter>[
-    //                 FilteringTextInputFormatter.digitsOnly
-    //               ],
-    //               controller: controller.carbonTypeController,
-    //               decoration: InputDecoration.collapsed(
-    //                 hintText: 'ex: molase',
-    //                 hintStyle: subtitleTextStyle,
-    //               ),
-    //             ),
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   );
-    // }
-
     Widget carbonTypeInput() {
       return Container(
         margin: EdgeInsets.only(
@@ -831,6 +787,52 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
         ),
       );
     }
+    // Widget carbonTypeInput() {
+    //   return Container(
+    //     margin: EdgeInsets.only(
+    //         top: defaultSpace, right: defaultMargin, left: defaultMargin),
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         Text(
+    //           'Jenis Karbon',
+    //           style: primaryTextStyle.copyWith(
+    //             fontSize: 16,
+    //             fontWeight: medium,
+    //           ),
+    //         ),
+    //         SizedBox(
+    //           height: 12,
+    //         ),
+    //         Container(
+    //           height: 50,
+    //           padding: EdgeInsets.symmetric(
+    //             horizontal: 16,
+    //           ),
+    //           decoration: BoxDecoration(
+    //             color: backgroundColor2,
+    //             borderRadius: BorderRadius.circular(12),
+    //           ),
+    //           child: Center(
+    //             child: TextFormField(
+    //               style: primaryTextStyle,
+    //               inputFormatters: <TextInputFormatter>[
+    //                 FilteringTextInputFormatter.digitsOnly
+    //               ],
+    //               controller: controller.carbonTypeController,
+    //               decoration: InputDecoration.collapsed(
+    //                 hintText: 'ex: molase',
+    //                 hintStyle: subtitleTextStyle,
+    //               ),
+    //             ),
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
+
+
 
     // Widget widthInput() {
     //   return Container(
@@ -1025,7 +1027,10 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
             actions: [
               IconButton(
                 onPressed: () {
-                  scaffoldKey.currentState?.openEndDrawer();
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
                 },
                 icon: Icon(Icons.card_travel_rounded),
               )
@@ -1035,6 +1040,13 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               treatmentTypeInput(),
               descInput(),
               controller.typeController.selected.value == "berat"
@@ -1098,7 +1110,7 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text(
-                              'Aktifkan tanggal input pakan manual',
+                              'Aktifkan tanggal entry treatment manual',
                               style: headingText3,
                             ),
                           ],

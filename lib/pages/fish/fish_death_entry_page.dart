@@ -11,6 +11,7 @@ import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
+import '../../widgets/new_Menu_widget.dart';
 import 'fish_recap_controller.dart';
 
 class FishDeathEntryPage extends StatefulWidget {
@@ -27,7 +28,7 @@ class _FishDeathEntryPageState extends State<FishDeathEntryPage> {
         Get.put(FishDeathEntryController());
 
     final FishRecapController deathcontroller = Get.put(FishRecapController());
-
+    var isMenuTapped = false.obs;
     var scaffoldKey = GlobalKey<ScaffoldState>();
 
     // @override
@@ -213,7 +214,10 @@ class _FishDeathEntryPageState extends State<FishDeathEntryPage> {
             actions: [
               IconButton(
                 onPressed: () {
-                  scaffoldKey.currentState?.openEndDrawer();
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
                 },
                 icon: Icon(Icons.card_travel_rounded),
               )
@@ -223,6 +227,13 @@ class _FishDeathEntryPageState extends State<FishDeathEntryPage> {
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               fishTypeInput(),
               fishDeathAmountInput(),
               submitButton(),

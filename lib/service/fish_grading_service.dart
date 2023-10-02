@@ -8,6 +8,7 @@ class FishGradingService {
   Future<List<FishGrading>> fetchFishGradings(
       {required String activationId}) async {
     var url = Uri.parse(Urls.fishGrading(activationId));
+    print("GET URL: ${Uri.parse(Urls.fishGrading(activationId))}");
     var headers = {'Content-Type': 'application/json'};
 
     var response = await http.get(url, headers: headers);
@@ -17,7 +18,8 @@ class FishGradingService {
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       List<FishGrading> fishgradings = FishGrading.fromJsonList(data);
-      print("success add fishgradings");
+      print("success gett fishgradings");
+      print("res = ${response.body}");
       return fishgradings;
     } else {
       throw Exception('Gagal Get fishgradings!');
@@ -59,17 +61,18 @@ class FishGradingService {
       }
     }
     print({
-      "pond_id": pondId.toString(),
+      "pond_id": pondId,
       "fish_type": fishType,
       "sampling_amount": samplingAmount,
       "avg_fish_weight": avgFishWeight,
-      "avg_fish_long": avgFishLong,
-      "amount_normal_fish": amountNormal,
-      "amount_oversize_fish": amountOver,
-      "amount_undersize_fish": amountUnder,
+      "avg_fish_long": avgFishLong!.isNotEmpty ? avgFishLong :  "0",
+      "amount_normal_fish": amountNormal!.isNotEmpty ? amountNormal :  "0",
+      "amount_oversize_fish": amountOver!.isNotEmpty ? amountOver :  "0",
+      "amount_undersize_fish": amountUnder!.isNotEmpty ? amountUnder :  "0",
     });
     final response = await http.post(
       Uri.parse(Urls.fishGradings),
+
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
@@ -79,13 +82,14 @@ class FishGradingService {
         "fish_type": fishType,
         "sampling_amount": samplingAmount,
         "avg_fish_weight": avgFishWeight,
-        "avg_fish_long": avgFishLong,
-        "amount_normal_fish": amountNormal,
-        "amount_oversize_fish": amountOver,
-        "amount_undersize_fish": amountUnder,
+        "avg_fish_long": avgFishLong!.isNotEmpty ? avgFishLong :  "0",
+        "amount_normal_fish": amountNormal!.isNotEmpty ? amountNormal :  "0",
+        "amount_oversize_fish": amountOver!.isNotEmpty ? amountOver :  "0",
+        "amount_undersize_fish": amountUnder!.isNotEmpty ? amountUnder :  "0",
       },
     );
-
+    print("POST URL:${Urls.fishGradings}");
+    print("avg_fish_long $avgFishLong");
     if (response.statusCode == 200) {
       print(response.body);
       return true;

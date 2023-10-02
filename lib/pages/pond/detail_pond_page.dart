@@ -12,14 +12,20 @@ import 'package:fish/pages/pond/add_pond_page.dart';
 import 'package:fish/pages/pond/deactivation_breed_page.dart';
 import 'package:fish/pages/pond/detail_pond_controller.dart';
 import 'package:fish/widgets/drawer_inventaris_list.dart';
+import 'package:fish/widgets/new_Menu_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
 import '../fish_transfer/fish_transfer_entry_page.dart';
+import 'edit_pond_page.dart';
 
 class DetailPondPage extends StatefulWidget {
-  const DetailPondPage({Key? key}) : super(key: key);
+  bool isMenuTapped;
+ DetailPondPage({
+    Key? key,
+    required this.isMenuTapped,
+  }) : super(key: key);
 
   @override
   State<DetailPondPage> createState() => _DetailPondPageState();
@@ -62,33 +68,47 @@ class _DetailPondPageState extends State<DetailPondPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
               children: [
-                Text(
-                  "kolam ${detailController.pondController.selectedPond.value.alias}",
-                  style: primaryTextStyle.copyWith(
-                    fontSize: 18,
-                    fontWeight: heavy,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "kolam ${detailController.pondController.selectedPond.value.alias}",
+                      style: primaryTextStyle.copyWith(
+                        fontSize: 18,
+                        fontWeight: heavy,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      detailController.pondController.selectedPond.value
+                          .getGmtToNormalDate(),
+                      style: secondaryTextStyle.copyWith(
+                        fontSize: 16,
+                        fontWeight: medium,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                    SizedBox(height: 16,),
+
+                  ],
                 ),
-                SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  detailController.pondController.selectedPond.value
-                      .getGmtToNormalDate(),
-                  style: secondaryTextStyle.copyWith(
-                    fontSize: 16,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
+                IconButton(
+                    color: Colors.white,
+                    iconSize: 28,
+                    onPressed: () {
+                      Get.to(() => const EditPondPage());
+                    },
+                    icon: const Icon(Icons.edit_outlined)),
               ],
             ),
+
             Container(
               width: 120,
               height: 40,
@@ -175,11 +195,14 @@ class _DetailPondPageState extends State<DetailPondPage> {
                 textConfirm: 'Panen',
                 textCancel: 'Tidak',
                 onConfirm: (() {
+                  Navigator.pop(context);
                   Get.to(() => DeactivationBreedPage(), arguments: {
                     "pond": detailController.pondController.selectedPond.value,
                     "activation": detailController.activations[0],
                   });
+
                 }));
+
           },
           style: TextButton.styleFrom(
             backgroundColor: Colors.amber,
@@ -385,6 +408,13 @@ class _DetailPondPageState extends State<DetailPondPage> {
               )
             : ListView(
                 children: [
+                  if (widget.isMenuTapped)
+                    Column(
+                      children: [
+                        newMenu(),
+                        SizedBox(height: 10,),
+                      ],
+                    ),
                   pondStatus(),
                   detail(),
                   detailController.isPondActive.value == false

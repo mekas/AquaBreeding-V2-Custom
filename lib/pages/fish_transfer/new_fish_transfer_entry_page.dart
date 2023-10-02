@@ -1,6 +1,7 @@
 import 'package:fish/controllers/fish_transfer/fish_transfer_entry_controller.dart';
 import 'package:fish/controllers/fish_transfer/pond_list_item_controller.dart';
 import 'package:fish/pages/fish_transfer/new_fish_transfer_input_page.dart';
+import 'package:fish/service/activation_service.dart';
 import 'package:fish/service/fish_transfer_service.dart';
 import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:get/get.dart';
 
 import '../../controllers/fish_transfer/fish_transfer_list_controller.dart';
 import '../../models/new_sortir_model.dart';
+import '../../widgets/new_Menu_widget.dart';
 import '../component/deactivation_with_fish_transfer_input.dart';
 
 class NewFishTransferEntryPage extends StatefulWidget {
@@ -24,6 +26,7 @@ class _NewFishTransferEntryPageState extends State<NewFishTransferEntryPage> {
   final FishTransferEntryController controller =
       Get.put(FishTransferEntryController());
 
+
   final TransferController fishTransferController =
       Get.put(TransferController());
 
@@ -31,6 +34,7 @@ class _NewFishTransferEntryPageState extends State<NewFishTransferEntryPage> {
       Get.put(PondListController());
 
   final pageController = PageController(initialPage: 0);
+  var isMenuTapped = false.obs;
   @override
   void dispose() {
     controller.descController.clear();
@@ -2059,7 +2063,10 @@ class _NewFishTransferEntryPageState extends State<NewFishTransferEntryPage> {
           actions: [
             IconButton(
               onPressed: () {
-                scaffoldKey.currentState?.openEndDrawer();
+                // scaffoldKey.currentState?.openEndDrawer();
+                setState(() {
+                  isMenuTapped.value = !isMenuTapped.value;
+                });
               },
               icon: Icon(Icons.card_travel_rounded),
             )
@@ -2073,6 +2080,13 @@ class _NewFishTransferEntryPageState extends State<NewFishTransferEntryPage> {
           children: [
             ListView(
               children: [
+                if (isMenuTapped.value)
+                  Column(
+                    children: [
+                      newMenu(),
+                      SizedBox(height: 10,),
+                    ],
+                  ),
                 transferMethodInput(),
                 // SizedBox(
                 //   height: 16,
@@ -2100,6 +2114,7 @@ class _NewFishTransferEntryPageState extends State<NewFishTransferEntryPage> {
   }
 
   Future<void> postData() async {
+    print("NEW FISH ENTRY PAGE");
     bool isFullfiled;
     List<dynamic> transferList = [];
 
@@ -2129,14 +2144,18 @@ class _NewFishTransferEntryPageState extends State<NewFishTransferEntryPage> {
       for (var i in controller.listPondSelected) {
         transferList.add(i.dataInput);
       }
-      print(transferList);
+      print("transferlist: ${transferList}");
       FishTransferService().postTransfer(
           origin_pond_id: controller.pond.id.toString(),
           transfer_method: controller.methodController.selected.value,
           transferList: transferList,
-          ctx: context);
+          ctx: context).then((value){
+            if (value != null && value == true){
+              Get.back();
+            }
+      });
       fishTransferController.getTransfertData(context);
-      Get.back();
+
     }
   }
 }

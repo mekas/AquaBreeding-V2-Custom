@@ -8,21 +8,27 @@ import 'package:get/get.dart';
 
 import '../pond/detail_pond_page.dart';
 
-class DailyWaterListPondCard extends StatelessWidget {
+class DailyWaterListPondCard extends StatefulWidget {
   final Pond pond;
   // final DailyWater indicatorWater
-
-  const DailyWaterListPondCard({
+  bool isMenuTapped;
+  DailyWaterListPondCard({
     Key? key,
     required this.pond,
+    required this.isMenuTapped,
   }) : super(key: key);
 
+  @override
+  State<DailyWaterListPondCard> createState() => _DailyWaterListPondCardState();
+}
+
+class _DailyWaterListPondCardState extends State<DailyWaterListPondCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => DailyWaterDetailPondPage(), arguments: {
-          'pond': pond,
+        Get.to(() => DailyWaterDetailPondPage(isMenuTapped: widget.isMenuTapped,), arguments: {
+          'pond': widget.pond,
         });
       },
       child: Container(
@@ -43,7 +49,7 @@ class DailyWaterListPondCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  pond.alias!,
+                  widget.pond.alias!,
                   style: blackTextStyle.copyWith(
                     fontSize: 18,
                     fontWeight: bold,
@@ -56,11 +62,11 @@ class DailyWaterListPondCard extends StatelessWidget {
                   height: 30,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    color: pond.getColor(),
+                    color: widget.pond.getColor(),
                   ),
                   child: Center(
                     child: Text(
-                      pond.pondStatusStr!,
+                      widget.pond.pondStatusStr!,
                       style: blackTextStyle.copyWith(
                         fontSize: 14,
                         fontWeight: heavy,

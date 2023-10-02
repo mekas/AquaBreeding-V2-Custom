@@ -1,12 +1,14 @@
 import 'dart:developer';
 
 import 'package:another_flushbar/flushbar.dart';
+import 'package:fish/pages/inventaris/inventaris_aset/add_asset.dart';
 import 'package:fish/pages/inventaris/inventaris_aset/inventaris_aset_state.dart';
 import 'package:fish/theme.dart';
 import 'package:fish/widgets/bottom_sheet_widget.dart';
 import 'package:fish/widgets/convert_to_rupiah_widget.dart';
 import 'package:fish/widgets/dialog_widget.dart';
 import 'package:fish/widgets/drawer_inventaris_list.dart';
+import 'package:fish/widgets/new_Menu_widget.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,7 +23,7 @@ class InventarisAsetPage extends StatefulWidget {
 
 class _InventarisAsetPageState extends State<InventarisAsetPage> {
   final InventarisAsetState state = Get.put(InventarisAsetState());
-
+  var isMenuTapped = false.obs;
   DateTime currDate = DateTime.now();
 
   @override
@@ -49,7 +51,10 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
         actions: [
           IconButton(
             onPressed: () {
-              scaffoldKey.currentState?.openEndDrawer();
+              // scaffoldKey.currentState?.openEndDrawer();
+              setState(() {
+                isMenuTapped.value = !isMenuTapped.value;
+              });
             },
             icon: Icon(Icons.card_travel_rounded),
           ),
@@ -69,6 +74,13 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
           child: SafeArea(
             child: Column(
               children: [
+                if (isMenuTapped.value)
+                  Column(
+                    children: [
+                      newMenu(),
+                      SizedBox(height: 10,),
+                    ],
+                  ),
                 Container(
                   margin: EdgeInsets.only(left: 16),
                   height: 35,
@@ -168,11 +180,13 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
                                     await state.getDataByID(
                                         state.assetList.value.data![index]
                                             .idInt!, () {
-                                      getBottomSheet(
-                                          index,
-                                          state.assetList.value.data![index]
-                                              .idInt!,
-                                          true);
+                                      // getBottomSheet(
+                                      //     index,
+                                      //     state.assetList.value.data![index]
+                                      //         .idInt!,
+                                      //     true);
+                                      Get.to(() => AddorEditAsset(index: index, id: state.assetList.value.data![index]
+                                          .idInt!, isEditable: true));
                                     });
                                   },
                                   child: Container(
@@ -409,7 +423,8 @@ class _InventarisAsetPageState extends State<InventarisAsetPage> {
         onPressed: () {
           state.resetVariables();
           state.setSheetVariableEdit(true);
-          getBottomSheet(0, 0, false);
+          // getBottomSheet(0, 0, false);
+          Get.to(() => AddorEditAsset(index: 0, id: 0, isEditable: false));
         },
         child: const Icon(
           Icons.add,

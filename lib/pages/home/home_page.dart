@@ -16,6 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fish/theme.dart';
 
+import '../../widgets/new_Menu_widget.dart';
+
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
 
@@ -25,7 +27,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final HomeController controller = Get.put(HomeController(), permanent: false);
-
+  var isMenuTapped = false.obs;
   var scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -289,6 +291,97 @@ class _HomePageState extends State<HomePage> {
     //   );
     // }
 
+    // Widget newMenu(bool isMenuTapped) {
+    //   return isMenuTapped ? Column(
+    //     children: [
+    //       SizedBox(height: 10,),
+    //       Container(
+    //         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+    //         child: Row(
+    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //           children: [
+    //             Column(
+    //               children: [
+    //                 SizedBox(
+    //                   width: 55,
+    //                   height: 55,
+    //                   child: ElevatedButton(onPressed: (){}, child: Image.asset("assets/icon_pakan.png", fit: BoxFit.cover,), style: ElevatedButton.styleFrom(backgroundColor: Colors.white, shape: CircleBorder(),)),
+    //                 ),
+    //                 SizedBox(height: 10,),
+    //                 Text("Pakan",
+    //                   style: primaryTextStyle.copyWith(
+    //                     fontSize: 18,
+    //                     fontWeight: semiBold,
+    //                   ),)
+    //               ],
+    //             ),
+    //             Column(
+    //               children: [
+    //                 SizedBox(
+    //                   width: 55,
+    //                   height: 55,
+    //                   child: ElevatedButton(onPressed: (){}, child: Image.asset("assets/icon_suplemen.png", fit: BoxFit.cover,), style: ElevatedButton.styleFrom(backgroundColor: Colors.white, shape: CircleBorder(),)),
+    //                 ),
+    //                 SizedBox(height: 10,),
+    //                 Text("Suplemen",
+    //                   style: primaryTextStyle.copyWith(
+    //                     fontSize: 18,
+    //                     fontWeight: semiBold,
+    //                   ),)
+    //               ],
+    //             ),
+    //             Column(
+    //               children: [
+    //                 SizedBox(
+    //                   width: 55,
+    //                   height: 55,
+    //                   child: ElevatedButton(onPressed: (){}, child: Image.asset("assets/icon_listrik.png", fit: BoxFit.cover,), style: ElevatedButton.styleFrom(backgroundColor: Colors.white, shape: CircleBorder(),)),
+    //                 ),
+    //                 SizedBox(height: 10,),
+    //                 Text("Listrik",
+    //                   style: primaryTextStyle.copyWith(
+    //                     fontSize: 18,
+    //                     fontWeight: semiBold,
+    //                   ),)
+    //               ],
+    //             ),
+    //             Column(
+    //               children: [
+    //                 SizedBox(
+    //                   width: 55,
+    //                   height: 55,
+    //                   child: ElevatedButton(onPressed: (){}, child: Image.asset("assets/ikon_asset.png", fit: BoxFit.cover,), style: ElevatedButton.styleFrom(backgroundColor: Colors.white, shape: CircleBorder(),)),
+    //                 ),
+    //                 SizedBox(height: 10,),
+    //                 Text("Asset",
+    //                   style: primaryTextStyle.copyWith(
+    //                     fontSize: 18,
+    //                     fontWeight: semiBold,
+    //                   ),)
+    //               ],
+    //             ),
+    //             Column(
+    //               children: [
+    //                 SizedBox(
+    //                   width: 55,
+    //                   height: 55,
+    //                   child: ElevatedButton(onPressed: (){}, child: Image.asset("assets/icon_benih.png", fit: BoxFit.cover,), style: ElevatedButton.styleFrom(backgroundColor: Colors.white, shape: CircleBorder(),)),
+    //                 ),
+    //                 SizedBox(height: 10,),
+    //                 Text("Benih",
+    //                   style: primaryTextStyle.copyWith(
+    //                     fontSize: 18,
+    //                     fontWeight: semiBold,
+    //                   ),)
+    //               ],
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //     ],
+    //   ) : Container();
+    // }
+
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
@@ -310,7 +403,10 @@ class _HomePageState extends State<HomePage> {
             actions: [
               IconButton(
                 onPressed: () {
-                  scaffoldKey.currentState?.openEndDrawer();
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
                 },
                 icon: Icon(Icons.card_travel_rounded),
               )
@@ -320,6 +416,8 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                newMenu(),
               title(),
               username(),
               statistic(),
@@ -341,3 +439,5 @@ class _HomePageState extends State<HomePage> {
     });
   }
 }
+
+

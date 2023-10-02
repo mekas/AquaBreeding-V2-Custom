@@ -6,15 +6,23 @@ import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-class WeeklyWaterEntryPage extends StatelessWidget {
+import '../../widgets/new_Menu_widget.dart';
+
+class WeeklyWaterEntryPage extends StatefulWidget {
   WeeklyWaterEntryPage({Key? key}) : super(key: key);
 
+  @override
+  State<WeeklyWaterEntryPage> createState() => _WeeklyWaterEntryPageState();
+}
+
+class _WeeklyWaterEntryPageState extends State<WeeklyWaterEntryPage> {
   final WeeklyWaterEntryController controller =
       Get.put(WeeklyWaterEntryController());
 
   final WeeklyWaterController weeklyWaterControlller =
       Get.put(WeeklyWaterController());
 
+  var isMenuTapped = false.obs;
   @override
   Widget build(BuildContext context) {
     var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -317,7 +325,10 @@ class WeeklyWaterEntryPage extends StatelessWidget {
             actions: [
               IconButton(
                 onPressed: () {
-                  scaffoldKey.currentState?.openEndDrawer();
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
                 },
                 icon: Icon(Icons.card_travel_rounded),
               )
@@ -327,6 +338,13 @@ class WeeklyWaterEntryPage extends StatelessWidget {
           endDrawer: DrawerInvetarisList(),
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               flocInput(),
               amoniaInput(),
               nitriteInput(),

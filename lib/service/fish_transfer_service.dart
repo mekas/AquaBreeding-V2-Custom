@@ -4,9 +4,11 @@ import 'package:fish/models/fish_transfer_model.dart';
 import 'package:fish/service/url_api.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FishTransferService {
   Future<List<FishTransfer>> getFishTransferList() async {
+    print("get transfer list, url: ${Uri.parse(Urls.fishtransfer)}");
     var url = Uri.parse(Urls.fishtransfer);
     var headers = {'Content-Type': 'application/json'};
 
@@ -40,6 +42,8 @@ class FishTransferService {
     required String? sample_long,
     required List? fish,
   }) async {
+    print("POST TRANSFER FISH BODY. TRANSFER BASAH");
+    print("post url: ${Uri.parse(Urls.fishtransfer)}");
     print({
       "origin_pond_id": origin_pond_id.toString(),
       "destination_pond_id": destination_pond_id.toString(),
@@ -88,6 +92,7 @@ class FishTransferService {
       required num? total_fish_harvested,
       required num? total_weight_harvested,
       String? water_level}) async {
+    print("POST TRANSFER FISH BODY. TRANSFER KERING");
     print({
       "origin_pond_id": origin_pond_id.toString(),
       "destination_pond_id": destination_pond_id.toString(),
@@ -140,6 +145,14 @@ class FishTransferService {
       required BuildContext ctx}) async {
     List<dynamic> transferListPost = [];
     for (var i in transferList) {
+      print("data: $i");
+      if(i["price"].runtimeType == int){
+        print("true int");
+      } else {
+        print("not int");
+      }
+      var fishSeed = i["fish_seed"];
+      var fishCategory =  i["fish_category"];
       final fish = [];
       for (var j in i["fish"]) {
         var k = json.decode(j);
@@ -159,27 +172,41 @@ class FishTransferService {
         "sample_weight": int.parse(i["sample_weight"]),
         "sample_long": double.parse(i['sample_long']),
         "transfer_type": i["transfer_type"],
+        "fish_seed_id" : i["fish_seed"],
+        "fish_category" : i["fish_category"],
+        "price" : i["price"],
         if (i["status"] == "isNotActivated") ...{
           "water_level": int.parse(i["water_level"])
         }
       };
       transferListPost.add(datas);
     }
+    print("POST NEW TRANSFER FISH BODY. NEW TRANSFER LIST");
+    print("post url: ${Uri.parse(Urls.newfishtransfer)}");
+    print("transferlistpost: $transferListPost");
+    print("transferlistpost seed: ${transferListPost[0]["fish_seed_id"]}");
     print({
       "origin_pond_id": origin_pond_id.toString(),
       "fish_sort_type": transfer_method,
       "transfer_list": json.encode(transferListPost)
     });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+    var headers = {'Authorization': 'Bearer $token'};
     final response = await http.post(
       Uri.parse(Urls.newfishtransfer),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
+        'Authorization': 'Bearer $token'
       },
       encoding: Encoding.getByName('utf-8'),
       body: {
         "origin_pond_id": origin_pond_id.toString(),
         "fish_sort_type": transfer_method,
-        "transfer_list": json.encode(transferListPost)
+        "transfer_list": json.encode(transferListPost),
+        "fish_seed_id" : transferListPost[0]["fish_seed_id"],
+        "fish_category" : transferListPost[0]["fish_category"],
+        "price" : transferListPost[0]["price"].toString(),
       },
     );
 

@@ -5,11 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
-class DailyWaterPondPage extends StatelessWidget {
+class DailyWaterPondPage extends StatefulWidget {
   DailyWaterPondPage({Key? key}) : super(key: key);
 
+  @override
+  State<DailyWaterPondPage> createState() => _DailyWaterPondPageState();
+}
+
+class _DailyWaterPondPageState extends State<DailyWaterPondPage> {
   final DailyWaterPondListController controller =
       Get.put(DailyWaterPondListController());
+
+  var isMenuTapped = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +69,7 @@ class DailyWaterPondPage extends StatelessWidget {
           shrinkWrap: true,
           primary: false,
           itemBuilder: ((context, index) {
-            return DailyWaterListPondCard(pond: controller.ponds[index]
+            return DailyWaterListPondCard(pond: controller.ponds[index], isMenuTapped: isMenuTapped.value,
                 // indicatorWater: controller.indicatorWater[index]);
                 );
           }),
@@ -81,7 +88,10 @@ class DailyWaterPondPage extends StatelessWidget {
             actions: [
               IconButton(
                 onPressed: () {
-                  scaffoldKey.currentState?.openEndDrawer();
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
                 },
                 icon: Icon(Icons.card_travel_rounded),
               )

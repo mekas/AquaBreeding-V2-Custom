@@ -8,9 +8,17 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 
-class AddFish extends StatelessWidget {
+import '../../widgets/new_Menu_widget.dart';
+
+class AddFish extends StatefulWidget {
   const AddFish({Key? key}) : super(key: key);
 
+  @override
+  State<AddFish> createState() => _AddFishState();
+}
+
+class _AddFishState extends State<AddFish> {
+  var isMenuTapped = false.obs;
   @override
   Widget build(BuildContext context) {
     var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -607,7 +615,10 @@ class AddFish extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              scaffoldKey.currentState?.openEndDrawer();
+              // scaffoldKey.currentState?.openEndDrawer();
+              setState(() {
+                isMenuTapped.value = !isMenuTapped.value;
+              });
             },
             icon: Icon(Icons.card_travel_rounded),
           )
@@ -617,6 +628,13 @@ class AddFish extends StatelessWidget {
       body: Obx(
         (() => ListView(
               children: [
+                if (isMenuTapped.value)
+                  Column(
+                    children: [
+                      newMenu(),
+                      SizedBox(height: 10,),
+                    ],
+                  ),
                 checkBoxFish(),
                 controller.isNilaHitam == true ? nilaHitamInput() : Container(),
                 controller.isNilaMerah == true ? nilaMerahInput() : Container(),

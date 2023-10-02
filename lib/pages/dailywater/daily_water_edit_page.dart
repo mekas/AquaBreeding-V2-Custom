@@ -7,16 +7,23 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/daily_water/daily_water_detail_controller.dart';
+import '../../widgets/new_Menu_widget.dart';
 
-class DailyWaterEditPage extends StatelessWidget {
+class DailyWaterEditPage extends StatefulWidget {
   DailyWaterEditPage({Key? key}) : super(key: key);
 
+  @override
+  State<DailyWaterEditPage> createState() => _DailyWaterEditPageState();
+}
+
+class _DailyWaterEditPageState extends State<DailyWaterEditPage> {
   final DailyWaterEditController controller =
       Get.put(DailyWaterEditController());
 
   final DailyWaterDetailController dailyWaterControlller =
       Get.put(DailyWaterDetailController());
 
+  var isMenuTapped = false.obs;
   @override
   Widget build(BuildContext context) {
     var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -254,7 +261,10 @@ class DailyWaterEditPage extends StatelessWidget {
             actions: [
               IconButton(
                 onPressed: () {
-                  scaffoldKey.currentState?.openEndDrawer();
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
                 },
                 icon: Icon(Icons.card_travel_rounded),
               )
@@ -264,6 +274,13 @@ class DailyWaterEditPage extends StatelessWidget {
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               phInput(),
               doInput(),
               temperatureInput(),

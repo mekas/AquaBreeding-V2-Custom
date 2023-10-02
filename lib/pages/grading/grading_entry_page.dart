@@ -5,11 +5,18 @@ import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
+import '../../widgets/new_Menu_widget.dart';
 import 'grading_controller.dart';
 
-class GradingEntryPage extends StatelessWidget {
+class GradingEntryPage extends StatefulWidget {
   const GradingEntryPage({Key? key}) : super(key: key);
 
+  @override
+  State<GradingEntryPage> createState() => _GradingEntryPageState();
+}
+
+class _GradingEntryPageState extends State<GradingEntryPage> {
+  var isMenuTapped = false.obs;
   @override
   Widget build(BuildContext context) {
     var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -207,7 +214,7 @@ class GradingEntryPage extends StatelessWidget {
                     FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
                   ],
                   keyboardType: TextInputType.number,
-                  controller: controller.normalsizeController,
+                  controller: controller.fishLengthAvgController,
                   decoration: InputDecoration.collapsed(
                       hintText: 'ex: 23', hintStyle: subtitleTextStyle),
                 )),
@@ -252,7 +259,7 @@ class GradingEntryPage extends StatelessWidget {
                     FilteringTextInputFormatter.digitsOnly
                   ],
                   keyboardType: TextInputType.number,
-                  controller: controller.normalsizeController,
+                  controller: controller.undersizeController,
                   decoration: InputDecoration.collapsed(
                       hintText: 'ex: 23', hintStyle: subtitleTextStyle),
                 )),
@@ -297,7 +304,7 @@ class GradingEntryPage extends StatelessWidget {
                     FilteringTextInputFormatter.digitsOnly
                   ],
                   keyboardType: TextInputType.number,
-                  controller: controller.normalsizeController,
+                  controller: controller.oversizeController,
                   decoration: InputDecoration.collapsed(
                       hintText: 'ex: 4', hintStyle: subtitleTextStyle),
                 )),
@@ -400,7 +407,10 @@ class GradingEntryPage extends StatelessWidget {
             actions: [
               IconButton(
                 onPressed: () {
-                  scaffoldKey.currentState?.openEndDrawer();
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
                 },
                 icon: Icon(Icons.card_travel_rounded),
               )
@@ -410,6 +420,13 @@ class GradingEntryPage extends StatelessWidget {
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               fishTypelInput(),
               sampleAmountInput(),
               fishWightInput(),

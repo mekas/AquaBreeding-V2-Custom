@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:fish/models/inventaris/pakan/inventaris_pakan_model.dart';
 import 'package:fish/models/inventaris/pakan/inventaris_pakan_name_model.dart';
+import 'package:fish/pages/inventaris/inventaris_pakan/add_name_and_feed_screens/edit_pakan.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_state.dart';
 import 'package:fish/theme.dart';
 import 'package:fish/widgets/bottom_sheet_widget.dart';
@@ -51,132 +52,135 @@ class _RenderInventarisPakanListWidgetState
                   : Container(
                       height: MediaQuery.of(context).size.height / 4.5,
                       margin: const EdgeInsets.fromLTRB(16, 20, 16, 20),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: BouncingScrollPhysics(),
-                        padding: const EdgeInsets.only(bottom: padding4XL),
-                        itemCount: state.feedNameList.value.data!.length,
-                        itemBuilder: ((context, index) {
-                          return GestureDetector(
-                            onTap: () async {
-                              state.setSheetNameVariableEdit(false);
-                              // inspect(state.feedNameList.value);
-                              state.getDetailPakanNameData(
-                                state.feedNameList.value.data![index].idInt!,
-                                () {
-                                  getNameBottomSheet(
-                                      index,
-                                      state.feedNameList.value.data![index]
-                                          .idInt!);
-                                },
-                              );
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.only(bottom: 14),
-                              decoration: BoxDecoration(
-                                color: backgroundColor1,
-                                border:
-                                    Border.all(width: 2, color: primaryColor),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 12,
-                                      right: 12,
-                                      bottom: 12,
-                                      top: 12,
+                      child: SingleChildScrollView(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: BouncingScrollPhysics(),
+                          padding: const EdgeInsets.only(bottom: padding4XL),
+                          itemCount: state.feedNameList.value.data!.length,
+                          itemBuilder: ((context, index) {
+                            print("index render_inventaris_pakan_list_widget: $index");
+                            return GestureDetector(
+                              onTap: () async {
+                                state.setSheetNameVariableEdit(false);
+                                // inspect(state.feedNameList.value);
+                                state.getDetailPakanNameData(
+                                  state.feedNameList.value.data![index].idInt!,
+                                      () {
+                                    getNameBottomSheet(
+                                        index,
+                                        state.feedNameList.value.data![index]
+                                            .idInt!);
+                                  },
+                                );
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(bottom: 14),
+                                decoration: BoxDecoration(
+                                  color: backgroundColor1,
+                                  border:
+                                  Border.all(width: 2, color: primaryColor),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 12,
+                                        right: 12,
+                                        bottom: 12,
+                                        top: 12,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Merk',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              SizedBox(height: 6),
+                                              Text(
+                                                state.feedNameList.value
+                                                    .data![index].name
+                                                    .toString(),
+                                                style: TextStyle(
+                                                  color: Colors.grey.shade500,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Produser',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              SizedBox(height: 6),
+                                              Text(
+                                                '${state.feedNameList.value.data![index].producer}',
+                                                style: TextStyle(
+                                                  color: Colors.grey.shade500,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Kadaluarsa',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              SizedBox(height: 6),
+                                              Text(
+                                                state.convertDaysToDate(
+                                                    currDate,
+                                                    state
+                                                        .feedNameList
+                                                        .value
+                                                        .data![index]
+                                                        .maxExpiredPeriod!),
+                                                style: TextStyle(
+                                                  color: Colors.grey.shade500,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Merk',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            SizedBox(height: 6),
-                                            Text(
-                                              state.feedNameList.value
-                                                  .data![index].name
-                                                  .toString(),
-                                              style: TextStyle(
-                                                color: Colors.grey.shade500,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Produser',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            SizedBox(height: 6),
-                                            Text(
-                                              '${state.feedNameList.value.data![index].producer}',
-                                              style: TextStyle(
-                                                color: Colors.grey.shade500,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Kadaluarsa',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            SizedBox(height: 6),
-                                            Text(
-                                              state.convertDaysToDate(
-                                                  currDate,
-                                                  state
-                                                      .feedNameList
-                                                      .value
-                                                      .data![index]
-                                                      .maxExpiredPeriod!),
-                                              style: TextStyle(
-                                                color: Colors.grey.shade500,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        }),
+                            );
+                          }),
+                        ),
                       ),
                     )),
             ],
@@ -208,133 +212,137 @@ class _RenderInventarisPakanListWidgetState
                   )
                 : Container(
                     margin: const EdgeInsets.fromLTRB(16, 20, 16, 20),
-                    height: MediaQuery.of(context).size.height / 2.5,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: BouncingScrollPhysics(),
-                      padding: const EdgeInsets.only(bottom: padding4XL),
-                      itemCount: state.feedList.value.data!.length,
-                      itemBuilder: ((context, index) {
-                        return GestureDetector(
-                          onTap: () async {
-                            // state.setSheetNameVariableEdit(false);
-                            state.setSheetFeedVariableEdit(false);
+                    height: MediaQuery.of(context).size.height/4,
+                    child: SingleChildScrollView(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: BouncingScrollPhysics(),
+                        padding: const EdgeInsets.only(bottom: padding4XL),
+                        itemCount: state.feedList.value.data!.length,
+                        itemBuilder: ((context, index) {
+                          return GestureDetector(
+                            onTap: () async {
+                              // state.setSheetNameVariableEdit(false);
+                              state.setSheetFeedVariableEdit(false);
 
-                            // inspect(state.feedNameList.value);
-                            await state.getDataByID(
-                                state.feedList.value.data![index].idInt!, () {
-                              state.getDetailPakanNameData(
-                                  state.feedList.value.data![index].feed!
-                                      .idInt!, () {
-                                getPakanBottomSheet(index,
-                                    state.feedList.value.data![index].idInt!);
+                              // inspect(state.feedNameList.value);
+                              await state.getDataByID(
+                                  state.feedList.value.data![index].idInt!, () {
+                                state.getDetailPakanNameData(
+                                    state.feedList.value.data![index].feed!
+                                        .idInt!, () {
+                                  // getPakanBottomSheet(index,
+                                  //     state.feedList.value.data![index].idInt!);
+                                  Get.to(()=> EditPakan(index: index, id: state.feedList.value.data![index].idInt!));
+                                });
+
+
+                                // getBottomSheet(index,
+                                //     state.feedList.value.data![index].idInt!);
                               });
-
-                              // getBottomSheet(index,
-                              //     state.feedList.value.data![index].idInt!);
-                            });
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.only(bottom: 14),
-                            decoration: BoxDecoration(
-                              color: backgroundColor1,
-                              border: Border.all(width: 2, color: primaryColor),
-                              borderRadius: BorderRadius.circular(6),
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(bottom: 14),
+                              decoration: BoxDecoration(
+                                color: backgroundColor1,
+                                border: Border.all(width: 2, color: primaryColor),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: primaryColor,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Tanggal :',
+                                          style: headingText3,
+                                        ),
+                                        Text(
+                                          state.dateFormat(
+                                              state.feedList.value.data![index]
+                                                  .createdAt!
+                                                  .toString(),
+                                              true),
+                                          style: headingText3,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 12,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 12,
+                                      right: 12,
+                                      bottom: 12,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Merk',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            SizedBox(height: 6),
+                                            Text(
+                                              state.feedList.value.data![index]
+                                                  .brandName!,
+                                              style: TextStyle(
+                                                color: Colors.grey.shade500,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Column(
+                                          children: [
+                                            Text(
+                                              'Jumlah',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            SizedBox(height: 6),
+                                            Text(
+                                              '${state.feedList.value.data![index].amount!.toStringAsFixed(2)} kg',
+                                              style: TextStyle(
+                                                color: Colors.grey.shade500,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color: primaryColor,
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Tanggal :',
-                                        style: headingText3,
-                                      ),
-                                      Text(
-                                        state.dateFormat(
-                                            state.feedList.value.data![index]
-                                                .createdAt!
-                                                .toString(),
-                                            true),
-                                        style: headingText3,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 12,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 12,
-                                    right: 12,
-                                    bottom: 12,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Merk',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          SizedBox(height: 6),
-                                          Text(
-                                            state.feedList.value.data![index]
-                                                .brandName!,
-                                            style: TextStyle(
-                                              color: Colors.grey.shade500,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            'Jumlah',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          SizedBox(height: 6),
-                                          Text(
-                                            '${state.feedList.value.data![index].amount!.toStringAsFixed(2)} kg',
-                                            style: TextStyle(
-                                              color: Colors.grey.shade500,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      }),
-                    ),
+                          );
+                        }),
+                      ),
+                    )
                   )),
           ],
         ),

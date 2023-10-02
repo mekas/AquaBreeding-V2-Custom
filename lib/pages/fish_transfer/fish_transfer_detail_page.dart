@@ -4,10 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 import '../../controllers/fish_transfer/fish_transfer_detail_controller.dart';
+import '../../widgets/new_Menu_widget.dart';
 
-class DetailSortirPage extends StatelessWidget {
+class DetailSortirPage extends StatefulWidget {
   const DetailSortirPage({Key? key}) : super(key: key);
 
+  @override
+  State<DetailSortirPage> createState() => _DetailSortirPageState();
+}
+
+class _DetailSortirPageState extends State<DetailSortirPage> {
+  var isMenuTapped = false.obs;
   @override
   Widget build(BuildContext context) {
     var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -311,7 +318,10 @@ class DetailSortirPage extends StatelessWidget {
             actions: [
               IconButton(
                 onPressed: () {
-                  scaffoldKey.currentState?.openEndDrawer();
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
                 },
                 icon: Icon(Icons.card_travel_rounded),
               )
@@ -321,6 +331,13 @@ class DetailSortirPage extends StatelessWidget {
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               transferDataRecap(),
               detail(),
               titleRecap(),

@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/fish_transfer/fish_transfer_list_controller.dart';
+import '../../widgets/new_Menu_widget.dart';
 import '../component/deactivation_with_fish_transfer_input.dart';
 import '../component/fish_transfer_input.dart';
 
@@ -31,7 +32,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
 
   final PondListController getpondlistcontroller =
       Get.put(PondListController());
-
+  var isMenuTapped = false.obs;
   final pageController = PageController(initialPage: 0);
   @override
   void dispose() {
@@ -1757,7 +1758,10 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
           actions: [
             IconButton(
               onPressed: () {
-                scaffoldKey.currentState?.openEndDrawer();
+                // scaffoldKey.currentState?.openEndDrawer();
+                setState(() {
+                  isMenuTapped.value = !isMenuTapped.value;
+                });
               },
               icon: Icon(Icons.card_travel_rounded),
             )
@@ -1772,6 +1776,13 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
             Obx(() {
               return ListView(
                 children: [
+                  if (isMenuTapped.value)
+                    Column(
+                      children: [
+                        newMenu(),
+                        SizedBox(height: 10,),
+                      ],
+                    ),
                   transferMethodInput(),
                   destinationPondInput(),
                   checkBoxFishTransfer(),

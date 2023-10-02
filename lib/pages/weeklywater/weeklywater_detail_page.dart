@@ -4,9 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
-class WeeklyWaterDetailPage extends StatelessWidget {
+import '../../widgets/new_Menu_widget.dart';
+
+class WeeklyWaterDetailPage extends StatefulWidget {
   const WeeklyWaterDetailPage({Key? key}) : super(key: key);
 
+  @override
+  State<WeeklyWaterDetailPage> createState() => _WeeklyWaterDetailPageState();
+}
+
+class _WeeklyWaterDetailPageState extends State<WeeklyWaterDetailPage> {
+  var isMenuTapped = false.obs;
   @override
   Widget build(BuildContext context) {
     var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -307,7 +315,10 @@ class WeeklyWaterDetailPage extends StatelessWidget {
             actions: [
               IconButton(
                 onPressed: () {
-                  scaffoldKey.currentState?.openEndDrawer();
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
                 },
                 icon: Icon(Icons.card_travel_rounded),
               )
@@ -317,6 +328,13 @@ class WeeklyWaterDetailPage extends StatelessWidget {
           endDrawer: DrawerInvetarisList(),
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               treatmentDataRecap(),
               detail(),
               titleRecap(),
