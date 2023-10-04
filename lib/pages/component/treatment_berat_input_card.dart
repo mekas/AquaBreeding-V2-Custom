@@ -2,6 +2,7 @@ import 'package:fish/models/fish_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/pages/treatment/treatment_entry_controller.dart';
 import 'package:fish/theme.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class TreatmentBeratCard extends StatelessWidget {
@@ -34,7 +35,7 @@ class TreatmentBeratCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
-              const SizedBox(
+              SizedBox(
                 width: 6,
               ),
               Text(
@@ -50,7 +51,7 @@ class TreatmentBeratCard extends StatelessWidget {
           ),
           Container(
             height: 50,
-            padding: const EdgeInsets.symmetric(
+            padding: EdgeInsets.symmetric(
               horizontal: 16,
             ),
             decoration: BoxDecoration(
@@ -59,6 +60,10 @@ class TreatmentBeratCard extends StatelessWidget {
             ),
             child: Center(
               child: TextFormField(
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                ],
                 style: primaryTextStyle,
                 controller: fish.type! == "lele"
                     ? controller.leleWeightController

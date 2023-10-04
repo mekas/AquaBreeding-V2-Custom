@@ -20,7 +20,7 @@ class FishTransferDeactivationListCard extends StatelessWidget {
       margin: EdgeInsets.only(
         top: defaultMargin / 2,
       ),
-      padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 20),
+      padding: EdgeInsets.symmetric(vertical: 7, horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -41,7 +41,7 @@ class FishTransferDeactivationListCard extends StatelessWidget {
           ),
           Container(
             height: 50,
-            padding: const EdgeInsets.symmetric(
+            padding: EdgeInsets.symmetric(
               horizontal: 16,
             ),
             decoration: BoxDecoration(
@@ -68,12 +68,12 @@ class FishTransferDeactivationListCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(
+          SizedBox(
             height: 10,
           ),
           Container(
             height: 50,
-            padding: const EdgeInsets.symmetric(
+            padding: EdgeInsets.symmetric(
               horizontal: 16,
             ),
             decoration: BoxDecoration(

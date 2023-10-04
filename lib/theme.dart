@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:google_fonts/google_fonts.dart' as fonts;
 
 double defaultMargin = 18.0;
 double defaultSpace = 20.0;
@@ -23,39 +23,39 @@ Color inputColor = const Color(0xff2F2C40);
 Color addButtonColor = const Color(0xff1B7C1A);
 Color greyBackgroundColor = const Color(0xff3C3F4D);
 
-TextStyle primaryTextStyle = GoogleFonts.poppins(
+TextStyle primaryTextStyle = fonts.GoogleFonts.poppins(
   color: primaryTextColor,
 );
 
-TextStyle secondaryTextStyle = GoogleFonts.poppins(
+TextStyle secondaryTextStyle = fonts.GoogleFonts.poppins(
   color: secondaryTextColor,
 );
 
-TextStyle subtitleTextStyle = GoogleFonts.poppins(
+TextStyle subtitleTextStyle = fonts.GoogleFonts.poppins(
   color: subtitleColor,
 );
 
-TextStyle priceTextStyle = GoogleFonts.poppins(
+TextStyle priceTextStyle = fonts.GoogleFonts.poppins(
   color: priceColor,
 );
 
-TextStyle purpleTextStyle = GoogleFonts.poppins(
+TextStyle purpleTextStyle = fonts.GoogleFonts.poppins(
   color: primaryColor,
 );
 
-TextStyle blackTextStyle = GoogleFonts.poppins(
+TextStyle blackTextStyle = fonts.GoogleFonts.poppins(
   color: blackColor,
 );
 
-TextStyle alertTextStyle = GoogleFonts.poppins(
+TextStyle alertTextStyle = fonts.GoogleFonts.poppins(
   color: alertColor,
 );
 
-TextStyle blueTextStyle = GoogleFonts.poppins(
+TextStyle blueTextStyle = fonts.GoogleFonts.poppins(
   color: secondaryColor,
 );
 
-TextStyle whiteTextStyle = GoogleFonts.poppins(
+TextStyle whiteTextStyle = fonts.GoogleFonts.poppins(
   color: Colors.white,
 );
 

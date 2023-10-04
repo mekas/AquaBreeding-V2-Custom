@@ -1,11 +1,9 @@
-// ignore_for_file: non_constant_identifier_names
-
 class StatisticModel {
   int? total_pond;
   int? active_pond;
   int? fish_live;
   int? fish_death;
-  int? fish_harvested;
+  num? fish_harvested;
   num? total_feed_dose;
   num? fishes_weight_lele;
   num? fishes_weight_nilamerah;

@@ -19,23 +19,23 @@ class WaterCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: const Color(0xffECEDEF),
+        color: Color(0xffECEDEF),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(
+          SizedBox(
             height: 20,
           ),
           Container(
-            margin: const EdgeInsets.symmetric(
+            margin: EdgeInsets.symmetric(
               horizontal: 20,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title!,
+                  this.title!,
                   style: blackTextStyle.copyWith(
                     fontSize: 30,
                     fontWeight: heavy,
@@ -43,7 +43,7 @@ class WaterCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 6,
                 ),
                 Row(
@@ -55,11 +55,11 @@ class WaterCard extends StatelessWidget {
                         fontWeight: medium,
                       ),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       width: 10,
                     ),
                     Text(
-                      '${normal.toString()} Kolam',
+                      '${this.normal.toString()} Kolam',
                       style: priceTextStyle.copyWith(
                         fontSize: 20,
                         fontWeight: bold,
@@ -67,7 +67,7 @@ class WaterCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 6,
                 ),
                 Row(
@@ -79,11 +79,11 @@ class WaterCard extends StatelessWidget {
                         fontWeight: medium,
                       ),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       width: 10,
                     ),
                     Text(
-                      '${abnormal.toString()} Kolam',
+                      '${this.abnormal.toString()} Kolam',
                       style: priceTextStyle.copyWith(
                         fontSize: 20,
                         fontWeight: bold,
@@ -91,7 +91,7 @@ class WaterCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 12,
                 ),
               ],

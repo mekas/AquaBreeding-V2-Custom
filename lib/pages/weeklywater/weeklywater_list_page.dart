@@ -1,14 +1,18 @@
+import 'package:fish/pages/component/daily_water_card.dart';
 import 'package:fish/controllers/weeklywater/weekly_water_controller.dart';
 import 'package:fish/pages/component/weekly_water_card.dart';
 import 'package:fish/pages/weeklywater/weeklywater_avg.dart';
 import 'package:fish/pages/weeklywater/weeklywater_entry_page.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 // import 'package:fish/pages/dailywater/daily_water_entry_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
+import '../../widgets/new_Menu_widget.dart';
+
 class WeeklyWaterPage extends StatefulWidget {
-  const WeeklyWaterPage({Key? key}) : super(key: key);
+  WeeklyWaterPage({Key? key}) : super(key: key);
 
   @override
   State<WeeklyWaterPage> createState() => _WeeklyWaterPageState();
@@ -16,7 +20,7 @@ class WeeklyWaterPage extends StatefulWidget {
 
 class _WeeklyWaterPageState extends State<WeeklyWaterPage> {
   final WeeklyWaterController controller = Get.put(WeeklyWaterController());
-
+  var isMenuTapped = false.obs;
   @override
   void initState() {
     super.initState();
@@ -28,7 +32,15 @@ class _WeeklyWaterPageState extends State<WeeklyWaterPage> {
   }
 
   @override
+  void dispose() {
+    controller.postDataLog(controller.fitur);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     Widget fishDataRecap() {
       return Container(
         margin: EdgeInsets.only(
@@ -48,7 +60,7 @@ class _WeeklyWaterPageState extends State<WeeklyWaterPage> {
             ),
             TextButton(
               onPressed: () {
-                Get.to(() => const WeeklyWaterAvgPage(), arguments: {
+                Get.to(() => WeeklyWaterAvgPage(), arguments: {
                   "pond": controller.pond,
                   "activation": controller.activation
                 });
@@ -94,14 +106,14 @@ class _WeeklyWaterPageState extends State<WeeklyWaterPage> {
           margin: EdgeInsets.only(right: defaultMargin, left: defaultMargin),
           child: Center(
             child: Column(children: [
-              const SizedBox(height: 35),
-              const Image(
+              SizedBox(height: 35),
+              Image(
                 image: AssetImage("assets/unavailable_icon.png"),
                 width: 100,
                 height: 100,
                 fit: BoxFit.fitWidth,
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Text(
                 "Kolam belum pernah dilakukan treatment",
                 style: primaryTextStyle.copyWith(
@@ -112,7 +124,7 @@ class _WeeklyWaterPageState extends State<WeeklyWaterPage> {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               Text(
                 "Silahkan masukan treatment",
                 style: secondaryTextStyle.copyWith(
@@ -130,12 +142,29 @@ class _WeeklyWaterPageState extends State<WeeklyWaterPage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
+          appBar: AppBar(
+            backgroundColor: backgroundColor1,
+            actions: [
+              IconButton(
+                onPressed: () {
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
+            ],
+          ),
+          endDrawer: DrawerInvetarisList(),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               Get.to(() => WeeklyWaterEntryPage(), arguments: {
                 "pond": controller.pond,
                 "activation": controller.activation
               });
+              controller.postDataLog(controller.fitur);
             },
             backgroundColor: primaryColor,
             child: const Icon(Icons.add),
@@ -143,11 +172,18 @@ class _WeeklyWaterPageState extends State<WeeklyWaterPage> {
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               fishDataRecap(),
               controller.listWeeklyWater.isEmpty
                   ? emptyList()
                   : listWeeklyWater(),
-              const SizedBox(
+              SizedBox(
                 height: 10,
               )
             ],

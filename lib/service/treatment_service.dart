@@ -1,16 +1,23 @@
-// ignore_for_file: non_constant_identifier_names
-
 import 'dart:convert';
+import 'dart:developer';
 import 'package:fish/models/treatment_model.dart';
 import 'package:fish/service/url_api.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TreatmentService {
   Future<List<Treatment>> getTreatmentList() async {
     var url = Uri.parse(Urls.treatment);
-    var headers = {'Content-Type': 'application/json'};
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
 
     var response = await http.get(url, headers: headers);
+
+    print(response.body);
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -29,35 +36,65 @@ class TreatmentService {
 
   Future<bool> postPondTreatment({
     required String? pondId,
+    required String? prob_id,
+    required String? carb_id,
+    required String? salt_id,
     String? salt,
     String? type,
+    String? probiotic_name,
     String? probiotic,
     String? water,
     String? desc,
     String? carbohydrate,
+    String? date,
     String? carbohydrate_type,
   }) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+
+    var body = {
+      "pond_id": pondId,
+      "probiotic_culture_id": prob_id,
+      "carbon_id": carb_id,
+      "salt_id": salt_id,
+      "salt": salt,
+      "treatment_type": type,
+      "probiotic_culture_name": probiotic_name,
+      "probiotic_culture": probiotic,
+      "water_change": water,
+      "description": desc.toString(),
+      "carbohydrate": carbohydrate,
+      "carbohydrate_type": carbohydrate_type,
+      "created_at": date,
+    };
+
+    print("body: $body");
+
+    // if (carb_id != '') {}
+    // if (salt_id != '') {}
+    // if (carb_id != '' && salt_id != '') {
+    //   body['carb_id'] = carb_id;
+    //   body['salt_id'] = salt_id;
+    // }
+
     final response = await http.post(
       Uri.parse(Urls.treatment),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
+        'Authorization': 'Bearer $token'
       },
       encoding: Encoding.getByName('utf-8'),
-      body: {
-        "pond_id": pondId,
-        "salt": salt,
-        "treatment_type": type,
-        "probiotic_culture": probiotic,
-        "water_change": water,
-        "description": desc.toString(),
-        "carbohydrate": carbohydrate,
-        "carbohydrate_type": carbohydrate_type,
-      },
+      body: body,
     );
 
+    print("url: ${Uri.parse(Urls.treatment)}");
+
     if (response.statusCode == 200) {
+      inspect(response);
       return true;
     } else {
+      print("error: ${response.body}");
+      inspect(response);
       return false;
     }
   }
@@ -70,6 +107,11 @@ class TreatmentService {
       required num? total_weight_harvested,
       List? fish_harvested,
       bool? isFinish}) async {
+    print({
+      "pond_id": pondId.toString(),
+      "treatment_type": type,
+      "description": desc,
+    });
     final response = await http.post(
       Uri.parse(Urls.treatment),
       headers: {
@@ -87,8 +129,10 @@ class TreatmentService {
     );
 
     if (response.statusCode == 200) {
+      print(response.body);
       return true;
     } else {
+      print(response.body);
       return false;
     }
   }

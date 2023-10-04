@@ -12,7 +12,7 @@ class FishLiveData {
   });
 
   factory FishLiveData.fromJson(Map<String, dynamic> json) {
-    // print(json);
+    print(json);
     return FishLiveData(
       amount: json["fish"]['fish_amount'],
       fishType: json['fish']['fish_type'],

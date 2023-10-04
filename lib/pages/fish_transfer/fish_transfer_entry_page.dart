@@ -1,18 +1,24 @@
-// ignore_for_file: unrelated_type_equality_checks, use_build_context_synchronously
-
+import 'package:fish/models/fish_model.dart';
+import 'package:fish/pages/component/treatment_berat_input_card.dart';
+import 'package:fish/pages/treatment/treatment_entry_controller.dart';
 import 'package:fish/controllers/fish_transfer/fish_transfer_entry_controller.dart';
 import 'package:fish/controllers/fish_transfer/pond_list_item_controller.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
+import 'package:fish/pages/pond/detail_pond_controller.dart';
 import 'package:fish/theme.dart';
 
+import 'package:fish/pages/component/deactivation_list_input.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/fish_transfer/fish_transfer_list_controller.dart';
+import '../../widgets/new_Menu_widget.dart';
 import '../component/deactivation_with_fish_transfer_input.dart';
+import '../component/fish_transfer_input.dart';
 
 class FishTransferEntryPage extends StatefulWidget {
-  const FishTransferEntryPage({Key? key}) : super(key: key);
+  FishTransferEntryPage({Key? key}) : super(key: key);
   @override
   State<FishTransferEntryPage> createState() => _FishTransferEntryPageState();
 }
@@ -26,16 +32,48 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
 
   final PondListController getpondlistcontroller =
       Get.put(PondListController());
-
+  var isMenuTapped = false.obs;
   final pageController = PageController(initialPage: 0);
   @override
   void dispose() {
+    controller.descController.clear();
+    controller.sampleLongController.clear();
+    controller.sampleWeightController.clear();
+    controller.leleAmountActivationController.clear();
+    controller.leleAmountController.clear();
+    controller.leleAmountDeactivationController.clear();
+    controller.leleWeightActivationController.clear();
+    controller.leleWeightController.clear();
+    controller.leleWeightDeactivationController.clear();
+    controller.masAmountActivationController.clear();
+    controller.masAmountController.clear();
+    controller.masAmountDeactivationController.clear();
+    controller.masWeightActivationController.clear();
+    controller.masWeightController.clear();
+    controller.masWeightDeactivationController.clear();
+    controller.patinAmountActivationController.clear();
+    controller.patinAmountController.clear();
+    controller.patinAmountDeactivationController.clear();
+    controller.patinWeightActivationController.clear();
+    controller.patinWeightController.clear();
+    controller.patinWeightDeactivationController.clear();
+    controller.nilaMerahAmountActivationController.clear();
+    controller.nilaMerahAmountController.clear();
+    controller.nilaMerahAmountDeactivationController.clear();
+    controller.nilaMerahWeightActivationController.clear();
+    controller.nilaMerahWeightController.clear();
+    controller.nilaMerahWeightDeactivationController.clear();
+    controller.nilaHitamAmountActivationController.clear();
+    controller.nilaHitamAmountController.clear();
+    controller.nilaHitamAmountDeactivationController.clear();
+    controller.nilaHitamWeightActivationController.clear();
+    controller.nilaHitamWeightController.clear();
+    controller.nilaHitamWeightDeactivationController.clear();
     pageController.dispose();
-
+    controller.postDataLog(controller.fitur);
     super.dispose();
   }
 
-  @override
   void initState() {
     super.initState();
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
@@ -49,6 +87,8 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     Widget sampleWeightInput() {
       return Container(
         margin: EdgeInsets.only(
@@ -63,12 +103,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -87,7 +127,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                   controller: controller.sampleWeightController,
                   decoration: controller.validatesampleWeight.value == true
                       ? controller.sampleWeight == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'ikan tidak boleh kosong',
                               isCollapsed: true)
                           : null
@@ -108,18 +148,18 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Panjang Sample',
+              'Panjang Sample (cm)',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -138,7 +178,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                   controller: controller.sampleLongController,
                   decoration: controller.validatesampleLong.value == true
                       ? controller.sampleLong == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'jumlah ikan tidak boleh kosong',
                               isCollapsed: true)
                           : null
@@ -165,12 +205,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -183,9 +223,9 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                     onChanged: ((value) {
                       controller.pondlistController
                           .setSelected(value.toString());
-                      controller.getDestinationId(value.toString());
+                      // controller.getDestinationId(value.toString());
                     }),
-                    value: controller.pondlistController.selected.value,
+                    // value: controller.pondlistController.selected.value,
                     items: controller.listPondName.map((type) {
                       return DropdownMenuItem<String>(
                         value: type,
@@ -196,7 +236,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                       );
                     }).toList(),
                     dropdownColor: backgroundColor5,
-                    decoration: const InputDecoration(border: InputBorder.none),
+                    decoration: InputDecoration(border: InputBorder.none),
                   );
                 }),
               ),
@@ -220,12 +260,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -236,6 +276,8 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 child: Obx(() {
                   return DropdownButtonFormField<String>(
                     onChanged: ((value) {
+                      print(controller.listPondName);
+
                       controller.methodController.setSelected(value.toString());
                       controller.getPondsData(value.toString());
                     }),
@@ -250,7 +292,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                       );
                     }).toList(),
                     dropdownColor: backgroundColor5,
-                    decoration: const InputDecoration(border: InputBorder.none),
+                    decoration: InputDecoration(border: InputBorder.none),
                   );
                 }),
               ),
@@ -274,7 +316,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                     fontWeight: medium,
                   ),
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 5,
                 ),
                 controller.isNilaHitam.value
@@ -294,6 +336,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                           value: controller.isNilaHitamInput.value,
                           onChanged: (bool? value) {
                             controller.setInputNilaHitam(value!);
+                            print(controller.isNilaHitamInput.value);
                           },
                         ),
                       )
@@ -401,12 +444,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -425,7 +468,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                   controller: controller.leleAmountController,
                   decoration: controller.validateleleAmountval.value == true
                       ? controller.leleAmountval == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -437,12 +480,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 );
               })),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -461,7 +504,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                   controller: controller.leleWeightController,
                   decoration: controller.validateleleWeightval.value == true
                       ? controller.leleWeightval == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -492,12 +535,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -517,7 +560,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                   decoration:
                       controller.validatenilaMerahAmountval.value == true
                           ? controller.nilaMerahAmountval == ''
-                              ? const InputDecoration(
+                              ? InputDecoration(
                                   errorText: 'tidak boleh kosong',
                                   isCollapsed: true)
                               : InputDecoration.collapsed(
@@ -529,12 +572,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 );
               })),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -554,7 +597,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                   decoration:
                       controller.validatenilaMerahWeightval.value == true
                           ? controller.nilaMerahWeightval == ''
-                              ? const InputDecoration(
+                              ? InputDecoration(
                                   errorText: 'tidak boleh kosong',
                                   isCollapsed: true)
                               : InputDecoration.collapsed(
@@ -585,12 +628,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -610,7 +653,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                   decoration:
                       controller.validatenilaHitamAmountval.value == true
                           ? controller.nilaHitamAmountval == ''
-                              ? const InputDecoration(
+                              ? InputDecoration(
                                   errorText: 'tidak boleh kosong',
                                   isCollapsed: true)
                               : InputDecoration.collapsed(
@@ -622,12 +665,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 );
               })),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -647,7 +690,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                   decoration:
                       controller.validatenilaHitamWeightval.value == true
                           ? controller.nilaHitamWeightval == ''
-                              ? const InputDecoration(
+                              ? InputDecoration(
                                   errorText: 'tidak boleh kosong',
                                   isCollapsed: true)
                               : InputDecoration.collapsed(
@@ -678,12 +721,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -702,7 +745,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                   controller: controller.patinAmountController,
                   decoration: controller.validatepatinAmountval.value == true
                       ? controller.patinAmountval == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'jumlah ikan tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -714,12 +757,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 );
               })),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -738,7 +781,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                   controller: controller.patinWeightController,
                   decoration: controller.validatepatinWeightval.value == true
                       ? controller.patinWeightval == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -769,12 +812,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -793,7 +836,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                   controller: controller.masAmountController,
                   decoration: controller.validatemasAmountval.value == true
                       ? controller.masAmountval == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -805,12 +848,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 );
               })),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -829,7 +872,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                   controller: controller.masWeightController,
                   decoration: controller.validatemasWeightval.value == true
                       ? controller.masWeightval == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -877,7 +920,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 5,
             ),
             Theme(
@@ -896,6 +939,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 value: controller.isNilaHitamActivation.value,
                 onChanged: (bool? value) {
                   controller.setNilaHitam(value!);
+                  print(controller.isNilaHitamActivation.value);
                 },
               ),
             ),
@@ -994,12 +1038,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -1040,12 +1084,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -1067,12 +1111,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 ),
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -1113,12 +1157,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -1140,12 +1184,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 ),
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -1186,12 +1230,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -1213,12 +1257,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 ),
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -1259,12 +1303,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -1286,12 +1330,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 ),
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -1332,12 +1376,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -1359,12 +1403,12 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 ),
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -1404,6 +1448,41 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
               context,
               () {
                 Navigator.pop(context);
+                fishTransferController.getTransfertData(context);
+              },
+            );
+            controller.postDataLog(controller.fitur);
+          },
+          style: TextButton.styleFrom(
+            backgroundColor: primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          child: Text(
+            'Submit',
+            style: primaryTextStyle.copyWith(
+              fontSize: 16,
+              fontWeight: medium,
+            ),
+          ),
+        ),
+      );
+    }
+
+    Widget submitKeringButton() {
+      return Container(
+        height: 50,
+        width: double.infinity,
+        margin: EdgeInsets.only(
+            top: defaultSpace * 3, right: defaultMargin, left: defaultMargin),
+        child: TextButton(
+          onPressed: () async {
+            // Get.back();
+            await controller.postSortirKering(
+              context,
+              () {
+                Navigator.pop(context);
               },
             );
             fishTransferController.getTransfertData(context);
@@ -1424,40 +1503,6 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
         ),
       );
     }
-
-    // Widget submitKeringButton() {
-    //   return Container(
-    //     height: 50,
-    //     width: double.infinity,
-    //     margin: EdgeInsets.only(
-    //         top: defaultSpace * 3, right: defaultMargin, left: defaultMargin),
-    //     child: TextButton(
-    //       onPressed: () async {
-    //         // Get.back();
-    //         await controller.postSortirKering(
-    //           context,
-    //           () {
-    //             Navigator.pop(context);
-    //           },
-    //         );
-    //         fishTransferController.getTransfertData(context);
-    //       },
-    //       style: TextButton.styleFrom(
-    //         backgroundColor: primaryColor,
-    //         shape: RoundedRectangleBorder(
-    //           borderRadius: BorderRadius.circular(12),
-    //         ),
-    //       ),
-    //       child: Text(
-    //         'Submit',
-    //         style: primaryTextStyle.copyWith(
-    //           fontSize: 16,
-    //           fontWeight: medium,
-    //         ),
-    //       ),
-    //     ),
-    //   );
-    // }
 
     Widget previousSubmitButton() {
       return Container(
@@ -1488,7 +1533,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 ),
               ),
             ),
-            const SizedBox(width: 10),
+            SizedBox(width: 10),
             Expanded(
               child: TextButton(
                 onPressed: () async {
@@ -1497,9 +1542,10 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                     context,
                     () {
                       Navigator.pop(context);
+                      fishTransferController.getTransfertData(context);
                     },
                   );
-                  fishTransferController.getTransfertData(context);
+                  controller.postDataLog(controller.fitur);
                 },
                 style: TextButton.styleFrom(
                   backgroundColor: primaryColor,
@@ -1550,7 +1596,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 ),
               ),
             ),
-            const SizedBox(width: 10),
+            SizedBox(width: 10),
             Expanded(
               child: TextButton(
                 onPressed: () => pageController.nextPage(
@@ -1607,31 +1653,31 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
       );
     }
 
-    // Widget previousButton() {
-    //   return Container(
-    //     height: 50,
-    //     width: double.infinity,
-    //     margin: EdgeInsets.only(
-    //         top: defaultSpace * 3, right: defaultMargin, left: defaultMargin),
-    //     child: TextButton(
-    //       onPressed: () => pageController.previousPage(
-    //           duration: const Duration(seconds: 1), curve: Curves.easeInOut),
-    //       style: TextButton.styleFrom(
-    //         backgroundColor: primaryColor,
-    //         shape: RoundedRectangleBorder(
-    //           borderRadius: BorderRadius.circular(12),
-    //         ),
-    //       ),
-    //       child: Text(
-    //         'Kembali',
-    //         style: primaryTextStyle.copyWith(
-    //           fontSize: 16,
-    //           fontWeight: medium,
-    //         ),
-    //       ),
-    //     ),
-    //   );
-    // }
+    Widget previousButton() {
+      return Container(
+        height: 50,
+        width: double.infinity,
+        margin: EdgeInsets.only(
+            top: defaultSpace * 3, right: defaultMargin, left: defaultMargin),
+        child: TextButton(
+          onPressed: () => pageController.previousPage(
+              duration: const Duration(seconds: 1), curve: Curves.easeInOut),
+          style: TextButton.styleFrom(
+            backgroundColor: primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          child: Text(
+            'Kembali',
+            style: primaryTextStyle.copyWith(
+              fontSize: 16,
+              fontWeight: medium,
+            ),
+          ),
+        ),
+      );
+    }
 
     Widget deactivationInput() {
       return Container(
@@ -1655,7 +1701,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
           margin: EdgeInsets.only(right: defaultMargin, left: defaultMargin),
           child: Center(
             child: Column(children: [
-              const SizedBox(
+              SizedBox(
                 height: 20,
               ),
               Text(
@@ -1668,7 +1714,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               Text(
                 "Silahkan aktifasi kolam terlebih dahulu",
                 style: secondaryTextStyle.copyWith(
@@ -1689,7 +1735,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
           margin: EdgeInsets.only(right: defaultMargin, left: defaultMargin),
           child: Center(
             child: Column(children: [
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Text(
                 "Silahkan masukan data ikan yang tidak disortir (panen)",
                 style: secondaryTextStyle.copyWith(
@@ -1705,10 +1751,23 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
     }
 
     return Scaffold(
+        key: scaffoldKey,
         appBar: AppBar(
           backgroundColor: backgroundColor2,
           title: const Text("Entry Sortir"),
+          actions: [
+            IconButton(
+              onPressed: () {
+                // scaffoldKey.currentState?.openEndDrawer();
+                setState(() {
+                  isMenuTapped.value = !isMenuTapped.value;
+                });
+              },
+              icon: Icon(Icons.card_travel_rounded),
+            )
+          ],
         ),
+        endDrawer: DrawerInvetarisList(),
         backgroundColor: backgroundColor1,
         body: PageView(
           physics: const NeverScrollableScrollPhysics(),
@@ -1717,6 +1776,13 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
             Obx(() {
               return ListView(
                 children: [
+                  if (isMenuTapped.value)
+                    Column(
+                      children: [
+                        newMenu(),
+                        SizedBox(height: 10,),
+                      ],
+                    ),
                   transferMethodInput(),
                   destinationPondInput(),
                   checkBoxFishTransfer(),
@@ -1734,7 +1800,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                   controller.methodController.selected.value == "basah"
                       ? submitButton()
                       : nextButton(),
-                  const SizedBox(
+                  SizedBox(
                     height: 8,
                   )
                 ],
@@ -1770,7 +1836,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                   controller.destinationIsActive == false
                       ? previousNextButton()
                       : previousSubmitButton(),
-                  const SizedBox(
+                  SizedBox(
                     height: 8,
                   )
                 ],
@@ -1781,7 +1847,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 deactivationTransfer(),
                 deactivationInput(),
                 previousSubmitButton(),
-                const SizedBox(
+                SizedBox(
                   height: 8,
                 )
               ],

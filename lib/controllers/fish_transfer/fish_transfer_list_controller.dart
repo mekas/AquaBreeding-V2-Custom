@@ -4,8 +4,11 @@ import 'package:fish/models/pond_model.dart';
 import 'package:fish/models/fish_transfer_model.dart';
 import 'package:fish/service/fish_transfer_service.dart';
 
+import 'package:fish/service/pond_service.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+
+import '../../service/logging_service.dart';
 
 class TransferController extends GetxController {
   Activation activation = Get.arguments["activation"];
@@ -26,6 +29,15 @@ class TransferController extends GetxController {
   //   listTreatment.addAll(feedHistoryMonthly);
   //   isLoading.value = false;
   // }
+  final DateTime startTime = DateTime.now();
+  late DateTime endTime;
+  final fitur = 'Fist Transfer(Sortir)';
+
+  Future<void> postDataLog(String fitur) async {
+    // print(buildJsonFish());
+    bool value =
+        await LoggingService().postLogging(startAt: startTime, fitur: fitur);
+  }
 
   Future<void> getTransfertData(BuildContext context) async {
     isLoading.value = true;
@@ -36,9 +48,11 @@ class TransferController extends GetxController {
     for (var i in transferData) {
       if (i.destination_activation_id == activation.id ||
           i.origin_activation_id == activation.id) {
+        print('treatment get test');
         listTransfer.add(i);
       }
     }
+    print(listTransfer);
     // print(listTreatment.value);
     isLoading.value = false;
   }

@@ -1,22 +1,47 @@
-// ignore_for_file: unrelated_type_equality_checks
+import 'dart:developer';
 
+import 'package:fish/pages/component/detail_pond_tabview.dart';
+import 'package:fish/pages/dashboard.dart';
 import 'package:fish/pages/fish/fish_death_entry_controller.dart';
+import 'package:fish/pages/fish/fish_recap_page.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
+import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
+import '../../widgets/new_Menu_widget.dart';
 import 'fish_recap_controller.dart';
 
-class FishDeathEntryPage extends StatelessWidget {
+class FishDeathEntryPage extends StatefulWidget {
   const FishDeathEntryPage({Key? key}) : super(key: key);
 
+  @override
+  State<FishDeathEntryPage> createState() => _FishDeathEntryPageState();
+}
+
+class _FishDeathEntryPageState extends State<FishDeathEntryPage> {
   @override
   Widget build(BuildContext context) {
     final FishDeathEntryController controller =
         Get.put(FishDeathEntryController());
 
     final FishRecapController deathcontroller = Get.put(FishRecapController());
+    var isMenuTapped = false.obs;
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
+    // @override
+    // void initState() {
+    //   // TODO: implement initState
+    //   super.initState();
+    //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //     controller.getFish(() {
+    //       controller.selectedFish.value = controller.listFishAlive[0];
+    //     });
+    //   });
+    // }
+
     Widget fishTypeInput() {
       return Container(
         margin: EdgeInsets.only(
@@ -31,12 +56,12 @@ class FishDeathEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -44,23 +69,26 @@ class FishDeathEntryPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Center(
-                child: Obx(() => DropdownButtonFormField<String>(
-                      onChanged: (newValue) =>
-                          controller.fishTypeController.setSelected(newValue!),
-                      value: controller.fishTypeController.selected.value,
-                      items: controller.fishTypeController.listFish.map((fish) {
-                        return DropdownMenuItem<String>(
-                          value: fish,
-                          child: Text(
-                            fish,
-                            style: primaryTextStyle,
-                          ),
-                        );
-                      }).toList(),
-                      dropdownColor: backgroundColor5,
-                      decoration:
-                          const InputDecoration(border: InputBorder.none),
-                    )),
+                child: Obx(
+                  () => DropdownButtonFormField<Map<String, dynamic>>(
+                    onChanged: (newValue) {
+                      controller.selectedFish.value = newValue!;
+                    },
+                    value: controller.selectedFish.value,
+                    items: controller.listFishAlive
+                        .map<DropdownMenuItem<Map<String, dynamic>>>((fish) {
+                      return DropdownMenuItem<Map<String, dynamic>>(
+                        value: fish,
+                        child: Text(
+                          fish['type'],
+                          style: primaryTextStyle,
+                        ),
+                      );
+                    }).toList(),
+                    dropdownColor: backgroundColor5,
+                    decoration: InputDecoration(border: InputBorder.none),
+                  ),
+                ),
               ),
             ),
           ],
@@ -82,38 +110,49 @@ class FishDeathEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
                 color: backgroundColor2,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Center(child: Obx(() {
-                return TextFormField(
-                  style: primaryTextStyle,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                  keyboardType: TextInputType.number,
-                  onChanged: controller.fishamountChanged,
-                  onTap: controller.valfishamount,
-                  controller: controller.formDeathController,
-                  decoration: controller.validatefishamount.value == true
-                      ? controller.fishamount == ''
-                          ? const InputDecoration(
-                              errorText: 'jumlah ikan tidak boleh kosong',
-                              isCollapsed: true)
-                          : null
-                      : InputDecoration.collapsed(
-                          hintText: 'ex: 22', hintStyle: subtitleTextStyle),
-                );
-              })),
+              child: Center(
+                child: Obx(
+                  () {
+                    return TextFormField(
+                      style: primaryTextStyle,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      keyboardType: TextInputType.number,
+                      onChanged: controller.fishamountChanged,
+                      onTap: controller.valfishamount,
+                      controller: controller.formDeathController,
+                      decoration: controller.validatefishamount.value == true
+                          ? controller.fishamount == ''
+                              ? InputDecoration(
+                                  errorText: 'jumlah ikan tidak boleh kosong',
+                                  isCollapsed: true)
+                              : null
+                          : InputDecoration.collapsed(
+                              hintText: 'ex: 22', hintStyle: subtitleTextStyle),
+                    );
+                  },
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 24,
+            ),
+            TextFieldWidget(
+              label: 'Diagnosa',
+              controller: controller.diagnosa,
             ),
           ],
         ),
@@ -130,13 +169,23 @@ class FishDeathEntryPage extends StatelessWidget {
           onPressed: () async {
             controller.formDeathController.text == ""
                 ? null
-                : Navigator.pop(context);
-            controller.postFishDeath();
-            deathcontroller.getFishDeaths(
-                activation_id: controller.activation.id.toString());
+                : await controller.postFishDeath(
+                    context,
+                    () {
+                      deathcontroller.getFishDeaths(
+                          activation_id: controller.activation.id.toString());
+                    },
+                  );
+
             deathcontroller.getcharData(
                 activation_id: controller.activation.id.toString());
-            // print(deathcontroller.charData);
+            controller.postDataLog(controller.fitur);
+            Navigator.pop(context);
+            // Navigator.pushReplacement(context, MaterialPageRoute(
+            //   builder: (context) {
+            //     return DashboardPage();
+            //   },
+            // ));
           },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
@@ -158,17 +207,37 @@ class FishDeathEntryPage extends StatelessWidget {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Entry Kematian Ikan"),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
+            ],
           ),
+          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               fishTypeInput(),
               fishDeathAmountInput(),
               submitButton(),
-              const SizedBox(
+              SizedBox(
                 height: 8,
               )
             ],

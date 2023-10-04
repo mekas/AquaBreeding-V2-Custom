@@ -1,3 +1,4 @@
+import 'package:fish/pages/treatment/treatment_controller.dart';
 import 'package:fish/pages/treatment/treatment_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
@@ -12,26 +13,29 @@ class TreatmentCard extends StatelessWidget {
   final Activation? activation;
   final Pond? pond;
   final Treatment? treatmentList;
-  const TreatmentCard(
-      {Key? key, this.treatmentList, this.activation, this.pond})
+  final TreatmentController treatmentController =
+      Get.put(TreatmentController());
+  TreatmentCard({Key? key, this.treatmentList, this.activation, this.pond})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => const DetailTreatmentPage(), arguments: {
-          "treatment": treatmentList,
+        Get.to(() => DetailTreatmentPage(), arguments: {
           "activation": activation,
           "pond": pond,
+          "treatment": treatmentList,
         });
+
+        treatmentController.postDataLog("Pond Treatment");
       },
       child: Container(
         width: double.infinity,
         margin: EdgeInsets.only(
           top: defaultMargin,
         ),
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: primaryColor),
@@ -92,7 +96,7 @@ class TreatmentCard extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
+                    Container(
                       height: 40,
                       width: 80,
                       // margin: EdgeInsets.only(

@@ -10,9 +10,12 @@ class FeedTypeService {
 
     var response = await http.get(url, headers: headers);
 
+    print(response.body);
+
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       List<FeedType> feedtype = FeedType.fromJsonList(data);
+      print("success add feedtype");
       return feedtype;
     } else {
       throw Exception('Gagal Get feedtype!');

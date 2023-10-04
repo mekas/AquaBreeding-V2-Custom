@@ -1,13 +1,24 @@
 import 'package:fish/pages/grading/detail_grading_controller.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
-class DetailGradingPage extends StatelessWidget {
+import '../../widgets/new_Menu_widget.dart';
+
+class DetailGradingPage extends StatefulWidget {
   const DetailGradingPage({Key? key}) : super(key: key);
 
   @override
+  State<DetailGradingPage> createState() => _DetailGradingPageState();
+}
+
+class _DetailGradingPageState extends State<DetailGradingPage> {
+  var isMenuTapped = false.obs;
+  @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     final GradingDetailController controller =
         Get.put(GradingDetailController());
 
@@ -31,7 +42,7 @@ class DetailGradingPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 5,
                 ),
               ],
@@ -61,7 +72,18 @@ class DetailGradingPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                Text(
+                if (controller.activation.getStringDeactivationDate() == "-")
+                  Text(
+                    "${controller.activation.getStringActivationDate()} sampai ${DateTime.now().toString().split(" ")[0]}",
+                    style: secondaryTextStyle.copyWith(
+                      fontSize: 13,
+                      fontWeight: medium,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                if (controller.activation.getStringDeactivationDate() != "-")
+                  Text(
                   "${controller.activation.getStringActivationDate()} sampai ${controller.activation.getStringDeactivationDate()}",
                   style: secondaryTextStyle.copyWith(
                     fontSize: 13,
@@ -70,7 +92,7 @@ class DetailGradingPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Row(
@@ -101,7 +123,7 @@ class DetailGradingPage extends StatelessWidget {
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
+                      children: [
                         SizedBox(
                           width: 40,
                         ),
@@ -187,7 +209,7 @@ class DetailGradingPage extends StatelessWidget {
                   maxLines: 1,
                 ),
                 Text(
-                  controller.fishGrading.getDate(),
+                  "${controller.fishGrading.getDate()}",
                   style: secondaryTextStyle.copyWith(
                     fontSize: 13,
                     fontWeight: medium,
@@ -231,7 +253,7 @@ class DetailGradingPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -252,7 +274,7 @@ class DetailGradingPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -296,7 +318,7 @@ class DetailGradingPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -317,7 +339,7 @@ class DetailGradingPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -348,19 +370,39 @@ class DetailGradingPage extends StatelessWidget {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Detail Rekap Grading"),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
+            ],
           ),
+          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               gradingDataRecap(),
               detail(),
               titleRecap(),
               dataGrading(),
               detailGrading(),
-              const SizedBox(
+              SizedBox(
                 height: 10,
               )
             ],

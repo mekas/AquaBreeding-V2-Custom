@@ -1,5 +1,3 @@
-// ignore_for_file: non_constant_identifier_names
-
 import 'dart:convert';
 import 'package:fish/models/daily_water_model.dart';
 import 'package:fish/service/url_api.dart';
@@ -12,6 +10,8 @@ class DailyWaterService {
 
     var response = await http.get(url, headers: headers);
 
+    print(response.body);
+
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       List<DailyWater> ponds = [];
@@ -19,6 +19,8 @@ class DailyWaterService {
       for (var item in data) {
         ponds.add(DailyWater.fromJson(item));
       }
+
+      print(ponds);
 
       return ponds;
     } else {
@@ -52,6 +54,14 @@ class DailyWaterService {
     String? week,
     required String? temperature,
   }) async {
+    print({
+      "pond_id": pondId.toString(),
+      "pond_activation_id": activationId.toString(),
+      "ph": ph,
+      "do": numDo,
+      "week": week,
+      "temperature": temperature,
+    });
     final response = await http.post(
       Uri.parse(Urls.dailyWater),
       headers: {
@@ -69,8 +79,10 @@ class DailyWaterService {
     );
 
     if (response.statusCode == 200) {
+      print(response.body);
       return true;
     } else {
+      print(response.body);
       return false;
     }
   }
@@ -80,6 +92,11 @@ class DailyWaterService {
       required String? ph,
       required String? numDo,
       required String? temperature}) async {
+    print({
+      "ph": ph,
+      "do": numDo,
+      "temperature": temperature,
+    });
     final response = await http.put(
       Uri.parse(Urls.dailyWaterbyid(dailywaterId)),
       headers: {
@@ -94,8 +111,10 @@ class DailyWaterService {
     );
 
     if (response.statusCode == 200) {
+      print(response.body);
       return true;
     } else {
+      print(response.body);
       return false;
     }
   }
@@ -105,6 +124,8 @@ class DailyWaterService {
     var headers = {'Content-Type': 'application/json'};
 
     var response = await http.delete(url, headers: headers);
+
+    print(response.body);
 
     if (response.statusCode == 200) {
       return DailyWater.fromJson(jsonDecode(response.body));
@@ -119,10 +140,14 @@ class DailyWaterService {
 
     var response = await http.get(url, headers: headers);
 
+    print(response.body);
+
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       List<DailyWater> ponds = [];
       ponds.add(DailyWater.fromJson(data));
+
+      print(ponds);
 
       return ponds;
     } else {

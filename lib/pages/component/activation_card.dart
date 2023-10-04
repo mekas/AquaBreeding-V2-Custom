@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fish/models/activation_model.dart';
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/component/tabview.dart';
@@ -5,6 +7,9 @@ import 'package:flutter/material.dart';
 
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
+
+import '../pond/detail_Breed_page.dart';
+import '../pond/detail_pond_controller.dart';
 
 class ActivationCard extends StatelessWidget {
   final Activation? activation;
@@ -15,8 +20,11 @@ class ActivationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // inspect(activation);
+    final DetailPondController detailPondController = Get.find();
     return GestureDetector(
       onTap: () {
+        detailPondController.updateSelectedActivation(activation!.id);
         Get.to(() => MyTabScreen(),
             arguments: {"activation": activation, "pond": pond});
       },
@@ -54,6 +62,7 @@ class ActivationCard extends StatelessWidget {
                       style: blackTextStyle.copyWith(
                         fontSize: 13,
                         fontWeight: heavy,
+                        color: Colors.white,
                       ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,

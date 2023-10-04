@@ -10,7 +10,7 @@ class FeedChartData {
   });
 
   factory FeedChartData.fromJson(Map<String, dynamic> json) {
-    // print(json);
+    print(json);
     return FeedChartData(
       amount: json["feed_dose"],
       date: DateTime.tryParse(json['date']),

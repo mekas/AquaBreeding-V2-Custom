@@ -1,13 +1,14 @@
-// ignore_for_file: unused_local_variable
-
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
+import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_state.dart';
 import 'package:fish/pages/treatment/carbon_type_controller.dart';
 import 'package:fish/service/treatment_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../service/logging_service.dart';
 import 'treatment_type_controller.dart';
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/models/activation_model.dart';
@@ -53,19 +54,80 @@ class TreatmentEntryController extends GetxController {
   Activation activation = Get.arguments["activation"];
   Pond pond = Get.arguments["pond"];
 
+  RxBool checkUsedDate = false.obs;
+
+  final InventarisBahanBudidayaState supState =
+      Get.put(InventarisBahanBudidayaState());
+
+  List buildJsonTreatment() {
+    var data = [];
+    data.clear();
+
+    data.add({
+      'suplemen_id': supState.probID.value,
+      'amount': probioticController.value.text,
+      'original_value': supState.probStock.value.toString(),
+    });
+
+    if (supState.carbCheck.value) {
+      // Carbon
+      data.add({
+        'suplemen_id': supState.selectedCarbon.value['suplemen_id'],
+        'amount': probioticController.value.text,
+        'original_value': supState.probStock.value.toString(),
+      });
+    }
+    if (supState.saltDetail.value.data!.isNotEmpty) {
+      data.add({
+        'suplemen_id': supState.saltDetail.value.data![0].sId,
+        'amount': saltController.value.text,
+        'original_value': supState.saltStock.value.toString(),
+      });
+    }
+    if (supState.carbCheck.value &&
+        supState.saltDetail.value.data!.isNotEmpty) {
+      data.add({
+        'suplemen_id': supState.selectedCarbon.value['suplemen_id'],
+        'amount': probioticController.value.text,
+        'original_value': supState.probStock.value.toString(),
+      });
+      data.add({
+        'suplemen_id': supState.saltDetail.value.data![0].sId,
+        'amount': saltController.value.text,
+        'original_value': supState.saltStock.value.toString(),
+      });
+    }
+
+    return data;
+  }
+
   Future<void> postFishGrading(BuildContext context, Function doInPost) async {
     bool value = await TreatmentService().postPondTreatment(
-        pondId: pond.id,
-        salt: saltController.value.text,
-        type: typeController.selected.value,
-        probiotic: probioticController.value.text,
-        desc: descController.value.text,
-        water: waterController.value.text,
-        carbohydrate: carbonController.value.text,
-        carbohydrate_type: carbonTypeController.selected.value == "tidak ada"
-            ? carbonTypeNullController.value.text
-            : carbonTypeController.selected.value);
-    // print(value);
+      pondId: pond.id,
+      prob_id: supState.probID.value,
+      carb_id: supState.carbID.value,
+      salt_id: supState.saltID.value,
+      type: typeController.selected.value,
+      probiotic_name: supState.selectedCultureProbiotik.value['suplemen_name'],
+      probiotic: probioticController.value.text,
+      desc: descController.value.text,
+      water: waterController.value.text,
+      date: supState.selectedUsedDate.value,
+      carbohydrate:
+          supState.carbCheck.value ? carbonController.value.text : '0',
+      carbohydrate_type: supState.carbCheck.value
+          ? supState.selectedCarbon.value['suplemen_name']
+          : 'Tidak ada',
+      salt: saltController.value.text,
+    );
+
+    await supState.postHistorySuplemenData(
+      supState.pondName.value,
+      buildJsonTreatment(),
+      supState.selectedUsedDate.value,
+      () => null,
+    );
+    print(value);
     doInPost();
   }
 
@@ -173,7 +235,17 @@ class TreatmentEntryController extends GetxController {
         total_weight_harvested: getWeight(),
         isFinish: true,
         fish_harvested: buildJsonFish());
-    // print(value);
+    print(value);
     doInPost();
+  }
+
+  final DateTime startTime = DateTime.now();
+  late DateTime endTime;
+  final fitur = 'Pond Treatment';
+
+  Future<void> postDataLog(String fitur) async {
+    // print(buildJsonFish());
+    bool value =
+        await LoggingService().postLogging(startAt: startTime, fitur: fitur);
   }
 }

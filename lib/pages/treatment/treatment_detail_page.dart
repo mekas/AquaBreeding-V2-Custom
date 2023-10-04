@@ -1,13 +1,24 @@
 import 'package:fish/pages/treatment/treatment_detail_controller.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
-class DetailTreatmentPage extends StatelessWidget {
+import '../../widgets/new_Menu_widget.dart';
+
+class DetailTreatmentPage extends StatefulWidget {
   const DetailTreatmentPage({Key? key}) : super(key: key);
 
   @override
+  State<DetailTreatmentPage> createState() => _DetailTreatmentPageState();
+}
+
+class _DetailTreatmentPageState extends State<DetailTreatmentPage> {
+  var isMenuTapped = false.obs;
+  @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     final TreatmentDetailController controller =
         Get.put(TreatmentDetailController());
 
@@ -31,7 +42,7 @@ class DetailTreatmentPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 5,
                 ),
               ],
@@ -70,7 +81,7 @@ class DetailTreatmentPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
               ],
@@ -164,15 +175,12 @@ class DetailTreatmentPage extends StatelessWidget {
                   maxLines: 1,
                 ),
                 Text(
-                  controller.treatment.type.toString(),
-                  style: secondaryTextStyle.copyWith(
-                    fontSize: 13,
-                    fontWeight: medium,
-                  ),
+                  '${controller.treatment.type.toString()}',
+                  style: headingText3,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -186,41 +194,15 @@ class DetailTreatmentPage extends StatelessWidget {
                 ),
                 Text(
                   "${controller.treatment.water.toString()} %",
-                  style: secondaryTextStyle.copyWith(
-                    fontSize: 13,
-                    fontWeight: medium,
-                  ),
+                  style: headingText3,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Text(
-                  "Karbon",
-                  style: primaryTextStyle.copyWith(
-                    fontSize: 14,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-                Text(
-                  "${controller.treatment.carbohydrate.toString()} gram",
-                  style: secondaryTextStyle.copyWith(
-                    fontSize: 13,
-                    fontWeight: medium,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Dosis Garam (Kg)",
+                  "Dosis Garam",
                   style: primaryTextStyle.copyWith(
                     fontSize: 14,
                     fontWeight: medium,
@@ -231,15 +213,44 @@ class DetailTreatmentPage extends StatelessWidget {
                 Text(
                   controller.treatment.salt == null
                       ? '-'
-                      : controller.treatment.salt.toString(),
-                  style: secondaryTextStyle.copyWith(
-                    fontSize: 13,
+                      : '${controller.treatment.salt.toString()} kg',
+                  style: headingText3,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Karbon",
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 14,
                     fontWeight: medium,
                   ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                Text(
+                  '( ${controller.treatment.carbohydrate_type.toString()} )',
+                  style: headingText3.copyWith(
+                    color: Colors.grey,
+                    fontSize: 12,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  "${controller.treatment.carbohydrate.toString()} kg",
+                  style: headingText3,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -252,15 +263,24 @@ class DetailTreatmentPage extends StatelessWidget {
                   maxLines: 1,
                 ),
                 Text(
-                  "${controller.treatment.probiotic.toString()} g/mL",
-                  style: secondaryTextStyle.copyWith(
-                    fontSize: 13,
-                    fontWeight: medium,
+                  '( ${controller.treatment.probiotic_name.toString()} )',
+                  style: headingText3.copyWith(
+                    color: Colors.grey,
+                    fontSize: 12,
                   ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  "${controller.treatment.probiotic.toString()} kg/L",
+                  style: headingText3,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                SizedBox(
                   height: 20,
                 ),
               ],
@@ -273,19 +293,39 @@ class DetailTreatmentPage extends StatelessWidget {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Detail Treatment "),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
+            ],
           ),
           backgroundColor: backgroundColor1,
+          endDrawer: DrawerInvetarisList(),
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               treatmentDataRecap(),
               detail(),
               titleRecap(),
               dataTreatment(),
               detailTreatment(),
-              const SizedBox(
+              SizedBox(
                 height: 10,
               )
             ],

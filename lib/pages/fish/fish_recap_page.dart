@@ -1,5 +1,6 @@
 import 'package:fish/pages/component/death_card.dart';
 import 'package:fish/pages/fish/fish_recap_controller.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/pages/fish/fish_death_entry_page.dart';
 import 'package:fish/theme.dart';
@@ -7,44 +8,55 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../models/fish_live_model.dart';
+import '../../widgets/new_Menu_widget.dart';
 
-class FishRecapPage extends StatelessWidget {
+class FishRecapPage extends StatefulWidget {
   const FishRecapPage({Key? key}) : super(key: key);
 
   @override
+  State<FishRecapPage> createState() => _FishRecapPageState();
+}
+
+class _FishRecapPageState extends State<FishRecapPage> {
+  var isMenuTapped = false.obs;
+  @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     final FishRecapController controller = Get.put(FishRecapController());
 
     Widget chartDeath() {
-      return SfCartesianChart(
-        enableAxisAnimation: true,
-        tooltipBehavior: TooltipBehavior(enable: true),
-        zoomPanBehavior: ZoomPanBehavior(
-          enablePanning: true,
+      return Container(
+        child: SfCartesianChart(
+          enableAxisAnimation: true,
+          tooltipBehavior: TooltipBehavior(enable: true),
+          zoomPanBehavior: ZoomPanBehavior(
+            enablePanning: true,
+          ),
+          title: ChartTitle(
+              text: 'Jumlah Ikan Hidup',
+              textStyle: TextStyle(color: Colors.white)),
+          legend: Legend(
+              isVisible: true,
+              position: LegendPosition.bottom,
+              textStyle: TextStyle(color: Colors.white)),
+          primaryXAxis: CategoryAxis(
+              labelStyle: TextStyle(color: Colors.white),
+              autoScrollingDelta: 4),
+          primaryYAxis: NumericAxis(
+              // maximum: 100,
+              // minimum: 0,
+              labelStyle: TextStyle(color: Colors.white)),
+          series: <ChartSeries>[
+            LineSeries<FishLiveData, dynamic>(
+                enableTooltip: true,
+                color: Colors.red,
+                dataSource: controller.charData,
+                xValueMapper: (FishLiveData fish, _) => fish.getDate(),
+                yValueMapper: (FishLiveData fish, _) => fish.amount,
+                name: 'Ikan Hidup')
+          ],
         ),
-        title: ChartTitle(
-            text: 'Jumlah Ikan Hidup',
-            textStyle: const TextStyle(color: Colors.white)),
-        legend: Legend(
-            isVisible: true,
-            position: LegendPosition.bottom,
-            textStyle: const TextStyle(color: Colors.white)),
-        primaryXAxis: CategoryAxis(
-            labelStyle: const TextStyle(color: Colors.white),
-            autoScrollingDelta: 4),
-        primaryYAxis: NumericAxis(
-            // maximum: 100,
-            // minimum: 0,
-            labelStyle: const TextStyle(color: Colors.white)),
-        series: <ChartSeries>[
-          LineSeries<FishLiveData, dynamic>(
-              enableTooltip: true,
-              color: Colors.red,
-              dataSource: controller.charData,
-              xValueMapper: (FishLiveData fish, _) => fish.getDate(),
-              yValueMapper: (FishLiveData fish, _) => fish.amount,
-              name: 'Ikan Hidup')
-        ],
       );
     }
 
@@ -68,7 +80,7 @@ class FishRecapPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 5,
                 ),
               ],
@@ -86,10 +98,11 @@ class FishRecapPage extends StatelessWidget {
             top: defaultSpace, right: defaultMargin, left: defaultMargin),
         child: TextButton(
           onPressed: () {
-            Get.to(() => const FishDeathEntryPage(), arguments: {
+            Get.to(() => FishDeathEntryPage(), arguments: {
               "pond": controller.pond,
               "activation": controller.activation
             });
+            controller.postDataLog(controller.fitur);
           },
           style: TextButton.styleFrom(
             backgroundColor: Colors.green.shade400,
@@ -106,6 +119,45 @@ class FishRecapPage extends StatelessWidget {
           ),
         ),
       );
+    }
+
+    Widget emptyListPond() {
+      return Container(
+          width: double.infinity,
+          margin: EdgeInsets.only(right: defaultMargin, left: defaultMargin),
+          child: Center(
+            child: Column(children: [
+              SizedBox(height: 35),
+              Image(
+                image: AssetImage("assets/unavailable_icon.png"),
+                width: 100,
+                height: 100,
+                fit: BoxFit.fitWidth,
+              ),
+              SizedBox(height: 20),
+              Text(
+                "Anda belum pernah melakukan entry kematian",
+                style: primaryTextStyle.copyWith(
+                  fontSize: 14,
+                  fontWeight: bold,
+                ),
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+              SizedBox(height: 10),
+              Text(
+                "Silahkan Lakukan Entry Kematian Ikan",
+                style: secondaryTextStyle.copyWith(
+                  fontSize: 13,
+                  fontWeight: bold,
+                ),
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+            ]),
+          ));
     }
 
     Widget detail() {
@@ -144,7 +196,7 @@ class FishRecapPage extends StatelessWidget {
                       )
                       .toList(),
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
               ],
@@ -177,7 +229,7 @@ class FishRecapPage extends StatelessWidget {
                       )
                       .toList(),
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
               ],
@@ -222,13 +274,33 @@ class FishRecapPage extends StatelessWidget {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Rekapitulasi Jumlah Kematian"),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
+            ],
           ),
+          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               chartDeath(),
               fishDataRecap(),
               detail(),
@@ -236,8 +308,8 @@ class FishRecapPage extends StatelessWidget {
               entryDeathButton(),
               recapTitle(),
               // chartRecap(),
-              listDeath(),
-              const SizedBox(
+              controller.list_fishDeath.isEmpty ? emptyListPond() : listDeath(),
+              SizedBox(
                 height: 10,
               )
             ],

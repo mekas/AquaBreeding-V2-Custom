@@ -1,10 +1,12 @@
-// ignore_for_file: unused_local_variable
-
 import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/service/pond_service.dart';
 import 'package:fish/models/daily_water_model.dart';
+import 'package:fish/pages/dashboard.dart';
 import 'package:fish/service/daily_water_service.dart';
+import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 
 class DailyWaterPondListController extends GetxController {
@@ -32,7 +34,7 @@ class DailyWaterPondListController extends GetxController {
     for (var i in pondsData) {
       idStore.add(pondsData[index].id.toString());
       index++;
-      // print(idStore);
+      print(idStore);
     }
     index = 0;
     isLoading.value = false;
@@ -45,6 +47,7 @@ class DailyWaterPondListController extends GetxController {
     List<DailyWater> watersData = await DailyWaterService().getPonds();
     waters.addAll(watersData);
     for (var i in watersData) {
+      print(i.pondId);
       if (waterindex < idStore.length) {
         if (i.pondId == idStore[waterindex]) {
           var testing =
@@ -52,12 +55,16 @@ class DailyWaterPondListController extends GetxController {
           // print(testing.toString());
           indicatorWater.add(testing!);
           waterindex++;
-        } else {}
+        } else {
+          print('dummy');
+        }
       }
     }
+    print(waterindex);
     for (var j in watersData) {
       if (indicatorWater.length < idStore.length + 1) {
         indicatorWater.add(j);
+        print(indicatorWater.length);
       }
     }
     waterindex = 0;

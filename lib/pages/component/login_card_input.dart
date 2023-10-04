@@ -1,5 +1,3 @@
-// ignore_for_file: unrelated_type_equality_checks
-
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
@@ -8,8 +6,10 @@ import '../../controllers/authentication/login_controller.dart';
 
 class LoginInputCard extends StatelessWidget {
   final VoidCallback loginfunc;
-  LoginInputCard({Key? key, required this.loginfunc}) : super(key: key);
+  LoginInputCard({Key? key, required this.loginfunc, required this.isLoading})
+      : super(key: key);
   final LoginController controller = Get.put(LoginController());
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +21,12 @@ class LoginInputCard extends StatelessWidget {
           BoxShadow(
             color: backgroundColor3,
             blurRadius: 4,
-            offset: const Offset(2, 8), // Shadow position
+            offset: Offset(2, 8), // Shadow position
           ),
         ],
       ),
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20),
       margin: EdgeInsets.only(
         top: defaultMargin / 2,
       ),
@@ -63,29 +63,52 @@ class LoginInputCard extends StatelessWidget {
               color: backgroundColor2,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Center(child: Obx(() {
-              return TextFormField(
-                style: primaryTextStyle,
-                onChanged: controller.usernameChanged,
-                onTap: controller.valusername,
-                controller: controller.usernameController,
-                decoration: controller.validateusername.value == true
+            child: Center(
+                child: TextFormField(
+              style: primaryTextStyle,
+              onChanged: controller.usernameChanged,
+              onTap: controller.valusername,
+              controller: controller.usernameController,
+              decoration: InputDecoration(
+                  hintText: "Breeder ID",
+                  hintStyle: TextStyle(color: Colors.grey),
+                  isCollapsed: true),
+            )),
+          ),
+          SizedBox(height: 5),
+          Row(
+            children: [
+              SizedBox(width: 10),
+              Obx(() {
+                return controller.validateusername.value == true
                     ? controller.username == ''
-                        ? const InputDecoration(
-                            errorText: 'username tidak boleh kosong',
-                            isCollapsed: true)
-                        : controller.usernameController.text.length < 6
-                            ? const InputDecoration(
-                                errorText: 'username kurang dari 6 karakter',
-                                isCollapsed: true)
-                            : null
-                    : null,
-              );
-            })),
+                        ? Text(
+                            'username tidak boleh kosong',
+                            style: primaryTextStyle.copyWith(
+                              color: Colors.red,
+                              fontSize: 14,
+                              fontWeight: medium,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          )
+                        : controller.usernameController.text.length < 5
+                            ? Text(
+                                'username kurang dari 5 karakter',
+                                style: primaryTextStyle.copyWith(
+                                  color: Colors.red,
+                                  fontSize: 14,
+                                  fontWeight: medium,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              )
+                            : Text('')
+                    : SizedBox();
+              }),
+            ],
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          SizedBox(height: 10),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -99,17 +122,17 @@ class LoginInputCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
-              const SizedBox(
+              SizedBox(
                 width: 6,
               ),
             ],
           ),
-          const SizedBox(
+          SizedBox(
             height: 10,
           ),
           Container(
             height: 50,
-            padding: const EdgeInsets.symmetric(
+            padding: EdgeInsets.symmetric(
               horizontal: 16,
             ),
             decoration: BoxDecoration(
@@ -123,59 +146,55 @@ class LoginInputCard extends StatelessWidget {
                 onTap: controller.valpassword,
                 controller: controller.passwordController,
                 obscureText: controller.passwordHide.value,
-                decoration: controller.validatepassword.value == true
-                    ? controller.password == ''
-                        ? InputDecoration(
-                            errorText: 'Password tidak boleh kosong',
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                controller.passVisibiity(
-                                    controller.passwordHide.value);
-                              },
-                              icon: Icon(controller.passwordHide.value
-                                  ? Icons.visibility
-                                  : Icons.visibility_off),
-                              color: Colors.white,
-                            ))
-                        : controller.passwordController.text.length < 8
-                            ? InputDecoration(
-                                errorText: 'passowrd kurang dari 8 karakter',
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    controller.passVisibiity(
-                                        controller.passwordHide.value);
-                                  },
-                                  icon: Icon(controller.passwordHide.value
-                                      ? Icons.visibility
-                                      : Icons.visibility_off),
-                                  color: Colors.white,
-                                ))
-                            : InputDecoration(
-                                suffixIcon: IconButton(
-                                onPressed: () {
-                                  controller.passVisibiity(
-                                      controller.passwordHide.value);
-                                },
-                                icon: Icon(controller.passwordHide.value
-                                    ? Icons.visibility
-                                    : Icons.visibility_off),
-                                color: Colors.white,
-                              ))
-                    : InputDecoration(
-                        suffixIcon: IconButton(
-                        onPressed: () {
-                          controller
-                              .passVisibiity(controller.passwordHide.value);
-                        },
-                        icon: Icon(controller.passwordHide.value
-                            ? Icons.visibility
-                            : Icons.visibility_off),
-                        color: Colors.white,
-                      )),
+                decoration: InputDecoration(
+                    hintText: "Password",
+                    hintStyle: TextStyle(color: Colors.grey),
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        controller.passVisibiity(controller.passwordHide.value);
+                      },
+                      icon: Icon(controller.passwordHide.value
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                      color: Colors.white,
+                    )),
               );
             })),
           ),
-          const SizedBox(
+          SizedBox(height: 5),
+          Row(
+            children: [
+              SizedBox(width: 10),
+              Obx(() {
+                return controller.validatepassword.value == true
+                    ? controller.password == ''
+                        ? Text(
+                            'password tidak boleh kosong',
+                            style: primaryTextStyle.copyWith(
+                              color: Colors.red,
+                              fontSize: 14,
+                              fontWeight: medium,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          )
+                        : controller.passwordController.text.length < 8
+                            ? Text(
+                                'username kurang dari 8 karakter',
+                                style: primaryTextStyle.copyWith(
+                                  color: Colors.red,
+                                  fontSize: 14,
+                                  fontWeight: medium,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              )
+                            : SizedBox()
+                    : SizedBox();
+              }),
+            ],
+          ),
+          SizedBox(
             height: 12,
           ),
           Container(
@@ -187,7 +206,7 @@ class LoginInputCard extends StatelessWidget {
             child: TextButton(
               onPressed: () {
                 // Get.back();
-                controller.usernameController.text.length < 6 ||
+                controller.usernameController.text.length < 5 ||
                         controller.passwordController.text.length < 8
                     ? null
                     : loginfunc.call();
@@ -199,16 +218,24 @@ class LoginInputCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: Text(
-                'Login',
-                style: primaryTextStyle.copyWith(
-                  fontSize: 16,
-                  fontWeight: medium,
-                ),
-              ),
+              child: isLoading
+                  ? SizedBox(
+                      height: 30,
+                      width: 30,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    )
+                  : Text(
+                      'Login',
+                      style: primaryTextStyle.copyWith(
+                        fontSize: 16,
+                        fontWeight: medium,
+                      ),
+                    ),
             ),
           ),
-          const SizedBox(
+          SizedBox(
             height: 6,
           ),
         ],

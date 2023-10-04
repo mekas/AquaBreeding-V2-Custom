@@ -1,50 +1,47 @@
 import 'dart:developer';
 
-import 'package:fish/pages/inventaris/inventaris_pakan/detail_inventaris_pakan/detail_inventaris_pakan_input_page.dart';
-import 'package:fish/pages/inventaris/inventaris_pakan/detail_inventaris_pakan/detail_inventaris_pakan_output_page.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_state.dart';
 import 'package:fish/theme.dart';
 import 'package:fish/widgets/dialog_widget.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:get/instance_manager.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
-class DetailInventarisPakanMainpage extends StatelessWidget {
+class DetailInventarisPakanMainpage extends StatefulWidget {
   DetailInventarisPakanMainpage({
     Key? key,
-    required this.pageIdentifier,
   }) : super(key: key);
 
-  final String pageIdentifier;
-  final TextEditingController firstDate = TextEditingController();
-  final TextEditingController lastDate = TextEditingController();
+  @override
+  State<DetailInventarisPakanMainpage> createState() =>
+      _DetailInventarisPakanMainpageState();
+}
 
+class _DetailInventarisPakanMainpageState
+    extends State<DetailInventarisPakanMainpage> {
   final InventarisPakanState state = Get.put(InventarisPakanState());
+
+  DateTime currDate = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    initializeDateFormatting('id', null);
+    state.isReversed.value = false;
+    state.getHistoryFeedData(
+        false, state.firstDate.text, state.lastDate.text, () {});
+  }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
+    return Obx(
+      () => Scaffold(
+        backgroundColor: backgroundColor1,
         appBar: AppBar(
           centerTitle: true,
           backgroundColor: backgroundColor1,
-          elevation: 0,
-          title: Column(
-            children: [
-              Text(
-                'Detail Pakan',
-                style: headingText2,
-              ),
-              const SizedBox(
-                height: 2,
-              ),
-              Text(
-                '($pageIdentifier)',
-                style: hoverText,
-              ),
-            ],
-          ),
           actions: [
             IconButton(
               onPressed: () async {
@@ -55,34 +52,244 @@ class DetailInventarisPakanMainpage extends StatelessWidget {
               ),
             )
           ],
-          bottom: TabBar(
-            indicator: BoxDecoration(
-              color: primaryColor,
-            ),
-            tabs: const [
-              Tab(
-                child: Text(
-                  'Pemasukan',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              Tab(
-                child: Text(
-                  'Pengeluaran',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
+          title: Text(
+            'Riwayat Pakan',
+            style: headingText2,
           ),
         ),
-        body: TabBarView(
-          children: [
-            DetailInventarisPakanInputPage(
-              pageIdentifier: pageIdentifier,
-            ),
-            const DetailInventarisPakanOutputPage(),
-          ],
-        ),
+        body: state.isLoadingHistory.value
+            ? Center(
+                child: SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            : state.feedHistoryList.value.data!.isEmpty
+                ? Center(
+                    child: Text(
+                      'Tidak ada data',
+                      style: headingText3,
+                    ),
+                  )
+                : Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Urutkan Data',
+                              style: headingText3,
+                            ),
+                            GestureDetector(
+                                onTap: () async {
+                                  state.isReversed.value =
+                                      !state.isReversed.value;
+                                  await state.getHistoryFeedData(
+                                      state.isReversed.value,
+                                      state.firstDate.text,
+                                      state.lastDate.text,
+                                      () {});
+                                },
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      state.isReversed.value
+                                          ? Icons.arrow_upward_rounded
+                                          : Icons.arrow_downward_rounded,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text(
+                                      state.isReversed.value
+                                          ? 'Terbaru - Terlama'
+                                          : 'Terlama - Terbaru',
+                                      style: headingText3,
+                                    ),
+                                  ],
+                                )),
+                          ],
+                        ),
+                      ),
+                      Flexible(
+                        child: Container(
+                          color: backgroundColor1,
+                          child: SafeArea(
+                            child: ListView.builder(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              itemCount:
+                                  state.feedHistoryList.value.data!.length,
+                              physics: BouncingScrollPhysics(),
+                              itemBuilder: ((context, index) {
+                                return Container(
+                                  margin:
+                                      const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                                  decoration: BoxDecoration(
+                                    color: backgroundColor1,
+                                    border: Border.all(
+                                        width: 2, color: primaryColor),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color: primaryColor,
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              'Tanggal :',
+                                              style: headingText3,
+                                            ),
+                                            Text(
+                                              state.dateFormat(
+                                                  state.feedHistoryList.value
+                                                      .data![index].createdAt
+                                                      .toString(),
+                                                  true),
+                                              style: headingText3,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 12,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  'Tipe',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 6),
+                                                Text(
+                                                  state
+                                                      .feedHistoryList
+                                                      .value
+                                                      .data![index]
+                                                      .feed!
+                                                      .feedCategory
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    color: Colors.grey.shade500,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  'Nama',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 6),
+                                                Text(
+                                                  state
+                                                      .feedHistoryList
+                                                      .value
+                                                      .data![index]
+                                                      .feed!
+                                                      .brandName
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    color: Colors.grey.shade500,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  'Jumlah',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 6),
+                                                Text(
+                                                  '-${state.feedHistoryList.value.data![index].usage.toString()} kg',
+                                                  style: TextStyle(
+                                                    color: Colors.red.shade900,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  'Kolam',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 6),
+                                                Text(
+                                                  state.feedHistoryList.value
+                                                      .data![index].pond
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    color: Colors.grey.shade500,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 12,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
       ),
     );
   }
@@ -129,16 +336,11 @@ class DetailInventarisPakanMainpage extends StatelessWidget {
                   firstDate: DateTime(1900),
                   lastDate: DateTime(2100),
                 );
-                firstDate.text = datePicker
-                    .toString()
-                    .split(' ')[0]
-                    .split('-')
-                    .reversed
-                    .join('-');
+                state.firstDate.text = datePicker.toString().split(' ')[0];
               },
               child: TextFieldWidget(
                 label: 'Tanggal Awal',
-                controller: firstDate,
+                controller: state.firstDate,
                 isLong: false,
                 isEdit: false,
                 suffixSection: Icon(
@@ -155,16 +357,11 @@ class DetailInventarisPakanMainpage extends StatelessWidget {
                   firstDate: DateTime(1900),
                   lastDate: DateTime(2100),
                 );
-                lastDate.text = datePicker
-                    .toString()
-                    .split(' ')[0]
-                    .split('-')
-                    .reversed
-                    .join('-');
+                state.lastDate.text = datePicker.toString().split(' ')[0];
               },
               child: TextFieldWidget(
                 label: 'Tanggal Akhir',
-                controller: lastDate,
+                controller: state.lastDate,
                 isLong: false,
                 isEdit: false,
                 suffixSection: Icon(
@@ -185,8 +382,15 @@ class DetailInventarisPakanMainpage extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
           ),
-          onPressed: () {
-            Navigator.pop(context);
+          onPressed: () async {
+            await state.getHistoryFeedData(
+              state.isReversed.value,
+              state.firstDate.text,
+              state.lastDate.text,
+              () {
+                Navigator.pop(context);
+              },
+            );
           },
           child: Icon(
             Icons.navigate_next_rounded,

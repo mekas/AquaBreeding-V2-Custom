@@ -26,7 +26,7 @@ class FeedWeeklyCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => const DetailFeedWeeklyPage(), arguments: {
+        Get.to(() => DetailFeedWeeklyPage(), arguments: {
           "activation": activation,
           "pond": pond,
           "feedHistoryMonthly": feedHistoryMonthly,
@@ -38,7 +38,7 @@ class FeedWeeklyCard extends StatelessWidget {
         margin: EdgeInsets.only(
           top: defaultMargin,
         ),
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: primaryColor),

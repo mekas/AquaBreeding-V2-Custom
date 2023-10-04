@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:fish/models/grading_chart_model.dart';
 import 'package:fish/pages/component/grading_card.dart';
 import 'package:fish/pages/grading/grading_controller.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/pages/grading/grading_constanta_edit_page.dart';
 import 'package:fish/pages/grading/grading_entry_page.dart';
@@ -8,70 +11,91 @@ import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class GradingPage extends StatelessWidget {
+import '../../widgets/new_Menu_widget.dart';
+
+class GradingPage extends StatefulWidget {
   const GradingPage({Key? key}) : super(key: key);
 
   @override
+  State<GradingPage> createState() => _GradingPageState();
+}
+
+class _GradingPageState extends State<GradingPage> {
+  var isMenuTapped = false.obs;
+  @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     final GradingController controller = Get.put(GradingController());
 
     Widget chartGrading() {
-      return SfCartesianChart(
-        enableAxisAnimation: true,
-        tooltipBehavior: TooltipBehavior(enable: true),
-        zoomPanBehavior: ZoomPanBehavior(
-          enablePanning: true,
+      return Container(
+        child: SfCartesianChart(
+          enableAxisAnimation: true,
+          tooltipBehavior: TooltipBehavior(enable: true),
+          zoomPanBehavior: ZoomPanBehavior(
+            enablePanning: true,
+          ),
+          title: ChartTitle(
+              text: 'Rekap Grading', textStyle: TextStyle(color: Colors.white)),
+          legend: Legend(
+              isVisible: true,
+              position: LegendPosition.bottom,
+              textStyle: TextStyle(color: Colors.white)),
+          primaryXAxis: CategoryAxis(
+              labelStyle: TextStyle(color: Colors.white),
+              autoScrollingDelta: 4),
+          primaryYAxis: NumericAxis(
+              labelFormat: '{value}Kg',
+              labelStyle: TextStyle(color: Colors.white)),
+          series: <ChartSeries>[
+            LineSeries<GradingChartData, dynamic>(
+                enableTooltip: true,
+                color: Colors.blue,
+                dataSource: controller.charLeleData,
+                xValueMapper: (GradingChartData grading, _) =>
+                    grading.getDate(),
+                yValueMapper: (GradingChartData grading, _) =>
+                    grading.avg_weight,
+                name: 'Lele'),
+            LineSeries<GradingChartData, dynamic>(
+                enableTooltip: true,
+                color: Colors.pink,
+                dataSource: controller.charNilaMerahData,
+                xValueMapper: (GradingChartData grading, _) =>
+                    grading.getDate(),
+                yValueMapper: (GradingChartData grading, _) =>
+                    grading.avg_weight,
+                name: 'Nila Merah'),
+            LineSeries<GradingChartData, dynamic>(
+                enableTooltip: true,
+                color: Colors.green,
+                dataSource: controller.charNilaHitamData,
+                xValueMapper: (GradingChartData grading, _) =>
+                    grading.getDate(),
+                yValueMapper: (GradingChartData grading, _) =>
+                    grading.avg_weight,
+                name: 'Nila Hitam'),
+            LineSeries<GradingChartData, dynamic>(
+                enableTooltip: true,
+                color: Colors.amber,
+                dataSource: controller.charMasData,
+                xValueMapper: (GradingChartData grading, _) =>
+                    grading.getDate(),
+                yValueMapper: (GradingChartData grading, _) =>
+                    grading.avg_weight,
+                name: 'Mas'),
+            LineSeries<GradingChartData, dynamic>(
+                enableTooltip: true,
+                color: Colors.pink.shade100,
+                dataSource: controller.charPatinData,
+                xValueMapper: (GradingChartData grading, _) =>
+                    grading.getDate(),
+                yValueMapper: (GradingChartData grading, _) =>
+                    grading.avg_weight,
+                name: 'Patin'),
+          ],
         ),
-        title: ChartTitle(
-            text: 'Rekap Grading',
-            textStyle: const TextStyle(color: Colors.white)),
-        legend: Legend(
-            isVisible: true,
-            position: LegendPosition.bottom,
-            textStyle: const TextStyle(color: Colors.white)),
-        primaryXAxis: CategoryAxis(
-            labelStyle: const TextStyle(color: Colors.white),
-            autoScrollingDelta: 4),
-        primaryYAxis: NumericAxis(
-            labelFormat: '{value}Kg',
-            labelStyle: const TextStyle(color: Colors.white)),
-        series: <ChartSeries>[
-          LineSeries<GradingChartData, dynamic>(
-              enableTooltip: true,
-              color: Colors.blue,
-              dataSource: controller.charLeleData,
-              xValueMapper: (GradingChartData grading, _) => grading.getDate(),
-              yValueMapper: (GradingChartData grading, _) => grading.avg_weight,
-              name: 'Lele'),
-          LineSeries<GradingChartData, dynamic>(
-              enableTooltip: true,
-              color: Colors.pink,
-              dataSource: controller.charNilaMerahData,
-              xValueMapper: (GradingChartData grading, _) => grading.getDate(),
-              yValueMapper: (GradingChartData grading, _) => grading.avg_weight,
-              name: 'Nila Merah'),
-          LineSeries<GradingChartData, dynamic>(
-              enableTooltip: true,
-              color: Colors.green,
-              dataSource: controller.charNilaHitamData,
-              xValueMapper: (GradingChartData grading, _) => grading.getDate(),
-              yValueMapper: (GradingChartData grading, _) => grading.avg_weight,
-              name: 'Nila Hitam'),
-          LineSeries<GradingChartData, dynamic>(
-              enableTooltip: true,
-              color: Colors.amber,
-              dataSource: controller.charMasData,
-              xValueMapper: (GradingChartData grading, _) => grading.getDate(),
-              yValueMapper: (GradingChartData grading, _) => grading.avg_weight,
-              name: 'Mas'),
-          LineSeries<GradingChartData, dynamic>(
-              enableTooltip: true,
-              color: Colors.pink.shade100,
-              dataSource: controller.charPatinData,
-              xValueMapper: (GradingChartData grading, _) => grading.getDate(),
-              yValueMapper: (GradingChartData grading, _) => grading.avg_weight,
-              name: 'Patin'),
-        ],
       );
     }
 
@@ -95,7 +119,7 @@ class GradingPage extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 5,
                 ),
               ],
@@ -117,6 +141,7 @@ class GradingPage extends StatelessWidget {
               "pond": controller.pond,
               "activation": controller.activation
             });
+            controller.postDataLog(controller.fitur);
           },
           style: TextButton.styleFrom(
             backgroundColor: Colors.green.shade400,
@@ -135,70 +160,109 @@ class GradingPage extends StatelessWidget {
       );
     }
 
-    // Widget detail() {
-    //   return Container(
-    //     width: double.infinity,
-    //     margin: EdgeInsets.only(
-    //         top: defaultSpace, right: defaultMargin, left: defaultMargin),
-    //     child: Row(
-    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //       children: [
-    //         Column(
-    //           crossAxisAlignment: CrossAxisAlignment.start,
-    //           children: [
-    //             Text(
-    //               "Lokasi Kolam",
-    //               style: primaryTextStyle.copyWith(
-    //                 fontSize: 14,
-    //                 fontWeight: medium,
-    //               ),
-    //               overflow: TextOverflow.ellipsis,
-    //               maxLines: 1,
-    //             ),
-    //             Text(
-    //               "Blok A",
-    //               style: secondaryTextStyle.copyWith(
-    //                 fontSize: 13,
-    //                 fontWeight: medium,
-    //               ),
-    //               overflow: TextOverflow.ellipsis,
-    //               maxLines: 1,
-    //             ),
-    //             const SizedBox(
-    //               height: 20,
-    //             ),
-    //           ],
-    //         ),
-    //         Column(
-    //           crossAxisAlignment: CrossAxisAlignment.start,
-    //           children: [
-    //             Text(
-    //               "Musim Budidaya",
-    //               style: primaryTextStyle.copyWith(
-    //                 fontSize: 14,
-    //                 fontWeight: medium,
-    //               ),
-    //               overflow: TextOverflow.ellipsis,
-    //               maxLines: 1,
-    //             ),
-    //             Text(
-    //               "12-09-2022 sampai 01-19-2022",
-    //               style: secondaryTextStyle.copyWith(
-    //                 fontSize: 13,
-    //                 fontWeight: medium,
-    //               ),
-    //               overflow: TextOverflow.ellipsis,
-    //               maxLines: 1,
-    //             ),
-    //             const SizedBox(
-    //               height: 20,
-    //             ),
-    //           ],
-    //         ),
-    //       ],
-    //     ),
-    //   );
-    // }
+    Widget emptyListPond() {
+      return Container(
+          width: double.infinity,
+          margin: EdgeInsets.only(right: defaultMargin, left: defaultMargin),
+          child: Center(
+            child: Column(children: [
+              SizedBox(height: 35),
+              Image(
+                image: AssetImage("assets/unavailable_icon.png"),
+                width: 100,
+                height: 100,
+                fit: BoxFit.fitWidth,
+              ),
+              SizedBox(height: 20),
+              Text(
+                "Anda belum pernah melakukan entry grading",
+                style: primaryTextStyle.copyWith(
+                  fontSize: 14,
+                  fontWeight: bold,
+                ),
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+              SizedBox(height: 10),
+              Text(
+                "Silahkan Lakukan Entry Grading",
+                style: secondaryTextStyle.copyWith(
+                  fontSize: 13,
+                  fontWeight: bold,
+                ),
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+            ]),
+          ));
+    }
+
+    Widget detail() {
+      return Container(
+        width: double.infinity,
+        margin: EdgeInsets.only(
+            top: defaultSpace, right: defaultMargin, left: defaultMargin),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Lokasi Kolam",
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: medium,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                Text(
+                  "Blok A",
+                  style: secondaryTextStyle.copyWith(
+                    fontSize: 13,
+                    fontWeight: medium,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Musim Budidaya",
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: medium,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                Text(
+                  "12-09-2022 sampai 01-19-2022",
+                  style: secondaryTextStyle.copyWith(
+                    fontSize: 13,
+                    fontWeight: medium,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
 
     Widget recapTitle() {
       return Container(
@@ -215,6 +279,45 @@ class GradingPage extends StatelessWidget {
           maxLines: 1,
         ),
       );
+    }
+
+    Widget emptyListActivation() {
+      return Container(
+          width: double.infinity,
+          margin: EdgeInsets.only(right: defaultMargin, left: defaultMargin),
+          child: Center(
+            child: Column(children: [
+              SizedBox(height: 35),
+              Image(
+                image: AssetImage("assets/unavailable_icon.png"),
+                width: 100,
+                height: 100,
+                fit: BoxFit.fitWidth,
+              ),
+              SizedBox(height: 20),
+              Text(
+                "Kolam belum pernah\nMelakukan grading",
+                style: primaryTextStyle.copyWith(
+                  fontSize: 14,
+                  fontWeight: bold,
+                ),
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+              SizedBox(height: 10),
+              Text(
+                "Silahkan melakukan grading!",
+                style: secondaryTextStyle.copyWith(
+                  fontSize: 13,
+                  fontWeight: bold,
+                ),
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+            ]),
+          ));
     }
 
     Widget listMonthFeed() {
@@ -236,9 +339,8 @@ class GradingPage extends StatelessWidget {
     Widget sizingSec() {
       return Container(
         width: double.infinity,
-        margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
-        padding:
-            const EdgeInsets.only(top: 16, bottom: 16, right: 20, left: 20),
+        margin: EdgeInsets.only(left: 20, right: 20, top: 20),
+        padding: EdgeInsets.only(top: 16, bottom: 16, right: 20, left: 20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: primaryColor),
@@ -299,7 +401,7 @@ class GradingPage extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
+                    Container(
                       height: 40,
                       width: 80,
                       // margin: EdgeInsets.only(
@@ -308,11 +410,10 @@ class GradingPage extends StatelessWidget {
                       //     left: defaultMargin),
                       child: TextButton(
                         onPressed: () {
-                          Get.to(() => const ConstantaGradingPage(),
-                              arguments: {
-                                "activation": controller.activation,
-                                "pond": controller.pond
-                              });
+                          Get.to(() => ConstantaGradingPage(), arguments: {
+                            "activation": controller.activation,
+                            "pond": controller.pond
+                          });
                         },
                         style: TextButton.styleFrom(
                           backgroundColor: primaryColor,
@@ -340,15 +441,35 @@ class GradingPage extends StatelessWidget {
 
     return Obx(() {
       if (controller.isLoading.value == false) {
-        // print('object');
+        print('object');
         return Scaffold(
+          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Rekapitulasi Grading"),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
+            ],
           ),
+          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               chartGrading(),
               gradingDataRecap(),
               // detail(),
@@ -356,8 +477,10 @@ class GradingPage extends StatelessWidget {
               entryGradingButton(),
               recapTitle(),
               // chartRecap(),
-              listMonthFeed(),
-              const SizedBox(
+              controller.list_fishGrading.isEmpty
+                  ? emptyListPond()
+                  : listMonthFeed(),
+              SizedBox(
                 height: 10,
               )
             ],

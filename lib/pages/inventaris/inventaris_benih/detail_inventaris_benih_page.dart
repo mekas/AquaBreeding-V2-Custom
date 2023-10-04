@@ -4,11 +4,10 @@ import 'package:fish/widgets/dialog_widget.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class DetailInventarisBenihPage extends StatefulWidget {
-  const DetailInventarisBenihPage({super.key, required this.pageIdentifier});
-
-  final String pageIdentifier;
+  const DetailInventarisBenihPage({super.key});
 
   @override
   State<DetailInventarisBenihPage> createState() =>
@@ -16,223 +15,353 @@ class DetailInventarisBenihPage extends StatefulWidget {
 }
 
 class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
-  final TextEditingController firstDate = TextEditingController();
-  final TextEditingController lastDate = TextEditingController();
-
   final InventarisBenihState state = Get.put(InventarisBenihState());
+
+  DateTime currDate = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    initializeDateFormatting('id', null);
+    state.isReversed.value = false;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      state.getAllSeedData('');
+      state.getHistorySeedData(
+        false,
+        state.firstDate.text,
+        state.lastDate.text,
+        '',
+        () {},
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor1,
-      appBar: AppBar(
-        centerTitle: true,
+    return Obx(
+      () => Scaffold(
         backgroundColor: backgroundColor1,
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () async {
-              openDateDialogPicker(context);
-            },
-            icon: const Icon(
-              Icons.filter_list_rounded,
-            ),
-          )
-        ],
-        title: Column(
-          children: [
-            Text(
-              'Detail Bahan',
-              style: headingText2,
-            ),
-            const SizedBox(
-              height: 2,
-            ),
-            Text(
-              '(${widget.pageIdentifier})',
-              style: hoverText,
-            ),
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: backgroundColor1,
+          actions: [
+            IconButton(
+              onPressed: () async {
+                openDateDialogPicker(context);
+              },
+              icon: const Icon(
+                Icons.filter_list_rounded,
+              ),
+            )
           ],
-        ),
-      ),
-      body: Container(
-        color: backgroundColor1,
-        child: SafeArea(
-          child: ListView.builder(
-            padding: const EdgeInsets.only(bottom: 16),
-            itemCount: state.dummyDataValue2.length,
-            physics: BouncingScrollPhysics(),
-            itemBuilder: ((context, index) {
-              return Container(
-                margin: const EdgeInsets.fromLTRB(16, 20, 16, 0),
-                decoration: BoxDecoration(
-                  color: backgroundColor1,
-                  border: Border.all(width: 2, color: primaryColor),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Tanggal :',
-                            style: headingText3,
-                          ),
-                          Text(
-                            state.dummyDataValue2[index]['date_input'],
-                            style: headingText3,
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.all(12),
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: greyBackgroundColor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Kategori :',
-                                style: headingText3,
-                              ),
-                              Text(
-                                '${state.dummyDataValue2[index]['category']}',
-                                style: headingText3,
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            height: 12,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Jenis Ikan :',
-                                style: headingText3,
-                              ),
-                              Text(
-                                'Ikan ${state.dummyDataValue2[index]['fish_type']}',
-                                style: headingText3,
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            height: 12,
-                          ),
-                          state.dummyDataValue2[index]['category'] ==
-                                  'Kelas Benih'
-                              ? Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Satuan Sortir :',
-                                      style: headingText3,
-                                    ),
-                                    Text(
-                                      '${state.dummyDataValue2[index]['sortir']} cm',
-                                      style: headingText3,
-                                    )
-                                  ],
-                                )
-                              : Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Panjang & Lebar :',
-                                      style: headingText3,
-                                    ),
-                                    Text(
-                                      '${state.dummyDataValue2[index]['panjang']}x${state.dummyDataValue2[index]['panjang']} cm',
-                                      style: headingText3,
-                                    )
-                                  ],
-                                ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                      ),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Jumlah :',
-                                style: headingText3,
-                              ),
-                              Text(
-                                '${state.dummyDataValue2[index]['amount']} ekor',
-                                style: headingText3,
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Berat :',
-                                style: headingText3,
-                              ),
-                              Text(
-                                '${state.dummyDataValue2[index]['weight']} gram',
-                                style: headingText3,
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Harga :',
-                                style: headingText3,
-                              ),
-                              Text('Rp${state.dummyDataValue2[index]['price']}',
-                                  style: headingText3)
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                  ],
-                ),
-              );
-            }),
+          title: Text(
+            'Riwayat Benih',
+            style: headingText2,
           ),
         ),
+        body: state.isLoadingHistory.value
+            ? Center(
+                child: SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            : state.seedHistoryList.value.data!.isEmpty
+                ? Center(
+                    child: Text(
+                      'Tidak ada data',
+                      style: headingText3,
+                    ),
+                  )
+                : Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 1.3,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 4),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: inputColor,
+                                ),
+                                child: StatefulBuilder(
+                                  builder: ((context, setState) {
+                                    return DropdownButtonHideUnderline(
+                                      child: DropdownButton(
+                                        onChanged: ((String? value) async {
+                                          setState(() {
+                                            state.selectedNameHistory.value =
+                                                value!;
+                                          });
+
+                                          state.resetVariables();
+                                        }),
+                                        value: state.selectedNameHistory.value,
+                                        dropdownColor: inputColor,
+                                        items: state.nameHistoryList.map(
+                                          (String val) {
+                                            return DropdownMenuItem(
+                                              value: val,
+                                              child: Text(
+                                                val,
+                                                style: headingText3,
+                                              ),
+                                            );
+                                          },
+                                        ).toList(),
+                                      ),
+                                    );
+                                  }),
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                                onTap: () async {
+                                  await state.getHistorySeedData(
+                                    state.isReversed.value,
+                                    state.firstDate.text,
+                                    state.lastDate.text,
+                                    state.selectedNameHistory.value == 'Semua'
+                                        ? ''
+                                        : state.selectedNameHistory.value,
+                                    () {},
+                                  );
+                                },
+                                child: Icon(
+                                  Icons.search,
+                                  color: Colors.white,
+                                )),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Urutkan Data',
+                              style: headingText3,
+                            ),
+                            GestureDetector(
+                                onTap: () async {
+                                  state.isReversed.value =
+                                      !state.isReversed.value;
+                                  await state.getHistorySeedData(
+                                    state.isReversed.value,
+                                    state.firstDate.text,
+                                    state.lastDate.text,
+                                    state.selectedNameHistory.value == 'Semua'
+                                        ? ''
+                                        : state.selectedNameHistory.value,
+                                    () {},
+                                  );
+                                },
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      state.isReversed.value
+                                          ? Icons.arrow_upward_rounded
+                                          : Icons.arrow_downward_rounded,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text(
+                                      state.isReversed.value
+                                          ? 'Terbaru - Terlama'
+                                          : 'Terlama - Terbaru',
+                                      style: headingText3,
+                                    ),
+                                  ],
+                                )),
+                          ],
+                        ),
+                      ),
+                      Flexible(
+                        child: Container(
+                          color: backgroundColor1,
+                          child: SafeArea(
+                            child: ListView.builder(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              itemCount:
+                                  state.seedHistoryList.value.data!.length,
+                              physics: BouncingScrollPhysics(),
+                              itemBuilder: ((context, index) {
+                                return Container(
+                                  margin:
+                                      const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                                  decoration: BoxDecoration(
+                                    color: backgroundColor1,
+                                    border: Border.all(
+                                        width: 2, color: primaryColor),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color: primaryColor,
+                                          borderRadius:
+                                              BorderRadius.circular(6),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              'Tanggal :',
+                                              style: headingText3,
+                                            ),
+                                            Text(
+                                              state.dateFormat(
+                                                  state.seedHistoryList.value
+                                                      .data![index].createdAt!
+                                                      .toString(),
+                                                  true),
+                                              style: headingText3,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 12,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  'Tipe',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 6),
+                                                Text(
+                                                  state
+                                                      .seedHistoryList
+                                                      .value
+                                                      .data![index]
+                                                      .seed!
+                                                      .fishSeedCategory
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    color: Colors.grey.shade500,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  'Nama',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 6),
+                                                Text(
+                                                  state
+                                                      .seedHistoryList
+                                                      .value
+                                                      .data![index]
+                                                      .seed!
+                                                      .brandName
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    color: Colors.grey.shade500,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  'Jumlah',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 6),
+                                                Text(
+                                                  '-${state.seedHistoryList.value.data![index].usage.toString()} ekor',
+                                                  style: TextStyle(
+                                                    color: Colors.red.shade900,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  'Kolam',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 6),
+                                                Text(
+                                                  state.seedHistoryList.value
+                                                      .data![index].pond
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    color: Colors.grey.shade500,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 12,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
       ),
     );
   }
@@ -279,16 +408,11 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
                   firstDate: DateTime(1900),
                   lastDate: DateTime(2100),
                 );
-                firstDate.text = datePicker
-                    .toString()
-                    .split(' ')[0]
-                    .split('-')
-                    .reversed
-                    .join('-');
+                state.firstDate.text = datePicker.toString().split(' ')[0];
               },
               child: TextFieldWidget(
                 label: 'Tanggal Awal',
-                controller: firstDate,
+                controller: state.firstDate,
                 isLong: false,
                 isEdit: false,
                 suffixSection: Icon(
@@ -305,16 +429,11 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
                   firstDate: DateTime(1900),
                   lastDate: DateTime(2100),
                 );
-                lastDate.text = datePicker
-                    .toString()
-                    .split(' ')[0]
-                    .split('-')
-                    .reversed
-                    .join('-');
+                state.lastDate.text = datePicker.toString().split(' ')[0];
               },
               child: TextFieldWidget(
                 label: 'Tanggal Akhir',
-                controller: lastDate,
+                controller: state.lastDate,
                 isLong: false,
                 isEdit: false,
                 suffixSection: Icon(
@@ -335,8 +454,16 @@ class _DetailInventarisBenihPageState extends State<DetailInventarisBenihPage> {
               borderRadius: BorderRadius.circular(8),
             ),
           ),
-          onPressed: () {
-            Navigator.pop(context);
+          onPressed: () async {
+            await state.getHistorySeedData(
+              state.isReversed.value,
+              state.firstDate.text,
+              state.lastDate.text,
+              '',
+              () {
+                Navigator.pop(context);
+              },
+            );
           },
           child: Icon(
             Icons.navigate_next_rounded,

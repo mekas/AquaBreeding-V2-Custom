@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:convert';
 import 'dart:developer';
 
@@ -7,18 +5,21 @@ import 'package:fish/controllers/authentication/register_controller.dart';
 import 'package:fish/pages/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fish/service/url_api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:http/http.dart' as http;
 
+import '../component/login_card_input.dart';
 import '../component/register_input.dart';
 import '../component/register_input_next.dart';
 import 'login_page.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+  RegisterPage({Key? key}) : super(key: key);
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
@@ -26,15 +27,16 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   late SharedPreferences prefs;
   final RegisterController controller = Get.put(RegisterController());
+  bool isLoading = false;
 
   final pageController = PageController(initialPage: 0);
   @override
   void dispose() {
     pageController.dispose();
+
     super.dispose();
   }
 
-  @override
   void initState() {
     super.initState();
     initSharedPrefs();
@@ -47,6 +49,9 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void register() async {
+    setState(() {
+      isLoading = true;
+    });
     final response = await http.post(
       Uri.parse(Urls.register),
       headers: {
@@ -68,103 +73,145 @@ class _RegisterPageState extends State<RegisterPage> {
       },
     );
     var data = jsonDecode(response.body);
-    // print(response.body);
+    print(response.body);
     if (response.statusCode == 200) {
       var myToken = data['access_token'];
-      prefs.setString('token', myToken);
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const DashboardPage()));
-      // print(response.body);
+      var identity = data['identity'];
+      prefs.setString(
+        'token',
+        myToken,
+      );
+      prefs.setString('identity', identity.toString());
+      setState(() {
+        isLoading = false;
+      });
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => DashboardPage()));
+      print(response.body);
+      controller.usernameController.clear();
+      controller.passwordController.clear();
+      controller.addressController.clear();
+      controller.breedercountController.clear();
+      controller.coordinateController.clear();
+      controller.phoneController.clear();
+      controller.nameController.clear();
+      controller.farmnameController.clear();
+      controller.nikController.clear();
     } else {
-      // print(response.body);
+      // inspect(response);
+      showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+                title: const Text('Register Error',
+                    style: TextStyle(color: Colors.red)),
+                content: const Text(
+                  'BreederID Sudah Digunakan',
+                  style: TextStyle(color: Colors.white),
+                ),
+                backgroundColor: backgroundColor1,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context, 'OK');
+                      setState(() {
+                        isLoading = false;
+                      });
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              ));
+      print(response.body);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // Widget usernameInput() {
-    //   return Container(
-    //     margin: EdgeInsets.only(
-    //         top: defaultSpace, right: defaultMargin, left: defaultMargin),
-    //     child: Column(
-    //       crossAxisAlignment: CrossAxisAlignment.start,
-    //       children: [
-    //         Text(
-    //           'Username',
-    //           style: primaryTextStyle.copyWith(
-    //             fontSize: 16,
-    //             fontWeight: medium,
-    //           ),
-    //         ),
-    //         const SizedBox(
-    //           height: 12,
-    //         ),
-    //         Container(
-    //           height: 50,
-    //           padding: const EdgeInsets.symmetric(
-    //             horizontal: 16,
-    //           ),
-    //           decoration: BoxDecoration(
-    //             color: backgroundColor2,
-    //             borderRadius: BorderRadius.circular(12),
-    //           ),
-    //           child: Center(
-    //             child: TextFormField(
-    //               style: primaryTextStyle,
-    //               controller: controller.usernameController,
-    //               decoration: InputDecoration.collapsed(
-    //                 hintText: 'ex: 20',
-    //                 hintStyle: subtitleTextStyle,
-    //               ),
-    //             ),
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   );
-    // }
+    Widget usernameInput() {
+      return Container(
+        margin: EdgeInsets.only(
+            top: defaultSpace, right: defaultMargin, left: defaultMargin),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Username',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Container(
+              height: 50,
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              decoration: BoxDecoration(
+                color: backgroundColor2,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: TextFormField(
+                  style: primaryTextStyle,
+                  controller: controller.usernameController,
+                  decoration: InputDecoration.collapsed(
+                    hintText: 'ex: 20',
+                    hintStyle: subtitleTextStyle,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
 
-    // Widget passwordInput() {
-    //   return Container(
-    //     margin: EdgeInsets.only(
-    //         top: defaultSpace, right: defaultMargin, left: defaultMargin),
-    //     child: Column(
-    //       crossAxisAlignment: CrossAxisAlignment.start,
-    //       children: [
-    //         Text(
-    //           'Password',
-    //           style: primaryTextStyle.copyWith(
-    //             fontSize: 16,
-    //             fontWeight: medium,
-    //           ),
-    //         ),
-    //         const SizedBox(
-    //           height: 12,
-    //         ),
-    //         Container(
-    //           height: 50,
-    //           padding: const EdgeInsets.symmetric(
-    //             horizontal: 16,
-    //           ),
-    //           decoration: BoxDecoration(
-    //             color: backgroundColor2,
-    //             borderRadius: BorderRadius.circular(12),
-    //           ),
-    //           child: Center(
-    //             child: TextFormField(
-    //               style: primaryTextStyle,
-    //               controller: controller.passwordController,
-    //               decoration: InputDecoration.collapsed(
-    //                 hintText: '',
-    //                 hintStyle: subtitleTextStyle,
-    //               ),
-    //             ),
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   );
-    // }
+    Widget passwordInput() {
+      return Container(
+        margin: EdgeInsets.only(
+            top: defaultSpace, right: defaultMargin, left: defaultMargin),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Password',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Container(
+              height: 50,
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              decoration: BoxDecoration(
+                color: backgroundColor2,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: TextFormField(
+                  style: primaryTextStyle,
+                  controller: controller.passwordController,
+                  decoration: InputDecoration.collapsed(
+                    hintText: '',
+                    hintStyle: subtitleTextStyle,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
 
     Widget formInput() {
       return Container(
@@ -195,6 +242,7 @@ class _RegisterPageState extends State<RegisterPage> {
             return RegisterNextInputCard(
               registerfunc: register,
               pageController: pageController,
+              isLoading: isLoading,
             );
           }),
           itemCount: 1,
@@ -202,41 +250,41 @@ class _RegisterPageState extends State<RegisterPage> {
       );
     }
 
-    // Widget logo() {
-    //   return Center(
-    //     child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-    //       Container(
-    //         width: 130,
-    //         height: 130,
-    //         decoration: const BoxDecoration(
-    //           image: DecorationImage(
-    //             image: AssetImage(
-    //               'assets/logo.png',
-    //             ),
-    //           ),
-    //         ),
-    //       ),
-    //       Text(
-    //         "Assistive Aquaculture Breeding Management",
-    //         textAlign: TextAlign.center,
-    //         style: blueTextStyle.copyWith(
-    //           fontSize: 16,
-    //           fontWeight: bold,
-    //         ),
-    //       ),
-    //       Text(
-    //         "by Aquaculture Tech",
-    //         style: secondaryTextStyle.copyWith(
-    //           fontSize: 14,
-    //           fontWeight: medium,
-    //         ),
-    //       ),
-    //       const SizedBox(
-    //         height: 10,
-    //       ),
-    //     ]),
-    //   );
-    // }
+    Widget logo() {
+      return Center(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Container(
+            width: 130,
+            height: 130,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                  'assets/logo.png',
+                ),
+              ),
+            ),
+          ),
+          Text(
+            "Assistive Aquaculture Breeding Management",
+            textAlign: TextAlign.center,
+            style: blueTextStyle.copyWith(
+              fontSize: 16,
+              fontWeight: bold,
+            ),
+          ),
+          Text(
+            "by Aquaculture Tech",
+            style: secondaryTextStyle.copyWith(
+              fontSize: 14,
+              fontWeight: medium,
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+        ]),
+      );
+    }
 
     Widget footer() {
       return Center(
@@ -248,38 +296,63 @@ class _RegisterPageState extends State<RegisterPage> {
               fontWeight: bold,
             ),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Sudah punya akun?",
+                style: secondaryTextStyle.copyWith(
+                  fontSize: 16,
+                  fontWeight: medium,
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => LoginPage()));
+                },
+                child: Text(
+                  'Login',
+                  style: blueTextStyle.copyWith(
+                    fontSize: 16,
+                    fontWeight: bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ]),
       );
     }
 
-    // Widget submitButton() {
-    //   return Container(
-    //     height: 50,
-    //     width: double.infinity,
-    //     margin: EdgeInsets.only(
-    //         top: defaultSpace * 3, right: defaultMargin, left: defaultMargin),
-    //     child: TextButton(
-    //       onPressed: () {
-    //         // Get.back();
-    //         register();
-    //         // controller.getWeek();
-    //       },
-    //       style: TextButton.styleFrom(
-    //         backgroundColor: primaryColor,
-    //         shape: RoundedRectangleBorder(
-    //           borderRadius: BorderRadius.circular(12),
-    //         ),
-    //       ),
-    //       child: Text(
-    //         'Submit',
-    //         style: primaryTextStyle.copyWith(
-    //           fontSize: 16,
-    //           fontWeight: medium,
-    //         ),
-    //       ),
-    //     ),
-    //   );
-    // }
+    Widget submitButton() {
+      return Container(
+        height: 50,
+        width: double.infinity,
+        margin: EdgeInsets.only(
+            top: defaultSpace * 3, right: defaultMargin, left: defaultMargin),
+        child: TextButton(
+          onPressed: () {
+            // Get.back();
+            register();
+            // controller.getWeek();
+          },
+          style: TextButton.styleFrom(
+            backgroundColor: primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          child: Text(
+            'Submit',
+            style: primaryTextStyle.copyWith(
+              fontSize: 16,
+              fontWeight: medium,
+            ),
+          ),
+        ),
+      );
+    }
 
     return Obx(() {
       if (controller.isLoading.value == false) {
@@ -291,78 +364,24 @@ class _RegisterPageState extends State<RegisterPage> {
               children: [
                 ListView(
                   children: [
-                    const SizedBox(
+                    SizedBox(
                       height: 10,
                     ),
                     footer(),
                     formInput(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Sudah punya akun?",
-                          style: secondaryTextStyle.copyWith(
-                            fontSize: 16,
-                            fontWeight: medium,
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const LoginPage()));
-                          },
-                          child: Text(
-                            'Login',
-                            style: blueTextStyle.copyWith(
-                              fontSize: 16,
-                              fontWeight: bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
+                    SizedBox(
                       height: 10,
                     ),
                   ],
                 ),
                 ListView(
                   children: [
-                    const SizedBox(
+                    SizedBox(
                       height: 10,
                     ),
                     footer(),
                     form2Input(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Sudah punya akun?",
-                          style: secondaryTextStyle.copyWith(
-                            fontSize: 16,
-                            fontWeight: medium,
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const LoginPage()));
-                          },
-                          child: Text(
-                            'Login',
-                            style: blueTextStyle.copyWith(
-                              fontSize: 16,
-                              fontWeight: bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
+                    SizedBox(
                       height: 10,
                     ),
                   ],

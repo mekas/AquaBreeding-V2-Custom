@@ -1,10 +1,16 @@
+import 'dart:ffi';
+
+import 'package:fish/pages/component/tabviewwater.dart';
 import 'package:fish/pages/dashboard_controller.dart';
 
 import 'package:fish/pages/home/home_page.dart';
+import 'package:fish/pages/component/tabviewwater.dart';
 import 'package:fish/pages/pond/pond_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:fish/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'authentication/profile_page.dart';
 
@@ -32,14 +38,14 @@ class _DashboardPageState extends State<DashboardPage> {
             child: IndexedStack(
               index: controller.tabIndex,
               children: [
-                const HomePage(),
-                const PondPage(),
+                HomePage(),
+                PondPage(),
                 ProfilePage(),
               ],
             ),
           ),
           bottomNavigationBar: BottomNavigationBar(
-            unselectedItemColor: const Color(0xff808191),
+            unselectedItemColor: Color(0xff808191),
             selectedItemColor: primaryColor,
             type: BottomNavigationBarType.fixed,
             backgroundColor: backgroundColor3,
@@ -48,7 +54,7 @@ class _DashboardPageState extends State<DashboardPage> {
             items: [
               BottomNavigationBarItem(
                 icon: Container(
-                  margin: const EdgeInsets.only(
+                  margin: EdgeInsets.only(
                     top: 20,
                     bottom: 5,
                   ),
@@ -57,14 +63,14 @@ class _DashboardPageState extends State<DashboardPage> {
                     width: 25,
                     color: controller.tabIndex == 0
                         ? primaryColor
-                        : const Color(0xff808191),
+                        : Color(0xff808191),
                   ),
                 ),
                 label: 'Home',
               ),
               BottomNavigationBarItem(
                 icon: Container(
-                  margin: const EdgeInsets.only(
+                  margin: EdgeInsets.only(
                     top: 20,
                     bottom: 5,
                   ),
@@ -73,14 +79,14 @@ class _DashboardPageState extends State<DashboardPage> {
                     width: 25,
                     color: controller.tabIndex == 1
                         ? primaryColor
-                        : const Color(0xff808191),
+                        : Color(0xff808191),
                   ),
                 ),
                 label: 'Kolam',
               ),
               BottomNavigationBarItem(
                 icon: Container(
-                  margin: const EdgeInsets.only(
+                  margin: EdgeInsets.only(
                     top: 20,
                     bottom: 5,
                   ),
@@ -89,7 +95,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     width: 22,
                     color: controller.tabIndex == 2
                         ? primaryColor
-                        : const Color(0xff808191),
+                        : Color(0xff808191),
                   ),
                 ),
                 label: 'Profile',

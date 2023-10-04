@@ -1,7 +1,7 @@
+import 'package:fish/models/activation_model.dart';
 import 'package:fish/models/feed_history_detail.dart';
 import 'package:fish/models/feed_history_monthly.dart';
 import 'package:fish/models/feed_history_weekly.dart';
-import 'package:fish/models/activation_model.dart';
 import 'package:fish/models/pond_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/pages/feeding/detail_feed_daily_page.dart';
@@ -28,7 +28,7 @@ class FeedDailyCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => const DetailFeedDailyPage(), arguments: {
+        Get.to(() => DetailFeedDailyPage(), arguments: {
           "activation": activation,
           "pond": pond,
           "feedHistoryMonthly": feedHistoryMonthly,
@@ -41,7 +41,7 @@ class FeedDailyCard extends StatelessWidget {
         margin: EdgeInsets.only(
           top: defaultMargin,
         ),
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: primaryColor),

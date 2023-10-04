@@ -1,12 +1,13 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:fish/controllers/daily_water/daily_water_detail_controller.dart';
 import 'package:fish/pages/dailywater/daily_water_edit_page.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/daily_water/daily_water_controller.dart';
+import '../../models/daily_water_model.dart';
+import '../../widgets/new_Menu_widget.dart';
 
 class DailyWaterDetailPage extends StatefulWidget {
   const DailyWaterDetailPage({Key? key}) : super(key: key);
@@ -19,8 +20,8 @@ class DailyWaterDetailPage extends StatefulWidget {
 class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
   final DailyWaterDetailController controller =
       Get.put(DailyWaterDetailController());
-  final DailyWaterController dailyWaterControlller =
-      Get.put(DailyWaterController());
+  final DailyWaterController watercontroller = Get.put(DailyWaterController());
+  var isMenuTapped = false.obs;
   @override
   void initState() {
     super.initState();
@@ -32,7 +33,16 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
   }
 
   @override
+  void dispose() {
+    controller.postDataLog(controller.fitur);
+    watercontroller.getDailyWaterData(context);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     Widget treatmentDataRecap() {
       return Container(
         margin: EdgeInsets.only(
@@ -53,7 +63,7 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 5,
                 ),
               ],
@@ -144,7 +154,7 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       width: 10,
                     ),
                     TextButton(
@@ -153,7 +163,6 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
                           await controller.deleteDailyWaterData(
                               context, controller.dailyWater.id.toString());
                           // controller.getWeek();
-                          dailyWaterControlller.getDailyWaterData(context);
                         },
                         style: TextButton.styleFrom(
                           backgroundColor: Colors.red.shade400,
@@ -161,7 +170,7 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.restore_from_trash,
                           color: Colors.white,
                         )),
@@ -232,8 +241,8 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
                   maxLines: 1,
                 ),
                 Text(
-                  "${controller.dailyWaterfix[0].ph} "
-                  "${controller.dailyWaterfix[0].ph_desc}",
+                  "${controller.dailyWaterfix[0].ph} " +
+                      "${controller.dailyWaterfix[0].ph_desc}",
                   style: secondaryTextStyle.copyWith(
                     color: controller.dailyWaterfix[0].ph_desc == "normal"
                         ? Colors.green
@@ -244,7 +253,7 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -257,7 +266,7 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
                   maxLines: 1,
                 ),
                 Text(
-                  "${controller.dailyWaterfix[0].temperature} " "°C",
+                  "${controller.dailyWaterfix[0].temperature} " + "°C",
                   style: secondaryTextStyle.copyWith(
                     fontSize: 16,
                     fontWeight: medium,
@@ -280,8 +289,8 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
                   maxLines: 1,
                 ),
                 Text(
-                  "${controller.dailyWaterfix[0].numDo} "
-                  "${controller.dailyWaterfix[0].numDo_desc}",
+                  "${controller.dailyWaterfix[0].numDo} " +
+                      "${controller.dailyWaterfix[0].numDo_desc}",
                   style: secondaryTextStyle.copyWith(
                     color: controller.dailyWaterfix[0].numDo_desc == "normal"
                         ? Colors.green
@@ -294,10 +303,10 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
               ],
@@ -310,29 +319,47 @@ class _DailyWaterDetailPageState extends State<DailyWaterDetailPage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Detail Kondisi Air Harian"),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
+            leading: new IconButton(
+              icon: new Icon(Icons.arrow_back),
               onPressed: () async {
                 // Get.back();
 
                 Navigator.pop(context);
-
-                dailyWaterControlller.getDailyWaterData(context);
               },
             ),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
+            ],
           ),
+          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               treatmentDataRecap(),
               detail(),
               titleRecap(),
               dataTreatment(),
               detailTreatment(),
-              const SizedBox(
+              SizedBox(
                 height: 10,
               )
             ],

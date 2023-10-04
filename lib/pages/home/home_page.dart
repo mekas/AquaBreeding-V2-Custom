@@ -1,24 +1,37 @@
 import 'package:fish/pages/component/statistic_card.dart';
 import 'package:fish/pages/component/water_card.dart';
 import 'package:fish/controllers/home/home_controller.dart';
+import 'package:fish/pages/deactivation_recap/deactivation_recap_page.dart';
 import 'package:fish/pages/inventaris/inventaris_aset/inventaris_aset_page.dart';
+import 'package:fish/pages/inventaris/inventaris_aset/inventaris_aset_state.dart';
 import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_mainpage.dart';
+import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_state.dart';
 import 'package:fish/pages/inventaris/inventaris_benih/inventaris_benih_mainpage.dart';
-import 'package:fish/pages/inventaris/inventaris_listrik/inventaris_listrik_page.dart';
+import 'package:fish/pages/inventaris/inventaris_listrik/inventaris_listrik_mainpage.dart';
+import 'package:fish/pages/inventaris/inventaris_listrik/inventaris_listrik_state.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_mainpage.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:fish/widgets/main_inventaris_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fish/theme.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+import '../../widgets/new_Menu_widget.dart';
+
+class HomePage extends StatefulWidget {
+  HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final HomeController controller = Get.put(HomeController(), permanent: false);
+  var isMenuTapped = false.obs;
+  var scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-    final HomeController controller =
-        Get.put(HomeController(), permanent: false);
-
     Widget title() {
       return Container(
         margin: EdgeInsets.only(
@@ -80,7 +93,7 @@ class HomePage extends StatelessWidget {
                       )),
                 ],
               ),
-              const SizedBox(
+              SizedBox(
                 height: 16,
               ),
               Row(
@@ -103,7 +116,7 @@ class HomePage extends StatelessWidget {
                       )),
                 ],
               ),
-              const SizedBox(
+              SizedBox(
                 height: 16,
               ),
               Row(
@@ -114,14 +127,18 @@ class HomePage extends StatelessWidget {
                       flex: 1,
                       child: StatisticCard(
                         title: 'Panen',
-                        value: controller.statistic.value.fish_harvested,
+                        value: double.parse(controller
+                            .statistic.value.fish_harvested!
+                            .toStringAsFixed(1)),
                         unit: 'Kg',
                       )),
                   Expanded(
                       flex: 1,
                       child: StatisticCard(
                         title: 'Total Pakan',
-                        value: controller.statistic.value.total_feed_dose,
+                        value: double.parse(controller
+                            .statistic.value.total_feed_dose!
+                            .toStringAsFixed(1)),
                         unit: 'Kg',
                       )),
                 ],
@@ -130,31 +147,31 @@ class HomePage extends StatelessWidget {
           ));
     }
 
-    // Widget fishTitle() {
-    //   return Container(
-    //     margin: EdgeInsets.only(
-    //       top: defaultSpace,
-    //       left: defaultMargin,
-    //       right: defaultMargin,
-    //     ),
-    //     child: Column(
-    //       crossAxisAlignment: CrossAxisAlignment.start,
-    //       children: [
-    //         Text(
-    //           'Total Berat Ikan',
-    //           style: primaryTextStyle.copyWith(
-    //             fontSize: 24,
-    //             fontWeight: semiBold,
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   );
-    // }
+    Widget fishTitle() {
+      return Container(
+        margin: EdgeInsets.only(
+          top: defaultSpace,
+          left: defaultMargin,
+          right: defaultMargin,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Total Berat Ikan',
+              style: primaryTextStyle.copyWith(
+                fontSize: 24,
+                fontWeight: semiBold,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
 
     // Widget fish() {
     //   return Container(
-    //     margin: const EdgeInsets.only(top: 14),
+    //     margin: EdgeInsets.only(top: 14),
     //     child: SingleChildScrollView(
     //       scrollDirection: Axis.horizontal,
     //       child: Row(
@@ -274,86 +291,133 @@ class HomePage extends StatelessWidget {
     //   );
     // }
 
+    // Widget newMenu(bool isMenuTapped) {
+    //   return isMenuTapped ? Column(
+    //     children: [
+    //       SizedBox(height: 10,),
+    //       Container(
+    //         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+    //         child: Row(
+    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //           children: [
+    //             Column(
+    //               children: [
+    //                 SizedBox(
+    //                   width: 55,
+    //                   height: 55,
+    //                   child: ElevatedButton(onPressed: (){}, child: Image.asset("assets/icon_pakan.png", fit: BoxFit.cover,), style: ElevatedButton.styleFrom(backgroundColor: Colors.white, shape: CircleBorder(),)),
+    //                 ),
+    //                 SizedBox(height: 10,),
+    //                 Text("Pakan",
+    //                   style: primaryTextStyle.copyWith(
+    //                     fontSize: 18,
+    //                     fontWeight: semiBold,
+    //                   ),)
+    //               ],
+    //             ),
+    //             Column(
+    //               children: [
+    //                 SizedBox(
+    //                   width: 55,
+    //                   height: 55,
+    //                   child: ElevatedButton(onPressed: (){}, child: Image.asset("assets/icon_suplemen.png", fit: BoxFit.cover,), style: ElevatedButton.styleFrom(backgroundColor: Colors.white, shape: CircleBorder(),)),
+    //                 ),
+    //                 SizedBox(height: 10,),
+    //                 Text("Suplemen",
+    //                   style: primaryTextStyle.copyWith(
+    //                     fontSize: 18,
+    //                     fontWeight: semiBold,
+    //                   ),)
+    //               ],
+    //             ),
+    //             Column(
+    //               children: [
+    //                 SizedBox(
+    //                   width: 55,
+    //                   height: 55,
+    //                   child: ElevatedButton(onPressed: (){}, child: Image.asset("assets/icon_listrik.png", fit: BoxFit.cover,), style: ElevatedButton.styleFrom(backgroundColor: Colors.white, shape: CircleBorder(),)),
+    //                 ),
+    //                 SizedBox(height: 10,),
+    //                 Text("Listrik",
+    //                   style: primaryTextStyle.copyWith(
+    //                     fontSize: 18,
+    //                     fontWeight: semiBold,
+    //                   ),)
+    //               ],
+    //             ),
+    //             Column(
+    //               children: [
+    //                 SizedBox(
+    //                   width: 55,
+    //                   height: 55,
+    //                   child: ElevatedButton(onPressed: (){}, child: Image.asset("assets/ikon_asset.png", fit: BoxFit.cover,), style: ElevatedButton.styleFrom(backgroundColor: Colors.white, shape: CircleBorder(),)),
+    //                 ),
+    //                 SizedBox(height: 10,),
+    //                 Text("Asset",
+    //                   style: primaryTextStyle.copyWith(
+    //                     fontSize: 18,
+    //                     fontWeight: semiBold,
+    //                   ),)
+    //               ],
+    //             ),
+    //             Column(
+    //               children: [
+    //                 SizedBox(
+    //                   width: 55,
+    //                   height: 55,
+    //                   child: ElevatedButton(onPressed: (){}, child: Image.asset("assets/icon_benih.png", fit: BoxFit.cover,), style: ElevatedButton.styleFrom(backgroundColor: Colors.white, shape: CircleBorder(),)),
+    //                 ),
+    //                 SizedBox(height: 10,),
+    //                 Text("Benih",
+    //                   style: primaryTextStyle.copyWith(
+    //                     fontSize: 18,
+    //                     fontWeight: semiBold,
+    //                   ),)
+    //               ],
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //     ],
+    //   ) : Container();
+    // }
+
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor1,
             title: Text('Home'),
             centerTitle: true,
+            leading: IconButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) {
+                    return DeactivationRecapPage();
+                  },
+                ));
+              },
+              icon: Icon(Icons.book_rounded),
+            ),
             actions: [
-              IconButton(onPressed: () {}, icon: Icon(Icons.book_rounded))
+              IconButton(
+                onPressed: () {
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
             ],
           ),
-          drawer: Drawer(
-            backgroundColor: backgroundColor1,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 24,
-                ),
-                const Text(
-                  'Inventaris',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(
-                  height: 54,
-                ),
-                MainInvetarisButton(
-                  title: 'Pakan',
-                  doOnTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const InventarisPakanMainpage();
-                    }));
-                  },
-                ),
-                MainInvetarisButton(
-                  title: 'Bahan Budidaya',
-                  doOnTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const InventarisBahanBudidayaMainpage();
-                    }));
-                  },
-                ),
-                MainInvetarisButton(
-                  title: 'Listrik',
-                  doOnTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const InventarisListrikPage();
-                    }));
-                  },
-                ),
-                MainInvetarisButton(
-                  title: 'Benih',
-                  doOnTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const InventarisBenihMainpage();
-                    }));
-                  },
-                ),
-                MainInvetarisButton(
-                  title: 'Aset',
-                  doOnTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const InventarisAsetPage();
-                    }));
-                  },
-                ),
-              ],
-            ),
-          ),
+          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                newMenu(),
               title(),
               username(),
               statistic(),
@@ -375,3 +439,5 @@ class HomePage extends StatelessWidget {
     });
   }
 }
+
+

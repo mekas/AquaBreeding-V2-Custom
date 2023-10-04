@@ -1,16 +1,48 @@
-// ignore_for_file: unrelated_type_equality_checks
-
 import 'package:fish/pages/pond/pond_controller.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
+import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 
-class AddPondPage extends StatelessWidget {
+import '../../widgets/new_Menu_widget.dart';
+
+class AddPondPage extends StatefulWidget {
   const AddPondPage({Key? key}) : super(key: key);
 
   @override
+  State<AddPondPage> createState() => _AddPondPageState();
+}
+
+class _AddPondPageState extends State<AddPondPage> {
+  final PondController controller = Get.put(PondController());
+  var isMenuTapped = false.obs;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initializeDateFormatting('id', null);
+  }
+
+  @override
+  void dispose() {
+    controller.aliasController.clear();
+    controller.diameterController.clear();
+    controller.heightController.clear();
+    controller.locationController.clear();
+    controller.lengthController.clear();
+    controller.widthController.clear();
+    controller.selectedUsedDate.value = '';
+    controller.showedUsedDate.clear();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final PondController controller = Get.put(PondController());
+    var scaffoldKey = GlobalKey<ScaffoldState>();
 
     Widget aliasInput() {
       return Container(
@@ -26,12 +58,12 @@ class AddPondPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -46,7 +78,7 @@ class AddPondPage extends StatelessWidget {
                   controller: controller.aliasController,
                   decoration: controller.validateAlias.value == true
                       ? controller.alias == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'tinggi tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -77,12 +109,12 @@ class AddPondPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -119,12 +151,12 @@ class AddPondPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -147,8 +179,7 @@ class AddPondPage extends StatelessWidget {
                         );
                       }).toList(),
                       dropdownColor: backgroundColor5,
-                      decoration:
-                          const InputDecoration(border: InputBorder.none),
+                      decoration: InputDecoration(border: InputBorder.none),
                     )),
               ),
             ),
@@ -171,12 +202,12 @@ class AddPondPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -185,8 +216,10 @@ class AddPondPage extends StatelessWidget {
               ),
               child: Center(
                 child: Obx(() => DropdownButtonFormField<String>(
-                      onChanged: (newValue) =>
-                          controller.shapeController.setSelected(newValue!),
+                      onChanged: (newValue) {
+                        return controller.shapeController
+                            .setSelected(newValue!);
+                      },
                       value: controller.shapeController.selected.value,
                       items:
                           controller.shapeController.listMaterial.map((shape) {
@@ -199,8 +232,7 @@ class AddPondPage extends StatelessWidget {
                         );
                       }).toList(),
                       dropdownColor: backgroundColor5,
-                      decoration:
-                          const InputDecoration(border: InputBorder.none),
+                      decoration: InputDecoration(border: InputBorder.none),
                     )),
               ),
             ),
@@ -223,12 +255,12 @@ class AddPondPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -239,12 +271,15 @@ class AddPondPage extends StatelessWidget {
                 return TextFormField(
                   style: primaryTextStyle,
                   keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
                   onChanged: controller.heightChanged,
                   onTap: controller.valHeight,
                   controller: controller.heightController,
                   decoration: controller.validateHeight.value == true
                       ? controller.height == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'tinggi tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -273,12 +308,12 @@ class AddPondPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -289,12 +324,15 @@ class AddPondPage extends StatelessWidget {
                 return TextFormField(
                   style: primaryTextStyle,
                   keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
                   onChanged: controller.lenghtChanged,
                   onTap: controller.valLenght,
                   controller: controller.lengthController,
                   decoration: controller.validatelenght.value == true
                       ? controller.lenght == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'Panjang tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -323,12 +361,12 @@ class AddPondPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -339,12 +377,15 @@ class AddPondPage extends StatelessWidget {
                 return TextFormField(
                   style: primaryTextStyle,
                   keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
                   onChanged: controller.widthChanged,
                   onTap: controller.valWidth,
                   controller: controller.widthController,
                   decoration: controller.validateWidth.value == true
                       ? controller.width == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'lebar tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -373,12 +414,12 @@ class AddPondPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -389,12 +430,15 @@ class AddPondPage extends StatelessWidget {
                 return TextFormField(
                   style: primaryTextStyle,
                   keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
                   onChanged: controller.diameterChanged,
                   onTap: controller.valDiameter,
                   controller: controller.diameterController,
                   decoration: controller.validatediameter.value == true
                       ? controller.diameter == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'diameter tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -417,32 +461,26 @@ class AddPondPage extends StatelessWidget {
             top: defaultSpace * 3, right: defaultMargin, left: defaultMargin),
         child: TextButton(
           onPressed: () async {
-            // Get.back();
-            controller.shapeController.selected.value == "persegi"
-                ? controller.aliasController.text == "" ||
-                        controller.heightController.text == "" ||
-                        controller.widthController.text == "" ||
-                        controller.lengthController.text == ""
-                    ? null
-                    : await controller.pondRegister(
-                        context,
-                        () {
-                          Navigator.pop(context);
-                          controller.getPondsData(context);
-                        },
-                      )
-                : controller.aliasController.text == "" ||
-                        controller.heightController.text == "" ||
-                        controller.diameterController.text == ""
-                    ? null
-                    : await controller.pondRegister(
-                        context,
-                        () {
-                          Navigator.pop(context);
-                          controller.getPondsData(context);
-                        },
-                      );
-
+            if (controller.shapeController.selected.value == 'persegi' &&
+                controller.widthController.text == '') {
+              return null;
+            }
+            if (controller.shapeController.selected.value == 'persegi' &&
+                controller.lengthController.text == '') {
+              return null;
+            }
+            if (controller.shapeController.selected.value == 'bundar' &&
+                controller.diameterController.text == '') {
+              print("ini masuk sini");
+              return null;
+            } else {
+              await controller.pondRegister(
+                context,
+                () {
+                  controller.getPondsData(context);
+                },
+              );
+            }
             // profilecontroller.getBreeder();
           },
           style: TextButton.styleFrom(
@@ -463,29 +501,51 @@ class AddPondPage extends StatelessWidget {
     }
 
     Widget persegiInput() {
-      return Column(
+      return Container(
+          child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [widthInput(), lengthInput()],
-      );
+      ));
     }
 
     Widget bundarInput() {
-      return Column(
+      return Container(
+          child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [diameterInput()],
-      );
+      ));
     }
 
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Registrasi Kolam"),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
+            ],
           ),
+          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               aliasInput(),
               locationInput(),
               materialInput(),
@@ -494,8 +554,108 @@ class AddPondPage extends StatelessWidget {
                   ? persegiInput()
                   : bundarInput(),
               heightInput(),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 4, horizontal: 24),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Checkbox(
+                          value: controller.checkUsedDate.value,
+                          onChanged: (v) {
+                            controller.checkUsedDate.value = v!;
+                            controller.selectedUsedDate.value = '';
+                            controller.showedUsedDate.clear();
+                          },
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              'Aktifkan tanggal registrasi kolam manual',
+                              style: headingText3,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    controller.checkUsedDate.value
+                        ? GestureDetector(
+                            onTap: () async {
+                              final DateTime? datePicker = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime(2100),
+                              );
+
+                              // ignore: use_build_context_synchronously
+                              if (datePicker != null) {
+                                final TimeOfDay? selectedTime =
+                                    await showTimePicker(
+                                  context: context,
+                                  initialTime:
+                                      TimeOfDay.fromDateTime(datePicker!),
+                                  builder: (context, child) {
+                                    return MediaQuery(
+                                      data: MediaQuery.of(context).copyWith(
+                                          alwaysUse24HourFormat: true),
+                                      child: child!,
+                                    );
+                                  },
+                                );
+
+                                if (selectedTime != null) {
+                                  // Define the format for parsing
+
+                                  // Define the format for parsing the input date and time string
+                                  String inputFormatStr =
+                                      'EEEE, d MMMM yyyy | \'Jam\' HH:mm:ss.SSS';
+                                  DateTime dateTime =
+                                      DateFormat(inputFormatStr, 'id_ID').parse(
+                                          '${controller.dateFormat(datePicker.toString(), false)} | Jam ${selectedTime!.hour < 10 ? '0${selectedTime.hour}' : selectedTime.hour}:${selectedTime.minute < 10 ? '0${selectedTime.minute}' : selectedTime.minute}:00.000');
+
+                                  // Define the format for formatting the date into the desired format
+                                  String outputFormatStr =
+                                      'yyyy-MM-ddTHH:mm:ss.SSS';
+                                  String formattedDateTime =
+                                      DateFormat(outputFormatStr)
+                                          .format(dateTime);
+
+                                  controller.selectedUsedDate.value =
+                                      datePicker == null
+                                          ? ''
+                                          : '$formattedDateTime +0000';
+
+                                  controller.showedUsedDate.text = datePicker ==
+                                          null
+                                      ? ''
+                                      : '${controller.dateFormat(datePicker.toString(), false)} | Jam ${selectedTime!.hour < 10 ? '0${selectedTime.hour}' : selectedTime.hour}:${selectedTime.minute < 10 ? '0${selectedTime.minute}' : selectedTime.minute}';
+                                }
+                              }
+                            },
+                            child: TextFieldWidget(
+                              label: 'Pilih Tanggal',
+                              controller: controller.showedUsedDate,
+                              isLong: true,
+                              isEdit: false,
+                              suffixSection: Icon(
+                                Icons.arrow_drop_down_circle_rounded,
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        : Container(),
+                  ],
+                ),
+              ),
               registerButton(),
-              const SizedBox(
+              SizedBox(
                 height: 8,
               )
             ],

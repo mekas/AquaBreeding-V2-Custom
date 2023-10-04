@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 
 class DeathCard extends StatelessWidget {
-  final FishDeath? fishDeath;
+  final FishDeath fishDeath;
 
   const DeathCard({
     Key? key,
-    this.fishDeath,
+    required this.fishDeath,
   }) : super(key: key);
 
   @override
@@ -19,7 +19,7 @@ class DeathCard extends StatelessWidget {
         margin: EdgeInsets.only(
           top: defaultMargin,
         ),
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: primaryColor),

@@ -1,5 +1,6 @@
 import 'package:fish/models/fish_model.dart';
 import 'package:flutter/material.dart';
+import 'package:fish/pages/treatment/treatment_entry_controller.dart';
 import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -36,14 +37,14 @@ class FishTransferInputCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
-              const SizedBox(
+              SizedBox(
                 width: 6,
               ),
             ],
           ),
           Container(
             height: 50,
-            padding: const EdgeInsets.symmetric(
+            padding: EdgeInsets.symmetric(
               horizontal: 16,
             ),
             decoration: BoxDecoration(

@@ -1,12 +1,21 @@
 import 'package:fish/pages/component/transfer_card.dart';
 import 'package:fish/controllers/fish_transfer/fish_transfer_list_controller.dart';
 import 'package:fish/pages/fish_transfer/fish_transfer_entry_page.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
+import '../../models/activation_model.dart';
+import '../../widgets/new_Menu_widget.dart';
+import 'new_fish_transfer_entry_page.dart';
+
 class FishTransferListPage extends StatefulWidget {
-  const FishTransferListPage({Key? key}) : super(key: key);
+  bool isMenuTapped;
+  FishTransferListPage({
+    Key? key,
+    required this.isMenuTapped,
+  }) : super(key: key);
 
   @override
   State<FishTransferListPage> createState() => _FishTransferListPageState();
@@ -14,7 +23,7 @@ class FishTransferListPage extends StatefulWidget {
 
 class _FishTransferListPageState extends State<FishTransferListPage> {
   final TransferController controller = Get.put(TransferController());
-
+  Activation activation = Get.arguments["activation"];
   @override
   void initState() {
     super.initState();
@@ -22,11 +31,20 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
     //   await controller.getPondActivations(
     //       pondId: controller.pond.id.toString());
     // });
+
     controller.getTransfertData(context);
   }
 
   @override
+  void dispose() {
+    controller.postDataLog(controller.fitur);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     Widget fishDataRecap() {
       return Container(
         margin: EdgeInsets.only(
@@ -47,7 +65,7 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 5,
                 ),
               ],
@@ -79,14 +97,14 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
           margin: EdgeInsets.only(right: defaultMargin, left: defaultMargin),
           child: Center(
             child: Column(children: [
-              const SizedBox(height: 35),
-              const Image(
+              SizedBox(height: 35),
+              Image(
                 image: AssetImage("assets/unavailable_icon.png"),
                 width: 100,
                 height: 100,
                 fit: BoxFit.fitWidth,
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Text(
                 "Kolam belum pernah melakukan transfer ikan",
                 style: primaryTextStyle.copyWith(
@@ -97,7 +115,7 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               Text(
                 "Silahkan masukan transfer ikan",
                 style: secondaryTextStyle.copyWith(
@@ -115,12 +133,26 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
+          // appBar: AppBar(
+          //   backgroundColor: backgroundColor1,
+          //   actions: [
+          //     IconButton(
+          //       onPressed: () {
+          //         scaffoldKey.currentState?.openEndDrawer();
+          //       },
+          //       icon: Icon(Icons.card_travel_rounded),
+          //     )
+          //   ],
+          // ),
+          // endDrawer: DrawerInvetarisList(),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              Get.to(() => const FishTransferEntryPage(), arguments: {
+              Get.to(() => const NewFishTransferEntryPage(), arguments: {
                 "pond": controller.pond,
-                "activation": controller.activation
+                "activation": activation
               });
+              controller.postDataLog(controller.fitur);
             },
             backgroundColor: primaryColor,
             child: const Icon(Icons.add),
@@ -128,11 +160,18 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (widget.isMenuTapped)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               fishDataRecap(),
               controller.listTransfer.isEmpty
                   ? emptyListTransfer()
                   : listTransfer(),
-              const SizedBox(
+              SizedBox(
                 height: 10,
               )
             ],

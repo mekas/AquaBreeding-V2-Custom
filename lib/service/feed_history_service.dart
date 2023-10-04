@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert';
+import 'dart:developer';
 import 'package:fish/models/feed_history_detail.dart';
 import 'package:fish/models/feed_history_hourly.dart';
 import 'package:fish/models/feed_history_monthly.dart';
@@ -8,13 +9,17 @@ import 'package:fish/models/feed_history_weekly.dart';
 import 'package:fish/models/feed_chart_model.dart';
 import 'package:fish/service/url_api.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FeedHistoryService {
   Future<List<FeedChartData>> getChart({required String activation_id}) async {
     var url = Uri.parse(Urls.feedChartApi(activation_id));
+    print(url);
     var headers = {'Content-Type': 'application/json'};
 
     var response = await http.get(url, headers: headers);
+
+    print(response.body);
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -28,9 +33,12 @@ class FeedHistoryService {
   Future<List<FeedHistoryMonthly>> getMonthlyRecap(
       {required String activation_id}) async {
     var url = Uri.parse(Urls.feedHistoryMonthly(activation_id));
+    print(url);
     var headers = {'Content-Type': 'application/json'};
 
     var response = await http.get(url, headers: headers);
+
+    print(response.body);
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -45,9 +53,12 @@ class FeedHistoryService {
   Future<List<FeedHistoryWeekly>> getWeeklyRecap(
       {required String activation_id, required String month}) async {
     var url = Uri.parse(Urls.feedHistoryWeekly(activation_id, month));
+    print(url);
     var headers = {'Content-Type': 'application/json'};
 
     var response = await http.get(url, headers: headers);
+
+    print(response.body);
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -62,9 +73,12 @@ class FeedHistoryService {
   Future<List<FeedHistoryDaily>> getDailyRecap(
       {required String activation_id, required String week}) async {
     var url = Uri.parse(Urls.feedHistoryDaily(activation_id, week));
+    print(url);
     var headers = {'Content-Type': 'application/json'};
 
     var response = await http.get(url, headers: headers);
+
+    print(response.body);
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -79,9 +93,12 @@ class FeedHistoryService {
   Future<List<FeedHistoryHourly>> getHourlyRecap(
       {required String activation_id, required String date}) async {
     var url = Uri.parse(Urls.feedHistory(activation_id, date));
+    print(url);
     var headers = {'Content-Type': 'application/json'};
 
     var response = await http.get(url, headers: headers);
+
+    print(response.body);
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -95,25 +112,38 @@ class FeedHistoryService {
 
   Future<bool> postFeedHistory({
     required String? pondId,
-    required String? feedTypeId,
+    required String? fishFeedId,
     required String? feedDose,
+    required String? date,
+    required Function() doAfter,
   }) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+
     final response = await http.post(
       Uri.parse(Urls.feedhistorys),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
+        'Authorization': 'Bearer $token'
       },
       encoding: Encoding.getByName('utf-8'),
       body: {
         "pond_id": pondId,
-        "feed_type_id": feedTypeId,
+        "fish_feed_id": fishFeedId,
         "feed_dose": feedDose,
+        "created_at": date,
       },
     );
 
     if (response.statusCode == 200) {
+      inspect(response.body);
+      doAfter();
+
       return true;
     } else {
+      inspect(response.body);
+      doAfter();
+
       return false;
     }
   }

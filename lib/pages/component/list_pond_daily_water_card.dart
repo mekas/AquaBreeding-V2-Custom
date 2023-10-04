@@ -1,3 +1,4 @@
+import 'package:fish/models/daily_water_model.dart';
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/dailywater/daily_water_pond_detail_page.dart';
 import 'package:flutter/material.dart';
@@ -5,21 +6,29 @@ import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
-class DailyWaterListPondCard extends StatelessWidget {
+import '../pond/detail_pond_page.dart';
+
+class DailyWaterListPondCard extends StatefulWidget {
   final Pond pond;
   // final DailyWater indicatorWater
-
-  const DailyWaterListPondCard({
+  bool isMenuTapped;
+  DailyWaterListPondCard({
     Key? key,
     required this.pond,
+    required this.isMenuTapped,
   }) : super(key: key);
 
+  @override
+  State<DailyWaterListPondCard> createState() => _DailyWaterListPondCardState();
+}
+
+class _DailyWaterListPondCardState extends State<DailyWaterListPondCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => const DailyWaterDetailPondPage(), arguments: {
-          'pond': pond,
+        Get.to(() => DailyWaterDetailPondPage(isMenuTapped: widget.isMenuTapped,), arguments: {
+          'pond': widget.pond,
         });
       },
       child: Container(
@@ -32,7 +41,7 @@ class DailyWaterListPondCard extends StatelessWidget {
         padding: EdgeInsets.all(defaultSpace),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: const Color(0xffECEDEF),
+          color: Color(0xffECEDEF),
         ),
         child: Column(
           children: [
@@ -40,7 +49,7 @@ class DailyWaterListPondCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  pond.alias!,
+                  widget.pond.alias!,
                   style: blackTextStyle.copyWith(
                     fontSize: 18,
                     fontWeight: bold,
@@ -53,11 +62,11 @@ class DailyWaterListPondCard extends StatelessWidget {
                   height: 30,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    color: pond.getColor(),
+                    color: widget.pond.getColor(),
                   ),
                   child: Center(
                     child: Text(
-                      pond.pondStatusStr!,
+                      widget.pond.pondStatusStr!,
                       style: blackTextStyle.copyWith(
                         fontSize: 14,
                         fontWeight: heavy,
@@ -69,9 +78,9 @@ class DailyWaterListPondCard extends StatelessWidget {
                 )
               ],
             ),
-            const Divider(color: Colors.black),
+            Divider(color: Colors.black),
             Container(
-              margin: const EdgeInsets.only(top: 5),
+              margin: EdgeInsets.only(top: 5),
               child: Row(
                 children: [
                   Text(
@@ -83,7 +92,7 @@ class DailyWaterListPondCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
-                  const SizedBox(
+                  SizedBox(
                     width: 10,
                   ),
                   // pond.id == indicatorWater.pondId
@@ -112,7 +121,7 @@ class DailyWaterListPondCard extends StatelessWidget {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 5),
+              margin: EdgeInsets.only(top: 5),
               child: Row(
                 children: [
                   Text(
@@ -124,7 +133,7 @@ class DailyWaterListPondCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
-                  const SizedBox(
+                  SizedBox(
                     width: 10,
                   ),
                   // pond.id == indicatorWater.pondId
@@ -156,7 +165,7 @@ class DailyWaterListPondCard extends StatelessWidget {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 5),
+              margin: EdgeInsets.only(top: 5),
               child: Row(
                 children: [
                   Text(
@@ -168,7 +177,7 @@ class DailyWaterListPondCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
-                  const SizedBox(
+                  SizedBox(
                     width: 10,
                   ),
                   // pond.id == indicatorWater.pondId

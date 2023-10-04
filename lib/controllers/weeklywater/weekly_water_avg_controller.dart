@@ -34,9 +34,11 @@ class WeeklyWaterAvgController extends GetxController {
     List<WeeklyWater> weeklyWaterData = await WeeklyWaterService().getDatas();
     for (var i in weeklyWaterData) {
       if (i.activationId == activation.id) {
+        print('Weekly Water get test');
         listWeeklyWater.add(i);
       }
     }
+    print(listWeeklyWater);
     formattedList(listWeeklyWater);
     // print(listTreatment.value);
     isLoading.value = false;
@@ -48,6 +50,7 @@ class WeeklyWaterAvgController extends GetxController {
     List<WeeklyWater> weeklyWaterData = await WeeklyWaterService().getDatas();
     for (var i in weeklyWaterData) {
       if (i.activationId == activation.id) {
+        print('Weekly Water get test');
         listWeeklyWater.add(i);
       }
     }
@@ -89,6 +92,7 @@ class WeeklyWaterAvgController extends GetxController {
         "ammonia": obj[key]["ammonia"] / obj[key]["count"],
       });
     }
+    print(sol);
     return sol;
   }
 }

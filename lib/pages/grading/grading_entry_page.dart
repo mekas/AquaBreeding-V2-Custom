@@ -1,18 +1,26 @@
-// ignore_for_file: unrelated_type_equality_checks
-
 import 'package:fish/pages/grading/grading_entry_controller.dart';
+import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
+import '../../widgets/new_Menu_widget.dart';
 import 'grading_controller.dart';
 
-class GradingEntryPage extends StatelessWidget {
+class GradingEntryPage extends StatefulWidget {
   const GradingEntryPage({Key? key}) : super(key: key);
 
   @override
+  State<GradingEntryPage> createState() => _GradingEntryPageState();
+}
+
+class _GradingEntryPageState extends State<GradingEntryPage> {
+  var isMenuTapped = false.obs;
+  @override
   Widget build(BuildContext context) {
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
     final GradingEntryController controller = Get.put(GradingEntryController());
     final GradingController gradingcontroller = Get.put(GradingController());
 
@@ -30,12 +38,12 @@ class GradingEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -47,7 +55,7 @@ class GradingEntryPage extends StatelessWidget {
                       onChanged: (newValue) =>
                           controller.fishTypeController.setSelected(newValue!),
                       value: controller.fishTypeController.selected.value,
-                      items: controller.fishTypeController.listFish.map((fish) {
+                      items: controller.listFishAlive.map((fish) {
                         return DropdownMenuItem<String>(
                           value: fish,
                           child: Text(
@@ -57,8 +65,7 @@ class GradingEntryPage extends StatelessWidget {
                         );
                       }).toList(),
                       dropdownColor: backgroundColor5,
-                      decoration:
-                          const InputDecoration(border: InputBorder.none),
+                      decoration: InputDecoration(border: InputBorder.none),
                     )),
               ),
             ),
@@ -81,12 +88,12 @@ class GradingEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -105,7 +112,7 @@ class GradingEntryPage extends StatelessWidget {
                   controller: controller.sampleAmountController,
                   decoration: controller.validatesampleAmount.value == true
                       ? controller.sampleAmount == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'jumlah ikan tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -134,12 +141,12 @@ class GradingEntryPage extends StatelessWidget {
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
@@ -152,10 +159,13 @@ class GradingEntryPage extends StatelessWidget {
                   keyboardType: TextInputType.number,
                   onChanged: controller.fishWeightChanged,
                   onTap: controller.valfishWeight,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
                   controller: controller.fishWeightController,
                   decoration: controller.validatefishWeight.value == true
                       ? controller.fishWeight == ''
-                          ? const InputDecoration(
+                          ? InputDecoration(
                               errorText: 'tidak boleh kosong',
                               isCollapsed: true)
                           : InputDecoration.collapsed(
@@ -178,42 +188,37 @@ class GradingEntryPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Panjang Rata-rata (cm)',
+              'Panjang Rata-rata (cm) (Opsional)',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
                 color: backgroundColor2,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Center(child: Obx(() {
-                return TextFormField(
+              child: Center(
+                child: Center(
+                    child: TextFormField(
                   style: primaryTextStyle,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
                   keyboardType: TextInputType.number,
-                  onChanged: controller.fishLenghtChanged,
-                  onTap: controller.valfishLenght,
                   controller: controller.fishLengthAvgController,
-                  decoration: controller.validatefishLenght.value == true
-                      ? controller.fishLenght == ''
-                          ? const InputDecoration(
-                              errorText: 'jumlah ikan tidak boleh kosong',
-                              isCollapsed: true)
-                          : InputDecoration.collapsed(
-                              hintText: 'ex: 11', hintStyle: subtitleTextStyle)
-                      : InputDecoration.collapsed(
-                          hintText: 'ex: 11', hintStyle: subtitleTextStyle),
-                );
-              })),
+                  decoration: InputDecoration.collapsed(
+                      hintText: 'ex: 23', hintStyle: subtitleTextStyle),
+                )),
+              ),
             ),
           ],
         ),
@@ -228,45 +233,37 @@ class GradingEntryPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Jumlah Ikan Undersize (Ekor)',
+              'Jumlah Ikan Undersize (Ekor) (Opsional)',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
                 color: backgroundColor2,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Center(child: Obx(() {
-                return TextFormField(
+              child: Center(
+                child: Center(
+                    child: TextFormField(
                   style: primaryTextStyle,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly
                   ],
                   keyboardType: TextInputType.number,
-                  onChanged: controller.undersizeChanged,
-                  onTap: controller.valundersize,
                   controller: controller.undersizeController,
-                  decoration: controller.validateundersize.value == true
-                      ? controller.undersize == ''
-                          ? const InputDecoration(
-                              errorText: 'jumlah ikan tidak boleh kosong',
-                              isCollapsed: true)
-                          : InputDecoration.collapsed(
-                              hintText: 'ex: 2', hintStyle: subtitleTextStyle)
-                      : InputDecoration.collapsed(
-                          hintText: 'ex: 2', hintStyle: subtitleTextStyle),
-                );
-              })),
+                  decoration: InputDecoration.collapsed(
+                      hintText: 'ex: 23', hintStyle: subtitleTextStyle),
+                )),
+              ),
             ),
           ],
         ),
@@ -281,45 +278,37 @@ class GradingEntryPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Jumlah Ikan Oversize (Ekor)',
+              'Jumlah Ikan Oversize (Ekor) (Opsional)',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
                 color: backgroundColor2,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Center(child: Obx(() {
-                return TextFormField(
+              child: Center(
+                child: Center(
+                    child: TextFormField(
                   style: primaryTextStyle,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly
                   ],
                   keyboardType: TextInputType.number,
-                  onChanged: controller.oversizeChanged,
-                  onTap: controller.valoversize,
                   controller: controller.oversizeController,
-                  decoration: controller.validateoversize.value == true
-                      ? controller.oversize == ''
-                          ? const InputDecoration(
-                              errorText: 'jumlah ikan tidak boleh kosong',
-                              isCollapsed: true)
-                          : InputDecoration.collapsed(
-                              hintText: 'ex: 4', hintStyle: subtitleTextStyle)
-                      : InputDecoration.collapsed(
-                          hintText: 'ex: 4', hintStyle: subtitleTextStyle),
-                );
-              })),
+                  decoration: InputDecoration.collapsed(
+                      hintText: 'ex: 4', hintStyle: subtitleTextStyle),
+                )),
+              ),
             ),
           ],
         ),
@@ -334,45 +323,35 @@ class GradingEntryPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Jumlah Ikan Normalsize (Ekor)',
+              'Jumlah Ikan Normalsize (Ekor) (Opsional)',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
                 color: backgroundColor2,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Center(child: Obx(() {
-                return TextFormField(
-                  style: primaryTextStyle,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                  keyboardType: TextInputType.number,
-                  onChanged: controller.normalChanged,
-                  onTap: controller.valnormal,
-                  controller: controller.normalsizeController,
-                  decoration: controller.validatenormal.value == true
-                      ? controller.normal == ''
-                          ? const InputDecoration(
-                              errorText: 'jumlah ikan tidak boleh kosong',
-                              isCollapsed: true)
-                          : InputDecoration.collapsed(
-                              hintText: 'ex: 23', hintStyle: subtitleTextStyle)
-                      : InputDecoration.collapsed(
-                          hintText: 'ex: 23', hintStyle: subtitleTextStyle),
-                );
-              })),
+              child: Center(
+                  child: TextFormField(
+                style: primaryTextStyle,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
+                keyboardType: TextInputType.number,
+                controller: controller.normalsizeController,
+                decoration: InputDecoration.collapsed(
+                    hintText: 'ex: 23', hintStyle: subtitleTextStyle),
+              )),
             ),
           ],
         ),
@@ -384,15 +363,12 @@ class GradingEntryPage extends StatelessWidget {
         height: 50,
         width: double.infinity,
         margin: EdgeInsets.only(
-            top: defaultSpace * 3, right: defaultMargin, left: defaultMargin),
+            top: defaultSpace, right: defaultMargin, left: defaultMargin),
         child: TextButton(
           onPressed: () async {
-            controller.fishLengthAvgController.text == "" ||
-                    controller.fishWeightController.text == "" ||
-                    controller.normalsizeController.text == "" ||
-                    controller.undersizeController.text == "" ||
-                    controller.oversizeController.text == "" ||
-                    controller.sampleAmountController.text == ""
+            controller.fishWeightController.text == "" ||
+                    controller.sampleAmountController.text == "" ||
+                    controller.fishTypeController.selected.value == "pilih ikan"
                 ? null
                 : Navigator.pop(context);
             controller.postFishGrading();
@@ -401,6 +377,8 @@ class GradingEntryPage extends StatelessWidget {
             gradingcontroller.getFishGradingChart(
                 activation_id: controller.activation.id.toString());
             // print(gradingcontroller.charData);
+
+            controller.postDataLog(controller.fitur);
           },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
@@ -422,13 +400,33 @@ class GradingEntryPage extends StatelessWidget {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
+          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Entry Grading"),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  // scaffoldKey.currentState?.openEndDrawer();
+                  setState(() {
+                    isMenuTapped.value = !isMenuTapped.value;
+                  });
+                },
+                icon: Icon(Icons.card_travel_rounded),
+              )
+            ],
           ),
+          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
+              if (isMenuTapped.value)
+                Column(
+                  children: [
+                    newMenu(),
+                    SizedBox(height: 10,),
+                  ],
+                ),
               fishTypelInput(),
               sampleAmountInput(),
               fishWightInput(),
@@ -437,7 +435,7 @@ class GradingEntryPage extends StatelessWidget {
               undersizeInput(),
               oversizeInput(),
               submitButton(),
-              const SizedBox(
+              SizedBox(
                 height: 8,
               )
             ],
