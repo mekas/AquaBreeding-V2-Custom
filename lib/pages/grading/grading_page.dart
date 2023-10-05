@@ -24,11 +24,69 @@ class _GradingPageState extends State<GradingPage> {
   var isMenuTapped = false.obs;
   @override
   Widget build(BuildContext context) {
-    var scaffoldKey = GlobalKey<ScaffoldState>();
-
     final GradingController controller = Get.put(GradingController());
 
     Widget chartGrading() {
+      return Container(
+        child: SfCartesianChart(
+          enableAxisAnimation: true,
+          tooltipBehavior: TooltipBehavior(enable: true),
+          zoomPanBehavior: ZoomPanBehavior(
+            enablePanning: true,
+          ),
+          title: ChartTitle(
+              text: 'Pertumbuhan Ikan dan Pakan',
+              textStyle: TextStyle(color: Colors.white)),
+          legend: Legend(
+              isVisible: true,
+              position: LegendPosition.bottom,
+              textStyle: TextStyle(color: Colors.white)),
+          primaryXAxis: CategoryAxis(
+              labelStyle: TextStyle(color: Colors.white),
+              autoScrollingDelta: 4),
+          primaryYAxis: NumericAxis(
+              labelFormat: '{value}Kg',
+              labelStyle: TextStyle(color: Colors.white)),
+          series: <ChartSeries>[
+            SplineAreaSeries<FishWeightData, dynamic>(
+              enableTooltip: true,
+              color: Colors.blue.withOpacity(0.3), // Warna area di bawah garis
+              borderWidth: 2, // Lebar garis biru
+              borderColor: Colors.blue, // Warna garis biruna garis biru
+              dataSource: controller.fishGradingChart!.value.listFishWeight,
+              xValueMapper: (FishWeightData fishWeightData, _) =>
+                  fishWeightData.getDate(),
+              yValueMapper: (FishWeightData fishWeightData, _) =>
+              fishWeightData.totalWeightFish,
+              markerSettings: MarkerSettings(
+                isVisible: true, // Menampilkan marker
+                shape: DataMarkerType.circle, // Bentuk marker
+              ),
+              name: 'Bobot Ikan',
+            ),
+            SplineAreaSeries<FishFeedHistory, dynamic>(
+              enableTooltip: true,
+              color: Colors.pink.withOpacity(0.3),
+              borderWidth: 2, // Lebar garis biru
+              borderColor: Colors.pink, //
+              dataSource:
+              controller.fishGradingChart!.value.listFishFeedHistory,
+              xValueMapper: (FishFeedHistory fishFeedHistory, _) =>
+                  fishFeedHistory.getDate(),
+              yValueMapper: (FishFeedHistory fishFeedHistory, _) =>
+              fishFeedHistory.totalFeedDose,
+              markerSettings: MarkerSettings(
+                isVisible: true, // Menampilkan marker
+                shape: DataMarkerType.circle, // Bentuk marker
+              ),
+              name: 'Total Pakan',
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget emptyChartGrading() {
       return Container(
         child: SfCartesianChart(
           enableAxisAnimation: true,
@@ -49,51 +107,38 @@ class _GradingPageState extends State<GradingPage> {
               labelFormat: '{value}Kg',
               labelStyle: TextStyle(color: Colors.white)),
           series: <ChartSeries>[
-            LineSeries<GradingChartData, dynamic>(
-                enableTooltip: true,
-                color: Colors.blue,
-                dataSource: controller.charLeleData,
-                xValueMapper: (GradingChartData grading, _) =>
-                    grading.getDate(),
-                yValueMapper: (GradingChartData grading, _) =>
-                    grading.avg_weight,
-                name: 'Lele'),
-            LineSeries<GradingChartData, dynamic>(
-                enableTooltip: true,
-                color: Colors.pink,
-                dataSource: controller.charNilaMerahData,
-                xValueMapper: (GradingChartData grading, _) =>
-                    grading.getDate(),
-                yValueMapper: (GradingChartData grading, _) =>
-                    grading.avg_weight,
-                name: 'Nila Merah'),
-            LineSeries<GradingChartData, dynamic>(
-                enableTooltip: true,
-                color: Colors.green,
-                dataSource: controller.charNilaHitamData,
-                xValueMapper: (GradingChartData grading, _) =>
-                    grading.getDate(),
-                yValueMapper: (GradingChartData grading, _) =>
-                    grading.avg_weight,
-                name: 'Nila Hitam'),
-            LineSeries<GradingChartData, dynamic>(
-                enableTooltip: true,
-                color: Colors.amber,
-                dataSource: controller.charMasData,
-                xValueMapper: (GradingChartData grading, _) =>
-                    grading.getDate(),
-                yValueMapper: (GradingChartData grading, _) =>
-                    grading.avg_weight,
-                name: 'Mas'),
-            LineSeries<GradingChartData, dynamic>(
-                enableTooltip: true,
-                color: Colors.pink.shade100,
-                dataSource: controller.charPatinData,
-                xValueMapper: (GradingChartData grading, _) =>
-                    grading.getDate(),
-                yValueMapper: (GradingChartData grading, _) =>
-                    grading.avg_weight,
-                name: 'Patin'),
+            SplineAreaSeries<FishWeightData, dynamic>(
+              enableTooltip: true,
+              color: Colors.blue.withOpacity(0.3), // Warna area di bawah garis
+              borderWidth: 2, // Lebar garis biru
+              borderColor: Colors.blue, // Warna garis biruna garis biru
+              dataSource: [],
+              xValueMapper: (FishWeightData fishWeightData, _) =>
+                  fishWeightData.getDate(),
+              yValueMapper: (FishWeightData fishWeightData, _) =>
+              fishWeightData.totalWeightFish,
+              markerSettings: MarkerSettings(
+                isVisible: true, // Menampilkan marker
+                shape: DataMarkerType.circle, // Bentuk marker
+              ),
+              name: 'Bobot Ikan',
+            ),
+            SplineAreaSeries<FishFeedHistory, dynamic>(
+              enableTooltip: true,
+              color: Colors.pink.withOpacity(0.3),
+              borderWidth: 2, // Lebar garis biru
+              borderColor: Colors.pink, //
+              dataSource: [],
+              xValueMapper: (FishFeedHistory fishFeedHistory, _) =>
+                  fishFeedHistory.getDate(),
+              yValueMapper: (FishFeedHistory fishFeedHistory, _) =>
+              fishFeedHistory.totalFeedDose,
+              markerSettings: MarkerSettings(
+                isVisible: true, // Menampilkan marker
+                shape: DataMarkerType.circle, // Bentuk marker
+              ),
+              name: 'Total Pakan',
+            ),
           ],
         ),
       );
@@ -328,10 +373,15 @@ class _GradingPageState extends State<GradingPage> {
             children: controller.list_fishGrading
                 .map(
                   (fishGrading) => GradingCard(
-                      activation: controller.activation,
-                      pond: controller.pond,
-                      fishGrading: fishGrading),
-                )
+                fishList: fishGrading.fishList,
+                date: fishGrading.getDate(),
+                type: fishGrading.type,
+                sampleAmount: fishGrading.sampleAmount.toString(),
+                sampleWeight: fishGrading.sampleWeight!.toStringAsFixed(2),
+                sampleLength: fishGrading.sampleLength!.toStringAsFixed(2),
+                fcr: fishGrading.fcr!.toStringAsFixed(2),
+              ),
+            )
                 .toList(),
           ));
     }
@@ -352,52 +402,6 @@ class _GradingPageState extends State<GradingPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Oversize",
-                      style: primaryTextStyle.copyWith(
-                        fontSize: 14,
-                        fontWeight: bold,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                    Text(
-                      '${controller.activation.consOver} x avg',
-                      style: secondaryTextStyle.copyWith(
-                        fontSize: 14,
-                        fontWeight: medium,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Undersize",
-                      style: primaryTextStyle.copyWith(
-                        fontSize: 14,
-                        fontWeight: bold,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                    Text(
-                      '${controller.activation.consUnder} x avg',
-                      style: secondaryTextStyle.copyWith(
-                        fontSize: 14,
-                        fontWeight: medium,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ],
-                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -443,37 +447,19 @@ class _GradingPageState extends State<GradingPage> {
       if (controller.isLoading.value == false) {
         print('object');
         return Scaffold(
-          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Rekapitulasi Grading"),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  // scaffoldKey.currentState?.openEndDrawer();
-                  setState(() {
-                    isMenuTapped.value = !isMenuTapped.value;
-                  });
-                },
-                icon: Icon(Icons.card_travel_rounded),
-              )
-            ],
           ),
-          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
-              if (isMenuTapped.value)
-                Column(
-                  children: [
-                    newMenu(),
-                    SizedBox(height: 10,),
-                  ],
-                ),
-              chartGrading(),
               gradingDataRecap(),
+              controller.fishGradingChart == null
+                  ? emptyChartGrading()
+                  : chartGrading(),
               // detail(),
-              sizingSec(),
+              // sizingSec(),
               entryGradingButton(),
               recapTitle(),
               // chartRecap(),

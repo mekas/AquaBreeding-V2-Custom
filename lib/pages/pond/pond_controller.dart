@@ -143,7 +143,6 @@ class PondController extends GetxController {
         length: lengthController.text,
         width: widthController.text,
         diameter: diameterController.text,
-        status: status,
         height: heightController.text,
         doInPost: doInPost,
         buildAt: selectedUsedDate.value,

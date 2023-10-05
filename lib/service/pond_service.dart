@@ -68,7 +68,6 @@ class PondService {
       required String? width,
       required String? diameter,
       required String? height,
-      required String? status,
       required String? buildAt,
       required Function doInPost,
       required BuildContext context}) async {
@@ -108,7 +107,6 @@ class PondService {
         "location": location,
         "shape": shape,
         "material": material,
-        "status": status,
         "length": length,
         "width": width,
         "diameter": diameter,
@@ -116,6 +114,17 @@ class PondService {
         "build_at": buildAt,
       },
     );
+    print({
+      "alias": alias,
+      "location": location,
+      "shape": shape,
+      "material": material,
+      "length": length,
+      "width": width,
+      "diameter": diameter,
+      "height": height,
+      "build_at": buildAt,
+    },);
 
     if (response.statusCode == 200) {
       doInPost();
@@ -208,6 +217,17 @@ class PondService {
         "height": height,
       },
     );
+    print({
+      "alias": alias,
+      "location": location,
+      "shape": shape,
+      "material": material,
+      "status": status,
+      "length": length,
+      "width": width,
+      "diameter": diameter,
+      "height": height,
+    });
 
     if (response.statusCode == 200) {
       // doInPost();

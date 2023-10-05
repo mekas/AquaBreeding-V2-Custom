@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-
+import '../component/fish_list_card.dart';
 import '../../widgets/new_Menu_widget.dart';
+import '../pond/detail_pond_controller.dart';
 import 'grading_controller.dart';
 
 class GradingEntryPage extends StatefulWidget {
@@ -19,10 +20,9 @@ class _GradingEntryPageState extends State<GradingEntryPage> {
   var isMenuTapped = false.obs;
   @override
   Widget build(BuildContext context) {
-    var scaffoldKey = GlobalKey<ScaffoldState>();
-
     final GradingEntryController controller = Get.put(GradingEntryController());
     final GradingController gradingcontroller = Get.put(GradingController());
+    final DetailPondController detailPondController = Get.find();
 
     Widget fishTypelInput() {
       return Container(
@@ -52,21 +52,21 @@ class _GradingEntryPageState extends State<GradingEntryPage> {
               ),
               child: Center(
                 child: Obx(() => DropdownButtonFormField<String>(
-                      onChanged: (newValue) =>
-                          controller.fishTypeController.setSelected(newValue!),
-                      value: controller.fishTypeController.selected.value,
-                      items: controller.listFishAlive.map((fish) {
-                        return DropdownMenuItem<String>(
-                          value: fish,
-                          child: Text(
-                            fish,
-                            style: primaryTextStyle,
-                          ),
-                        );
-                      }).toList(),
-                      dropdownColor: backgroundColor5,
-                      decoration: InputDecoration(border: InputBorder.none),
-                    )),
+                  onChanged: (newValue) =>
+                      controller.fishTypeController.setSelected(newValue!),
+                  value: controller.fishTypeController.selected.value,
+                  items: controller.listFishAlive.map((fish) {
+                    return DropdownMenuItem<String>(
+                      value: fish,
+                      child: Text(
+                        fish,
+                        style: primaryTextStyle,
+                      ),
+                    );
+                  }).toList(),
+                  dropdownColor: backgroundColor5,
+                  decoration: InputDecoration(border: InputBorder.none),
+                )),
               ),
             ),
           ],
@@ -74,19 +74,121 @@ class _GradingEntryPageState extends State<GradingEntryPage> {
       );
     }
 
+    Widget fishInfo() {
+      return Column(
+        children: [
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: primaryColor),
+              color: transparentColor,
+            ),
+            margin: EdgeInsets.symmetric(horizontal: defaultMargin),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Jumlah Ikan",
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 16,
+                    fontWeight: medium,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                Divider(color: Colors.white),
+                Column(
+                  children:
+                  detailPondController.selectedActivation.value.fishLive!
+                      .map(
+                        (fish) => FishListCard(fish: fish),
+                  )
+                      .toList(),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Total Ikan",
+                      style: primaryTextStyle.copyWith(
+                        fontSize: 14,
+                        fontWeight: bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                    Text(
+                      "${detailPondController.selectedActivation.value.fishAmount.toString()} Ekor",
+                      style: purpleTextStyle.copyWith(
+                        fontSize: 18,
+                        fontWeight: bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Total Berat",
+                      style: primaryTextStyle.copyWith(
+                        fontSize: 14,
+                        fontWeight: bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                    Text(
+                      detailPondController
+                          .selectedActivation.value.totalWeightFishAlive!
+                          .toStringAsFixed(2) +
+                          " Kg",
+                      style: purpleTextStyle.copyWith(
+                        fontSize: 18,
+                        fontWeight: bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 30)
+        ],
+      );
+    }
+
     Widget sampleAmountInput() {
       return Container(
-        margin: EdgeInsets.only(
-            top: defaultSpace, right: defaultMargin, left: defaultMargin),
+        margin: EdgeInsets.only(right: defaultMargin, left: defaultMargin),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Jumlah Sample (Ekor)',
-              style: primaryTextStyle.copyWith(
-                fontSize: 16,
-                fontWeight: medium,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Jumlah Sample (Ekor)',
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 16,
+                    fontWeight: medium,
+                  ),
+                ),
+                Text(
+                  controller.persentageSample.toStringAsFixed(2) + '%',
+                  style: primaryTextStyle.copyWith(
+                      fontSize: 16, fontWeight: medium, color: Colors.green),
+                ),
+              ],
             ),
             SizedBox(
               height: 12,
@@ -107,18 +209,19 @@ class _GradingEntryPageState extends State<GradingEntryPage> {
                     FilteringTextInputFormatter.digitsOnly
                   ],
                   keyboardType: TextInputType.number,
-                  onChanged: controller.sampleAmountChanged,
-                  onTap: controller.valsampleAmount,
+                  onChanged: (newValue) {
+                    controller.updatePersentageSample();
+                  },
                   controller: controller.sampleAmountController,
                   decoration: controller.validatesampleAmount.value == true
                       ? controller.sampleAmount == ''
-                          ? InputDecoration(
-                              errorText: 'jumlah ikan tidak boleh kosong',
-                              isCollapsed: true)
-                          : InputDecoration.collapsed(
-                              hintText: 'ex: 20', hintStyle: subtitleTextStyle)
+                      ? InputDecoration(
+                      errorText: 'jumlah ikan tidak boleh kosong',
+                      isCollapsed: true)
                       : InputDecoration.collapsed(
-                          hintText: 'ex: 20', hintStyle: subtitleTextStyle),
+                      hintText: 'ex: 20', hintStyle: subtitleTextStyle)
+                      : InputDecoration.collapsed(
+                      hintText: 'ex: 20', hintStyle: subtitleTextStyle),
                 );
               })),
             ),
@@ -135,7 +238,7 @@ class _GradingEntryPageState extends State<GradingEntryPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Berat Rata-rata Ikan (Kg)',
+              'Berat Total Sample (Kg)',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -153,27 +256,20 @@ class _GradingEntryPageState extends State<GradingEntryPage> {
                 color: backgroundColor2,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Center(child: Obx(() {
-                return TextFormField(
+              child: Center(
+                child: TextFormField(
                   style: primaryTextStyle,
                   keyboardType: TextInputType.number,
-                  onChanged: controller.fishWeightChanged,
-                  onTap: controller.valfishWeight,
+                  // onChanged: controller.fishWeightChanged,
+                  // onTap: controller.valfishWeight,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
                   ],
                   controller: controller.fishWeightController,
-                  decoration: controller.validatefishWeight.value == true
-                      ? controller.fishWeight == ''
-                          ? InputDecoration(
-                              errorText: 'tidak boleh kosong',
-                              isCollapsed: true)
-                          : InputDecoration.collapsed(
-                              hintText: 'ex: 2.1', hintStyle: subtitleTextStyle)
-                      : InputDecoration.collapsed(
-                          hintText: 'ex: 2.1', hintStyle: subtitleTextStyle),
-                );
-              })),
+                  decoration: InputDecoration.collapsed(
+                      hintText: 'ex: 2.1', hintStyle: subtitleTextStyle),
+                ),
+              ),
             ),
           ],
         ),
@@ -209,15 +305,15 @@ class _GradingEntryPageState extends State<GradingEntryPage> {
               child: Center(
                 child: Center(
                     child: TextFormField(
-                  style: primaryTextStyle,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
-                  ],
-                  keyboardType: TextInputType.number,
-                  controller: controller.fishLengthAvgController,
-                  decoration: InputDecoration.collapsed(
-                      hintText: 'ex: 23', hintStyle: subtitleTextStyle),
-                )),
+                      style: primaryTextStyle,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                      ],
+                      keyboardType: TextInputType.number,
+                      controller: controller.fishLengthAvgController,
+                      decoration: InputDecoration.collapsed(
+                          hintText: 'ex: 23', hintStyle: subtitleTextStyle),
+                    )),
               ),
             ),
           ],
@@ -254,15 +350,15 @@ class _GradingEntryPageState extends State<GradingEntryPage> {
               child: Center(
                 child: Center(
                     child: TextFormField(
-                  style: primaryTextStyle,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                  keyboardType: TextInputType.number,
-                  controller: controller.undersizeController,
-                  decoration: InputDecoration.collapsed(
-                      hintText: 'ex: 23', hintStyle: subtitleTextStyle),
-                )),
+                      style: primaryTextStyle,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      keyboardType: TextInputType.number,
+                      controller: controller.undersizeController,
+                      decoration: InputDecoration.collapsed(
+                          hintText: 'ex: 23', hintStyle: subtitleTextStyle),
+                    )),
               ),
             ),
           ],
@@ -299,15 +395,15 @@ class _GradingEntryPageState extends State<GradingEntryPage> {
               child: Center(
                 child: Center(
                     child: TextFormField(
-                  style: primaryTextStyle,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                  keyboardType: TextInputType.number,
-                  controller: controller.oversizeController,
-                  decoration: InputDecoration.collapsed(
-                      hintText: 'ex: 4', hintStyle: subtitleTextStyle),
-                )),
+                      style: primaryTextStyle,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      keyboardType: TextInputType.number,
+                      controller: controller.oversizeController,
+                      decoration: InputDecoration.collapsed(
+                          hintText: 'ex: 4', hintStyle: subtitleTextStyle),
+                    )),
               ),
             ),
           ],
@@ -343,15 +439,15 @@ class _GradingEntryPageState extends State<GradingEntryPage> {
               ),
               child: Center(
                   child: TextFormField(
-                style: primaryTextStyle,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly
-                ],
-                keyboardType: TextInputType.number,
-                controller: controller.normalsizeController,
-                decoration: InputDecoration.collapsed(
-                    hintText: 'ex: 23', hintStyle: subtitleTextStyle),
-              )),
+                    style: primaryTextStyle,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                    keyboardType: TextInputType.number,
+                    controller: controller.normalsizeController,
+                    decoration: InputDecoration.collapsed(
+                        hintText: 'ex: 23', hintStyle: subtitleTextStyle),
+                  )),
             ),
           ],
         ),
@@ -366,19 +462,35 @@ class _GradingEntryPageState extends State<GradingEntryPage> {
             top: defaultSpace, right: defaultMargin, left: defaultMargin),
         child: TextButton(
           onPressed: () async {
-            controller.fishWeightController.text == "" ||
-                    controller.sampleAmountController.text == "" ||
-                    controller.fishTypeController.selected.value == "pilih ikan"
-                ? null
-                : Navigator.pop(context);
-            controller.postFishGrading();
-            gradingcontroller.getFishGrading(
-                activation_id: controller.activation.id.toString());
-            gradingcontroller.getFishGradingChart(
-                activation_id: controller.activation.id.toString());
-            // print(gradingcontroller.charData);
-
-            controller.postDataLog(controller.fitur);
+            Map<String, dynamic> result = controller.validationInput();
+            if (result['isValid'] == false) {
+              Get.snackbar('Input Salah', result['message'],
+                  titleText: Text(
+                    'Input Salah',
+                    style: alertTextStyle.copyWith(
+                      fontSize: 16,
+                      fontWeight: medium,
+                    ),
+                  ),
+                  messageText: Text(
+                    result['message'],
+                    style: primaryTextStyle.copyWith(
+                      fontSize: 16,
+                      fontWeight: medium,
+                    ),
+                  ),
+                  backgroundColor: backgroundColor1);
+            } else {
+              await controller.postFishGrading();
+              // update chart
+              // await gradingcontroller.getFishGradingChart(
+              //     activation_id: controller.activation.id.toString());
+              // update list
+              await gradingcontroller.getFishGrading(
+                  activation_id: controller.activation.id.toString());
+              await controller.postDataLog(controller.fitur);
+              Get.back();
+            }
           },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
@@ -400,40 +512,20 @@ class _GradingEntryPageState extends State<GradingEntryPage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
-          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
-            title: const Text("Entry Grading"),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  // scaffoldKey.currentState?.openEndDrawer();
-                  setState(() {
-                    isMenuTapped.value = !isMenuTapped.value;
-                  });
-                },
-                icon: Icon(Icons.card_travel_rounded),
-              )
-            ],
+            title: Text("Entry Grading ${controller.pond.alias}"),
           ),
-          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
-              if (isMenuTapped.value)
-                Column(
-                  children: [
-                    newMenu(),
-                    SizedBox(height: 10,),
-                  ],
-                ),
-              fishTypelInput(),
+              SizedBox(
+                height: defaultMargin,
+              ),
+              fishInfo(),
               sampleAmountInput(),
               fishWightInput(),
               fishLengthAvgInput(),
-              normalsizeInput(),
-              undersizeInput(),
-              oversizeInput(),
               submitButton(),
               SizedBox(
                 height: 8,

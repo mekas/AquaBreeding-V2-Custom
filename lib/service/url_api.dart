@@ -1,7 +1,7 @@
 class Urls {
   // static const String baseUrl = 'https://6343-103-8-12-43.ngrok-free.app/api';
-  static const String baseUrl = 'http://jft.web.id/fishapiv3/api';
-  // static const String baseUrl = 'http://10.0.2.2:8000/api';
+  // static const String baseUrl = 'http://jft.web.id/fishapiv4/api';
+  static const String baseUrl = 'http://10.0.2.2:8000/api';
 
   // Home
   static const String statistic = '$baseUrl/statistic';
@@ -42,7 +42,8 @@ class Urls {
   static const String fishGradings = '$baseUrl/fishgradings';
   static String fishGrading(String? activationId) =>
       '$baseUrl/fishgradings/activation/$activationId';
-
+  static String fishGradingsGraph(String? activationId) =>
+      '$baseUrl/fishgradings/graph/$activationId';
   // Fish Death
   static const String fishDeaths = '$baseUrl/fishdeath';
   static String fishDeath(String? activationId) =>

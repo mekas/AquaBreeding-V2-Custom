@@ -429,6 +429,9 @@ class _DetailPondPageState extends State<DetailPondPage> {
                   detailController.activations.isEmpty
                       ? emptyListActivation()
                       : listActivation(),
+                  // detailController.activations.isEmpty
+                  //     ? listActivation()
+                  //     : emptyListActivation(),
                   SizedBox(
                     height: 10,
                   )

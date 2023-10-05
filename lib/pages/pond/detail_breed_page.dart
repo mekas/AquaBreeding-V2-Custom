@@ -97,10 +97,10 @@ class _DetailBreedPageState extends State<DetailBreedPage> {
             top: defaultSpace, right: defaultMargin, left: defaultMargin),
         child: TextButton(
           onPressed: () {
-            Get.to(() => DailyWaterEditPage(), arguments: {
-              'pond': controller.pondController.selectedPond.value,
-              'activation': controller.detailPondController.selectedActivation.value,
-            });
+            // Get.to(() => DailyWaterEditPage(), arguments: {
+            //   'pond': controller.pondController.selectedPond.value,
+            //   'activation': controller.detailPondController.selectedActivation.value,
+            // });
           },
           style: TextButton.styleFrom(
             fixedSize: const Size(300, 40),
@@ -160,10 +160,10 @@ class _DetailBreedPageState extends State<DetailBreedPage> {
             top: defaultSpace, right: defaultMargin, left: defaultMargin),
         child: TextButton(
           onPressed: () {
-            Get.to(() => DailyWaterEditPage(), arguments: {
-              'pond': controller.pondController.selectedPond.value,
-              'activation': controller.detailPondController.selectedActivation.value,
-            });
+            // Get.to(() => DailyWaterEditPage(), arguments: {
+            //   'pond': controller.pondController.selectedPond.value,
+            //   'activation': controller.detailPondController.selectedActivation.value,
+            // });
           },
           style: TextButton.styleFrom(
             fixedSize: const Size(300, 40),

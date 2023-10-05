@@ -46,6 +46,7 @@ class DetailPondController extends GetxController {
     // activationData = result[0];
     for (var i in result) {
       // activations.add(i);
+      print("item activation: ${i.fishLive!.first.type}");
       if (i.isFinish == false) {
         isPondActive.value = true;
         print("masuk ini ");

@@ -6,21 +6,24 @@ import 'package:get/get.dart';
 
 import '../../models/activation_model.dart';
 import '../../service/logging_service.dart';
+import '../pond/detail_pond_controller.dart';
 
 class GradingEntryController extends GetxController {
-  TextEditingController fishWeightController = TextEditingController(text: '');
-  TextEditingController undersizeController = TextEditingController(text: '');
-  TextEditingController oversizeController = TextEditingController(text: '');
-  TextEditingController normalsizeController = TextEditingController(text: '');
-  TextEditingController fishLengthAvgController =
-      TextEditingController(text: '');
-  TextEditingController sampleAmountController =
-      TextEditingController(text: '');
   FishTypeController fishTypeController = FishTypeController();
+  TextEditingController sampleAmountController =
+  TextEditingController(text: '0');
+  TextEditingController fishWeightController = TextEditingController(text: '0');
+  TextEditingController fishLengthAvgController =
+  TextEditingController(text: '0');
+  TextEditingController normalsizeController = TextEditingController(text: '0');
+  TextEditingController undersizeController = TextEditingController(text: '0');
+  TextEditingController oversizeController = TextEditingController(text: '0');
   var isLoading = false.obs;
   Pond pond = Get.arguments['pond'];
   Activation activation = Get.arguments["activation"];
   RxList<String> listFishAlive = List<String>.empty().obs;
+  DetailPondController detailPondController = Get.find();
+  final persentageSample = 0.0.obs;
 
   Future<void> getFish() async {
     isLoading.value = true;
@@ -98,18 +101,46 @@ class GradingEntryController extends GetxController {
     validatenormal.value = true;
   }
 
+  Map<String, dynamic> validationInput() {
+    Map<String, dynamic> result = {
+      'isValid': false,
+      'message': '',
+    };
+    if (sampleAmountController.text.isEmpty ||
+        int.parse(sampleAmountController.text) == 0) {
+      result['isValid'] = false;
+      result['message'] = "Isi jumlah sample dengan angka > 0";
+      return result;
+    }
+    if (fishWeightController.text.isEmpty ||
+        double.parse(fishWeightController.text) == 0) {
+      result['isValid'] = false;
+      result['message'] = "Isi berat total sample ikan dengan angka > 0";
+      return result;
+    }
+    result['isValid'] = true;
+    result['message'] = "Isian sudah benar";
+    return result;
+  }
+
+  void updatePersentageSample() {
+    double persentage = double.parse(sampleAmountController.text);
+    persentageSample.value = 100 *
+        double.parse(sampleAmountController.text) /
+        double.parse(detailPondController.selectedActivation.value.fishAmount
+            .toString());
+  }
+
   Future<void> postFishGrading() async {
+    double avgWeigt = double.parse(sampleAmountController.text) /
+        double.parse(fishWeightController.text);
     bool value = await FishGradingService().postFishGrading(
       pondId: pond.id,
-      fishType: fishTypeController.selected.value,
-      samplingAmount: sampleAmountController.value.text,
-      avgFishWeight: fishWeightController.value.text,
-      avgFishLong: fishLengthAvgController.value.text,
-      amountNormal: normalsizeController.value.text,
-      amountOver: oversizeController.value.text,
-      amountUnder: undersizeController.value.text,
+      avgWeight: avgWeigt.toString(),
+      sampleAmount: sampleAmountController.text,
+      sampleWeight: fishWeightController.text,
+      sampleLength: fishLengthAvgController.text,
     );
-    print(value);
   }
 
   final DateTime startTime = DateTime.now();
@@ -119,7 +150,7 @@ class GradingEntryController extends GetxController {
   Future<void> postDataLog(String fitur) async {
     // print(buildJsonFish());
     bool value =
-        await LoggingService().postLogging(startAt: startTime, fitur: fitur);
+    await LoggingService().postLogging(startAt: startTime, fitur: fitur);
 
     print(value);
   }

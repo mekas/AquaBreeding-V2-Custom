@@ -8,7 +8,6 @@ class FishGradingService {
   Future<List<FishGrading>> fetchFishGradings(
       {required String activationId}) async {
     var url = Uri.parse(Urls.fishGrading(activationId));
-    print("GET URL: ${Uri.parse(Urls.fishGrading(activationId))}");
     var headers = {'Content-Type': 'application/json'};
 
     var response = await http.get(url, headers: headers);
@@ -18,28 +17,26 @@ class FishGradingService {
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       List<FishGrading> fishgradings = FishGrading.fromJsonList(data);
-      print("success gett fishgradings");
-      print("res = ${response.body}");
+      print("success get fishgradings");
       return fishgradings;
     } else {
       throw Exception('Gagal Get fishgradings!');
     }
   }
 
-  Future<List<GradingChartData>> fetchChartFishGradings(
+  Future<FishGradingChart> fetchChartFishGradings(
       {required String activationId}) async {
-    var url = Uri.parse(Urls.fishGrading(activationId));
+    var url = Uri.parse(Urls.fishGradingsGraph(activationId));
     var headers = {'Content-Type': 'application/json'};
+    print(url);
 
     var response = await http.get(url, headers: headers);
-
-    print(response.body);
-
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      List<GradingChartData> fishgradings = GradingChartData.fromJsonList(data);
-      print("success add fishgradings");
-      return fishgradings;
+      print(data);
+      FishGradingChart fishGradingChart = FishGradingChart.fromJson(data);
+      print("success get fish grading chart");
+      return fishGradingChart;
     } else {
       throw Exception('Gagal Get fishgradings!');
     }
@@ -47,49 +44,34 @@ class FishGradingService {
 
   Future<bool> postFishGrading({
     required String? pondId,
-    required String? fishType,
-    required String? samplingAmount,
-    required String? avgFishWeight,
-    required String? avgFishLong,
-    required String? amountNormal,
-    required String? amountOver,
-    required String? amountUnder,
+    required String? avgWeight,
+    required String? sampleAmount,
+    required String? sampleWeight,
+    required String? sampleLength,
   }) async {
-    if (avgFishWeight!.isNotEmpty) {
-      if (avgFishWeight.contains(",")) {
-        avgFishWeight = avgFishWeight.replaceAll(',', '.');
-      }
-    }
-    print({
-      "pond_id": pondId,
-      "fish_type": fishType,
-      "sampling_amount": samplingAmount,
-      "avg_fish_weight": avgFishWeight,
-      "avg_fish_long": avgFishLong!.isNotEmpty ? avgFishLong :  "0",
-      "amount_normal_fish": amountNormal!.isNotEmpty ? amountNormal :  "0",
-      "amount_oversize_fish": amountOver!.isNotEmpty ? amountOver :  "0",
-      "amount_undersize_fish": amountUnder!.isNotEmpty ? amountUnder :  "0",
-    });
     final response = await http.post(
       Uri.parse(Urls.fishGradings),
-
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       encoding: Encoding.getByName('utf-8'),
       body: {
         "pond_id": pondId,
-        "fish_type": fishType,
-        "sampling_amount": samplingAmount,
-        "avg_fish_weight": avgFishWeight,
-        "avg_fish_long": avgFishLong!.isNotEmpty ? avgFishLong :  "0",
-        "amount_normal_fish": amountNormal!.isNotEmpty ? amountNormal :  "0",
-        "amount_oversize_fish": amountOver!.isNotEmpty ? amountOver :  "0",
-        "amount_undersize_fish": amountUnder!.isNotEmpty ? amountUnder :  "0",
+        "avg_weight": avgWeight,
+        "sample_amount": sampleAmount,
+        "sample_weight": sampleWeight,
+        "sample_long": sampleLength,
       },
     );
-    print("POST URL:${Urls.fishGradings}");
-    print("avg_fish_long $avgFishLong");
+    print({
+      "pond_id": pondId,
+      "avg_weight": avgWeight,
+      "sample_amount": sampleAmount,
+      "sample_weight": sampleWeight,
+      "sample_long": sampleLength,
+    });
+    print(response.body);
+
     if (response.statusCode == 200) {
       print(response.body);
       return true;

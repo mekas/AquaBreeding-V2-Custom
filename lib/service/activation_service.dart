@@ -17,8 +17,8 @@ class ActivationService {
     var headers = {'Content-Type': 'application/json'};
 
     var response = await http.get(url, headers: headers);
-
-    // print(response.body);
+    print("get url: ${Uri.parse(Urls.activation(pondId))}");
+    print("response: ${response.body}");
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -42,7 +42,7 @@ class ActivationService {
     var headers = {'Content-Type': 'application/json'};
 
     var response = await http.get(url, headers: headers);
-
+    print("get url: ${Uri.parse(Urls.fishChart(activationId))}");
     // print(response.body);
 
     if (response.statusCode == 200) {

@@ -18,10 +18,10 @@ class Fish {
     return Fish(
       fishId: json['fish_seed_id'],
       fishCategory: json['fish_category'],
-      type: json['fish_type'],
-      amount: json['fish_amount'] <= 0
-          ? json['fish_amount'] * -1
-          : json['fish_amount'],
+      type: json['type'],
+      amount: json['amount'] <= 0
+          ? json['amount'] * -1
+          : json['amount'],
     );
   }
 
