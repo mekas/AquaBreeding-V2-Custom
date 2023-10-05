@@ -15,10 +15,11 @@ import 'package:fish/pages/pond/detail_pond_controller.dart';
 
 import 'package:get/get_connect/http/src/utils/utils.dart';
 
+import '../pond/detail_finished_breed_page.dart';
+
 class MyTabs extends GetxController with GetSingleTickerProviderStateMixin {
   final PondController pondController = Get.find();
   final DetailPondController detailPondController = Get.find();
-
   var isLoading = false.obs;
 
   late TabController controller;
@@ -85,6 +86,13 @@ class MyTabScreen extends StatefulWidget {
 
 class _MyTabScreenState extends State<MyTabScreen> {
   var isMenuTapped = false.obs;
+  var status = Get.arguments["status"];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("status: $status");
+  }
   @override
   Widget build(BuildContext context) {
     var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -123,7 +131,7 @@ class _MyTabScreenState extends State<MyTabScreen> {
       endDrawer: DrawerInvetarisList(),
       body: TabBarView(
         controller: _tabs.controller,
-        children: [DetailBreedPage(isMenuTapped: isMenuTapped.value,), TreatmentPage(isMenuTapped: isMenuTapped.value,), FishTransferListPage(isMenuTapped: isMenuTapped.value,)],
+        children: [status == "Selesai" ? DetailFinishedBreedPage(isMenuTapped: isMenuTapped.value,):  DetailBreedPage(isMenuTapped: isMenuTapped.value,), TreatmentPage(isMenuTapped: isMenuTapped.value,), FishTransferListPage(isMenuTapped: isMenuTapped.value,)],
       ),
     );
   }

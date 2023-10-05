@@ -26,7 +26,7 @@ class ActivationCard extends StatelessWidget {
       onTap: () {
         detailPondController.updateSelectedActivation(activation!.id);
         Get.to(() => MyTabScreen(),
-            arguments: {"activation": activation, "pond": pond});
+            arguments: {"activation": activation, "pond": pond, "status" : activation!.getStatus()});
       },
       // onTap: () {
       //   Get.to(() => const DetailBreedPage(),

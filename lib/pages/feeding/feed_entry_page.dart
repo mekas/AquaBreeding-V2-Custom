@@ -469,7 +469,7 @@ class _FeedEntryPageState extends State<FeedEntryPage> {
             controller.postFeedHistory();
             // feedcontroller.getChartFeed(
             //     activation_id: controller.activation.id.toString());
-            feedcontroller.getChartFeed(pakanState.selectedFeedType.value);
+            feedcontroller.getChartFeed(controller.activation.id.toString());
             feedcontroller.getWeeklyRecapFeedHistory(
                 activation_id: controller.activation.id.toString());
             controller.postDataLog(controller.fitur);

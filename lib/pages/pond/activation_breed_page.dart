@@ -14,6 +14,7 @@ import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/new_Menu_widget.dart';
 import '../component/detail_pond_tabview.dart';
 
@@ -35,6 +36,7 @@ class _ActivationBreedPageState extends State<ActivationBreedPage> {
 
   TextEditingController dump = TextEditingController();
   var isMenuTapped = false.obs;
+  late SharedPreferences prefs;
   @override
   void initState() {
     // TODO: implement initState
@@ -61,6 +63,12 @@ class _ActivationBreedPageState extends State<ActivationBreedPage> {
     benihState.isNilaMerahSelected.value = false;
     benihState.isPatinSelected.value = false;
     benihState.isMasSelected.value = false;
+    initSharedPrefs();
+  }
+
+  void initSharedPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    inspect(prefs);
   }
 
   @override
@@ -121,6 +129,7 @@ class _ActivationBreedPageState extends State<ActivationBreedPage> {
                             benihState.selectedNilaHitam.value['id'], () {
                           controller.calculatedNilaHitamStock.value =
                               int.parse(benihState.nilaHitamFishStock.value);
+
                         });
                       },
                     ),
@@ -1282,6 +1291,8 @@ class _ActivationBreedPageState extends State<ActivationBreedPage> {
                         controller.isNilaMerah.value = false;
                         controller.isPatin.value = false;
                         controller.isMas.value = false;
+                        prefs.setString("fishCategory", newValue);
+                        print("kategori: $newValue");
 
                         benihState.isLeleSelected.value = false;
                         benihState.isMasSelected.value = false;
@@ -1537,7 +1548,7 @@ class _ActivationBreedPageState extends State<ActivationBreedPage> {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Text(
-                                        'Aktifkan tanggal input pakan manual',
+                                        'Aktifkan tanggal aktivasi kolam manual',
                                         style: headingText3,
                                       ),
                                     ],

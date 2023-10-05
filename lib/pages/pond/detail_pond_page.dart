@@ -18,6 +18,7 @@ import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
 import '../fish_transfer/fish_transfer_entry_page.dart';
+import 'deactivation_breed_controller.dart';
 import 'edit_pond_page.dart';
 
 class DetailPondPage extends StatefulWidget {
@@ -35,6 +36,9 @@ class _DetailPondPageState extends State<DetailPondPage> {
   final detailController = Get.put(DetailPondController());
   final activationController = Get.put(ActivationBreedController());
   // final feedEntryController = Get.put(FeedEntryController());
+  // final DeactivationBreedController panenController =
+  // Get.put(DeactivationBreedController());
+
   final pondController = Get.put(PondController());
   final InventarisPakanState pakanState = Get.put(InventarisPakanState());
   final InventarisBahanBudidayaState supState =
@@ -48,12 +52,14 @@ class _DetailPondPageState extends State<DetailPondPage> {
     //       pondId: controller.pond.id.toString());
     // });
     detailController.getPondActivation();
+
     activationController.pondName.value =
         'kolam ${detailController.pondController.selectedPond.value.alias}';
     pakanState.pondName.value =
         'kolam ${detailController.pondController.selectedPond.value.alias}';
     supState.pondName.value =
         'kolam ${detailController.pondController.selectedPond.value.alias}';
+    // panenController.pondName.value = 'kolam ${detailController.pondController.selectedPond.value.alias}';
   }
 
   @override

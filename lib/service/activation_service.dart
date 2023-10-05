@@ -10,6 +10,7 @@ import 'package:fish/service/url_api.dart';
 import 'package:fish/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ActivationService {
   Future<List<Activation>> getActivations({required String pondId}) async {
@@ -62,7 +63,10 @@ class ActivationService {
       required bool? isWaterPreparation,
       required String? waterLevel,
       required String? activeDate,
-      required Function doInPost}) async {
+      required Function doInPost,
+      Function()? doAfter}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String fishCategory = prefs.getString('fishCategory').toString();
     final response = await http.post(Uri.parse(Urls.pondActivation(pondId)),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -70,13 +74,22 @@ class ActivationService {
         encoding: Encoding.getByName('utf-8'),
         body: {
           "fish": fish.toString(),
-          "isWaterPreparation": false.toString(),
           "water_level": waterLevel,
           "active_at": activeDate,
+          "fish_category": fishCategory
         });
+    print({
+      "fish": fish.toString(),
+      "water_level": waterLevel,
+      "active_at": activeDate,
+      "fish_category": fishCategory
+    });
 
     if (response.statusCode == 200) {
       doInPost();
+      if (doAfter != null){
+        doAfter();
+      }
       return true;
     } else {
       return false;
@@ -110,8 +123,12 @@ class ActivationService {
           "total_weight_harvested": total_weight_harvested.toString(),
           "total_fish_harvested": total_fish_harvested.toString(),
           "fish": fish_harvested.toString(),
-          "deactivated_at": date,
         });
+      print({
+        "total_weight_harvested": total_weight_harvested.toString(),
+        "total_fish_harvested": total_fish_harvested.toString(),
+        "fish": fish_harvested.toString(),
+      });
 
     if (response.statusCode == 200) {
       print('sukses deaktifasi');
@@ -143,6 +160,59 @@ class ActivationService {
       return true;
     } else {
       return false;
+    }
+  }
+
+  Future postHistorySeedData(
+      String pondName, List fish, String usedDate, Function() doAfter) async {
+    var map = <String, dynamic>{};
+
+    map['pond'] = pondName;
+    print("postHistorySeed...");
+    print("fish $fish}");
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token').toString();
+    var headers = {'Authorization': 'Bearer $token', "Content-Type": "application/x-www-form-urlencoded"};
+
+    // print('HEHE');
+
+    for (var i = 0; i < fish.length; i++) {
+      if (fish[i]['seed_id'] is int){
+        print("yes seed id int");
+      } else {
+        print("no seed id not int");
+      }
+      if (fish[i]['original_value'] is int){
+        print("yes original_value int");
+      } else {
+        print("no original_value not int");
+      }
+      if (fish[i]['amount'] is int){
+        print("yes amount int");
+      } else {
+        print("no amount not int");
+      }
+      map['fish_seed_id'] = fish[i]['seed_id'];
+      map['original_amount'] = fish[i]['original_value'];
+      map['usage'] = fish[i]['amount'].toString();
+      map['created_at'] = usedDate;
+      print("loop fish");
+      print("post url: ${Uri.parse(Urls.seedSch)}");
+      print("map $map");
+      try {
+        print("try...");
+        await http.post(
+          Uri.parse(Urls.seedSch),
+          body: map,
+          headers: headers,
+        );
+        print("post url: ${Uri.parse(Urls.seedSch)}");
+        doAfter();
+      } catch (e) {
+        throw Exception(e);
+      }
+
     }
   }
 }

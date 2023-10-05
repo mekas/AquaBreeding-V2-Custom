@@ -16,8 +16,8 @@ class Fish {
 
   factory Fish.fromJson(Map<String, dynamic> json) {
     return Fish(
-      fishId: json['fish_seed_id'],
-      fishCategory: json['fish_category'],
+      fishId: json['seed_id'],
+      fishCategory: json['category'],
       type: json['type'],
       amount: json['amount'] <= 0
           ? json['amount'] * -1

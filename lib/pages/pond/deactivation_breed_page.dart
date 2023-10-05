@@ -27,6 +27,8 @@ class _DeactivationBreedPageState extends State<DeactivationBreedPage> {
   final DetailPondController detailPondController =
       Get.put(DetailPondController());
 
+  final detailController = Get.put(DetailPondController());
+
   var currDate = DateTime.now();
   var isMenuTapped = false.obs;
 
@@ -52,7 +54,7 @@ class _DeactivationBreedPageState extends State<DeactivationBreedPage> {
       currDate.toString().split(' ')[0],
     );
     // inspect(currDate);
-
+    controller.pondName.value = 'kolam ${detailController.pondController.selectedPond.value.alias}';
     controller.getHarvestedBool(detailPondController.activations[0]);
   }
 
@@ -72,11 +74,11 @@ class _DeactivationBreedPageState extends State<DeactivationBreedPage> {
             await controller.pondDeactivation(
               context,
               () {
-                detailPondController.getPondActivation();
-                Navigator.pushAndRemoveUntil(context,
-                    MaterialPageRoute(builder: (context) {
-                  return DashboardPage();
-                }), (route) => false);
+                // detailPondController.getPondActivation();
+                // Navigator.pushAndRemoveUntil(context,
+                //     MaterialPageRoute(builder: (context) {
+                //   return DashboardPage();
+                // }), (route) => false);
               },
             );
             // detailPondController.isPondActive.value = false;

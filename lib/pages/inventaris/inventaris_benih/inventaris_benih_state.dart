@@ -455,36 +455,7 @@ class InventarisBenihState extends Urls {
     isLoadingDelete.value = false;
   }
 
-  Future postHistorySeedData(
-      String pondName, List fish, String usedDate, Function() doAfter) async {
-    var map = <String, dynamic>{};
 
-    map['pond'] = pondName;
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('token').toString();
-    var headers = {'Authorization': 'Bearer $token'};
-
-    // print('HEHE');
-
-    for (var i = 0; i < fish.length; i++) {
-      map['fish_seed_id'] = fish[i]['seed_id'];
-      map['original_amount'] = fish[i]['original_value'];
-      map['usage'] = fish[i]['amount'];
-      map['created_at'] = usedDate;
-
-      try {
-        await http.post(
-          Uri.parse(Urls.seedSch),
-          body: map,
-          headers: headers,
-        );
-        doAfter();
-      } catch (e) {
-        throw Exception(e);
-      }
-    }
-  }
 
   Future getHistorySeedData(bool isReversed, String firstDate, String lastDate,
       String name, Function() doAfter) async {

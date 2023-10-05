@@ -97,7 +97,7 @@ class ActivationBreedController extends GetxController {
         "seed_id": benihState.selectedNilaMerah.value['seed_id'],
         "category": breedOptionController.selected.value,
         "original_value": benihState.nilaMerahFishStock.value,
-        "amount": nilaMerahAmountController.value.text,
+        "amount": int.parse(nilaMerahAmountController.value.text),
         "weight": benihState.nilaMerahFishWeigth.value == '-'
             ? '0'
             : benihState.nilaMerahFishWeigth.value,
@@ -114,7 +114,7 @@ class ActivationBreedController extends GetxController {
         "seed_id": benihState.selectedNilaHitam.value['seed_id'],
         "category": breedOptionController.selected.value,
         "original_value": benihState.nilaHitamFishStock.value,
-        "amount": nilaHitamAmountController.value.text,
+        "amount": int.parse(nilaHitamAmountController.value.text),
         "weight": benihState.nilaHitamFishWeigth.value == '-'
             ? '0'
             : benihState.nilaHitamFishWeigth.value,
@@ -131,7 +131,7 @@ class ActivationBreedController extends GetxController {
         "seed_id": benihState.selectedLele.value['seed_id'],
         "category": breedOptionController.selected.value,
         "original_value": benihState.leleFishStock.value,
-        "amount": leleAmountController.value.text,
+        "amount": int.parse(leleAmountController.value.text),
         "weight": benihState.leleFishWeigth.value == '-'
             ? '0'
             : benihState.leleFishWeigth.value,
@@ -148,7 +148,7 @@ class ActivationBreedController extends GetxController {
         "seed_id": benihState.selectedPatin.value['seed_id'],
         "category": breedOptionController.selected.value,
         "original_value": benihState.patinFishStock.value,
-        "amount": patinAmountController.value.text,
+        "amount": int.parse(patinAmountController.value.text),
         "weight": benihState.patinFishWeigth.value == '-'
             ? '0'
             : benihState.patinFishWeigth.value,
@@ -165,7 +165,7 @@ class ActivationBreedController extends GetxController {
         "seed_id": benihState.selectedMas.value['seed_id'],
         "category": breedOptionController.selected.value,
         "original_value": benihState.masFishStock.value,
-        "amount": masAmountController.value.text,
+        "amount": int.parse(masAmountController.value.text),
         "weight": benihState.masFishWeigth.value == '-'
             ? '0'
             : benihState.masFishWeigth.value,
@@ -195,8 +195,16 @@ class ActivationBreedController extends GetxController {
       "isWaterPreparation": false,
       "waterLevel": waterHeightController.value.text,
     });
+    print({
+      "pondId": pond.id,
+      "fish": buildFish,
+      "isWaterPreparation": false,
+      "waterLevel": waterHeightController.value.text,
+      "activeDate" : benihState.selectedUsedDate.value,
+    });
 
     try {
+
       await service.postActivation(
         pondId: pond.id,
         fish: buildFish,
@@ -204,13 +212,16 @@ class ActivationBreedController extends GetxController {
         waterLevel: waterHeightController.value.text,
         activeDate: benihState.selectedUsedDate.value,
         doInPost: doInPost,
+        doAfter: () async {
+          await service.postHistorySeedData(
+            pondName.value,
+            fishTmp,
+            benihState.selectedUsedDate.value,
+                () => null,
+          );
+        }
       );
-      await benihState.postHistorySeedData(
-        pondName.value,
-        fishTmp,
-        benihState.selectedUsedDate.value,
-        () => null,
-      );
+
       postDataLog(fitur);
     } catch (e) {
       //

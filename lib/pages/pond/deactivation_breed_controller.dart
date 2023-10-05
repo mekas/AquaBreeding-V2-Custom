@@ -210,6 +210,8 @@ class DeactivationBreedController extends GetxController {
           '${Urls.suplemenSch}?start_date=$firstDate&end_date=$lastDate&pond_name=$pondName'),
       headers: headers,
     );
+    print("get url: ${Uri.parse(
+        '${Urls.suplemenSch}?start_date=$firstDate&end_date=$lastDate&pond_name=$pondName')}");
 
     try {
       if (response.statusCode == 200) {
@@ -247,7 +249,8 @@ class DeactivationBreedController extends GetxController {
         Uri.parse(
             '${Urls.feedSch}?start_date=$firstDate&end_date=$lastDate&pond_name=$pondName'),
         headers: headers);
-
+    print("get url: ${Uri.parse(
+        '${Urls.feedSch}?start_date=$firstDate&end_date=$lastDate&pond_name=$pondName')}");
     try {
       if (response.statusCode == 200) {
         HistoryFeedModel res =
@@ -283,6 +286,8 @@ class DeactivationBreedController extends GetxController {
           '${Urls.seedSch}?start_date=$firstDate&end_date=$lastDate&pond_name=$pondName'),
       headers: headers,
     );
+    print("get url: ${Uri.parse(
+        '${Urls.seedSch}?start_date=$firstDate&end_date=$lastDate&pond_name=$pondName')}");
 
     try {
       if (response.statusCode == 200) {
@@ -290,6 +295,9 @@ class DeactivationBreedController extends GetxController {
             HistorySeedModel.fromJson(jsonDecode(response.body));
 
         seedHistoryList.value = res;
+        print("res body ${response.body}");
+        print("token $token");
+        print("seed history list value ${seedHistoryList.value.data}");
 
         if (seedHistoryList.value.data!.isNotEmpty) {
           for (var i in activation.fishLive!) {
@@ -314,7 +322,10 @@ class DeactivationBreedController extends GetxController {
             // }
 
             for (var j in seedHistoryList.value.data!) {
+              print("i fish seed ${i.fishId}");
+              print("j fish seed ${j.fishSeedId}");
               if (i.fishId == j.fishSeedId) {
+                print("equal");
                 if (i.type == "patin") {
                   patinPrice.value += ((j.usage! / j.originalAmount!) *
                           j.seed!.price! *
@@ -326,6 +337,10 @@ class DeactivationBreedController extends GetxController {
                           j.seed!.price! *
                           j.originalAmount!)
                       .round();
+                  print("lele prices ${lelePrice.value += ((j.usage! / j.originalAmount!) *
+                      j.seed!.price! *
+                      j.originalAmount!)
+                      .round()}");
                 }
                 if (i.type == "mas") {
                   masPrice.value += ((j.usage! / j.originalAmount!) *
@@ -361,6 +376,9 @@ class DeactivationBreedController extends GetxController {
 
   Future getAllInventory(String firstDate, String lastDate) async {
     isLoadingInventory.value = true;
+    print("firstdate: $firstDate");
+    print("lastdate: $lastDate");
+
 
     DateTime now = DateTime.now();
     var currMonth = DateTime.now().month;
@@ -375,24 +393,28 @@ class DeactivationBreedController extends GetxController {
         lastDate,
         () => null,
       ); // Rumus 2 (Aset)
+      print("asset price: ${valueA}");
 
       var valueB = await getAllElectricData(
         '$currYear-$currMonth-01',
         '$currYear-$currMonth-$lastday',
         () => null,
       );
+      print("electric price: ${valueB}");
       var valueC = await getHistorySuplemenData(
         firstDate,
         lastDate,
         pondName.value,
         () => null,
       );
+      print("suplement price: ${valueC}");
       var valueD = await getHistoryFeedData(
         firstDate,
         lastDate,
         pondName.value,
         () => null,
       );
+      print("feed price ${valueD}");
       await getHistorySeedData(
         firstDate,
         lastDate,
@@ -411,11 +433,17 @@ class DeactivationBreedController extends GetxController {
 
       for (var i in activation.fishLive!) {
         if (i.type == 'lele') {
+          print("break down prices ${valueA} + ${valueB} + ${valueC} + ${valueD} + ${lelePriceController.text}}");
           lelePriceController.text = ConvertToRupiah.formatToRupiah(
             ((valueA + valueB + valueC + valueD + lelePrice.value) /
                     activation.fishAmount!)
                 .round(),
           );
+          print("break down prices ${valueA} + ${valueB} + ${valueC} + ${valueD} + ${lelePriceController.text}}");
+          print("fish amount ${activation.fishAmount!}");
+          print("price ${((valueA + valueB + valueC + valueD + lelePrice.value) /
+              activation.fishAmount!)
+              .round()}");
         }
         if (i.type == 'mas') {
           masPriceController.text = ConvertToRupiah.formatToRupiah(
@@ -423,6 +451,7 @@ class DeactivationBreedController extends GetxController {
                     activation.fishAmount!)
                 .round(),
           );
+          print("mas price ${masPrice.value}");
         }
         if (i.type == 'patin') {
           patinPriceController.text = ConvertToRupiah.formatToRupiah(
@@ -430,6 +459,7 @@ class DeactivationBreedController extends GetxController {
                     activation.fishAmount!)
                 .round(),
           );
+          print("patin price ${patinPrice.value}");
         }
         if (i.type == 'nila hitam') {
           nilaHitamPriceController.text = ConvertToRupiah.formatToRupiah(
@@ -437,6 +467,7 @@ class DeactivationBreedController extends GetxController {
                     activation.fishAmount!)
                 .round(),
           );
+          print("nila hitam price ${nilaHitamPrice.value}");
         }
         if (i.type == 'nila merah') {
           nilaMerahPriceController.text = ConvertToRupiah.formatToRupiah(
@@ -444,6 +475,7 @@ class DeactivationBreedController extends GetxController {
                     activation.fishAmount!)
                 .round(),
           );
+          print("nila merah price ${nilaMerahPrice.value}");
         }
       }
     } catch (e) {
@@ -455,6 +487,8 @@ class DeactivationBreedController extends GetxController {
 
   Future<void> getHarvestedBool(Activation activation) async {
     for (var i in activation.fishLive!) {
+      print("type: ${i.type}");
+      print("id: ${i.fishId}");
       if (i.type == 'lele') {
         isLele.value = true;
         leleAmount.value = i.amount!;
