@@ -48,15 +48,19 @@ class DailyWaterDetailPondController extends GetxController {
 
   @override
   void onInit() {
-    startTime = DateTime.now();
+    postDataLog(fitur);
     super.onInit();
   }
 
   Future<void> postDataLog(String fitur) async {
-    // print(buildJsonFish());
     bool value =
         await LoggingService().postLogging(startAt: startTime, fitur: fitur);
-    print(value);
+  }
+
+  @override
+  void dispose() {
+    postDataLog(fitur);
+    super.dispose();
   }
 
   // @override

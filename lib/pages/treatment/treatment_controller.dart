@@ -25,6 +25,18 @@ class TreatmentController extends GetxController {
     print(value);
   }
 
+  @override
+  void onInit() async {
+    postDataLog(fitur);
+    super.onInit();
+  }
+
+  @override
+  void dispose() {
+    postDataLog(fitur);
+    super.dispose();
+  }
+
   // Future<void> getTreatmentData() async {
   //   isLoading.value = true;
   //   listTreatment.clear();

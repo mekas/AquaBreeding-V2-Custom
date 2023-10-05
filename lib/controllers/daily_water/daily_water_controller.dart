@@ -85,10 +85,14 @@ class DailyWaterController extends GetxController {
 
   @override
   void onInit() {
-    print("ini init state water");
-    // getDailyWaterData2();
-    // print('ini on init dailywater');
+    postDataLog(fitur);
     super.onInit();
+  }
+
+  @override
+  void dispose() {
+    postDataLog(fitur);
+    super.dispose();
   }
 
   Future<void> postDataLog(String fitur) async {

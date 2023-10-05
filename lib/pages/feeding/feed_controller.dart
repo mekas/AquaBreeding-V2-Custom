@@ -26,7 +26,7 @@ class FeedController extends GetxController {
   void onInit() async {
     getWeeklyRecapFeedHistory(activation_id: activation.id!);
     getChartFeed('Alami');
-
+    postDataLog(fitur);
     super.onInit();
   }
 

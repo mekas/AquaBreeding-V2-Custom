@@ -22,6 +22,12 @@ class WeeklyWaterDetailController extends GetxController {
   }
 
   @override
+  void onInit() async {
+    postDataLog(fitur);
+    super.onInit();
+  }
+
+  @override
   void dispose() {
     postDataLog(fitur);
     super.dispose();

@@ -1102,4 +1102,16 @@ class FishTransferEntryController extends GetxController {
     bool value =
         await LoggingService().postLogging(startAt: startTime, fitur: fitur);
   }
+
+  @override
+  void onInit() async {
+    postDataLog(fitur);
+    super.onInit();
+  }
+
+  @override
+  void dispose() {
+    postDataLog(fitur);
+    super.dispose();
+  }
 }

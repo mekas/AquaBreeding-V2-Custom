@@ -1,6 +1,7 @@
 import 'package:fish/models/activation_model.dart';
 import 'package:fish/pages/grading/grading_entry_controller.dart';
 import 'package:get/get.dart';
+import '../../service/logging_service.dart';
 
 class FishTypeController extends GetxController {
   // It is mandatory initialize with one value from listType
@@ -30,5 +31,25 @@ class FishTypeController extends GetxController {
 
   void setSelected(String value) {
     selected.value = value;
+  }
+
+  final DateTime startTime = DateTime.now();
+  final fitur = 'Grading';
+
+  Future<void> postDataLog(String fitur) async {
+    bool value =
+    await LoggingService().postLogging(startAt: startTime, fitur: fitur);
+  }
+
+  @override
+  void onInit() async {
+    postDataLog(fitur);
+    super.onInit();
+  }
+
+  @override
+  void dispose() {
+    postDataLog(fitur);
+    super.dispose();
   }
 }

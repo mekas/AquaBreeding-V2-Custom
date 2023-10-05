@@ -4,6 +4,7 @@ import 'package:fish/models/pond_model.dart';
 import 'package:fish/service/pond_service.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
+import '../../service/logging_service.dart';
 
 class PondListController extends GetxController {
   // It is mandatory initialize with one value from listType
@@ -28,6 +29,27 @@ class PondListController extends GetxController {
 
   void setSelected(String value) {
     getDestination(value);
+  }
+
+  final DateTime startTime = DateTime.now();
+  final fitur = 'Fist Transfer(Sortir)';
+
+  Future<void> postDataLog(String fitur) async {
+    // print(buildJsonFish());
+    bool value =
+    await LoggingService().postLogging(startAt: startTime, fitur: fitur);
+  }
+
+  @override
+  void onInit() async {
+    postDataLog(fitur);
+    super.onInit();
+  }
+
+  @override
+  void dispose() {
+    postDataLog(fitur);
+    super.dispose();
   }
 
   // Future<void> getPondsData(String method) async {

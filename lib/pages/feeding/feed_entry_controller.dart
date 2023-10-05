@@ -77,6 +77,12 @@ class FeedEntryController extends GetxController {
   }
 
   @override
+  void onInit() async {
+    postDataLog(fitur);
+    super.onInit();
+  }
+
+  @override
   void dispose() {
     feedDosisController.clear();
     postDataLog(fitur);

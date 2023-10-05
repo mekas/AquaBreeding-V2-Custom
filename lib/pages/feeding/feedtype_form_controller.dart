@@ -1,6 +1,7 @@
 import 'package:fish/models/feed_type_model.dart';
 import 'package:fish/service/feed_type_service.dart';
 import 'package:get/get.dart';
+import '../../service/logging_service.dart';
 
 class FeedTypeFormController extends GetxController {
   // It is mandatory initialize with one value from listType
@@ -28,4 +29,26 @@ class FeedTypeFormController extends GetxController {
     }
     return null;
   }
+
+  final DateTime startTime = DateTime.now();
+  final fitur = 'Feeding';
+
+  Future<void> postDataLog(String fitur) async {
+    // print(buildJsonFish());
+    bool value =
+    await LoggingService().postLogging(startAt: startTime, fitur: fitur);
+  }
+
+  @override
+  void onInit() async {
+    postDataLog(fitur);
+    super.onInit();
+  }
+
+  @override
+  void dispose() {
+    postDataLog(fitur);
+    super.dispose();
+  }
+
 }

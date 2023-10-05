@@ -35,6 +35,7 @@ class GradingEntryController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    postDataLog(fitur);
     getFish();
   }
 
@@ -120,8 +121,6 @@ class GradingEntryController extends GetxController {
     // print(buildJsonFish());
     bool value =
         await LoggingService().postLogging(startAt: startTime, fitur: fitur);
-
-    print(value);
   }
 
   @override

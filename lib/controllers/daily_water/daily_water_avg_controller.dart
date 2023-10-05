@@ -5,6 +5,7 @@ import 'package:fish/models/pond_model.dart';
 import 'package:fish/service/daily_water_service.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import '../../service/logging_service.dart';
 
 class DailyWaterAvgController extends GetxController {
   Activation activation = Get.arguments["activation"];
@@ -86,7 +87,31 @@ class DailyWaterAvgController extends GetxController {
     }
     return sol;
   }
+
+  final fitur = "Daily Water Quality";
+  late DateTime startTime;
+  late DateTime endTime;
+
+  Future<void> postDataLog(String fitur) async {
+    // print(buildJsonFish());
+    bool value =
+    await LoggingService().postLogging(startAt: startTime, fitur: fitur);
+  }
+
+  @override
+  void onInit() async {
+    postDataLog(fitur);
+    super.onInit();
+  }
+
+  @override
+  void dispose() {
+    postDataLog(fitur);
+    super.dispose();
+  }
 }
+
+
 
 
 // class TreatmentList {
