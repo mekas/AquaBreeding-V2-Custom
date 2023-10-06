@@ -19,6 +19,8 @@ class PondService {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token'
     };
+    print("get url: ${Uri.parse(Urls.ponds)}");
+    print("token: $token");
 
     var response = await http.get(url, headers: headers);
 

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -37,6 +35,8 @@ class Pond {
   String? pondDoDesc;
   num? pondDo;
   num? pondTemp;
+  num? waterLevel;
+  num? waterVolume;
   String? status;
 
   Pond({
@@ -65,6 +65,8 @@ class Pond {
     this.pondDo,
     this.pondDoDesc,
     this.pondTemp,
+    this.waterLevel = 0,
+    this.waterVolume = 0,
     this.status,
   });
 
@@ -85,27 +87,86 @@ class Pond {
         buildAt: json['build_at'],
         imageLink: json['image_link'],
         isActive: json['isActive'],
-        fishAlive: json['fish_alive'] ?? 0,
+        fishAlive: json['isActive'] == true
+            ? json['last_activation']['total_fish_alive']
+            : 0,
         lastActivationDate: json['activation_date'] ?? "-",
         rangeFromLastActivation: json['isActive'] == false
             ? "-"
             : (DateTime.now()
-                    .difference(stringToDate(json['activation_date']))
-                    .inDays)
-                .toString(),
+            .difference(stringToDate(json['activation_date']))
+            .inDays)
+            .toString(),
         pondStatus: PondStatusConverter.toEnum(json["status"]),
         pondStatusStr: json["status"],
         pondPh: json["pondPh"],
-        pondPhDesc: json["pondPhDesc"],
+        pondPhDesc: getPondPhDescription(json["pondPh"]),
         pondDo: json["pondDo"],
-        pondDoDesc: json["pondDoDesc"],
+        pondDoDesc: getPondDoDescription(json["pondDo"]),
         pondTemp: json["pondTemp"],
+        waterLevel: json['isActive'] == true ? json['water_level'] : 0,
+        waterVolume: json['isActive'] == true ? json['water_volume'] : 0,
         status: json["status"]);
   }
 
   static DateTime stringToDate(String dateString) {
     DateTime parseDate = DateFormat("dd-MM-yyyy").parse(dateString);
     return parseDate;
+  }
+
+  static String getPondPhDescription(num pondPh) {
+    if (pondPh < 6 || pondPh > 8) {
+      return 'Berbahaya';
+    }
+    return "Normal";
+  }
+
+  Color getPondPhColor() {
+    if (pondPh! < 6 || pondPh! > 8) {
+      return Colors.red.shade300;
+    }
+    return Colors.green;
+  }
+
+  static String getPondDoDescription(num pondDo) {
+    if (pondDo < 3 || pondDo > 7.5) {
+      return 'Berbahaya';
+    }
+    if (pondDo < 4 || pondDo > 6) {
+      return 'Semi Berbahaya';
+    }
+    return "Normal";
+  }
+
+  Color getPondDoColor() {
+    if (pondDo! < 3 || pondDo! > 7.5) {
+      return Colors.red.shade300;
+    }
+    if (pondDo! < 4 || pondDo! > 6) {
+      return Colors.amber;
+    }
+    return Colors.green;
+  }
+
+  String getStringEydDate(String strDate) {
+    String result = '';
+    DateTime date = DateFormat("dd-MM-yyyy").parse(strDate);
+    result = DateFormat("dd MMMM yyyy").format(date);
+    return result;
+  }
+
+  String getLastActivationDateEYD() => getStringEydDate(lastActivationDate!);
+
+  String getRatioVolumePerFishAlive() {
+    if (isActive == false) {
+      return '0';
+    }
+    try {
+      String result = (waterLevel! * 1000 / fishAlive!).toStringAsFixed(2);
+      return result;
+    } catch (e) {
+      return '';
+    }
   }
 
   Color getColor() {
@@ -139,7 +200,6 @@ class Pond {
   }
 
   String getGmtToNormalDate() {
-    // inspect(lastActivationDate);
     String stringDate = buildAt!;
     DateTime dateTime = DateFormat("yyyy-MM-dd hh:mm:ss").parse(stringDate);
     String newStringDate = DateFormat("dd-MM-yyyy").format(dateTime);

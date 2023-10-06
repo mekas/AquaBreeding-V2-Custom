@@ -30,11 +30,16 @@ class DetailFinishedBreedPage extends StatefulWidget {
 }
 
 class _DetailFinishedBreedPageState extends State<DetailFinishedBreedPage> {
+
   @override
   Widget build(BuildContext context) {
     final BreedController controller = Get.put(BreedController());
     final DetailPondController detailPondController =
     Get.put(DetailPondController());
+    print("fcr: ${controller
+        .detailPondController.selectedActivation.value.fcr!
+        .toStringAsFixed(4)}");
+
 
     Widget breedDataRecap() {
       return Container(
@@ -665,7 +670,7 @@ class _DetailFinishedBreedPageState extends State<DetailFinishedBreedPage> {
                       Text(
                         controller
                             .detailPondController.selectedActivation.value.fcr!
-                            .toStringAsFixed(3),
+                            .toStringAsFixed(4),
                         style: secondaryTextStyle.copyWith(
                           fontSize: 13,
                           fontWeight: medium,

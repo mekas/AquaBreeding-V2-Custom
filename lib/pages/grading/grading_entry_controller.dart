@@ -3,6 +3,7 @@ import 'package:fish/pages/grading/fish_type_controller.dart';
 import 'package:fish/service/fish_grading_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../models/activation_model.dart';
 import '../../service/logging_service.dart';
@@ -24,6 +25,19 @@ class GradingEntryController extends GetxController {
   RxList<String> listFishAlive = List<String>.empty().obs;
   DetailPondController detailPondController = Get.find();
   final persentageSample = 0.0.obs;
+
+  RxBool checkUsedDate = false.obs;
+  RxString selectedUsedDate = ''.obs;
+  TextEditingController showedUsedDate = TextEditingController(text: '');
+
+  String dateFormat(String dateString, bool includeHour) {
+    DateTime dateTime = DateTime.parse(dateString);
+    var formatter = includeHour
+        ? DateFormat('EEEE, d MMMM y | HH:mm', 'id')
+        : DateFormat('EEEE, d MMMM y', 'id');
+    var formattedDate = formatter.format(dateTime);
+    return formattedDate.split('|').join('| Jam');
+  }
 
   Future<void> getFish() async {
     isLoading.value = true;
@@ -140,6 +154,7 @@ class GradingEntryController extends GetxController {
       sampleAmount: sampleAmountController.text,
       sampleWeight: fishWeightController.text,
       sampleLength: fishLengthAvgController.text,
+      grading_at : selectedUsedDate.value
     );
   }
 

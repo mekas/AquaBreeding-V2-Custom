@@ -95,4 +95,7 @@ class Urls {
 
   // recap deactivation
   static String deactivationRecap = '$baseUrl/recap/deactivation';
+
+  // fish harvested price
+  static String fishHarvestedPrice = '$baseUrl/fishharvestedprice';
 }

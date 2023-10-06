@@ -48,6 +48,7 @@ class FishGradingService {
     required String? sampleAmount,
     required String? sampleWeight,
     required String? sampleLength,
+    required String? grading_at,
   }) async {
     final response = await http.post(
       Uri.parse(Urls.fishGradings),
@@ -61,6 +62,7 @@ class FishGradingService {
         "sample_amount": sampleAmount,
         "sample_weight": sampleWeight,
         "sample_long": sampleLength,
+        "grading_at": grading_at,
       },
     );
     print({
@@ -69,6 +71,7 @@ class FishGradingService {
       "sample_amount": sampleAmount,
       "sample_weight": sampleWeight,
       "sample_long": sampleLength,
+      "grading_at": grading_at,
     });
     print(response.body);
 

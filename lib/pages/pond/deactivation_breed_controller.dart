@@ -375,6 +375,7 @@ class DeactivationBreedController extends GetxController {
   }
 
   Future getAllInventory(String firstDate, String lastDate) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     isLoadingInventory.value = true;
     print("firstdate: $firstDate");
     print("lastdate: $lastDate");
@@ -394,6 +395,7 @@ class DeactivationBreedController extends GetxController {
         () => null,
       ); // Rumus 2 (Aset)
       print("asset price: ${valueA}");
+      prefs.setInt("assetPrice", valueA ?? 0);
 
       var valueB = await getAllElectricData(
         '$currYear-$currMonth-01',
@@ -401,6 +403,7 @@ class DeactivationBreedController extends GetxController {
         () => null,
       );
       print("electric price: ${valueB}");
+      prefs.setInt("electricPrice", valueB ?? 0);
       var valueC = await getHistorySuplemenData(
         firstDate,
         lastDate,
@@ -408,6 +411,7 @@ class DeactivationBreedController extends GetxController {
         () => null,
       );
       print("suplement price: ${valueC}");
+      prefs.setInt("suplementPrice", valueC ?? 0);
       var valueD = await getHistoryFeedData(
         firstDate,
         lastDate,
@@ -415,6 +419,7 @@ class DeactivationBreedController extends GetxController {
         () => null,
       );
       print("feed price ${valueD}");
+      prefs.setInt("feedPrice", valueD ?? 0);
       await getHistorySeedData(
         firstDate,
         lastDate,
@@ -439,11 +444,15 @@ class DeactivationBreedController extends GetxController {
                     activation.fishAmount!)
                 .round(),
           );
-          print("break down prices ${valueA} + ${valueB} + ${valueC} + ${valueD} + ${lelePriceController.text}}");
+          print("break down prices ${valueA} + ${valueB} + ${valueC} + ${valueD} + ${lelePrice.value}}");
           print("fish amount ${activation.fishAmount!}");
           print("price ${((valueA + valueB + valueC + valueD + lelePrice.value) /
               activation.fishAmount!)
               .round()}");
+          prefs.setInt("seedPrice", lelePrice.value ?? 0);
+          prefs.setInt("totalPrice", ((valueA + valueB + valueC + valueD + lelePrice.value) /
+              activation.fishAmount!)
+              .round() ?? 0);
         }
         if (i.type == 'mas') {
           masPriceController.text = ConvertToRupiah.formatToRupiah(
@@ -452,6 +461,10 @@ class DeactivationBreedController extends GetxController {
                 .round(),
           );
           print("mas price ${masPrice.value}");
+          prefs.setInt("seedPrice", masPrice.value ?? 0);
+          prefs.setInt("totalPrice", ((valueA + valueB + valueC + valueD + masPrice.value) /
+              activation.fishAmount!)
+              .round()?? 0);
         }
         if (i.type == 'patin') {
           patinPriceController.text = ConvertToRupiah.formatToRupiah(
@@ -460,6 +473,10 @@ class DeactivationBreedController extends GetxController {
                 .round(),
           );
           print("patin price ${patinPrice.value}");
+          prefs.setInt("seedPrice", patinPrice.value ?? 0);
+          prefs.setInt("totalPrice",  ((valueA + valueB + valueC + valueD + patinPrice.value) /
+              activation.fishAmount!)
+              .round() ?? 0);
         }
         if (i.type == 'nila hitam') {
           nilaHitamPriceController.text = ConvertToRupiah.formatToRupiah(
@@ -468,6 +485,10 @@ class DeactivationBreedController extends GetxController {
                 .round(),
           );
           print("nila hitam price ${nilaHitamPrice.value}");
+          prefs.setInt("seedPrice", nilaHitamPrice.value ?? 0);
+          prefs.setInt("totalPrice", ((valueA + valueB + valueC + valueD + nilaHitamPrice.value) /
+              activation.fishAmount!)
+              .round() ?? 0);
         }
         if (i.type == 'nila merah') {
           nilaMerahPriceController.text = ConvertToRupiah.formatToRupiah(
@@ -476,6 +497,10 @@ class DeactivationBreedController extends GetxController {
                 .round(),
           );
           print("nila merah price ${nilaMerahPrice.value}");
+          prefs.setInt("seedPrice", nilaMerahPrice.value ?? 0);
+          prefs.setInt("totalPrice",  ((valueA + valueB + valueC + valueD + nilaMerahPrice.value) /
+              activation.fishAmount!)
+              .round() ?? 0);
         }
       }
     } catch (e) {
@@ -876,6 +901,13 @@ class DeactivationBreedController extends GetxController {
           fish_harvested: buildJsonFish(),
           date: selectedUsedDate.value,
           doInPost: doInPost,
+          doAfter: () async {
+            await service.postFishHarvestedPrice();
+            Navigator.pushAndRemoveUntil(context,
+                MaterialPageRoute(builder: (context) {
+                  return DashboardPage();
+                }), (route) => false);
+          },
           context: context,
         );
         await deactivationRecapState.postRecap(
