@@ -146,6 +146,8 @@ class GradingEntryController extends GetxController {
   }
 
   Future<void> postFishGrading() async {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(now);
     double avgWeigt = double.parse(sampleAmountController.text) /
         double.parse(fishWeightController.text);
     bool value = await FishGradingService().postFishGrading(
@@ -154,7 +156,7 @@ class GradingEntryController extends GetxController {
       sampleAmount: sampleAmountController.text,
       sampleWeight: fishWeightController.text,
       sampleLength: fishLengthAvgController.text,
-      grading_at : selectedUsedDate.value
+      grading_at : selectedUsedDate.value != "" && selectedUsedDate.value != null ? selectedUsedDate.value : '$formattedDate +0000'
     );
   }
 

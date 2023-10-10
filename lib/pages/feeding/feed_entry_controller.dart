@@ -9,6 +9,7 @@ import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_state.da
 import 'package:fish/service/feed_history_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../models/activation_model.dart';
 import '../../service/logging_service.dart';
@@ -36,11 +37,13 @@ class FeedEntryController extends GetxController {
   }
 
   Future<void> postFeedHistory() async {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(now);
     bool value = await FeedHistoryService().postFeedHistory(
         pondId: pond.id,
         fishFeedId: pakanState.selectedFeedName.value['feed_id'],
         feedDose: pakanState.amountChecker(feedDosisController.text),
-        date: pakanState.selectedUsedDate.value,
+        date: pakanState.selectedUsedDate.value != "" && pakanState.selectedUsedDate.value != null ? pakanState.selectedUsedDate.value : '$formattedDate +0000',
         doAfter: () async {
           await feedController.getWeeklyRecapFeedHistory(
               activation_id: activation.id.toString());
@@ -51,7 +54,7 @@ class FeedEntryController extends GetxController {
       pakanState.selectedFeedName.value['feed_id'],
       pakanState.amount.text,
       pakanState.amountChecker(feedDosisController.text),
-      pakanState.selectedUsedDate.value,
+      pakanState.selectedUsedDate.value != "" && pakanState.selectedUsedDate.value != null ? pakanState.selectedUsedDate.value : '$formattedDate +0000',
       () => null,
     );
 

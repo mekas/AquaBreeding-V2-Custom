@@ -889,6 +889,8 @@ class DeactivationBreedController extends GetxController {
     } else {
       isDeactivationProgress.value = true;
       try {
+        DateTime now = DateTime.now();
+        String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(now);
         await service.postDeactivation(
           pondId: pond.id,
           total_fish_harvested: leleAmount.toInt() +
@@ -899,21 +901,17 @@ class DeactivationBreedController extends GetxController {
           total_weight_harvested: getWeight().toString(),
           isFinish: true,
           fish_harvested: buildJsonFish(),
-          date: selectedUsedDate.value,
+          date: selectedUsedDate.value != "" && selectedUsedDate.value != null ? selectedUsedDate.value : '$formattedDate +0000',
           doInPost: doInPost,
           doAfter: () async {
             await service.postFishHarvestedPrice();
-            Navigator.pushAndRemoveUntil(context,
-                MaterialPageRoute(builder: (context) {
-                  return DashboardPage();
-                }), (route) => false);
           },
           context: context,
         );
         await deactivationRecapState.postRecap(
           pond.id.toString(),
           fishDataRecap,
-          selectedUsedDate.value,
+          selectedUsedDate.value != "" && selectedUsedDate.value != null ? selectedUsedDate.value : '$formattedDate +0000',
           () => null,
         );
         doInPost();

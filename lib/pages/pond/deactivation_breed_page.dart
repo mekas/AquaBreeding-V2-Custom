@@ -75,6 +75,10 @@ class _DeactivationBreedPageState extends State<DeactivationBreedPage> {
               context,
               () {
                 detailPondController.getPondActivation();
+                Navigator.pushAndRemoveUntil(context,
+                    MaterialPageRoute(builder: (context) {
+                      return DashboardPage();
+                    }), (route) => false);
               },
             );
             // detailPondController.isPondActive.value = false;

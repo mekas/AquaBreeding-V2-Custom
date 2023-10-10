@@ -124,11 +124,13 @@ class ActivationService {
           "total_weight_harvested": total_weight_harvested.toString(),
           "total_fish_harvested": total_fish_harvested.toString(),
           "fish": fish_harvested.toString(),
+          "deactive_at" : date,
         });
     print({
       "total_weight_harvested": total_weight_harvested.toString(),
       "total_fish_harvested": total_fish_harvested.toString(),
       "fish": fish_harvested.toString(),
+      "deactive_at" : date,
     });
 
     if (response.statusCode == 200) {

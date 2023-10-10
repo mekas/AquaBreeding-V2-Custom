@@ -135,6 +135,8 @@ class PondController extends GetxController {
   }
 
   Future<void> pondRegister(BuildContext context, Function doInPost) async {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(now);
     bool value = await PondService().pondRegister(
         alias: aliasController.text.capitalize,
         location: locationController.text,
@@ -145,7 +147,7 @@ class PondController extends GetxController {
         diameter: diameterController.text,
         height: heightController.text,
         doInPost: doInPost,
-        buildAt: selectedUsedDate.value,
+        buildAt: selectedUsedDate.value != "" && selectedUsedDate.value != null ? selectedUsedDate.value : '$formattedDate +0000',
         context: context);
     print(value);
   }

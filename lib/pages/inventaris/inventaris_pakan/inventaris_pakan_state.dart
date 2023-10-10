@@ -529,7 +529,7 @@ class InventarisPakanState extends Urls {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
     var headers = {'Authorization': 'Bearer $token'};
-
+    print("${ Uri.parse(Urls.feedSch)}");
     map['pond'] = pondName;
     map['fish_feed_id'] = feedId;
     map['original_amount'] = amount;

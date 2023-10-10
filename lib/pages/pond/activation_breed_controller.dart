@@ -8,6 +8,7 @@ import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/inventaris/inventaris_benih/inventaris_benih_state.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../service/activation_service.dart';
 import '../../service/logging_service.dart';
@@ -200,23 +201,24 @@ class ActivationBreedController extends GetxController {
       "fish": buildFish,
       "isWaterPreparation": false,
       "waterLevel": waterHeightController.value.text,
-      "activeDate" : benihState.selectedUsedDate.value,
+      "activeDate" : benihState.selectedUsedDate.value != "" && benihState.selectedUsedDate.value != null ? benihState.selectedUsedDate.value : DateTime.now(),
     });
 
     try {
-
+      DateTime now = DateTime.now();
+      String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(now);
       await service.postActivation(
         pondId: pond.id,
         fish: buildFish,
         isWaterPreparation: false,
         waterLevel: waterHeightController.value.text,
-        activeDate: benihState.selectedUsedDate.value,
+        activeDate: benihState.selectedUsedDate.value != "" && benihState.selectedUsedDate.value != null ? benihState.selectedUsedDate.value : '$formattedDate +0000',
         doInPost: doInPost,
         doAfter: () async {
           await service.postHistorySeedData(
             pondName.value,
             fishTmp,
-            benihState.selectedUsedDate.value,
+            benihState.selectedUsedDate.value != "" && benihState.selectedUsedDate.value != null ? benihState.selectedUsedDate.value : '$formattedDate +0000',
                 () => null,
           );
         }

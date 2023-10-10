@@ -7,6 +7,7 @@ import 'package:fish/pages/treatment/carbon_type_controller.dart';
 import 'package:fish/service/treatment_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../service/logging_service.dart';
 import 'treatment_type_controller.dart';
@@ -101,7 +102,9 @@ class TreatmentEntryController extends GetxController {
     return data;
   }
 
-  Future<void> postFishGrading(BuildContext context, Function doInPost) async {
+  Future<void> postPondTreatment(BuildContext context, Function doInPost) async {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(now);
     bool value = await TreatmentService().postPondTreatment(
       pondId: pond.id,
       prob_id: supState.probID.value,
@@ -112,7 +115,7 @@ class TreatmentEntryController extends GetxController {
       probiotic: probioticController.value.text,
       desc: descController.value.text,
       water: waterController.value.text,
-      date: supState.selectedUsedDate.value,
+      date: supState.selectedUsedDate.value != "" && supState.selectedUsedDate.value != null ? supState.selectedUsedDate.value : '$formattedDate +0000',
       carbohydrate:
           supState.carbCheck.value ? carbonController.value.text : '0',
       carbohydrate_type: supState.carbCheck.value
@@ -124,7 +127,7 @@ class TreatmentEntryController extends GetxController {
     await supState.postHistorySuplemenData(
       supState.pondName.value,
       buildJsonTreatment(),
-      supState.selectedUsedDate.value,
+      supState.selectedUsedDate.value != "" && supState.selectedUsedDate.value != null ? supState.selectedUsedDate.value : '$formattedDate +0000',
       () => null,
     );
     print(value);

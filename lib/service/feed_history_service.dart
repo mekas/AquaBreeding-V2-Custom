@@ -119,7 +119,7 @@ class FeedHistoryService {
   }) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
-
+    print("post url ${ Uri.parse(Urls.feedhistorys)}");
     final response = await http.post(
       Uri.parse(Urls.feedhistorys),
       headers: {
@@ -136,6 +136,13 @@ class FeedHistoryService {
     );
 
     if (response.statusCode == 200) {
+
+      print({
+          "pond_id": pondId,
+          "fish_feed_id": fishFeedId,
+          "feed_dose": feedDose,
+          "created_at": date,
+      });
       inspect(response.body);
       doAfter();
 

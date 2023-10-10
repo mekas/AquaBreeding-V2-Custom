@@ -940,7 +940,7 @@ class _TreatmentEntryPageState extends State<TreatmentEntryPage> {
                     controller.waterController.text == "" &&
                     controller.probioticController.text == ""
                 ? null
-                : await controller.postFishGrading(
+                : await controller.postPondTreatment(
                     context,
                     () {
                       Navigator.pop(context);
