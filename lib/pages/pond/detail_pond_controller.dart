@@ -21,6 +21,7 @@ class DetailPondController extends GetxController {
   @override
   void onInit() async {
     // getPondActivation();
+    postDataLog(fitur);
     super.onInit();
   }
 
@@ -59,12 +60,18 @@ class DetailPondController extends GetxController {
 
   final DateTime startTime = DateTime.now();
   late DateTime endTime;
-  final fitur = 'Detai Pond';
+  final fitur = 'Detail Pond';
 
   Future<void> postDataLog(String fitur) async {
     // print(buildJsonFish());
     bool value =
         await LoggingService().postLogging(startAt: startTime, fitur: fitur);
     // print(value);
+  }
+
+  @override
+  void dispose() {
+    postDataLog(fitur);
+    super.dispose();
   }
 }

@@ -8,6 +8,7 @@ import 'package:fish/models/activation_model.dart';
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/service/feed_history_service.dart';
 import 'package:get/get.dart';
+import '../../service/logging_service.dart';
 
 class FeedDailyController extends GetxController {
   var isLoading = false.obs;
@@ -22,6 +23,7 @@ class FeedDailyController extends GetxController {
   void onInit() async {
     getHourlyRecapFeedHistory(
         activation_id: activation.id!, date: feedHistoryDaily.getDate());
+    postDataLog(fitur);
     super.onInit();
   }
 
@@ -33,5 +35,20 @@ class FeedDailyController extends GetxController {
         .getHourlyRecap(activation_id: activation_id, date: date);
     list_feedHistoryHourly.addAll(feedHistoryMonthly);
     isLoading.value = false;
+  }
+
+  final DateTime startTime = DateTime.now();
+  final fitur = 'Feeding';
+
+  Future<void> postDataLog(String fitur) async {
+    // print(buildJsonFish());
+    bool value =
+    await LoggingService().postLogging(startAt: startTime, fitur: fitur);
+  }
+
+  @override
+  void dispose() {
+    postDataLog(fitur);
+    super.dispose();
   }
 }

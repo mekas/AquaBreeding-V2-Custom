@@ -39,6 +39,18 @@ class TransferController extends GetxController {
         await LoggingService().postLogging(startAt: startTime, fitur: fitur);
   }
 
+  @override
+  void onInit() async {
+    postDataLog(fitur);
+    super.onInit();
+  }
+
+  @override
+  void dispose() {
+    postDataLog(fitur);
+    super.dispose();
+  }
+
   Future<void> getTransfertData(BuildContext context) async {
     isLoading.value = true;
     listTransfer.clear();

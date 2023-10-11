@@ -96,6 +96,12 @@ class WeeklyWaterEntryController extends GetxController {
     super.dispose();
   }
 
+  @override
+  void onInit() async {
+    postDataLog(fitur);
+    super.onInit();
+  }
+
   Future<void> postDataLog(String fitur) async {
     // print(buildJsonFish());
     bool value =

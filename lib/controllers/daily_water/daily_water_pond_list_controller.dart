@@ -8,6 +8,7 @@ import 'package:fish/pages/dashboard.dart';
 import 'package:fish/service/daily_water_service.dart';
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
+import '../../service/logging_service.dart';
 
 class DailyWaterPondListController extends GetxController {
   var isLoading = false.obs;
@@ -16,13 +17,6 @@ class DailyWaterPondListController extends GetxController {
   final dailywaters = <DailyWater>[].obs;
   final idStore = <String>[].obs;
   final indicatorWater = <DailyWater>[].obs;
-
-  @override
-  void onInit() async {
-    await getPondsData();
-    await getWatersData();
-    super.onInit();
-  }
 
   Future<void> getPondsData() async {
     indicatorWater.clear();
@@ -69,5 +63,28 @@ class DailyWaterPondListController extends GetxController {
     }
     waterindex = 0;
     isLoading.value = false;
+  }
+
+  final DateTime startTime = DateTime.now();
+  final fitur = 'Daily Water Quality';
+
+  Future<void> postDataLog(String fitur) async {
+    // print(buildJsonFish());
+    bool value =
+    await LoggingService().postLogging(startAt: startTime, fitur: fitur);
+  }
+
+  @override
+  void onInit() async {
+    await getPondsData();
+    await getWatersData();
+    postDataLog(fitur);
+    super.onInit();
+  }
+
+  @override
+  void dispose() {
+    postDataLog(fitur);
+    super.dispose();
   }
 }

@@ -26,6 +26,7 @@ class FishRecapController extends GetxController {
   void onInit() async {
     getFishDeaths(activation_id: activation.id!);
     getcharData(activation_id: activation.id!);
+    postDataLog(fitur);
     // inspect(charData);
     super.onInit();
   }

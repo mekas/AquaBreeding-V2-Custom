@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../service/logging_service.dart';
 import 'material_controller.dart';
 import 'shape_controller.dart';
 
@@ -149,14 +150,14 @@ class PondController extends GetxController {
         doInPost: doInPost,
         buildAt: selectedUsedDate.value != "" && selectedUsedDate.value != null ? selectedUsedDate.value : '$formattedDate +0000',
         context: context);
-    print(value);
+    // print(value);
   }
 
   Future<void> getPondsFiltered(String statusFilter) async {
     isLoading.value = true;
     ponds.clear();
-    print(statusFilter);
-    print(statusFilter);
+    // print(statusFilter);
+    // print(statusFilter);
     List<Pond> filter = await PondService().getPonds();
     for (var i in filter) {
       if (i.status == statusFilter) {
@@ -164,7 +165,7 @@ class PondController extends GetxController {
         var testing = filter.where((element) => element.status == statusFilter);
         // print(testing.toString());
         ponds.addAll(testing);
-        print(pondFiltered);
+        // print(pondFiltered);
       }
       if (statusFilter == 'all') {
         ponds.addAll(filter);
@@ -210,8 +211,23 @@ class PondController extends GetxController {
   late DateTime endTime;
   final fitur = 'List Pond';
 
+  Future<void> postDataLog(String fitur) async {
+    // print(buildJsonFish());
+    bool value =
+    await LoggingService().postLogging(startAt: startTime, fitur: fitur);
+    print(value);
+  }
+
+  @override
   void onInit() {
     startTime = DateTime.now();
+    postDataLog(fitur);
     super.onInit();
+  }
+
+  @override
+  void dispose() {
+    postDataLog(fitur);
+    super.dispose();
   }
 }

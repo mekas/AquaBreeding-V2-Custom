@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import '../../service/logging_service.dart';
 
 class BenihOptionController extends GetxController {
   final selected = "1-2 cm".obs;
@@ -15,5 +16,25 @@ class BenihOptionController extends GetxController {
 
   void setSelected(String value) {
     selected.value = value;
+  }
+
+  final DateTime startTime = DateTime.now();
+  final fitur = 'Benih Option';
+
+  Future<void> postDataLog(String fitur) async {
+    bool value =
+    await LoggingService().postLogging(startAt: startTime, fitur: fitur);
+  }
+
+  @override
+  void onInit() async {
+    postDataLog(fitur);
+    super.onInit();
+  }
+
+  @override
+  void dispose() {
+    postDataLog(fitur);
+    super.dispose();
   }
 }

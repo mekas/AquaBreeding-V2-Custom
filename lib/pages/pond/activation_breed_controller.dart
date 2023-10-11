@@ -300,4 +300,10 @@ class ActivationBreedController extends GetxController {
         await LoggingService().postLogging(startAt: startTime, fitur: fitur);
     print(value);
   }
+
+  @override
+  void dispose() {
+    postDataLog(fitur);
+    super.dispose();
+  }
 }

@@ -23,6 +23,8 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:fish/service/url_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../service/logging_service.dart';
+
 
 class DeactivationBreedController extends GetxController {
   Pond pond = Get.arguments['pond'];
@@ -114,6 +116,7 @@ class DeactivationBreedController extends GetxController {
     String last,
     Function() doAfter,
   ) async {
+    assetList.value.data!.clear();
     assetList.value.data!.clear();
     var assetPrice = 0;
 
@@ -925,6 +928,11 @@ class DeactivationBreedController extends GetxController {
   late DateTime startTime;
   late DateTime endTime;
   final fitur = 'Deactivation';
+
+  Future<void> postDataLog(String fitur) async {
+    bool value =
+    await LoggingService().postLogging(startAt: startTime, fitur: fitur);
+  }
 
   void onClose() {
     endTime = DateTime.now();

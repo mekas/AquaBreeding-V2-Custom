@@ -9,6 +9,7 @@ import 'package:fish/service/activation_service.dart';
 import 'package:fish/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../service/logging_service.dart';
 
 class AddFishController extends GetxController {
   final ActivationService service = ActivationService();
@@ -48,6 +49,7 @@ class AddFishController extends GetxController {
 
   @override
   void onInit() {
+    postDataLog(fitur);
     super.onInit();
   }
 
@@ -69,6 +71,21 @@ class AddFishController extends GetxController {
 
   void setMas(bool value) {
     isMas.value = value;
+  }
+
+
+  final DateTime startTime = DateTime.now();
+  final fitur = 'Add Fish';
+
+  Future<void> postDataLog(String fitur) async {
+    bool value =
+    await LoggingService().postLogging(startAt: startTime, fitur: fitur);
+  }
+
+  @override
+  void dispose() {
+    postDataLog(fitur);
+    super.dispose();
   }
 
   List buildJsonFish() {
@@ -164,6 +181,7 @@ class AddFishController extends GetxController {
       }
     }
     return data;
+
   }
 
   Future<void> addFish(BuildContext context, Function doInPost) async {

@@ -11,21 +11,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../pages/authentication/login_page.dart';
 import '../../pages/dashboard.dart';
+import '../../service/logging_service.dart';
+
 
 class HomeController extends GetxController {
   var isLoading = false.obs;
   var username = "";
   DateTime initializeDate = DateTime.now();
   final statistic = StatisticModel().obs;
-
-  @override
-  void onInit() async {
-    await getStatisticData();
-
-    startTime = DateTime.now();
-    super.onInit();
-    getUserData();
-  }
 
   @override
 
@@ -47,7 +40,7 @@ class HomeController extends GetxController {
     var token = prefs.getString("token");
     Map<String, dynamic> jwtdecoderToken = JwtDecoder.decode(token!);
     username = jwtdecoderToken["sub"]["username"].toString();
-    print(username);
+    // print(username);
   }
 
   Future<void> getStatisticData() async {
@@ -66,5 +59,26 @@ class HomeController extends GetxController {
   void onClose() {
     endTime = DateTime.now();
     super.onClose();
+  }
+
+  Future<void> postDataLog(String fitur) async {
+    // print(buildJsonFish());
+    bool value =
+    await LoggingService().postLogging(startAt: startTime, fitur: fitur);
+  }
+
+  @override
+  void onInit() async {
+    await getStatisticData();
+    startTime = DateTime.now();
+    getUserData();
+    postDataLog(fitur);
+    super.onInit();
+  }
+
+  @override
+  void dispose() {
+    postDataLog(fitur);
+    super.dispose();
   }
 }

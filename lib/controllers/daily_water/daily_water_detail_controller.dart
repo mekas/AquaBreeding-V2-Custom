@@ -47,7 +47,6 @@ class DailyWaterDetailController extends GetxController {
     // print(buildJsonFish());
     bool value =
         await LoggingService().postLogging(startAt: startTime, fitur: fitur);
-    print(value);
   }
   // Activation activation = Get.arguments()["activation"];
   // Pond pond = Get.arguments()["pond"];

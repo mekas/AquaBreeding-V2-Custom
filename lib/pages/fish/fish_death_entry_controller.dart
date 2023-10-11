@@ -63,6 +63,7 @@ class FishDeathEntryController extends GetxController {
   void onInit() {
     super.onInit();
     getFish(() {});
+    postDataLog(fitur);
     selectedFish.value = listFishAlive[0];
   }
 
