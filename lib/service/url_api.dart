@@ -1,6 +1,6 @@
 class Urls {
-  static const String baseUrl = 'https://f302-114-124-131-93.ngrok-free.app/api';
-  // static const String baseUrl = 'http://jft.web.id/fishapiv4/api';
+  // static const String baseUrl = 'https://f302-114-124-131-93.ngrok-free.app/api';
+  static const String baseUrl = 'http://jft.web.id/fishapiv4/api';
   // static const String baseUrl = 'http://10.0.2.2:8000/api';
   // Home
   static const String statistic = '$baseUrl/statistic';
