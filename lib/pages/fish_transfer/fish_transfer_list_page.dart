@@ -1,21 +1,14 @@
 import 'package:fish/pages/component/transfer_card.dart';
 import 'package:fish/controllers/fish_transfer/fish_transfer_list_controller.dart';
 import 'package:fish/pages/fish_transfer/fish_transfer_entry_page.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
-import '../../models/activation_model.dart';
-import '../../widgets/new_Menu_widget.dart';
 import 'new_fish_transfer_entry_page.dart';
 
 class FishTransferListPage extends StatefulWidget {
-  bool isMenuTapped;
-  FishTransferListPage({
-    Key? key,
-    required this.isMenuTapped,
-  }) : super(key: key);
+  FishTransferListPage({Key? key}) : super(key: key);
 
   @override
   State<FishTransferListPage> createState() => _FishTransferListPageState();
@@ -23,7 +16,7 @@ class FishTransferListPage extends StatefulWidget {
 
 class _FishTransferListPageState extends State<FishTransferListPage> {
   final TransferController controller = Get.put(TransferController());
-  Activation activation = Get.arguments["activation"];
+
   @override
   void initState() {
     super.initState();
@@ -31,8 +24,7 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
     //   await controller.getPondActivations(
     //       pondId: controller.pond.id.toString());
     // });
-
-    controller.getTransfertData(context);
+    controller.getTransfertData();
   }
 
   @override
@@ -43,8 +35,6 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
 
   @override
   Widget build(BuildContext context) {
-    var scaffoldKey = GlobalKey<ScaffoldState>();
-
     Widget fishDataRecap() {
       return Container(
         margin: EdgeInsets.only(
@@ -133,24 +123,11 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
-          key: scaffoldKey,
-          // appBar: AppBar(
-          //   backgroundColor: backgroundColor1,
-          //   actions: [
-          //     IconButton(
-          //       onPressed: () {
-          //         scaffoldKey.currentState?.openEndDrawer();
-          //       },
-          //       icon: Icon(Icons.card_travel_rounded),
-          //     )
-          //   ],
-          // ),
-          // endDrawer: DrawerInvetarisList(),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               Get.to(() => const NewFishTransferEntryPage(), arguments: {
                 "pond": controller.pond,
-                "activation": activation
+                "activation": controller.activation
               });
               controller.postDataLog(controller.fitur);
             },
@@ -160,13 +137,6 @@ class _FishTransferListPageState extends State<FishTransferListPage> {
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
-              if (widget.isMenuTapped)
-                Column(
-                  children: [
-                    newMenu(),
-                    SizedBox(height: 10,),
-                  ],
-                ),
               fishDataRecap(),
               controller.listTransfer.isEmpty
                   ? emptyListTransfer()

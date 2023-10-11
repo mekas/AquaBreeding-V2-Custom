@@ -19,14 +19,11 @@ class BreedController extends GetxController {
   final DateTime startTime = DateTime.now();
   late DateTime endTime;
   final fitur = 'Detail Activation';
-  var status = Get.arguments["status"];
+
   @override
   void onInit() async {
-    if (status != "Selesai"){
-      getFishChart(
-          activation_id: detailPondController.selectedActivation.value.id!);
-    }
-
+    // getFishChart(
+    //     activation_id: detailPondController.selectedActivation.value.id!);
     super.onInit();
   }
 

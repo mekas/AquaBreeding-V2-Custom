@@ -6,7 +6,6 @@ import 'package:fish/pages/dashboard.dart';
 import 'package:fish/service/pond_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'material_controller.dart';
@@ -41,10 +40,6 @@ class PondController extends GetxController {
   final validateWidth = false.obs;
   final validateAlias = false.obs;
   final validateHeight = false.obs;
-
-  RxBool checkUsedDate = false.obs;
-  RxString selectedUsedDate = ''.obs;
-  TextEditingController showedUsedDate = TextEditingController(text: '');
 
   void heightChanged(String val) {
     height.value = val;
@@ -86,17 +81,8 @@ class PondController extends GetxController {
     validateHeight.value = true;
   }
 
-  String dateFormat(String dateString, bool includeHour) {
-    DateTime dateTime = DateTime.parse(dateString);
-    var formatter = includeHour
-        ? DateFormat('EEEE, d MMMM y | HH:mm', 'id')
-        : DateFormat('EEEE, d MMMM y', 'id');
-    var formattedDate = formatter.format(dateTime);
-    return formattedDate.split('|').join('| Jam');
-  }
-
   Pond getSelectedPond() {
-    return ponds.firstWhere((pond) => pond.id == selectedPond.value);
+    return ponds.firstWhere((pond) => pond.id == selectedPond.value.id);
   }
 
   void updateSelectedPond(pondid) {
@@ -106,6 +92,13 @@ class PondController extends GetxController {
       selectedPond = Rx<Pond>(ponds.firstWhere((pond) => pond.id == pondid));
     }
   }
+
+  Future<void> updateListandSelectedPond() async {
+    await getPondsData2();
+    selectedPond.value =
+        ponds.firstWhere((pond) => pond.id == selectedPond.value.id);
+  }
+
   void setTextController() {
     locationController.text = selectedPond.value.location.toString();
     aliasController.text = selectedPond.value.alias.toString();
@@ -120,7 +113,23 @@ class PondController extends GetxController {
       heightController.text = selectedPond.value.height.toString();
     }
   }
+
   Future<void> getPondsData(BuildContext context) async {
+    WidgetsFlutterBinding.ensureInitialized();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    token = prefs.getString('token').toString();
+    identity = prefs.getString('identity').toString();
+    log("ini prefs $identity");
+    isLoading.value = true;
+    ponds.clear();
+    List<Pond> pondsData = await PondService().getPonds();
+    ponds.addAll(pondsData);
+    inspect(ponds);
+
+    isLoading.value = false;
+  }
+
+  Future<void> getPondsData2() async {
     WidgetsFlutterBinding.ensureInitialized();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     token = prefs.getString('token').toString();
@@ -135,8 +144,6 @@ class PondController extends GetxController {
   }
 
   Future<void> pondRegister(BuildContext context, Function doInPost) async {
-    DateTime now = DateTime.now();
-    String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(now);
     bool value = await PondService().pondRegister(
         alias: aliasController.text.capitalize,
         location: locationController.text,
@@ -145,32 +152,11 @@ class PondController extends GetxController {
         length: lengthController.text,
         width: widthController.text,
         diameter: diameterController.text,
+        status: status,
         height: heightController.text,
         doInPost: doInPost,
-        buildAt: selectedUsedDate.value != "" && selectedUsedDate.value != null ? selectedUsedDate.value : '$formattedDate +0000',
         context: context);
     print(value);
-  }
-
-  Future<void> getPondsFiltered(String statusFilter) async {
-    isLoading.value = true;
-    ponds.clear();
-    print(statusFilter);
-    print(statusFilter);
-    List<Pond> filter = await PondService().getPonds();
-    for (var i in filter) {
-      if (i.status == statusFilter) {
-        ponds.clear();
-        var testing = filter.where((element) => element.status == statusFilter);
-        // print(testing.toString());
-        ponds.addAll(testing);
-        print(pondFiltered);
-      }
-      if (statusFilter == 'all') {
-        ponds.addAll(filter);
-      }
-    }
-    isLoading.value = false;
   }
 
   Future<void> pondEdit(BuildContext context, String id) async {
@@ -192,17 +178,24 @@ class PondController extends GetxController {
     Get.back();
   }
 
-  Future<void> getPondsData2() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    token = prefs.getString('token').toString();
-    identity = prefs.getString('identity').toString();
-    log("ini prefs $identity");
+  Future<void> getPondsFiltered(String statusFilter) async {
     isLoading.value = true;
     ponds.clear();
-    List<Pond> pondsData = await PondService().getPonds();
-    ponds.addAll(pondsData);
-
+    print(statusFilter);
+    print(statusFilter);
+    List<Pond> filter = await PondService().getPonds();
+    for (var i in filter) {
+      if (i.status == statusFilter) {
+        ponds.clear();
+        var testing = filter.where((element) => element.status == statusFilter);
+        // print(testing.toString());
+        ponds.addAll(testing);
+        print(pondFiltered);
+      }
+      if (statusFilter == 'all') {
+        ponds.addAll(filter);
+      }
+    }
     isLoading.value = false;
   }
 

@@ -1,25 +1,14 @@
 import 'package:fish/pages/grading/grading_constanta_edit_controller.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import '../../widgets/new_Menu_widget.dart';
-
-class ConstantaGradingPage extends StatefulWidget {
+class ConstantaGradingPage extends StatelessWidget {
   const ConstantaGradingPage({Key? key}) : super(key: key);
 
   @override
-  State<ConstantaGradingPage> createState() => _ConstantaGradingPageState();
-}
-
-class _ConstantaGradingPageState extends State<ConstantaGradingPage> {
-  var isMenuTapped = false.obs;
-  @override
   Widget build(BuildContext context) {
-    var scaffoldKey = GlobalKey<ScaffoldState>();
-
     final ConstantaEditController controller =
         Get.put(ConstantaEditController());
     TextEditingController undersizeController = TextEditingController(text: '');
@@ -145,33 +134,13 @@ class _ConstantaGradingPageState extends State<ConstantaGradingPage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
-          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Edit Konstanta Grading"),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  // scaffoldKey.currentState?.openEndDrawer();
-                  setState(() {
-                    isMenuTapped.value = !isMenuTapped.value;
-                  });
-                },
-                icon: Icon(Icons.card_travel_rounded),
-              )
-            ],
           ),
-          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
-              if (isMenuTapped.value)
-                Column(
-                  children: [
-                    newMenu(),
-                    SizedBox(height: 10,),
-                  ],
-                ),
               oversizeInput(),
               undersizeInput(),
               activationButton(),

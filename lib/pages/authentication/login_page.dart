@@ -26,8 +26,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late SharedPreferences prefs;
   final LoginController controller = Get.put(LoginController());
-  bool isLoading = false;
-
   @override
   void initState() {
     super.initState();
@@ -40,9 +38,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void login() async {
-    setState(() {
-      isLoading = true;
-    });
     final response = await http.post(
       Uri.parse(Urls.authentication),
       headers: {
@@ -65,9 +60,6 @@ class _LoginPageState extends State<LoginPage> {
       );
       prefs.setString('identity', identity.toString());
       // prefs.setString('identity', identity);
-      setState(() {
-        isLoading = false;
-      });
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => DashboardPage()));
       controller.usernameController.clear();
@@ -87,12 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                     borderRadius: BorderRadius.all(Radius.circular(16.0))),
                 actions: <Widget>[
                   TextButton(
-                    onPressed: () {
-                      Navigator.pop(context, 'OK');
-                      setState(() {
-                        isLoading = false;
-                      });
-                    },
+                    onPressed: () => Navigator.pop(context, 'OK'),
                     child: const Text('OK'),
                   ),
                 ],
@@ -196,7 +183,6 @@ class _LoginPageState extends State<LoginPage> {
           itemBuilder: ((context, index) {
             return LoginInputCard(
               loginfunc: login,
-              isLoading: isLoading,
             );
           }),
           itemCount: 1,
@@ -262,7 +248,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.pushReplacement(context,
+                  Navigator.push(context,
                       MaterialPageRoute(builder: (context) => RegisterPage()));
                 },
                 child: Text(

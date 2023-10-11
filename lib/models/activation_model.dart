@@ -50,7 +50,7 @@ class Activation {
       isFinish: json['isFinish'],
       waterLevel: json['water_level'],
       activationAt:
-      DateFormat("yyyy-MM-dd hh:mm:ss").parse(json['activated_at']),
+          DateFormat("yyyy-MM-dd hh:mm:ss").parse(json['activated_at']),
       deactivationAt: json['isFinish'] == true
           ? DateFormat("yyyy-MM-dd hh:mm:ss").parse(json['deactivated_at'])
           : null,

@@ -3,7 +3,6 @@ import 'package:fish/pages/component/treatment_berat_input_card.dart';
 import 'package:fish/pages/treatment/treatment_entry_controller.dart';
 import 'package:fish/controllers/fish_transfer/fish_transfer_entry_controller.dart';
 import 'package:fish/controllers/fish_transfer/pond_list_item_controller.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/pages/pond/detail_pond_controller.dart';
 import 'package:fish/theme.dart';
@@ -13,7 +12,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/fish_transfer/fish_transfer_list_controller.dart';
-import '../../widgets/new_Menu_widget.dart';
 import '../component/deactivation_with_fish_transfer_input.dart';
 import '../component/fish_transfer_input.dart';
 
@@ -32,7 +30,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
 
   final PondListController getpondlistcontroller =
       Get.put(PondListController());
-  var isMenuTapped = false.obs;
+
   final pageController = PageController(initialPage: 0);
   @override
   void dispose() {
@@ -87,8 +85,6 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
 
   @override
   Widget build(BuildContext context) {
-    var scaffoldKey = GlobalKey<ScaffoldState>();
-
     Widget sampleWeightInput() {
       return Container(
         margin: EdgeInsets.only(
@@ -1448,7 +1444,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
               context,
               () {
                 Navigator.pop(context);
-                fishTransferController.getTransfertData(context);
+                fishTransferController.getTransfertData();
               },
             );
             controller.postDataLog(controller.fitur);
@@ -1485,7 +1481,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                 Navigator.pop(context);
               },
             );
-            fishTransferController.getTransfertData(context);
+            fishTransferController.getTransfertData();
           },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
@@ -1542,7 +1538,7 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
                     context,
                     () {
                       Navigator.pop(context);
-                      fishTransferController.getTransfertData(context);
+                      fishTransferController.getTransfertData();
                     },
                   );
                   controller.postDataLog(controller.fitur);
@@ -1751,23 +1747,10 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
     }
 
     return Scaffold(
-        key: scaffoldKey,
         appBar: AppBar(
           backgroundColor: backgroundColor2,
           title: const Text("Entry Sortir"),
-          actions: [
-            IconButton(
-              onPressed: () {
-                // scaffoldKey.currentState?.openEndDrawer();
-                setState(() {
-                  isMenuTapped.value = !isMenuTapped.value;
-                });
-              },
-              icon: Icon(Icons.card_travel_rounded),
-            )
-          ],
         ),
-        endDrawer: DrawerInvetarisList(),
         backgroundColor: backgroundColor1,
         body: PageView(
           physics: const NeverScrollableScrollPhysics(),
@@ -1776,13 +1759,6 @@ class _FishTransferEntryPageState extends State<FishTransferEntryPage> {
             Obx(() {
               return ListView(
                 children: [
-                  if (isMenuTapped.value)
-                    Column(
-                      children: [
-                        newMenu(),
-                        SizedBox(height: 10,),
-                      ],
-                    ),
                   transferMethodInput(),
                   destinationPondInput(),
                   checkBoxFishTransfer(),

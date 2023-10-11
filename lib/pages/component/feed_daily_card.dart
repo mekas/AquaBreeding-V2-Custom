@@ -1,8 +1,9 @@
+import 'package:fish/models/FeedHistoryDaily.dart';
+import 'package:fish/models/FeedHistoryMonthly.dart';
+import 'package:fish/models/FeedHistoryWeekly.dart';
 import 'package:fish/models/activation_model.dart';
-import 'package:fish/models/feed_history_detail.dart';
-import 'package:fish/models/feed_history_monthly.dart';
-import 'package:fish/models/feed_history_weekly.dart';
 import 'package:fish/models/pond_model.dart';
+import 'package:fish/pages/feeding/feed_weekly_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/pages/feeding/detail_feed_daily_page.dart';
 import 'package:fish/theme.dart';
@@ -14,8 +15,9 @@ class FeedDailyCard extends StatelessWidget {
   final FeedHistoryMonthly? feedHistoryMonthly;
   final FeedHistoryWeekly? feedHistoryWeekly;
   final FeedHistoryDaily? feedHistoryDaily;
+  final FeedWeeklyController feedWeeklyController = Get.find();
 
-  const FeedDailyCard(
+  FeedDailyCard(
       {Key? key,
       this.activation,
       this.pond,
@@ -28,13 +30,9 @@ class FeedDailyCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => DetailFeedDailyPage(), arguments: {
-          "activation": activation,
-          "pond": pond,
-          "feedHistoryMonthly": feedHistoryMonthly,
-          "feedHistoryWeekly": feedHistoryWeekly,
-          "feedHistoryDaily": feedHistoryDaily,
-        });
+        feedWeeklyController
+            .updateSelectedFeedHistoryDaily(feedHistoryDaily!.date);
+        Get.to(() => DetailFeedDailyPage());
       },
       child: Container(
         width: double.infinity,
@@ -89,7 +87,7 @@ class FeedDailyCard extends StatelessWidget {
                       maxLines: 1,
                     ),
                     Text(
-                      "${feedHistoryDaily!.totalFeedWeight} Kg",
+                      "${feedHistoryDaily!.totalFeedWeight!.toStringAsFixed(2)} Kg",
                       style: secondaryTextStyle.copyWith(
                         fontSize: 14,
                         fontWeight: medium,

@@ -1,12 +1,15 @@
+import 'package:fish/models/FeedHistoryDaily.dart';
+import 'package:fish/models/FeedHistoryHourly.dart';
+import 'package:fish/models/FeedHistoryMonthly.dart';
+import 'package:fish/models/FeedHistoryWeekly.dart';
 import 'package:fish/models/activation_model.dart';
-import 'package:fish/models/feed_history_detail.dart';
-import 'package:fish/models/feed_history_hourly.dart';
-import 'package:fish/models/feed_history_monthly.dart';
-import 'package:fish/models/feed_history_weekly.dart';
 import 'package:fish/models/pond_model.dart';
+import 'package:fish/pages/feeding/feed_daily_controller.dart';
+import 'package:fish/pages/feeding/update_feedHistory_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fish/theme.dart';
+import 'package:get/get.dart';
 
 class FeedHourCard extends StatelessWidget {
   final Activation? activation;
@@ -28,118 +31,100 @@ class FeedHourCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FeedDailyController feedDailyController = Get.find();
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        feedDailyController
+            .updateSelectedFeedHistoryHourly(feedHistoryHourly!.date);
+        Get.to(() => UpdateFeedHistory());
+      },
       child: Container(
         width: double.infinity,
         margin: EdgeInsets.only(
           top: defaultMargin,
         ),
-        // padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(color: primaryColor),
           color: transparentColor,
         ),
         child: Column(
           children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: primaryColor,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Tanggal :',
-                    style: headingText3,
-                  ),
-                  Text(
-                    feedHistoryHourly!.getDate(),
-                    style: headingText3,
-                  )
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Nama Pakan",
-                        style: primaryTextStyle.copyWith(
-                          fontSize: 14,
-                          fontWeight: bold,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Tanggal",
+                      style: primaryTextStyle.copyWith(
+                        fontSize: 14,
+                        fontWeight: bold,
                       ),
-                      Text(
-                        "${feedHistoryHourly!.brandName}",
-                        style: secondaryTextStyle.copyWith(
-                          fontSize: 14,
-                          fontWeight: medium,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                    Text(
+                      feedHistoryHourly!.getDate(),
+                      style: secondaryTextStyle.copyWith(
+                        fontSize: 14,
+                        fontWeight: medium,
                       ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Waktu",
-                        style: primaryTextStyle.copyWith(
-                          fontSize: 14,
-                          fontWeight: bold,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Waktu",
+                      style: primaryTextStyle.copyWith(
+                        fontSize: 14,
+                        fontWeight: bold,
                       ),
-                      Text(
-                        feedHistoryHourly!.getTime(),
-                        style: secondaryTextStyle.copyWith(
-                          fontSize: 14,
-                          fontWeight: medium,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                    Text(
+                      feedHistoryHourly!.getTime(),
+                      style: secondaryTextStyle.copyWith(
+                        fontSize: 14,
+                        fontWeight: medium,
                       ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Pakan",
-                        style: primaryTextStyle.copyWith(
-                          fontSize: 14,
-                          fontWeight: bold,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Pakan",
+                      style: primaryTextStyle.copyWith(
+                        fontSize: 14,
+                        fontWeight: bold,
                       ),
-                      Text(
-                        "${feedHistoryHourly!.totalFeedWeight} Kg",
-                        style: secondaryTextStyle.copyWith(
-                          fontSize: 14,
-                          fontWeight: medium,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                    Text(
+                      "${feedHistoryHourly!.totalFeedWeight} Kg",
+                      style: secondaryTextStyle.copyWith(
+                        fontSize: 14,
+                        fontWeight: medium,
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ],
+                ),
+              ],
             ),
           ],
         ),

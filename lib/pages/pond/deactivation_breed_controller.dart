@@ -1,36 +1,20 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:ffi';
 
 import 'package:fish/models/activation_model.dart';
 import 'package:fish/models/fish_model.dart';
-import 'package:fish/models/history/history_feed_model.dart';
-import 'package:fish/models/history/history_seed_model.dart';
-import 'package:fish/models/history/history_suplemen_model.dart';
-import 'package:fish/models/inventaris/aset/inventaris_asset_model.dart';
-import 'package:fish/models/inventaris/listrik/inventaris_listrik_model.dart';
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/dashboard.dart';
-import 'package:fish/pages/deactivation_recap/deactivation_recap_state.dart';
 import 'package:fish/pages/pond/detail_pond_controller.dart';
-import 'package:fish/pages/pond/pond_controller.dart';
 import 'package:fish/service/activation_service.dart';
 import 'package:fish/theme.dart';
-import 'package:fish/widgets/convert_to_rupiah_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
-import 'package:fish/service/url_api.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class DeactivationBreedController extends GetxController {
   Pond pond = Get.arguments['pond'];
-  Activation activation = Get.arguments["activation"];
+  // Activation activation = Get.arguments["activation"][0];
   ActivationService service = ActivationService();
-  final PondController pondController = Get.put(PondController());
-  final DeactivationRecapState deactivationRecapState =
-      Get.put(DeactivationRecapState());
 
   // Activation activation = Get.arguments["activation"];
   // Future<List<Activation>> activationsData =
@@ -53,21 +37,6 @@ class DeactivationBreedController extends GetxController {
 
   TextEditingController patinWeightController = TextEditingController(text: '');
   TextEditingController masWeightController = TextEditingController(text: '');
-
-  RxInt lelePrice = 0.obs;
-  RxInt masPrice = 0.obs;
-  RxInt patinPrice = 0.obs;
-  RxInt nilaHitamPrice = 0.obs;
-  RxInt nilaMerahPrice = 0.obs;
-
-  TextEditingController lelePriceController = TextEditingController();
-  TextEditingController masPriceController = TextEditingController();
-  TextEditingController patinPriceController = TextEditingController();
-  TextEditingController nilaHitamPriceController = TextEditingController();
-  TextEditingController nilaMerahPriceController = TextEditingController();
-
-  RxString pondName = ''.obs;
-
   var isLoading = false.obs;
   var isNilaMerah = false.obs;
   var isNilaHitam = false.obs;
@@ -86,463 +55,27 @@ class DeactivationBreedController extends GetxController {
   var masWeight = 0.obs;
   var isDeactivationProgress = false.obs;
 
-  var leleId = ''.obs;
-  var masId = ''.obs;
-  var patinId = ''.obs;
-  var nilaMerahId = ''.obs;
-  var nilaHitamId = ''.obs;
-
-  var leleType = ''.obs;
-  var masType = ''.obs;
-  var patinType = ''.obs;
-  var nilaMerahType = ''.obs;
-  var nilaHitamType = ''.obs;
-
-  RxBool isLoadingInventory = false.obs;
-  var assetList = InventarisAssetModel(data: []).obs;
-  var electricList = InventarisListrikModel(data: []).obs;
-  var suplemenHistoryList = HistorySuplemenModel(data: []).obs;
-  var feedHistoryList = HistoryFeedModel(data: []).obs;
-  var seedHistoryList = HistorySeedModel(data: []).obs;
-
-  RxBool checkUsedDate = false.obs;
-  RxString selectedUsedDate = ''.obs;
-  TextEditingController showedUsedDate = TextEditingController(text: '');
-
-  Future getAllAssetData(
-    String first,
-    String last,
-    Function() doAfter,
-  ) async {
-    assetList.value.data!.clear();
-    var assetPrice = 0;
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('token').toString();
-    var headers = {'Authorization': 'Bearer $token'};
-
-    final response = await http.get(
-      // Uri.parse('${Urls.invAsset}?start_date=$first&end_date=$last'),
-      Uri.parse(Urls.invAsset),
-      headers: headers,
-    );
-
-    try {
-      if (response.statusCode == 200) {
-        InventarisAssetModel res =
-            InventarisAssetModel.fromJson(jsonDecode(response.body));
-
-        assetList.value = res;
-
-        if (assetList.value.data!.isNotEmpty) {
-          for (var i in assetList.value.data!) {
-            assetPrice += i.price!;
-          }
-        }
-
-        doAfter();
-      }
-    } catch (e) {
-      throw Exception(e);
-    }
-
-    return (assetPrice / (60 * pondController.ponds.length)).round();
-  }
-
-  Future getAllElectricData(
-      String first, String last, Function() doAfter) async {
-    var filteredPond = [];
-    var electricPrice = 0;
-
-    electricList.value.data!.clear();
-    filteredPond.clear();
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('token').toString();
-    var headers = {'Authorization': 'Bearer $token'};
-
-    final response = await http.get(
-        Uri.parse('${Urls.invElect}?start_date=$first&end_date=$last'),
-        headers: headers);
-
-    try {
-      if (response.statusCode == 200) {
-        InventarisListrikModel res =
-            InventarisListrikModel.fromJson(jsonDecode(response.body));
-
-        electricList.value = res;
-
-        if (electricList.value.data!.isNotEmpty) {
-          for (var i in electricList.value.data!) {
-            electricPrice += i.price!;
-          }
-        }
-        doAfter();
-      }
-    } catch (e) {
-      throw Exception(e);
-    }
-
-    for (var i in pondController.ponds) {
-      if (i.isActive!) {
-        filteredPond.add(i);
-      }
-    }
-
-    return (electricPrice / filteredPond.length).round();
-  }
-
-  Future getHistorySuplemenData(
-    String firstDate,
-    String lastDate,
-    String pondName,
-    Function() doAfter,
-  ) async {
-    suplemenHistoryList.value.data!.clear();
-    var suplemenPrice = 0;
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('token').toString();
-    var headers = {'Authorization': 'Bearer $token'};
-
-    final response = await http.get(
-      Uri.parse(
-          '${Urls.suplemenSch}?start_date=$firstDate&end_date=$lastDate&pond_name=$pondName'),
-      headers: headers,
-    );
-    print("get url: ${Uri.parse(
-        '${Urls.suplemenSch}?start_date=$firstDate&end_date=$lastDate&pond_name=$pondName')}");
-
-    try {
-      if (response.statusCode == 200) {
-        HistorySuplemenModel res =
-            HistorySuplemenModel.fromJson(jsonDecode(response.body));
-
-        suplemenHistoryList.value = res;
-
-        if (suplemenHistoryList.value.data!.isNotEmpty) {
-          for (var i in suplemenHistoryList.value.data!) {
-            suplemenPrice +=
-                ((i.usage! / i.originalAmount!) * i.suplemen!.price!).round();
-          }
-        }
-
-        doAfter();
-      }
-    } catch (e) {
-      throw Exception(e);
-    }
-
-    return suplemenPrice;
-  }
-
-  Future getHistoryFeedData(String firstDate, String lastDate, String pondName,
-      Function() doAfter) async {
-    feedHistoryList.value.data!.clear();
-    var feedPrice = 0;
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('token').toString();
-    var headers = {'Authorization': 'Bearer $token'};
-
-    final response = await http.get(
-        Uri.parse(
-            '${Urls.feedSch}?start_date=$firstDate&end_date=$lastDate&pond_name=$pondName'),
-        headers: headers);
-    print("get url: ${Uri.parse(
-        '${Urls.feedSch}?start_date=$firstDate&end_date=$lastDate&pond_name=$pondName')}");
-    try {
-      if (response.statusCode == 200) {
-        HistoryFeedModel res =
-            HistoryFeedModel.fromJson(jsonDecode(response.body));
-
-        feedHistoryList.value = res;
-
-        if (feedHistoryList.value.data!.isNotEmpty) {
-          for (var i in feedHistoryList.value.data!) {
-            feedPrice +=
-                ((i.usage! / i.originalAmount!) * i.feed!.price!).round();
-          }
-        }
-
-        doAfter();
-      }
-    } catch (e) {
-      throw Exception(e);
-    }
-    return feedPrice;
-  }
-
-  Future getHistorySeedData(String firstDate, String lastDate, String pondName,
-      Function() doAfter) async {
-    seedHistoryList.value.data!.clear();
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('token').toString();
-    var headers = {'Authorization': 'Bearer $token'};
-
-    final response = await http.get(
-      Uri.parse(
-          '${Urls.seedSch}?start_date=$firstDate&end_date=$lastDate&pond_name=$pondName'),
-      headers: headers,
-    );
-    print("get url: ${Uri.parse(
-        '${Urls.seedSch}?start_date=$firstDate&end_date=$lastDate&pond_name=$pondName')}");
-
-    try {
-      if (response.statusCode == 200) {
-        HistorySeedModel res =
-            HistorySeedModel.fromJson(jsonDecode(response.body));
-
-        seedHistoryList.value = res;
-        print("res body ${response.body}");
-        print("token $token");
-        print("seed history list value ${seedHistoryList.value.data}");
-
-        if (seedHistoryList.value.data!.isNotEmpty) {
-          for (var i in activation.fishLive!) {
-            // for (var j in seedHistoryList.value.data!) {
-            //   if (i.fishId == j.fishSeedId) {
-            //     if (i.type == "patin") {
-            //       patinUsed += j.usage!;
-            //     }
-            //     if (i.type == "lele") {
-            //       leleUsed += j.usage!;
-            //     }
-            //     if (i.type == "mas") {
-            //       masUsed += j.usage!;
-            //     }
-            //     if (i.type == "nila hitam") {
-            //       nilaHitamUsed += j.usage!;
-            //     }
-            //     if (i.type == "nila merah") {
-            //       nilaMerahUsed += j.usage!;
-            //     }
-            //   }
-            // }
-
-            for (var j in seedHistoryList.value.data!) {
-              print("i fish seed ${i.fishId}");
-              print("j fish seed ${j.fishSeedId}");
-              if (i.fishId == j.fishSeedId) {
-                print("equal");
-                if (i.type == "patin") {
-                  patinPrice.value += ((j.usage! / j.originalAmount!) *
-                          j.seed!.price! *
-                          j.originalAmount!)
-                      .round();
-                }
-                if (i.type == "lele") {
-                  lelePrice.value += ((j.usage! / j.originalAmount!) *
-                          j.seed!.price! *
-                          j.originalAmount!)
-                      .round();
-                  print("lele prices ${lelePrice.value += ((j.usage! / j.originalAmount!) *
-                      j.seed!.price! *
-                      j.originalAmount!)
-                      .round()}");
-                }
-                if (i.type == "mas") {
-                  masPrice.value += ((j.usage! / j.originalAmount!) *
-                          j.seed!.price! *
-                          j.originalAmount!)
-                      .round();
-                }
-                if (i.type == "nila hitam") {
-                  nilaHitamPrice.value += ((j.usage! / j.originalAmount!) *
-                          j.seed!.price! *
-                          j.originalAmount!)
-                      .round();
-                }
-                if (i.type == "nila merah") {
-                  nilaMerahPrice.value += ((j.usage! / j.originalAmount!) *
-                          j.seed!.price! *
-                          j.originalAmount!)
-                      .round();
-                }
-              }
-            }
-          }
-        }
-
-        inspect(seedHistoryList.value.data!);
-
-        doAfter();
-      }
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
-
-  Future getAllInventory(String firstDate, String lastDate) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    isLoadingInventory.value = true;
-    print("firstdate: $firstDate");
-    print("lastdate: $lastDate");
-
-
-    DateTime now = DateTime.now();
-    var currMonth = DateTime.now().month;
-    var currYear = DateTime.now().year;
-    int lastday = DateTime(now.year, now.month + 1, 0).day;
-
-    try {
-      // var valueA = 0; // Rumus 1 (Aset)
-
-      var valueA = await getAllAssetData(
-        firstDate,
-        lastDate,
-        () => null,
-      ); // Rumus 2 (Aset)
-      print("asset price: ${valueA}");
-      prefs.setInt("assetPrice", valueA ?? 0);
-
-      var valueB = await getAllElectricData(
-        '$currYear-$currMonth-01',
-        '$currYear-$currMonth-$lastday',
-        () => null,
-      );
-      print("electric price: ${valueB}");
-      prefs.setInt("electricPrice", valueB ?? 0);
-      var valueC = await getHistorySuplemenData(
-        firstDate,
-        lastDate,
-        pondName.value,
-        () => null,
-      );
-      print("suplement price: ${valueC}");
-      prefs.setInt("suplementPrice", valueC ?? 0);
-      var valueD = await getHistoryFeedData(
-        firstDate,
-        lastDate,
-        pondName.value,
-        () => null,
-      );
-      print("feed price ${valueD}");
-      prefs.setInt("feedPrice", valueD ?? 0);
-      await getHistorySeedData(
-        firstDate,
-        lastDate,
-        pondName.value,
-        () => null,
-      );
-
-      // inspect({
-      //   'first_date': firstDate,
-      //   'last_date': lastDate,
-      //   'asset': valueA,
-      //   'listrik': valueB,
-      //   'sup': valueC,
-      //   'feed': valueD,
-      // });
-
-      for (var i in activation.fishLive!) {
-        if (i.type == 'lele') {
-          print("break down prices ${valueA} + ${valueB} + ${valueC} + ${valueD} + ${lelePriceController.text}}");
-          lelePriceController.text = ConvertToRupiah.formatToRupiah(
-            ((valueA + valueB + valueC + valueD + lelePrice.value) /
-                    activation.fishAmount!)
-                .round(),
-          );
-          print("break down prices ${valueA} + ${valueB} + ${valueC} + ${valueD} + ${lelePrice.value}}");
-          print("fish amount ${activation.fishAmount!}");
-          print("price ${((valueA + valueB + valueC + valueD + lelePrice.value) /
-              activation.fishAmount!)
-              .round()}");
-          prefs.setInt("seedPrice", lelePrice.value ?? 0);
-          prefs.setInt("totalPrice", ((valueA + valueB + valueC + valueD + lelePrice.value) /
-              activation.fishAmount!)
-              .round() ?? 0);
-        }
-        if (i.type == 'mas') {
-          masPriceController.text = ConvertToRupiah.formatToRupiah(
-            ((valueA + valueB + valueC + valueD + masPrice.value) /
-                    activation.fishAmount!)
-                .round(),
-          );
-          print("mas price ${masPrice.value}");
-          prefs.setInt("seedPrice", masPrice.value ?? 0);
-          prefs.setInt("totalPrice", ((valueA + valueB + valueC + valueD + masPrice.value) /
-              activation.fishAmount!)
-              .round()?? 0);
-        }
-        if (i.type == 'patin') {
-          patinPriceController.text = ConvertToRupiah.formatToRupiah(
-            ((valueA + valueB + valueC + valueD + patinPrice.value) /
-                    activation.fishAmount!)
-                .round(),
-          );
-          print("patin price ${patinPrice.value}");
-          prefs.setInt("seedPrice", patinPrice.value ?? 0);
-          prefs.setInt("totalPrice",  ((valueA + valueB + valueC + valueD + patinPrice.value) /
-              activation.fishAmount!)
-              .round() ?? 0);
-        }
-        if (i.type == 'nila hitam') {
-          nilaHitamPriceController.text = ConvertToRupiah.formatToRupiah(
-            ((valueA + valueB + valueC + valueD + nilaHitamPrice.value) /
-                    activation.fishAmount!)
-                .round(),
-          );
-          print("nila hitam price ${nilaHitamPrice.value}");
-          prefs.setInt("seedPrice", nilaHitamPrice.value ?? 0);
-          prefs.setInt("totalPrice", ((valueA + valueB + valueC + valueD + nilaHitamPrice.value) /
-              activation.fishAmount!)
-              .round() ?? 0);
-        }
-        if (i.type == 'nila merah') {
-          nilaMerahPriceController.text = ConvertToRupiah.formatToRupiah(
-            ((valueA + valueB + valueC + valueD + nilaMerahPrice.value) /
-                    activation.fishAmount!)
-                .round(),
-          );
-          print("nila merah price ${nilaMerahPrice.value}");
-          prefs.setInt("seedPrice", nilaMerahPrice.value ?? 0);
-          prefs.setInt("totalPrice",  ((valueA + valueB + valueC + valueD + nilaMerahPrice.value) /
-              activation.fishAmount!)
-              .round() ?? 0);
-        }
-      }
-    } catch (e) {
-      throw Exception(e);
-    }
-
-    isLoadingInventory.value = false;
-  }
-
   Future<void> getHarvestedBool(Activation activation) async {
     for (var i in activation.fishLive!) {
-      print("type: ${i.type}");
-      print("id: ${i.fishId}");
       if (i.type == 'lele') {
         isLele.value = true;
         leleAmount.value = i.amount!;
-        leleId.value = i.fishId!;
-        leleType.value = i.fishCategory!;
       }
       if (i.type == 'patin') {
         isPatin.value = true;
         patinAmount.value = i.amount!;
-        patinId.value = i.fishId!;
-        patinType.value = i.fishCategory!;
       }
       if (i.type == 'mas') {
         isMas.value = true;
         masAmount.value = i.amount!;
-        masId.value = i.fishId!;
-        masType.value = i.fishCategory!;
       }
       if (i.type == 'nila hitam') {
         isNilaHitam.value = true;
         nilahitamAmount.value = i.amount!;
-        nilaMerahId.value = i.fishId!;
-        nilaMerahType.value = i.fishCategory!;
       }
       if (i.type == 'nila merah') {
         isNilaMerah.value = true;
         nilamerahAmount.value = i.amount!;
-        nilaMerahId.value = i.fishId!;
-        nilaMerahType.value = i.fishCategory!;
       }
     }
   }
@@ -557,8 +90,6 @@ class DeactivationBreedController extends GetxController {
           "type": "nila merah",
           "amount": nilamerahAmount.toString(),
           "weight": nilaMerah,
-          "fish_seed_id": nilaMerahId.value,
-          "fish_category": nilaMerahType.value
         };
         data.add(jsonEncode(fishData));
       } else {
@@ -566,8 +97,6 @@ class DeactivationBreedController extends GetxController {
           "type": "nila merah",
           "amount": nilamerahAmount.toString(),
           "weight": nilaMerahWeightController.value.text,
-          "fish_seed_id": nilaMerahId.value,
-          "fish_category": nilaMerahType.value
         };
         data.add(jsonEncode(fishData));
       }
@@ -580,8 +109,6 @@ class DeactivationBreedController extends GetxController {
           "type": "nila hitam",
           "amount": nilahitamAmount.toString(),
           "weight": nilaHitam,
-          "fish_seed_id": nilaHitamId.value,
-          "fish_category": nilaHitamType.value
         };
         data.add(jsonEncode(fishData));
       } else {
@@ -589,8 +116,6 @@ class DeactivationBreedController extends GetxController {
           "type": "nila hitam",
           "amount": nilahitamAmount.toString(),
           "weight": nilaHitamWeightController.value.text,
-          "fish_seed_id": nilaHitamId.value,
-          "fish_category": nilaHitamType.value
         };
         data.add(jsonEncode(fishData));
       }
@@ -602,8 +127,6 @@ class DeactivationBreedController extends GetxController {
           "type": "lele",
           "amount": leleAmount.toString(),
           "weight": lele,
-          "fish_seed_id": leleId.value,
-          "fish_category": leleType.value
         };
         data.add(jsonEncode(fishData));
       } else {
@@ -611,8 +134,6 @@ class DeactivationBreedController extends GetxController {
           "type": "lele",
           "amount": leleAmount.toString(),
           "weight": leleWeightController.value.text,
-          "fish_seed_id": leleId.value,
-          "fish_category": leleType.value
         };
         data.add(jsonEncode(fishData));
       }
@@ -624,8 +145,6 @@ class DeactivationBreedController extends GetxController {
           "type": "patin",
           "amount": patinAmount.toString(),
           "weight": patin,
-          "fish_seed_id": patinId.value,
-          "fish_category": patinType.value
         };
         data.add(jsonEncode(fishData));
       } else {
@@ -633,8 +152,6 @@ class DeactivationBreedController extends GetxController {
           "type": "patin",
           "amount": patinAmount.toString(),
           "weight": patinWeightController.value.text,
-          "fish_seed_id": patinId.value,
-          "fish_category": patinType.value
         };
         data.add(jsonEncode(fishData));
       }
@@ -646,8 +163,6 @@ class DeactivationBreedController extends GetxController {
           "type": "mas",
           "amount": masAmount.toString(),
           "weight": mas,
-          "fish_seed_id": masId.value,
-          "fish_category": masType.value
         };
         data.add(jsonEncode(fishData));
       } else {
@@ -655,8 +170,6 @@ class DeactivationBreedController extends GetxController {
           "type": "mas",
           "amount": masAmount.toString(),
           "weight": masWeightController.value.text,
-          "fish_seed_id": masId.value,
-          "fish_category": masType.value
         };
         data.add(jsonEncode(fishData));
       }
@@ -716,155 +229,8 @@ class DeactivationBreedController extends GetxController {
     return weightTotal;
   }
 
-  List buildJsonFishRecap() {
-    var data = [];
-    if (isNilaMerah.value == true) {
-      if (nilaMerahWeightController.value.text.contains(",")) {
-        String nilaMerah =
-            nilaMerahWeightController.value.text.replaceAll(',', '.');
-        var fishData = {
-          "type": "nila merah",
-          "amount": nilamerahAmount.toString(),
-          "weight": nilaMerah,
-          "fish_seed_id": nilaMerahId.value,
-          "fish_category": nilaMerahType.value,
-          "fish_price":
-              nilaMerahPriceController.text.split(',')[0].split('.').join(''),
-        };
-        data.add(fishData);
-      } else {
-        var fishData = {
-          "type": "nila merah",
-          "amount": nilamerahAmount.toString(),
-          "weight": nilaMerahWeightController.value.text,
-          "fish_seed_id": nilaMerahId.value,
-          "fish_category": nilaMerahType.value,
-          "fish_price":
-              nilaMerahPriceController.text.split(',')[0].split('.').join(''),
-        };
-        data.add(fishData);
-      }
-    }
-    if (isNilaHitam.value == true) {
-      if (nilaHitamWeightController.value.text.contains(",")) {
-        String nilaHitam =
-            nilaHitamWeightController.value.text.replaceAll(',', '.');
-        var fishData = {
-          "type": "nila hitam",
-          "amount": nilahitamAmount.toString(),
-          "weight": nilaHitam,
-          "fish_seed_id": nilaHitamId.value,
-          "fish_category": nilaHitamType.value,
-          "fish_price":
-              nilaHitamPriceController.text.split(',')[0].split('.').join(''),
-        };
-        data.add(fishData);
-      } else {
-        var fishData = {
-          "type": "nila hitam",
-          "amount": nilahitamAmount.toString(),
-          "weight": nilaHitamWeightController.value.text,
-          "fish_seed_id": nilaHitamId.value,
-          "fish_category": nilaHitamType.value,
-          "fish_price":
-              nilaHitamPriceController.text.split(',')[0].split('.').join(''),
-        };
-        data.add(fishData);
-      }
-    }
-    if (isLele.value == true) {
-      if (leleWeightController.value.text.contains(",")) {
-        String lele = leleWeightController.value.text.replaceAll(',', '.');
-        var fishData = {
-          "type": "lele",
-          "amount": leleAmount.toString(),
-          "weight": lele,
-          "fish_seed_id": leleId.value,
-          "fish_category": leleType.value,
-          "fish_price":
-              lelePriceController.text.split(',')[0].split('.').join(''),
-        };
-        data.add(fishData);
-      } else {
-        var fishData = {
-          "type": "lele",
-          "amount": leleAmount.toString(),
-          "weight": leleWeightController.value.text,
-          "fish_seed_id": leleId.value,
-          "fish_category": leleType.value,
-          "fish_price":
-              lelePriceController.text.split(',')[0].split('.').join(''),
-        };
-        data.add(fishData);
-      }
-    }
-    if (isPatin.value == true) {
-      if (patinWeightController.value.text.contains(",")) {
-        String patin = patinWeightController.value.text.replaceAll(',', '.');
-        var fishData = {
-          "type": "patin",
-          "amount": patinAmount.toString(),
-          "weight": patin,
-          "fish_seed_id": patinId.value,
-          "fish_category": patinType.value,
-          "fish_price":
-              patinPriceController.text.split(',')[0].split('.').join(''),
-        };
-        data.add(fishData);
-      } else {
-        var fishData = {
-          "type": "patin",
-          "amount": patinAmount.toString(),
-          "weight": patinWeightController.value.text,
-          "fish_seed_id": patinId.value,
-          "fish_category": patinType.value,
-          "fish_price":
-              patinPriceController.text.split(',')[0].split('.').join(''),
-        };
-        data.add(fishData);
-      }
-    }
-    if (isMas.value == true) {
-      if (masWeightController.value.text.contains(",")) {
-        String mas = masWeightController.value.text.replaceAll(',', '.');
-        var fishData = {
-          "type": "mas",
-          "amount": masAmount.toString(),
-          "weight": mas,
-          "fish_seed_id": masId.value,
-          "fish_category": masType.value,
-          "fish_price":
-              masPriceController.text.split(',')[0].split('.').join(''),
-        };
-        data.add(fishData);
-      } else {
-        var fishData = {
-          "type": "mas",
-          "amount": masAmount.toString(),
-          "weight": masWeightController.value.text,
-          "fish_seed_id": masId.value,
-          "fish_category": masType.value,
-          "fish_price":
-              masPriceController.text.split(',')[0].split('.').join(''),
-        };
-        data.add(fishData);
-      }
-    }
-    return data;
-  }
-
-  String dateFormat(String dateString, bool includeHour) {
-    DateTime dateTime = DateTime.parse(dateString);
-    var formatter = includeHour
-        ? DateFormat('EEEE, d MMMM y | HH:mm', 'id')
-        : DateFormat('EEEE, d MMMM y', 'id');
-    var formattedDate = formatter.format(dateTime);
-    return formattedDate.split('|').join('| Jam');
-  }
-
   Future<void> pondDeactivation(BuildContext context, Function doInPost) async {
-    var fishDataRecap = buildJsonFishRecap();
-
+    // prdouble(buildJsonFish());
     double weight = getWeight();
     if (weight == 0) {
       showDialog<String>(
@@ -889,32 +255,19 @@ class DeactivationBreedController extends GetxController {
     } else {
       isDeactivationProgress.value = true;
       try {
-        DateTime now = DateTime.now();
-        String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(now);
         await service.postDeactivation(
-          pondId: pond.id,
-          total_fish_harvested: leleAmount.toInt() +
-              patinAmount.toInt() +
-              masAmount.toInt() +
-              nilahitamAmount.toInt() +
-              nilamerahAmount.toInt(),
-          total_weight_harvested: getWeight().toString(),
-          isFinish: true,
-          fish_harvested: buildJsonFish(),
-          date: selectedUsedDate.value != "" && selectedUsedDate.value != null ? selectedUsedDate.value : '$formattedDate +0000',
-          doInPost: doInPost,
-          doAfter: () async {
-            await service.postFishHarvestedPrice();
-          },
-          context: context,
-        );
-        await deactivationRecapState.postRecap(
-          pond.id.toString(),
-          fishDataRecap,
-          selectedUsedDate.value != "" && selectedUsedDate.value != null ? selectedUsedDate.value : '$formattedDate +0000',
-          () => null,
-        );
-        doInPost();
+            pondId: pond.id,
+            total_fish_harvested: leleAmount.toInt() +
+                patinAmount.toInt() +
+                masAmount.toInt() +
+                nilahitamAmount.toInt() +
+                nilamerahAmount.toInt(),
+            total_weight_harvested: getWeight().toString(),
+            isFinish: true,
+            fish_harvested: buildJsonFish(),
+            doInPost: doInPost,
+            context: context);
+        print(buildJsonFish());
       } catch (e) {
         //
       }

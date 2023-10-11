@@ -1,7 +1,7 @@
 class Urls {
-  // static const String baseUrl = 'https://f302-114-124-131-93.ngrok-free.app/api';
-  static const String baseUrl = 'http://jft.web.id/fishapiv4/api';
-  // static const String baseUrl = 'http://10.0.2.2:8000/api';
+  static const String baseUrl = 'http://jft.web.id/fishapiv2/api';
+  // static const String baseUrl = 'http://10.0.2.2:5000/api';
+
   // Home
   static const String statistic = '$baseUrl/statistic';
 
@@ -34,15 +34,14 @@ class Urls {
       '$baseUrl/feedhistorys/day/$activationId/$week';
   static String feedHistory(String? activationId, date) =>
       '$baseUrl/feedhistorys/hour/$activationId/$date';
-  static String feedChartHistory(String? type) =>
-      '$baseUrl/feedhistoryforchart?type=$type';
+  static String feedhistorybyid(String? feedhistoryId) =>
+      '$baseUrl/feedhistorys/$feedhistoryId';
 
   // Fish Grading
   static const String fishGradings = '$baseUrl/fishgradings';
   static String fishGrading(String? activationId) =>
       '$baseUrl/fishgradings/activation/$activationId';
-  static String fishGradingsGraph(String? activationId) =>
-      '$baseUrl/fishgradings/graph/$activationId';
+
   // Fish Death
   static const String fishDeaths = '$baseUrl/fishdeath';
   static String fishDeath(String? activationId) =>
@@ -50,6 +49,7 @@ class Urls {
 
   // Add Fish
   static const String addFish = '$baseUrl/addfish';
+  static const String editFish = '$baseUrl/editfish';
 
   //Treatment
   static const String treatment = '$baseUrl/pondtreatment';
@@ -74,27 +74,5 @@ class Urls {
   //user
   static String breeder = '$baseUrl/breeder';
   static String farm = '$baseUrl/farm';
-
-  // inventories
-  static String invSeed = '$baseUrl/inventory/seed';
-  static String invFeed = '$baseUrl/inventory/feed';
-  static String invSup = '$baseUrl/inventory/suplemen';
-  static String invAsset = '$baseUrl/inventory/asset';
-  static String invElect = '$baseUrl/inventory/electric';
-
-  // histories
-  static String seedSch = '$baseUrl/history/inventory/seed';
-  static String feedSch = '$baseUrl/history/inventory/feed';
-  static String suplemenSch = '$baseUrl/history/inventory/suplemen';
   static String logging = '$baseUrl/logging';
-
-  // name list
-  static String feedNameList = '$baseUrl/inventory/feed/name';
-  static String suplemenNameList = '$baseUrl/inventory/suplemen/name';
-
-  // recap deactivation
-  static String deactivationRecap = '$baseUrl/recap/deactivation';
-
-  // fish harvested price
-  static String fishHarvestedPrice = '$baseUrl/fishharvestedprice';
 }

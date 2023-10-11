@@ -8,27 +8,21 @@ import 'package:get/get.dart';
 
 import '../pond/detail_pond_page.dart';
 
-class DailyWaterListPondCard extends StatefulWidget {
+class DailyWaterListPondCard extends StatelessWidget {
   final Pond pond;
   // final DailyWater indicatorWater
-  bool isMenuTapped;
-  DailyWaterListPondCard({
+
+  const DailyWaterListPondCard({
     Key? key,
     required this.pond,
-    required this.isMenuTapped,
   }) : super(key: key);
 
-  @override
-  State<DailyWaterListPondCard> createState() => _DailyWaterListPondCardState();
-}
-
-class _DailyWaterListPondCardState extends State<DailyWaterListPondCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => DailyWaterDetailPondPage(isMenuTapped: widget.isMenuTapped,), arguments: {
-          'pond': widget.pond,
+        Get.to(() => DailyWaterDetailPondPage(), arguments: {
+          'pond': pond,
         });
       },
       child: Container(
@@ -49,7 +43,7 @@ class _DailyWaterListPondCardState extends State<DailyWaterListPondCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  widget.pond.alias!,
+                  pond.alias!,
                   style: blackTextStyle.copyWith(
                     fontSize: 18,
                     fontWeight: bold,
@@ -62,11 +56,11 @@ class _DailyWaterListPondCardState extends State<DailyWaterListPondCard> {
                   height: 30,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    color: widget.pond.getColor(),
+                    color: pond.getColor(),
                   ),
                   child: Center(
                     child: Text(
-                      widget.pond.pondStatusStr!,
+                      pond.pondStatusStr!,
                       style: blackTextStyle.copyWith(
                         fontSize: 14,
                         fontWeight: heavy,

@@ -1,31 +1,22 @@
 import 'package:fish/controllers/daily_water/daily_water_entry_controller.dart';
 import 'package:fish/controllers/daily_water/daily_water_controller.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import '../../widgets/new_Menu_widget.dart';
 import '../component/tabviewwater.dart';
 
-class DailyWaterEntryPage extends StatefulWidget {
+class DailyWaterEntryPage extends StatelessWidget {
   DailyWaterEntryPage({Key? key}) : super(key: key);
 
-  @override
-  State<DailyWaterEntryPage> createState() => _DailyWaterEntryPageState();
-}
-
-class _DailyWaterEntryPageState extends State<DailyWaterEntryPage> {
   final DailyWaterEntryController controller =
       Get.put(DailyWaterEntryController());
 
   final DailyWaterController water = Get.put(DailyWaterController());
-  var isMenuTapped = false.obs;
+
   @override
   Widget build(BuildContext context) {
-    var scaffoldKey = GlobalKey<ScaffoldState>();
-
     Widget doInput() {
       return Container(
         margin: EdgeInsets.only(
@@ -191,6 +182,7 @@ class _DailyWaterEntryPageState extends State<DailyWaterEntryPage> {
         child: TextButton(
           onPressed: () async {
             // Get.back();
+
             controller.phController.text == "" ||
                     controller.doController.text == "" ||
                     controller.temperatureController.text == ''
@@ -235,33 +227,14 @@ class _DailyWaterEntryPageState extends State<DailyWaterEntryPage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
-          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
-            title: const Text("Entry Kondisi Air Harian"),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  // scaffoldKey.currentState?.openEndDrawer();
-                  setState(() {
-                    isMenuTapped.value = !isMenuTapped.value;
-                  });
-                },
-                icon: Icon(Icons.card_travel_rounded),
-              )
-            ],
+            title:
+                Text("Entry Kondisi Air Harian Kolam ${controller.pond.alias}"),
           ),
-          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
-              if (isMenuTapped.value)
-                Column(
-                  children: [
-                    newMenu(),
-                    SizedBox(height: 10,),
-                  ],
-                ),
               phInput(),
               doInput(),
               temperatureInput(),

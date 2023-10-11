@@ -94,9 +94,9 @@ class Pond {
         rangeFromLastActivation: json['isActive'] == false
             ? "-"
             : (DateTime.now()
-            .difference(stringToDate(json['activation_date']))
-            .inDays)
-            .toString(),
+                    .difference(stringToDate(json['activation_date']))
+                    .inDays)
+                .toString(),
         pondStatus: PondStatusConverter.toEnum(json["status"]),
         pondStatusStr: json["status"],
         pondPh: json["pondPh"],

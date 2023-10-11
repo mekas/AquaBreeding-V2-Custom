@@ -1,25 +1,24 @@
 import 'package:fish/pages/component/feed_hour_card.dart';
+import 'package:fish/pages/feeding/feed_controller.dart';
 import 'package:fish/pages/feeding/feed_daily_controller.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
+import 'package:fish/pages/feeding/feed_monthly_controller.dart';
+import 'package:fish/pages/feeding/feed_weekly_controller.dart';
+import 'package:fish/pages/pond/detail_pond_controller.dart';
+import 'package:fish/pages/pond/pond_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
-import '../../widgets/new_Menu_widget.dart';
-
-class DetailFeedDailyPage extends StatefulWidget {
+class DetailFeedDailyPage extends StatelessWidget {
   const DetailFeedDailyPage({Key? key}) : super(key: key);
 
   @override
-  State<DetailFeedDailyPage> createState() => _DetailFeedDailyPageState();
-}
-
-class _DetailFeedDailyPageState extends State<DetailFeedDailyPage> {
-  var isMenuTapped = false.obs;
-  @override
   Widget build(BuildContext context) {
-    var scaffoldKey = GlobalKey<ScaffoldState>();
-
+    final PondController pondController = Get.find();
+    final DetailPondController detailPondController = Get.find();
+    final FeedController feedController = Get.find();
+    final FeedMonthlyController feedMonthlyController = Get.find();
+    final FeedWeeklyController feedWeeklyController = Get.find();
     final FeedDailyController controller = Get.put(FeedDailyController());
 
     Widget feedDailyRecap() {
@@ -34,7 +33,7 @@ class _DetailFeedDailyPageState extends State<DetailFeedDailyPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "kolam ${controller.pond.alias}",
+                  "kolam ${pondController.selectedPond.value.alias}",
                   style: primaryTextStyle.copyWith(
                     fontSize: 18,
                     fontWeight: heavy,
@@ -43,7 +42,7 @@ class _DetailFeedDailyPageState extends State<DetailFeedDailyPage> {
                   maxLines: 1,
                 ),
                 Text(
-                  "Bulan ${controller.feedHistoryMonthly.getMonthNameFull()}",
+                  "Bulan ${feedController.selectedFeedHistoryMonthly.value.getMonthNameFull()}",
                   style: secondaryTextStyle.copyWith(
                     fontSize: 13,
                     fontWeight: medium,
@@ -52,7 +51,7 @@ class _DetailFeedDailyPageState extends State<DetailFeedDailyPage> {
                   maxLines: 1,
                 ),
                 Text(
-                  "Minggu Ke-${controller.feedHistoryWeekly.week}",
+                  "Minggu Ke-${feedMonthlyController.selectedFeedHistoryWeekly.value.week}",
                   style: secondaryTextStyle.copyWith(
                     fontSize: 13,
                     fontWeight: medium,
@@ -61,7 +60,7 @@ class _DetailFeedDailyPageState extends State<DetailFeedDailyPage> {
                   maxLines: 1,
                 ),
                 Text(
-                  "Hari ${controller.feedHistoryDaily.getDayName()}",
+                  "Hari ${feedWeeklyController.selectedFeedHistoryDaily.value.getDayName()}",
                   style: secondaryTextStyle.copyWith(
                     fontSize: 13,
                     fontWeight: medium,
@@ -296,11 +295,14 @@ class _DetailFeedDailyPageState extends State<DetailFeedDailyPage> {
             children: controller.list_feedHistoryHourly
                 .map(
                   (feedHistoryHourly) => FeedHourCard(
-                    activation: controller.activation,
-                    pond: controller.pond,
-                    feedHistoryMonthly: controller.feedHistoryMonthly,
-                    feedHistoryWeekly: controller.feedHistoryWeekly,
-                    feedHistoryDaily: controller.feedHistoryDaily,
+                    activation: detailPondController.selectedActivation.value,
+                    pond: pondController.selectedPond.value,
+                    feedHistoryMonthly:
+                        feedController.selectedFeedHistoryMonthly.value,
+                    feedHistoryWeekly:
+                        feedMonthlyController.selectedFeedHistoryWeekly.value,
+                    feedHistoryDaily:
+                        feedWeeklyController.selectedFeedHistoryDaily.value,
                     feedHistoryHourly: feedHistoryHourly,
                   ),
                 )
@@ -311,33 +313,13 @@ class _DetailFeedDailyPageState extends State<DetailFeedDailyPage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
-          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Detail Pakan Harian"),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  // scaffoldKey.currentState?.openEndDrawer();
-                  setState(() {
-                    isMenuTapped.value = !isMenuTapped.value;
-                  });
-                },
-                icon: Icon(Icons.card_travel_rounded),
-              )
-            ],
           ),
-          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
-              if (isMenuTapped.value)
-                Column(
-                  children: [
-                    newMenu(),
-                    SizedBox(height: 10,),
-                  ],
-                ),
               feedDailyRecap(),
               // detail(),
               recapTitle(),

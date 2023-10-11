@@ -1,122 +1,60 @@
-import 'dart:developer';
-
 import 'package:fish/models/feed_chart_model.dart';
 import 'package:fish/pages/component/feed_month_card.dart';
 import 'package:fish/pages/feeding/feed_controller.dart';
-import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_state.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
+import 'package:fish/pages/pond/detail_pond_controller.dart';
+import 'package:fish/pages/pond/pond_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/pages/feeding/feed_entry_page.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../../widgets/new_Menu_widget.dart';
-
-class DetailFeedPage extends StatefulWidget {
+class DetailFeedPage extends StatelessWidget {
   const DetailFeedPage({Key? key}) : super(key: key);
 
   @override
-  State<DetailFeedPage> createState() => _DetailFeedPageState();
-}
-
-class _DetailFeedPageState extends State<DetailFeedPage> {
-  var isMenuTapped = false.obs;
-  @override
   Widget build(BuildContext context) {
-    var scaffoldKey = GlobalKey<ScaffoldState>();
-
     final FeedController controller = Get.put(FeedController());
-    final InventarisPakanState pakanState = Get.put(InventarisPakanState());
-
-    Widget feedCatDropdown() {
-      return Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'Kategori Pakan',
-              style: headingText2,
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: inputColor,
-              ),
-              child: StatefulBuilder(
-                builder: ((context, setState) {
-                  return DropdownButtonHideUnderline(
-                    child: DropdownButton(
-                      onChanged: ((String? value) async {
-                        setState(() {
-                          pakanState.feedCategory.value = value!;
-                        });
-                        pakanState.feedCategory.value = value!;
-                        await pakanState.getHistoryFeedChartData(
-                            pakanState.feedCategory.value, () {
-                          controller
-                              .getChartFeed(pakanState.feedCategory.value);
-                        });
-                      }),
-                      value: pakanState.feedCategory.value,
-                      dropdownColor: inputColor,
-                      items: pakanState.dropdownList.map(
-                        (String val) {
-                          return DropdownMenuItem(
-                            value: val,
-                            child: Text(
-                              val,
-                              style: headingText3,
-                            ),
-                          );
-                        },
-                      ).toList(),
-                    ),
-                  );
-                }),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+    final PondController pondController = Get.find();
+    final DetailPondController detailPondController = Get.find();
 
     Widget chartFeed() {
-      return SfCartesianChart(
-        enableAxisAnimation: true,
-        tooltipBehavior: TooltipBehavior(enable: true),
-        zoomPanBehavior: ZoomPanBehavior(
-          enablePanning: true,
+      return Container(
+        child: SfCartesianChart(
+          enableAxisAnimation: true,
+          tooltipBehavior: TooltipBehavior(enable: true),
+          zoomPanBehavior: ZoomPanBehavior(
+            enablePanning: true,
+          ),
+          title: ChartTitle(
+              text: 'Total Pakan', textStyle: TextStyle(color: Colors.white)),
+          legend: Legend(
+              isVisible: true,
+              position: LegendPosition.bottom,
+              textStyle: TextStyle(color: Colors.white)),
+          primaryXAxis: CategoryAxis(
+              interval: 1,
+              labelPlacement: LabelPlacement.onTicks,
+              labelRotation: 90,
+              labelStyle: TextStyle(color: Colors.white),
+              autoScrollingDelta: 10),
+          primaryYAxis: NumericAxis(
+              labelFormat: '{value} g',
+              // maximum: 100,
+              // minimum: 0,
+              labelStyle: TextStyle(color: Colors.white)),
+          series: controller.charData.isEmpty
+              ? <ChartSeries>[]
+              : <ChartSeries>[
+                  LineSeries<FeedChartData, dynamic>(
+                      enableTooltip: true,
+                      color: Colors.blueAccent,
+                      dataSource: controller.charData,
+                      xValueMapper: (FeedChartData feed, _) => feed.date,
+                      yValueMapper: (FeedChartData feed, _) => feed.feeddose,
+                      name: 'Jumlah Pakan')
+                ],
         ),
-        title: ChartTitle(
-            text: 'Total Pakan',
-            textStyle: const TextStyle(color: Colors.white)),
-        legend: Legend(
-            isVisible: true,
-            position: LegendPosition.bottom,
-            textStyle: const TextStyle(color: Colors.white)),
-        primaryXAxis: CategoryAxis(
-            labelStyle: const TextStyle(color: Colors.white),
-            autoScrollingDelta: 4),
-        primaryYAxis: NumericAxis(
-            labelFormat: '{value} kg',
-            // maximum: 100,
-            // minimum: 0,
-            labelStyle: const TextStyle(color: Colors.white)),
-        series: <ChartSeries>[
-          LineSeries<FeedChartData, dynamic>(
-              enableTooltip: true,
-              color: Colors.blueAccent,
-              dataSource: controller.charData,
-              xValueMapper: (FeedChartData feed, _) => feed.getDate(),
-              yValueMapper: (FeedChartData feed, _) => feed.amount,
-              name: 'Jumlah Pakan')
-        ],
       );
     }
 
@@ -171,7 +109,7 @@ class _DetailFeedPageState extends State<DetailFeedPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "kolam ${controller.pond.alias}",
+                  "kolam ${pondController.selectedPond.value.alias}",
                   style: primaryTextStyle.copyWith(
                     fontSize: 18,
                     fontWeight: heavy,
@@ -198,8 +136,8 @@ class _DetailFeedPageState extends State<DetailFeedPage> {
         child: TextButton(
           onPressed: () {
             Get.to(() => FeedEntryPage(), arguments: {
-              "pond": controller.pond,
-              "activation": controller.activation
+              "pond": pondController.selectedPond.value,
+              "activation": detailPondController.selectedActivation.value,
             });
             controller.postDataLog(controller.fitur);
           },
@@ -380,65 +318,46 @@ class _DetailFeedPageState extends State<DetailFeedPage> {
             children: controller.list_feedHistoryMonthly
                 .map(
                   (feedHistoryMonthly) => FeedMonthCard(
-                      activation: controller.activation,
-                      pond: controller.pond,
+                      activation: detailPondController.selectedActivation.value,
+                      pond: pondController.selectedPond.value,
                       feedHistoryMonthly: feedHistoryMonthly),
                 )
                 .toList(),
           ));
     }
 
-    return Obx(
-      () => Scaffold(
-        key: scaffoldKey,
-        appBar: AppBar(
-          backgroundColor: backgroundColor2,
-          title: const Text("Detail Pakan Permusim"),
-          actions: [
-            IconButton(
-              onPressed: () {
-                // scaffoldKey.currentState?.openEndDrawer();
-                setState(() {
-                  isMenuTapped.value = !isMenuTapped.value;
-                });
-              },
-              icon: Icon(Icons.card_travel_rounded),
-            )
-          ],
-        ),
-        endDrawer: DrawerInvetarisList(),
-        backgroundColor: backgroundColor1,
-        body: controller.isLoading.value
-            ? Center(
-                child: CircularProgressIndicator(
-                  color: secondaryColor,
-                ),
+    return Obx(() {
+      if (controller.isLoading.value == false) {
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: backgroundColor2,
+            title: const Text("Detail Pakan Permusim"),
+          ),
+          backgroundColor: backgroundColor1,
+          body: ListView(
+            children: [
+              chartFeed(),
+              feedDataRecap(),
+              // detail(),
+              entryPakanButton(),
+              recapTitle(),
+              // chartRecap(),
+              controller.list_feedHistoryMonthly.isEmpty
+                  ? emptyListPond()
+                  : listMonthFeed(),
+              SizedBox(
+                height: 10,
               )
-            : ListView(
-                children: [
-                  if (isMenuTapped.value)
-                    Column(
-                      children: [
-                        newMenu(),
-                        SizedBox(height: 10,),
-                      ],
-                    ),
-                  feedCatDropdown(),
-                  chartFeed(),
-                  feedDataRecap(),
-                  // detail(),
-                  entryPakanButton(),
-                  recapTitle(),
-                  // chartRecap(),
-                  controller.list_feedHistoryMonthly.isEmpty
-                      ? emptyListPond()
-                      : listMonthFeed(),
-                  const SizedBox(
-                    height: 10,
-                  )
-                ],
-              ),
-      ),
-    );
+            ],
+          ),
+        );
+      } else {
+        return Center(
+          child: CircularProgressIndicator(
+            color: secondaryColor,
+          ),
+        );
+      }
+    });
   }
 }

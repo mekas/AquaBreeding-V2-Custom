@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:fish/models/grading_chart_model.dart';
 import 'package:fish/pages/component/grading_card.dart';
 import 'package:fish/pages/grading/grading_controller.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/pages/grading/grading_constanta_edit_page.dart';
 import 'package:fish/pages/grading/grading_entry_page.dart';
@@ -11,17 +10,9 @@ import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../../widgets/new_Menu_widget.dart';
-
-class GradingPage extends StatefulWidget {
+class GradingPage extends StatelessWidget {
   const GradingPage({Key? key}) : super(key: key);
 
-  @override
-  State<GradingPage> createState() => _GradingPageState();
-}
-
-class _GradingPageState extends State<GradingPage> {
-  var isMenuTapped = false.obs;
   @override
   Widget build(BuildContext context) {
     final GradingController controller = Get.put(GradingController());
@@ -57,7 +48,7 @@ class _GradingPageState extends State<GradingPage> {
               xValueMapper: (FishWeightData fishWeightData, _) =>
                   fishWeightData.getDate(),
               yValueMapper: (FishWeightData fishWeightData, _) =>
-              fishWeightData.totalWeightFish,
+                  fishWeightData.totalWeightFish,
               markerSettings: MarkerSettings(
                 isVisible: true, // Menampilkan marker
                 shape: DataMarkerType.circle, // Bentuk marker
@@ -70,11 +61,11 @@ class _GradingPageState extends State<GradingPage> {
               borderWidth: 2, // Lebar garis biru
               borderColor: Colors.pink, //
               dataSource:
-              controller.fishGradingChart!.value.listFishFeedHistory,
+                  controller.fishGradingChart!.value.listFishFeedHistory,
               xValueMapper: (FishFeedHistory fishFeedHistory, _) =>
                   fishFeedHistory.getDate(),
               yValueMapper: (FishFeedHistory fishFeedHistory, _) =>
-              fishFeedHistory.totalFeedDose,
+                  fishFeedHistory.totalFeedDose,
               markerSettings: MarkerSettings(
                 isVisible: true, // Menampilkan marker
                 shape: DataMarkerType.circle, // Bentuk marker
@@ -116,7 +107,7 @@ class _GradingPageState extends State<GradingPage> {
               xValueMapper: (FishWeightData fishWeightData, _) =>
                   fishWeightData.getDate(),
               yValueMapper: (FishWeightData fishWeightData, _) =>
-              fishWeightData.totalWeightFish,
+                  fishWeightData.totalWeightFish,
               markerSettings: MarkerSettings(
                 isVisible: true, // Menampilkan marker
                 shape: DataMarkerType.circle, // Bentuk marker
@@ -132,7 +123,7 @@ class _GradingPageState extends State<GradingPage> {
               xValueMapper: (FishFeedHistory fishFeedHistory, _) =>
                   fishFeedHistory.getDate(),
               yValueMapper: (FishFeedHistory fishFeedHistory, _) =>
-              fishFeedHistory.totalFeedDose,
+                  fishFeedHistory.totalFeedDose,
               markerSettings: MarkerSettings(
                 isVisible: true, // Menampilkan marker
                 shape: DataMarkerType.circle, // Bentuk marker
@@ -373,15 +364,15 @@ class _GradingPageState extends State<GradingPage> {
             children: controller.list_fishGrading
                 .map(
                   (fishGrading) => GradingCard(
-                fishList: fishGrading.fishList,
-                date: fishGrading.getDate(),
-                type: fishGrading.type,
-                sampleAmount: fishGrading.sampleAmount.toString(),
-                sampleWeight: fishGrading.sampleWeight!.toStringAsFixed(2),
-                sampleLength: fishGrading.sampleLength!.toStringAsFixed(2),
-                fcr: fishGrading.fcr!.toStringAsFixed(2),
-              ),
-            )
+                    fishList: fishGrading.fishList,
+                    date: fishGrading.getDate(),
+                    type: fishGrading.type,
+                    sampleAmount: fishGrading.sampleAmount.toString(),
+                    sampleWeight: fishGrading.sampleWeight!.toStringAsFixed(2),
+                    sampleLength: fishGrading.sampleLength!.toStringAsFixed(2),
+                    fcr: fishGrading.fcr!.toStringAsFixed(2),
+                  ),
+                )
                 .toList(),
           ));
     }

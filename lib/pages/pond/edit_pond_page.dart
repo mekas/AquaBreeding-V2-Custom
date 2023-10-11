@@ -67,15 +67,15 @@ class _EditPondPageState extends State<EditPondPage> {
                   controller: controller.aliasController,
                   decoration: controller.validateAlias.value == true
                       ? controller.alias == ''
-                      ? InputDecoration(
-                      errorText: 'tinggi tidak boleh kosong',
-                      isCollapsed: true)
+                          ? InputDecoration(
+                              errorText: 'tinggi tidak boleh kosong',
+                              isCollapsed: true)
+                          : InputDecoration.collapsed(
+                              hintText: 'ex: Flamboyan',
+                              hintStyle: subtitleTextStyle)
                       : InputDecoration.collapsed(
-                      hintText: 'ex: Flamboyan',
-                      hintStyle: subtitleTextStyle)
-                      : InputDecoration.collapsed(
-                      hintText: 'ex: Flamboyan',
-                      hintStyle: subtitleTextStyle),
+                          hintText: 'ex: Flamboyan',
+                          hintStyle: subtitleTextStyle),
                 );
               })),
             ),
@@ -154,22 +154,22 @@ class _EditPondPageState extends State<EditPondPage> {
               ),
               child: Center(
                 child: Obx(() => DropdownButtonFormField<String>(
-                  onChanged: (newValue) =>
-                      controller.materialController.setSelected(newValue!),
-                  value: controller.materialController.selected.value,
-                  items: controller.materialController.listMaterial
-                      .map((material) {
-                    return DropdownMenuItem<String>(
-                      value: material,
-                      child: Text(
-                        material,
-                        style: primaryTextStyle,
-                      ),
-                    );
-                  }).toList(),
-                  dropdownColor: backgroundColor5,
-                  decoration: InputDecoration(border: InputBorder.none),
-                )),
+                      onChanged: (newValue) =>
+                          controller.materialController.setSelected(newValue!),
+                      value: controller.materialController.selected.value,
+                      items: controller.materialController.listMaterial
+                          .map((material) {
+                        return DropdownMenuItem<String>(
+                          value: material,
+                          child: Text(
+                            material,
+                            style: primaryTextStyle,
+                          ),
+                        );
+                      }).toList(),
+                      dropdownColor: backgroundColor5,
+                      decoration: InputDecoration(border: InputBorder.none),
+                    )),
               ),
             ),
           ],
@@ -205,24 +205,24 @@ class _EditPondPageState extends State<EditPondPage> {
               ),
               child: Center(
                 child: Obx(() => DropdownButtonFormField<String>(
-                  onChanged: (newValue) {
-                    return controller.shapeController
-                        .setSelected(newValue!);
-                  },
-                  value: controller.shapeController.selected.value,
-                  items:
-                  controller.shapeController.listMaterial.map((shape) {
-                    return DropdownMenuItem<String>(
-                      value: shape,
-                      child: Text(
-                        shape,
-                        style: primaryTextStyle,
-                      ),
-                    );
-                  }).toList(),
-                  dropdownColor: backgroundColor5,
-                  decoration: InputDecoration(border: InputBorder.none),
-                )),
+                      onChanged: (newValue) {
+                        return controller.shapeController
+                            .setSelected(newValue!);
+                      },
+                      value: controller.shapeController.selected.value,
+                      items:
+                          controller.shapeController.listMaterial.map((shape) {
+                        return DropdownMenuItem<String>(
+                          value: shape,
+                          child: Text(
+                            shape,
+                            style: primaryTextStyle,
+                          ),
+                        );
+                      }).toList(),
+                      dropdownColor: backgroundColor5,
+                      decoration: InputDecoration(border: InputBorder.none),
+                    )),
               ),
             ),
           ],
@@ -268,13 +268,13 @@ class _EditPondPageState extends State<EditPondPage> {
                   controller: controller.heightController,
                   decoration: controller.validateHeight.value == true
                       ? controller.height == ''
-                      ? InputDecoration(
-                      errorText: 'tinggi tidak boleh kosong',
-                      isCollapsed: true)
+                          ? InputDecoration(
+                              errorText: 'tinggi tidak boleh kosong',
+                              isCollapsed: true)
+                          : InputDecoration.collapsed(
+                              hintText: 'ex: 2.1', hintStyle: subtitleTextStyle)
                       : InputDecoration.collapsed(
-                      hintText: 'ex: 2.1', hintStyle: subtitleTextStyle)
-                      : InputDecoration.collapsed(
-                      hintText: 'ex: 2.1', hintStyle: subtitleTextStyle),
+                          hintText: 'ex: 2.1', hintStyle: subtitleTextStyle),
                 );
               })),
             ),
@@ -321,13 +321,13 @@ class _EditPondPageState extends State<EditPondPage> {
                   controller: controller.lengthController,
                   decoration: controller.validatelenght.value == true
                       ? controller.lenght == ''
-                      ? InputDecoration(
-                      errorText: 'Panjang tidak boleh kosong',
-                      isCollapsed: true)
+                          ? InputDecoration(
+                              errorText: 'Panjang tidak boleh kosong',
+                              isCollapsed: true)
+                          : InputDecoration.collapsed(
+                              hintText: 'ex: 1.1', hintStyle: subtitleTextStyle)
                       : InputDecoration.collapsed(
-                      hintText: 'ex: 1.1', hintStyle: subtitleTextStyle)
-                      : InputDecoration.collapsed(
-                      hintText: 'ex: 1.1', hintStyle: subtitleTextStyle),
+                          hintText: 'ex: 1.1', hintStyle: subtitleTextStyle),
                 );
               })),
             ),
@@ -374,13 +374,13 @@ class _EditPondPageState extends State<EditPondPage> {
                   controller: controller.widthController,
                   decoration: controller.validateWidth.value == true
                       ? controller.width == ''
-                      ? InputDecoration(
-                      errorText: 'lebar tidak boleh kosong',
-                      isCollapsed: true)
+                          ? InputDecoration(
+                              errorText: 'lebar tidak boleh kosong',
+                              isCollapsed: true)
+                          : InputDecoration.collapsed(
+                              hintText: 'ex: 1.1', hintStyle: subtitleTextStyle)
                       : InputDecoration.collapsed(
-                      hintText: 'ex: 1.1', hintStyle: subtitleTextStyle)
-                      : InputDecoration.collapsed(
-                      hintText: 'ex: 1.1', hintStyle: subtitleTextStyle),
+                          hintText: 'ex: 1.1', hintStyle: subtitleTextStyle),
                 );
               })),
             ),
@@ -427,13 +427,13 @@ class _EditPondPageState extends State<EditPondPage> {
                   controller: controller.diameterController,
                   decoration: controller.validatediameter.value == true
                       ? controller.diameter == ''
-                      ? InputDecoration(
-                      errorText: 'diameter tidak boleh kosong',
-                      isCollapsed: true)
+                          ? InputDecoration(
+                              errorText: 'diameter tidak boleh kosong',
+                              isCollapsed: true)
+                          : InputDecoration.collapsed(
+                              hintText: 'ex: 2.1', hintStyle: subtitleTextStyle)
                       : InputDecoration.collapsed(
-                      hintText: 'ex: 2.1', hintStyle: subtitleTextStyle)
-                      : InputDecoration.collapsed(
-                      hintText: 'ex: 2.1', hintStyle: subtitleTextStyle),
+                          hintText: 'ex: 2.1', hintStyle: subtitleTextStyle),
                 );
               })),
             ),
@@ -488,17 +488,17 @@ class _EditPondPageState extends State<EditPondPage> {
     Widget persegiInput() {
       return Container(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [widthInput(), lengthInput()],
-          ));
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [widthInput(), lengthInput()],
+      ));
     }
 
     Widget bundarInput() {
       return Container(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [diameterInput()],
-          ));
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [diameterInput()],
+      ));
     }
 
     return Obx(() {

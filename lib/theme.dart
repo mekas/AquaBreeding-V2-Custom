@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart' as fonts;
+import 'package:google_fonts/google_fonts.dart';
 
 double defaultMargin = 18.0;
 double defaultSpace = 20.0;
@@ -19,43 +19,38 @@ Color secondaryTextColor = const Color(0xff999999);
 Color subtitleColor = const Color(0xff504F5E);
 Color transparentColor = Colors.transparent;
 Color blackColor = const Color(0xff2E2E2E);
-Color inputColor = const Color(0xff2F2C40);
-Color addButtonColor = const Color(0xff1B7C1A);
-Color greyBackgroundColor = const Color(0xff3C3F4D);
 
-TextStyle primaryTextStyle = fonts.GoogleFonts.poppins(
+TextStyle primaryTextStyle = GoogleFonts.poppins(
   color: primaryTextColor,
 );
 
-TextStyle secondaryTextStyle = fonts.GoogleFonts.poppins(
+TextStyle secondaryTextStyle = GoogleFonts.poppins(
   color: secondaryTextColor,
 );
 
-TextStyle subtitleTextStyle = fonts.GoogleFonts.poppins(
-  color: subtitleColor,
-);
+TextStyle subtitleTextStyle = GoogleFonts.poppins(color: subtitleColor);
 
-TextStyle priceTextStyle = fonts.GoogleFonts.poppins(
+TextStyle priceTextStyle = GoogleFonts.poppins(
   color: priceColor,
 );
 
-TextStyle purpleTextStyle = fonts.GoogleFonts.poppins(
+TextStyle purpleTextStyle = GoogleFonts.poppins(
   color: primaryColor,
 );
 
-TextStyle blackTextStyle = fonts.GoogleFonts.poppins(
+TextStyle blackTextStyle = GoogleFonts.poppins(
   color: blackColor,
 );
 
-TextStyle alertTextStyle = fonts.GoogleFonts.poppins(
+TextStyle alertTextStyle = GoogleFonts.poppins(
   color: alertColor,
 );
 
-TextStyle blueTextStyle = fonts.GoogleFonts.poppins(
+TextStyle blueTextStyle = GoogleFonts.poppins(
   color: secondaryColor,
 );
 
-TextStyle whiteTextStyle = fonts.GoogleFonts.poppins(
+TextStyle whiteTextStyle = GoogleFonts.poppins(
   color: Colors.white,
 );
 
@@ -65,42 +60,3 @@ FontWeight medium = FontWeight.w500;
 FontWeight semiBold = FontWeight.w600;
 FontWeight bold = FontWeight.w700;
 FontWeight heavy = FontWeight.w900;
-
-const double padding3XS = 1;
-const double padding2XS = 2;
-const double paddingXS = 4;
-const double paddingS = 6;
-const double paddingM = 8;
-const double paddingL = 12;
-const double paddingXL = 18;
-const double padding2XL = 24;
-const double padding3XL = 28;
-const double padding4XL = 32;
-const double padding5XL = 36;
-const double padding6XL = 64;
-const double padding7XL = 72;
-const double padding8XL = 92;
-
-TextStyle headingText1 = const TextStyle(
-  fontSize: 24,
-  color: Colors.white,
-  fontWeight: FontWeight.bold,
-);
-
-TextStyle headingText2 = const TextStyle(
-  fontSize: 16,
-  color: Colors.white,
-  fontWeight: FontWeight.bold,
-);
-
-TextStyle headingText3 = const TextStyle(
-  fontSize: 14,
-  color: Colors.white,
-  fontWeight: FontWeight.bold,
-);
-
-TextStyle hoverText = TextStyle(
-  fontSize: 14,
-  color: Colors.grey.shade500,
-  fontWeight: FontWeight.bold,
-);

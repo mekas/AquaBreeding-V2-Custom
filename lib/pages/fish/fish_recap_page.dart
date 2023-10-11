@@ -1,6 +1,5 @@
 import 'package:fish/pages/component/death_card.dart';
 import 'package:fish/pages/fish/fish_recap_controller.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/pages/fish/fish_death_entry_page.dart';
 import 'package:fish/theme.dart';
@@ -8,21 +7,12 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../models/fish_live_model.dart';
-import '../../widgets/new_Menu_widget.dart';
 
-class FishRecapPage extends StatefulWidget {
+class FishRecapPage extends StatelessWidget {
   const FishRecapPage({Key? key}) : super(key: key);
 
   @override
-  State<FishRecapPage> createState() => _FishRecapPageState();
-}
-
-class _FishRecapPageState extends State<FishRecapPage> {
-  var isMenuTapped = false.obs;
-  @override
   Widget build(BuildContext context) {
-    var scaffoldKey = GlobalKey<ScaffoldState>();
-
     final FishRecapController controller = Get.put(FishRecapController());
 
     Widget chartDeath() {
@@ -274,33 +264,13 @@ class _FishRecapPageState extends State<FishRecapPage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
-          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Rekapitulasi Jumlah Kematian"),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  // scaffoldKey.currentState?.openEndDrawer();
-                  setState(() {
-                    isMenuTapped.value = !isMenuTapped.value;
-                  });
-                },
-                icon: Icon(Icons.card_travel_rounded),
-              )
-            ],
           ),
-          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
-              if (isMenuTapped.value)
-                Column(
-                  children: [
-                    newMenu(),
-                    SizedBox(height: 10,),
-                  ],
-                ),
               chartDeath(),
               fishDataRecap(),
               detail(),

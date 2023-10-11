@@ -1,13 +1,13 @@
+import 'package:fish/controllers/daily_water/daily_water_breed_list_controller.dart';
 import 'package:fish/pages/component/daily_water_card.dart';
 import 'package:fish/controllers/daily_water/daily_water_controller.dart';
 import 'package:fish/pages/dailywater/daily_water_entry_page.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
+import 'package:fish/pages/pond/pond_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 
-import '../../widgets/new_Menu_widget.dart';
 import 'daily_water_avg.dart';
 
 class DailyWaterPage extends StatefulWidget {
@@ -19,7 +19,10 @@ class DailyWaterPage extends StatefulWidget {
 
 class _DailyWaterPageState extends State<DailyWaterPage> {
   final DailyWaterController controller = Get.put(DailyWaterController());
-  var isMenuTapped = false.obs;
+  final PondController pondController = Get.find();
+  final DailyWaterBreedListController dailyWaterBreedListController =
+      Get.find();
+
   @override
   void initState() {
     super.initState();
@@ -41,8 +44,6 @@ class _DailyWaterPageState extends State<DailyWaterPage> {
   @override
   Widget build(BuildContext context) {
     controller.startTime = DateTime.now();
-    var scaffoldKey = GlobalKey<ScaffoldState>();
-
     print('ini build daily water');
     Widget fishDataRecap() {
       return Container(
@@ -53,7 +54,7 @@ class _DailyWaterPageState extends State<DailyWaterPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              "Kolam ${controller.pond.alias!}",
+              "Kolam ${pondController.selectedPond.value.alias!}",
               style: primaryTextStyle.copyWith(
                 fontSize: 18,
                 fontWeight: heavy,
@@ -64,8 +65,9 @@ class _DailyWaterPageState extends State<DailyWaterPage> {
             TextButton(
               onPressed: () {
                 Get.to(() => DailyWaterAvgPage(), arguments: {
-                  "pond": controller.pond,
-                  "activation": controller.activation
+                  "pond": pondController.selectedPond.value,
+                  "activation":
+                      dailyWaterBreedListController.selectedActivation.value
                 });
               },
               style: TextButton.styleFrom(
@@ -94,10 +96,11 @@ class _DailyWaterPageState extends State<DailyWaterPage> {
           child: Column(
             children: controller.listDailyWater
                 .map(
-                  (dailyWaterList) => DailyWaterCard(
-                      dailyWaterList: dailyWaterList,
-                      activation: controller.activation,
-                      pond: controller.pond),
+                  (dailyWater) => DailyWaterCard(
+                      dailyWater: dailyWater,
+                      activation: dailyWaterBreedListController
+                          .selectedActivation.value,
+                      pond: pondController.selectedPond.value),
                 )
                 .toList(),
           ));
@@ -151,8 +154,9 @@ class _DailyWaterPageState extends State<DailyWaterPage> {
         child: TextButton(
           onPressed: () {
             Get.to(() => DailyWaterAvgPage(), arguments: {
-              "pond": controller.pond,
-              "activation": controller.activation
+              "pond": pondController.selectedPond.value,
+              "activation":
+                  dailyWaterBreedListController.selectedActivation.value
             });
             controller.postDataLog(controller.fitur);
           },
@@ -176,43 +180,21 @@ class _DailyWaterPageState extends State<DailyWaterPage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
-          key: scaffoldKey,
-          appBar: AppBar(
-            backgroundColor: backgroundColor1,
-            actions: [
-              IconButton(
-                onPressed: () {
-                  // scaffoldKey.currentState?.openEndDrawer();
-                  setState(() {
-                    isMenuTapped.value = !isMenuTapped.value;
-                  });
-                },
-                icon: Icon(Icons.card_travel_rounded),
-              )
-            ],
-          ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               Get.to(() => DailyWaterEntryPage(), arguments: {
-                "pond": controller.pond,
-                "activation": controller.activation
+                "pond": pondController.selectedPond.value,
+                "activation":
+                    dailyWaterBreedListController.selectedActivation.value
               });
               controller.postDataLog(controller.fitur);
             },
             backgroundColor: primaryColor,
             child: const Icon(Icons.add),
           ),
-          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
-              if (isMenuTapped.value)
-                Column(
-                  children: [
-                    newMenu(),
-                    SizedBox(height: 10,),
-                  ],
-                ),
               fishDataRecap(),
               // submitButton(),
               controller.listDailyWater.isEmpty

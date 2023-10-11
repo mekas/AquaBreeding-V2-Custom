@@ -1,15 +1,11 @@
-// ignore_for_file: non_constant_identifier_names
-
 import 'dart:convert';
-import 'dart:developer';
-import 'package:fish/models/feed_history_detail.dart';
-import 'package:fish/models/feed_history_hourly.dart';
-import 'package:fish/models/feed_history_monthly.dart';
-import 'package:fish/models/feed_history_weekly.dart';
+import 'package:fish/models/FeedHistoryDaily.dart';
+import 'package:fish/models/FeedHistoryHourly.dart';
+import 'package:fish/models/FeedHistoryMonthly.dart';
+import 'package:fish/models/FeedHistoryWeekly.dart';
 import 'package:fish/models/feed_chart_model.dart';
 import 'package:fish/service/url_api.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class FeedHistoryService {
   Future<List<FeedChartData>> getChart({required String activation_id}) async {
@@ -112,45 +108,60 @@ class FeedHistoryService {
 
   Future<bool> postFeedHistory({
     required String? pondId,
-    required String? fishFeedId,
+    required String? feedTypeId,
     required String? feedDose,
-    required String? date,
-    required Function() doAfter,
   }) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('token').toString();
-    print("post url ${ Uri.parse(Urls.feedhistorys)}");
+    print({
+      "pond_id": pondId,
+      "feed_type_id": feedTypeId,
+      "feed_dose": feedDose,
+    });
     final response = await http.post(
       Uri.parse(Urls.feedhistorys),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
-        'Authorization': 'Bearer $token'
       },
       encoding: Encoding.getByName('utf-8'),
       body: {
         "pond_id": pondId,
-        "fish_feed_id": fishFeedId,
+        "feed_type_id": feedTypeId,
         "feed_dose": feedDose,
-        "created_at": date,
       },
     );
 
     if (response.statusCode == 200) {
-
-      print({
-          "pond_id": pondId,
-          "fish_feed_id": fishFeedId,
-          "feed_dose": feedDose,
-          "created_at": date,
-      });
-      inspect(response.body);
-      doAfter();
-
+      print(response.body);
       return true;
     } else {
-      inspect(response.body);
-      doAfter();
+      print(response.body);
+      return false;
+    }
+  }
 
+  Future<bool> putFeedHistory({
+    required String? feedHistoryId,
+    required String? feedDose,
+  }) async {
+    print({
+      "feedHistorId": feedHistoryId,
+      "feed_dose": feedDose,
+    });
+    final response = await http.put(
+      Uri.parse(Urls.feedhistorybyid(feedHistoryId)),
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      encoding: Encoding.getByName('utf-8'),
+      body: {
+        "feed_dose": feedDose,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      return true;
+    } else {
+      print(response.body);
       return false;
     }
   }

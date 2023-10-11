@@ -1,10 +1,7 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:fish/models/pond_model.dart';
-import 'package:fish/pages/fish/fish_recap_controller.dart';
 import 'package:fish/pages/fish/fish_type_controller.dart';
-import 'package:fish/service/activation_service.dart';
 import 'package:fish/service/fish_death_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,57 +10,48 @@ import '../../models/activation_model.dart';
 import '../../service/logging_service.dart';
 
 class FishDeathEntryController extends GetxController {
-  final ActivationService service = ActivationService();
-
   TextEditingController formDeathController = TextEditingController(text: '');
-  TextEditingController diagnosa =
-      TextEditingController(text: 'mati karena sakit');
-  // FishTypeController fishTypeController = FishTypeController();
+  FishTypeController fishTypeController = FishTypeController();
   Activation activation = Get.arguments["activation"];
   Pond pond = Get.arguments["pond"];
-  var listFishAlive = [];
-
-  final FishRecapController fishRecapController =
-      Get.put(FishRecapController());
-
-  RxMap<String, dynamic> selectedFish = <String, dynamic>{}.obs;
-
   final fishamount = ''.obs;
   final validatefishamount = false.obs;
   var isLoading = false.obs;
-
-  Future getPondActivation() async {
+  RxList<String> listFishAlive = List<String>.empty().obs;
+  Future<void> getFish() async {
     isLoading.value = true;
-
-    try {
-      var result = await service.getActivations(pondId: pond.id.toString());
-
-      activation = result[0];
-    } catch (e) {
-      //
-    }
-    isLoading.value = false;
-  }
-
-  Future<void> getFish(Function() doAfter) async {
-    isLoading.value = true;
+    listFishAlive.add("pilih ikan");
     for (var i in activation.fishLive!) {
-      listFishAlive.add({
-        'id': i.fishId,
-        'type': i.type!,
-        'category': i.fishCategory,
-      });
+      listFishAlive.add(i.type!);
+      print(listFishAlive);
     }
-
-    doAfter();
     isLoading.value = false;
   }
 
   @override
   void onInit() {
     super.onInit();
-    getFish(() {});
-    selectedFish.value = listFishAlive[0];
+    getFish();
+  }
+
+  Map<String, dynamic> validationInput() {
+    Map<String, dynamic> result = {
+      'isValid': false,
+      'message': '',
+    };
+    if (fishTypeController.selected == 'pilih ikan') {
+      result['isValid'] = false;
+      result['message'] = "Pilih jenis ikan";
+      return result;
+    }
+    if (formDeathController.text.isEmpty || formDeathController.text == 0) {
+      result['isValid'] = false;
+      result['message'] = "Isi jumlah sample dengan angka > 0";
+      return result;
+    }
+    result['isValid'] = true;
+    result['message'] = "Isian sudah benar";
+    return result;
   }
 
   void fishamountChanged(String val) {
@@ -77,9 +65,7 @@ class FishDeathEntryController extends GetxController {
   List buildJson() {
     var list = [];
     var data = {
-      "fish_seed_id": selectedFish.value['id'],
-      "fish_category": selectedFish.value['category'],
-      "type": selectedFish.value['type'],
+      "type": fishTypeController.selected.value,
       "amount": formDeathController.value.text,
     };
     list.add(jsonEncode(data));
@@ -90,12 +76,10 @@ class FishDeathEntryController extends GetxController {
     bool value = await FishDeathService().postFishDeath(
       pondId: pond.id,
       fish: buildJson(),
-      diagnosis: diagnosa.text,
     );
 
-    await getPondActivation();
-
     doInPost();
+    Navigator.pop(context);
 
     print(value);
   }

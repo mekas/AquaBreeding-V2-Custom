@@ -1,21 +1,20 @@
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/grading/fish_type_controller.dart';
+import 'package:fish/pages/pond/detail_pond_controller.dart';
 import 'package:fish/service/fish_grading_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 import '../../models/activation_model.dart';
 import '../../service/logging_service.dart';
-import '../pond/detail_pond_controller.dart';
 
 class GradingEntryController extends GetxController {
   FishTypeController fishTypeController = FishTypeController();
   TextEditingController sampleAmountController =
-  TextEditingController(text: '0');
+      TextEditingController(text: '0');
   TextEditingController fishWeightController = TextEditingController(text: '0');
   TextEditingController fishLengthAvgController =
-  TextEditingController(text: '0');
+      TextEditingController(text: '0');
   TextEditingController normalsizeController = TextEditingController(text: '0');
   TextEditingController undersizeController = TextEditingController(text: '0');
   TextEditingController oversizeController = TextEditingController(text: '0');
@@ -25,19 +24,6 @@ class GradingEntryController extends GetxController {
   RxList<String> listFishAlive = List<String>.empty().obs;
   DetailPondController detailPondController = Get.find();
   final persentageSample = 0.0.obs;
-
-  RxBool checkUsedDate = false.obs;
-  RxString selectedUsedDate = ''.obs;
-  TextEditingController showedUsedDate = TextEditingController(text: '');
-
-  String dateFormat(String dateString, bool includeHour) {
-    DateTime dateTime = DateTime.parse(dateString);
-    var formatter = includeHour
-        ? DateFormat('EEEE, d MMMM y | HH:mm', 'id')
-        : DateFormat('EEEE, d MMMM y', 'id');
-    var formattedDate = formatter.format(dateTime);
-    return formattedDate.split('|').join('| Jam');
-  }
 
   Future<void> getFish() async {
     isLoading.value = true;
@@ -146,8 +132,6 @@ class GradingEntryController extends GetxController {
   }
 
   Future<void> postFishGrading() async {
-    DateTime now = DateTime.now();
-    String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(now);
     double avgWeigt = double.parse(sampleAmountController.text) /
         double.parse(fishWeightController.text);
     bool value = await FishGradingService().postFishGrading(
@@ -156,7 +140,6 @@ class GradingEntryController extends GetxController {
       sampleAmount: sampleAmountController.text,
       sampleWeight: fishWeightController.text,
       sampleLength: fishLengthAvgController.text,
-      grading_at : selectedUsedDate.value != "" && selectedUsedDate.value != null ? selectedUsedDate.value : '$formattedDate +0000'
     );
   }
 
@@ -167,7 +150,7 @@ class GradingEntryController extends GetxController {
   Future<void> postDataLog(String fitur) async {
     // print(buildJsonFish());
     bool value =
-    await LoggingService().postLogging(startAt: startTime, fitur: fitur);
+        await LoggingService().postLogging(startAt: startTime, fitur: fitur);
 
     print(value);
   }

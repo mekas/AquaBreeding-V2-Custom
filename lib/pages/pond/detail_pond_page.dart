@@ -1,71 +1,56 @@
 import 'dart:developer';
 
-import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_state.dart';
-import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_state.dart';
-
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/component/activation_card.dart';
+import 'package:fish/pages/dailywater/daily_water_entry_page.dart';
+import 'package:fish/pages/feeding/feed_entry_page.dart';
+import 'package:fish/pages/fish/fish_death_entry_page.dart';
 import 'package:fish/pages/pond/activation_breed_controller.dart';
 import 'package:fish/pages/pond/activation_breed_page.dart';
+import 'package:fish/pages/pond/edit_pond_page.dart';
 import 'package:fish/pages/pond/pond_controller.dart';
 import 'package:fish/pages/pond/add_pond_page.dart';
 import 'package:fish/pages/pond/deactivation_breed_page.dart';
 import 'package:fish/pages/pond/detail_pond_controller.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
-import 'package:fish/widgets/new_Menu_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 
 import '../fish_transfer/fish_transfer_entry_page.dart';
-import 'deactivation_breed_controller.dart';
-import 'edit_pond_page.dart';
 
 class DetailPondPage extends StatefulWidget {
-  bool isMenuTapped;
- DetailPondPage({
-    Key? key,
-    required this.isMenuTapped,
-  }) : super(key: key);
+  const DetailPondPage({Key? key}) : super(key: key);
 
   @override
   State<DetailPondPage> createState() => _DetailPondPageState();
 }
 
 class _DetailPondPageState extends State<DetailPondPage> {
-  final detailController = Get.put(DetailPondController());
-  final activationController = Get.put(ActivationBreedController());
-  // final feedEntryController = Get.put(FeedEntryController());
-  // final DeactivationBreedController panenController =
-  // Get.put(DeactivationBreedController());
-
-  final pondController = Get.put(PondController());
-  final InventarisPakanState pakanState = Get.put(InventarisPakanState());
-  final InventarisBahanBudidayaState supState =
-      Get.put(InventarisBahanBudidayaState());
+  final DetailPondController detailController = Get.put(DetailPondController());
+  final PondController pondController = Get.find();
 
   @override
   void initState() {
+    // detailController.getPondActivation(context);
+    detailController.updateListAndSelectedActivation();
     super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-    //   await controller.getPondActivations(
-    //       pondId: controller.pond.id.toString());
-    // });
-    detailController.getPondActivation();
+  }
 
-    activationController.pondName.value =
-        'kolam ${detailController.pondController.selectedPond.value.alias}';
-    pakanState.pondName.value =
-        'kolam ${detailController.pondController.selectedPond.value.alias}';
-    supState.pondName.value =
-        'kolam ${detailController.pondController.selectedPond.value.alias}';
-    // panenController.pondName.value = 'kolam ${detailController.pondController.selectedPond.value.alias}';
+  @override
+  void activate() {
+    print('ini aktif');
+    super.activate();
+  }
+
+  @override
+  void deactivate() {
+    print('ini deaktif');
+    super.deactivate();
   }
 
   @override
   Widget build(BuildContext context) {
-    var scaffoldKey = GlobalKey<ScaffoldState>();
-
     Widget pondStatus() {
       return Container(
         margin: EdgeInsets.only(
@@ -101,9 +86,10 @@ class _DetailPondPageState extends State<DetailPondPage> {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
-                    SizedBox(height: 16,),
-
                   ],
+                ),
+                SizedBox(
+                  width: 16,
                 ),
                 IconButton(
                     color: Colors.white,
@@ -111,20 +97,20 @@ class _DetailPondPageState extends State<DetailPondPage> {
                     onPressed: () {
                       Get.to(() => const EditPondPage());
                     },
-                    icon: const Icon(Icons.edit_outlined)),
+                    icon: const Icon(Icons.edit_outlined))
               ],
             ),
-
             Container(
               width: 120,
               height: 40,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 // border: Border.all(color: detailController.pondController.selectedPond.getColor()),
-
-                color: detailController.isPondActive.value
-                    ? Colors.green
-                    : Colors.red.shade300,
+                border: Border.all(
+                    color: detailController.isPondActive.value
+                        ? Colors.green
+                        : Colors.red.shade300),
+                color: transparentColor,
               ),
               child: Center(
                 child: Text(
@@ -150,11 +136,7 @@ class _DetailPondPageState extends State<DetailPondPage> {
         height: 50,
         width: double.infinity,
         margin: EdgeInsets.only(
-          top: defaultSpace,
-          right: defaultMargin,
-          left: defaultMargin,
-          bottom: 12,
-        ),
+            top: defaultSpace, right: defaultMargin, left: defaultMargin),
         child: TextButton(
           onPressed: () {
             Get.to(() => ActivationBreedPage(), arguments: {
@@ -172,7 +154,7 @@ class _DetailPondPageState extends State<DetailPondPage> {
             'Start Budidaya',
             style: primaryTextStyle.copyWith(
               fontSize: 16,
-              fontWeight: bold,
+              fontWeight: medium,
             ),
           ),
         ),
@@ -184,14 +166,9 @@ class _DetailPondPageState extends State<DetailPondPage> {
         height: 50,
         width: double.infinity,
         margin: EdgeInsets.only(
-          top: defaultSpace,
-          right: defaultMargin,
-          left: defaultMargin,
-          bottom: 12,
-        ),
+            top: defaultSpace, right: defaultMargin, left: defaultMargin),
         child: TextButton(
           onPressed: () {
-            // detailController.getPondActivation();
             Get.defaultDialog(
                 title: 'Konfirmasi Panen!',
                 middleText: 'Apakah anda yakin ingin melakukan panen?',
@@ -201,14 +178,11 @@ class _DetailPondPageState extends State<DetailPondPage> {
                 textConfirm: 'Panen',
                 textCancel: 'Tidak',
                 onConfirm: (() {
-                  Navigator.pop(context);
+                  Get.back();
                   Get.to(() => DeactivationBreedPage(), arguments: {
                     "pond": detailController.pondController.selectedPond.value,
-                    "activation": detailController.activations[0],
                   });
-
                 }));
-
           },
           style: TextButton.styleFrom(
             backgroundColor: Colors.amber,
@@ -221,7 +195,6 @@ class _DetailPondPageState extends State<DetailPondPage> {
             style: blackTextStyle.copyWith(
               fontSize: 16,
               fontWeight: medium,
-              color: Colors.white,
             ),
           ),
         ),
@@ -278,6 +251,33 @@ class _DetailPondPageState extends State<DetailPondPage> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "Volume Air",
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: medium,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                Text(
+                  detailController.pondController.selectedPond.value.isActive ==
+                          true
+                      ? detailController
+                              .pondController.selectedPond.value.waterVolume!
+                              .toStringAsFixed(2) +
+                          " Liter"
+                      : "-",
+                  style: secondaryTextStyle.copyWith(
+                    fontSize: 13,
+                    fontWeight: medium,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
               ],
             ),
             Column(
@@ -325,6 +325,186 @@ class _DetailPondPageState extends State<DetailPondPage> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  detailController.pondController.selectedPond.value.isActive ==
+                          true
+                      ? "Ph " +
+                          detailController
+                              .pondController.selectedPond.value.pondPh!
+                              .toStringAsFixed(1)
+                      : "pH -",
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: medium,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                Text(
+                  detailController.pondController.selectedPond.value.isActive ==
+                          true
+                      ? "Do " +
+                          detailController
+                              .pondController.selectedPond.value.pondDo!
+                              .toStringAsFixed(1)
+                      : "Do -",
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: medium,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget fcr() {
+      return Container(
+        width: double.infinity,
+        margin: EdgeInsets.only(
+          top: defaultMargin,
+          left: defaultMargin,
+          right: defaultMargin,
+        ),
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: primaryColor),
+          color: transparentColor,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  'update terakhir: ',
+                  style: secondaryTextStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: medium,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                SizedBox(width: 10),
+                Text(
+                  detailController.selectedActivation.value
+                      .getStringFcrUpdate(),
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: medium,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ],
+            ),
+            Divider(color: Colors.white),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "FCR",
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 18,
+                    fontWeight: light,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                SizedBox(width: 10),
+                Text(
+                  detailController.selectedActivation.value.fcr!
+                      .toStringAsFixed(2),
+                  style: purpleTextStyle.copyWith(
+                    fontSize: 18,
+                    fontWeight: heavy,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget feedhistory() {
+      return Container(
+        width: double.infinity,
+        margin: EdgeInsets.only(
+          top: defaultMargin,
+          left: defaultMargin,
+          right: defaultMargin,
+        ),
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: primaryColor),
+          color: transparentColor,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  'tanggal: ',
+                  style: secondaryTextStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: medium,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                SizedBox(width: 10),
+                Text(
+                  detailController.selectedActivation.value
+                      .getStringLastFeedDose(),
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: medium,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ],
+            ),
+            Divider(color: Colors.white),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "Total Pakan",
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 18,
+                    fontWeight: light,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                SizedBox(width: 10),
+                Text(
+                  detailController.selectedActivation.value.lastFeedDose
+                          .toString() +
+                      ' Kg',
+                  style: purpleTextStyle.copyWith(
+                    fontSize: 18,
+                    fontWeight: heavy,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
               ],
             ),
           ],
@@ -335,8 +515,8 @@ class _DetailPondPageState extends State<DetailPondPage> {
     Widget activationTitle() {
       return Container(
         width: double.infinity,
-        margin:
-            EdgeInsets.only(right: defaultMargin, left: defaultMargin, top: 12),
+        margin: EdgeInsets.only(
+            top: defaultSpace * 2, right: defaultMargin, left: defaultMargin),
         child: Text(
           "List Musim Budidaya",
           style: primaryTextStyle.copyWith(
@@ -414,36 +594,121 @@ class _DetailPondPageState extends State<DetailPondPage> {
               )
             : ListView(
                 children: [
-                  if (widget.isMenuTapped)
-                    Column(
-                      children: [
-                        newMenu(),
-                        SizedBox(height: 10,),
-                      ],
-                    ),
                   pondStatus(),
-                  detail(),
                   detailController.isPondActive.value == false
                       ? activationButton()
                       : deactivationButton(),
-                  Divider(
-                    color: Colors.white24,
-                    height: 30,
-                    thickness: 2,
-                  ),
+                  detail(),
+                  // fcr(),
+                  // feedhistory(),
                   activationTitle(),
                   detailController.activations.isEmpty
                       ? emptyListActivation()
                       : listActivation(),
-                  // detailController.activations.isEmpty
-                  //     ? listActivation()
-                  //     : emptyListActivation(),
                   SizedBox(
-                    height: 10,
+                    height: 60,
                   )
                 ],
               ),
       ),
+      floatingActionButton: pondController.selectedPond.value.isActive == false
+          ? null
+          : SpeedDial(
+              icon: Icons.add, //icon on Floating action button
+              activeIcon: Icons.close, //icon when menu is expanded on button
+              backgroundColor:
+                  Colors.deepOrangeAccent, //background color of button
+              foregroundColor: Colors.white, //font color, icon color in button
+              activeBackgroundColor: Colors
+                  .deepPurpleAccent, //background color when menu is expanded
+              activeForegroundColor: Colors.white,
+              visible: true,
+              closeManually: false,
+              curve: Curves.bounceIn,
+              overlayColor: Colors.black,
+              overlayOpacity: 0.5,
+              onOpen: () => print('OPENING DIAL'), // action when menu opens
+              onClose: () => print('DIAL CLOSED'), //action when menu closes
+
+              elevation: 8.0, //shadow elevation of button
+              shape: CircleBorder(), //shape of button
+
+              children: [
+                SpeedDialChild(
+                  //speed dial child
+                  child: Icon(Icons.add),
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                  label: 'Entry Pemberian Pakan',
+                  labelStyle: TextStyle(fontSize: 18.0),
+                  onTap: () {
+                    detailController.updateSelectedActivationToLastActivation();
+                    Get.to(() => FeedEntryPage(), arguments: {
+                      "pond": pondController.selectedPond.value,
+                      "activation": detailController.selectedActivation.value,
+                    });
+                  },
+                ),
+                SpeedDialChild(
+                  child: Icon(Icons.add),
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  label: 'Entry Kematian Ikan',
+                  labelStyle: TextStyle(fontSize: 18.0),
+                  onTap: () {
+                    detailController.updateSelectedActivationToLastActivation();
+                    Get.to(() => FishDeathEntryPage(), arguments: {
+                      "pond": pondController.selectedPond.value,
+                      "activation": detailController.selectedActivation.value,
+                    });
+                  },
+                ),
+                // SpeedDialChild(
+                //   child: Icon(Icons.add),
+                //   foregroundColor: Colors.white,
+                //   backgroundColor: Colors.green,
+                //   label: 'Entry Daily Treatment',
+                //   labelStyle: TextStyle(fontSize: 18.0),
+                //   onTap: () {},
+                //   // onTap: () {
+                //   //   detailController.updateSelectedActivationToLastActivation();
+                //   //   Get.to(() => DailyWaterEntryPage(), arguments: {
+                //   //     "pond": pondController.selectedPond.value,
+                //   //     "activation": detailController.selectedActivation.value,
+                //   //   });
+                //   // },
+                // ),
+                // SpeedDialChild(
+                //   child: Icon(Icons.add),
+                //   foregroundColor: Colors.white,
+                //   backgroundColor: Colors.yellow,
+                //   label: 'Entry Weekly Treatment',
+                //   labelStyle: TextStyle(fontSize: 18.0),
+                //   onTap: () => print('THIRD CHILD'),
+                //   onLongPress: () => print('THIRD CHILD LONG PRESS'),
+                // ),
+                // SpeedDialChild(
+                //   child: Icon(Icons.add),
+                //   foregroundColor: Colors.white,
+                //   backgroundColor: Colors.purple,
+                //   label: 'Entry Grading',
+                //   labelStyle: TextStyle(fontSize: 18.0),
+                //   onTap: () => print('THIRD CHILD'),
+                //   onLongPress: () => print('THIRD CHILD LONG PRESS'),
+                // ),
+                // SpeedDialChild(
+                //   child: Icon(Icons.add),
+                //   foregroundColor: Colors.white,
+                //   backgroundColor: Colors.pink,
+                //   label: 'Entry Sortir',
+                //   labelStyle: TextStyle(fontSize: 18.0),
+                //   onTap: () => print('THIRD CHILD'),
+                //   onLongPress: () => print('THIRD CHILD LONG PRESS'),
+                // ),
+
+                //add more menu item children here
+              ],
+            ),
     );
   }
 }

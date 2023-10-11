@@ -1,5 +1,5 @@
+import 'package:fish/models/FeedHistoryMonthly.dart';
 import 'package:fish/models/activation_model.dart';
-import 'package:fish/models/feed_history_monthly.dart';
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/feeding/detail_feed_monthly_page.dart';
 import 'package:fish/pages/feeding/feed_controller.dart';
@@ -12,7 +12,7 @@ class FeedMonthCard extends StatelessWidget {
   final Activation? activation;
   final Pond? pond;
   final FeedHistoryMonthly? feedHistoryMonthly;
-  final FeedController feedcontrol = Get.put(FeedController());
+  final FeedController feedController = Get.find();
 
   FeedMonthCard({
     Key? key,
@@ -25,12 +25,10 @@ class FeedMonthCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => DetailFeedMonthlyPage(), arguments: {
-          "activation": activation,
-          "pond": pond,
-          "feedHistoryMonthly": feedHistoryMonthly!,
-        });
-        feedcontrol.postDataLog("Feeding");
+        feedController
+            .updateSelectedFeedHistoryMonthly(feedHistoryMonthly!.date);
+        Get.to(() => DetailFeedMonthlyPage());
+        feedController.postDataLog("Feeding");
       },
       child: Container(
         width: double.infinity,

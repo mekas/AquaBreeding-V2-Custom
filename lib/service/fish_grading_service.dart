@@ -1,5 +1,7 @@
 import 'dart:convert';
-import 'package:fish/models/fish_grading_model.dart';
+import 'dart:developer';
+import 'dart:ffi';
+import 'package:fish/models/fishGrading_model.dart';
 import 'package:fish/models/grading_chart_model.dart';
 import 'package:fish/service/url_api.dart';
 import 'package:http/http.dart' as http;
@@ -17,7 +19,7 @@ class FishGradingService {
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       List<FishGrading> fishgradings = FishGrading.fromJsonList(data);
-      print("success get fishgradings");
+      print("success add fishgradings");
       return fishgradings;
     } else {
       throw Exception('Gagal Get fishgradings!');
@@ -48,7 +50,6 @@ class FishGradingService {
     required String? sampleAmount,
     required String? sampleWeight,
     required String? sampleLength,
-    required String? grading_at,
   }) async {
     final response = await http.post(
       Uri.parse(Urls.fishGradings),
@@ -62,17 +63,8 @@ class FishGradingService {
         "sample_amount": sampleAmount,
         "sample_weight": sampleWeight,
         "sample_long": sampleLength,
-        "grading_at": grading_at,
       },
     );
-    print({
-      "pond_id": pondId,
-      "avg_weight": avgWeight,
-      "sample_amount": sampleAmount,
-      "sample_weight": sampleWeight,
-      "sample_long": sampleLength,
-      "grading_at": grading_at,
-    });
     print(response.body);
 
     if (response.statusCode == 200) {

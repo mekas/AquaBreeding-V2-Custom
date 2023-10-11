@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class DetailPondController extends GetxController {
-  final PondController pondController = Get.put(PondController());
+  final PondController pondController = Get.find();
   final ActivationService service = ActivationService();
   final RxList activations = List<Activation>.empty().obs;
   late Rx<Activation> selectedActivation;
@@ -20,8 +20,15 @@ class DetailPondController extends GetxController {
 
   @override
   void onInit() async {
-    // getPondActivation();
     super.onInit();
+  }
+
+  void updateSelectedActivationToLastActivation() {
+    try {
+      selectedActivation.value = activations[0];
+    } catch (e) {
+      selectedActivation = Rx<Activation>(activations[0]);
+    }
   }
 
   void updateSelectedActivation(activationid) {
@@ -34,19 +41,46 @@ class DetailPondController extends GetxController {
     }
   }
 
-  Future<void> getPondActivation() async {
+  Future<void> updateListAndSelectedActivation() async {
+    await getPondActivation2();
+    selectedActivation.value = activations.firstWhere(
+        (activation) => activation.id == selectedActivation.value.id);
+  }
+
+  Future<void> getPondActivation(BuildContext context) async {
     isLoading.value = true;
     activations.clear();
 
     List<Activation> result = await service.getActivations(
         pondId: pondController.selectedPond.value.id.toString());
-    inspect(result);
     activations.addAll(result);
+    inspect(result);
     print('masuk ke actvation');
     // activationData = result[0];
     for (var i in result) {
       // activations.add(i);
-      print("item activation: ${i.fishLive!.first.type}");
+      if (i.isFinish == false) {
+        isPondActive.value = true;
+        print("masuk ini ");
+      }
+    }
+    // inspect(isPondActive.value);
+
+    isLoading.value = false;
+  }
+
+  Future<void> getPondActivation2() async {
+    isLoading.value = true;
+    activations.clear();
+
+    List<Activation> result = await service.getActivations(
+        pondId: pondController.selectedPond.value.id.toString());
+    activations.addAll(result);
+    inspect(result);
+    print('masuk ke actvation');
+    // activationData = result[0];
+    for (var i in result) {
+      // activations.add(i);
       if (i.isFinish == false) {
         isPondActive.value = true;
         print("masuk ini ");

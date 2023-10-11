@@ -1,13 +1,13 @@
-import 'package:fish/models/fish_death_model.dart';
+import 'package:fish/models/fishDeath_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 
 class DeathCard extends StatelessWidget {
-  final FishDeath fishDeath;
+  final FishDeath? fishDeath;
 
   const DeathCard({
     Key? key,
-    required this.fishDeath,
+    this.fishDeath,
   }) : super(key: key);
 
   @override
@@ -26,34 +26,36 @@ class DeathCard extends StatelessWidget {
           color: transparentColor,
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Row(
+              children: [
+                Text(
+                  "Tanggal",
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: bold,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                SizedBox(width: 10),
+                Text(
+                  fishDeath!.getDate(),
+                  style: secondaryTextStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: medium,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ],
+            ),
+            Divider(color: Colors.white),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Tanggal",
-                      style: primaryTextStyle.copyWith(
-                        fontSize: 14,
-                        fontWeight: bold,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                    Text(
-                      fishDeath!.getDate(),
-                      style: secondaryTextStyle.copyWith(
-                        fontSize: 14,
-                        fontWeight: medium,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ],
-                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

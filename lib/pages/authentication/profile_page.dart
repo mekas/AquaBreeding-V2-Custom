@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:fish/controllers/authentication/register_controller.dart';
 import 'package:fish/pages/dashboard.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
@@ -11,23 +10,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../controllers/authentication/profile_controller.dart';
 import 'login_page.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfilePage extends StatelessWidget {
   ProfilePage({Key? key}) : super(key: key);
-
-  @override
-  State<ProfilePage> createState() => _ProfilePageState();
-}
-
-class _ProfilePageState extends State<ProfilePage> {
   @override
   final ProfileController controller = Get.put(ProfileController());
 
-  var isMenuTapped = false.obs;
-
   @override
   Widget build(BuildContext context) {
-    var scaffoldKey = GlobalKey<ScaffoldState>();
-
     Widget logo() {
       return Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -236,23 +225,6 @@ class _ProfilePageState extends State<ProfilePage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
-          key: scaffoldKey,
-          appBar: AppBar(
-            backgroundColor: backgroundColor1,
-            title: Text('Profil'),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  // scaffoldKey.currentState?.openEndDrawer();
-                  setState(() {
-                    isMenuTapped.value = !isMenuTapped.value;
-                  });
-                },
-                icon: Icon(Icons.card_travel_rounded),
-              )
-            ],
-          ),
-          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor2,
           body: ListView(
             children: [
@@ -281,41 +253,5 @@ class _ProfilePageState extends State<ProfilePage> {
         );
       }
     });
-    // return Scaffold(
-    //     appBar: AppBar(
-    //       backgroundColor: backgroundColor2,
-    //       title: const Text("Entry Sortir"),
-    //     ),
-    //     backgroundColor: backgroundColor1,
-    //     body: PageView(
-    //       physics: const NeverScrollableScrollPhysics(),
-    //       controller: pageController,
-    //       children: [
-    //         ListView(
-    //           children: [
-    //             SizedBox(
-    //               height: 10,
-    //             ),
-    //             footer(),
-    //             formInput(),
-    //             SizedBox(
-    //               height: 10,
-    //             ),
-    //           ],
-    //         ),
-    //         ListView(
-    //           children: [
-    //             SizedBox(
-    //               height: 10,
-    //             ),
-    //             footer(),
-    //             formInput(),
-    //             SizedBox(
-    //               height: 10,
-    //             ),
-    //           ],
-    //         ),
-    //       ],
-    //     ));
   }
 }

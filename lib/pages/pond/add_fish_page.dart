@@ -1,6 +1,5 @@
 import 'package:fish/pages/pond/add_fish_controller.dart';
 import 'package:fish/theme.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -8,21 +7,11 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 
-import '../../widgets/new_Menu_widget.dart';
-
-class AddFish extends StatefulWidget {
+class AddFish extends StatelessWidget {
   const AddFish({Key? key}) : super(key: key);
 
   @override
-  State<AddFish> createState() => _AddFishState();
-}
-
-class _AddFishState extends State<AddFish> {
-  var isMenuTapped = false.obs;
-  @override
   Widget build(BuildContext context) {
-    var scaffoldKey = GlobalKey<ScaffoldState>();
-
     final controller = Get.put(AddFishController());
     Widget checkBoxFish() {
       return Container(
@@ -574,7 +563,7 @@ class _AddFishState extends State<AddFish> {
               context,
               () {},
             );
-            await controller.detailPondController.getPondActivation();
+            await controller.detailPondController.getPondActivation(context);
             await controller.breedController.getFishChart(
                 activation_id: controller
                     .detailPondController.selectedActivation.value.id!);
@@ -601,7 +590,6 @@ class _AddFishState extends State<AddFish> {
     }
 
     return Scaffold(
-      key: scaffoldKey,
       backgroundColor: backgroundColor1,
       appBar: AppBar(
         backgroundColor: backgroundColor2,
@@ -612,29 +600,10 @@ class _AddFishState extends State<AddFish> {
             Get.back();
           },
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              // scaffoldKey.currentState?.openEndDrawer();
-              setState(() {
-                isMenuTapped.value = !isMenuTapped.value;
-              });
-            },
-            icon: Icon(Icons.card_travel_rounded),
-          )
-        ],
       ),
-      endDrawer: DrawerInvetarisList(),
       body: Obx(
         (() => ListView(
               children: [
-                if (isMenuTapped.value)
-                  Column(
-                    children: [
-                      newMenu(),
-                      SizedBox(height: 10,),
-                    ],
-                  ),
                 checkBoxFish(),
                 controller.isNilaHitam == true ? nilaHitamInput() : Container(),
                 controller.isNilaMerah == true ? nilaMerahInput() : Container(),

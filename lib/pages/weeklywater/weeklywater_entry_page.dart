@@ -1,32 +1,21 @@
 import 'package:fish/controllers/weeklywater/weekly_water_entry_controller.dart';
 import 'package:fish/controllers/weeklywater/weekly_water_controller.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import '../../widgets/new_Menu_widget.dart';
-
-class WeeklyWaterEntryPage extends StatefulWidget {
+class WeeklyWaterEntryPage extends StatelessWidget {
   WeeklyWaterEntryPage({Key? key}) : super(key: key);
 
-  @override
-  State<WeeklyWaterEntryPage> createState() => _WeeklyWaterEntryPageState();
-}
-
-class _WeeklyWaterEntryPageState extends State<WeeklyWaterEntryPage> {
   final WeeklyWaterEntryController controller =
       Get.put(WeeklyWaterEntryController());
 
   final WeeklyWaterController weeklyWaterControlller =
       Get.put(WeeklyWaterController());
 
-  var isMenuTapped = false.obs;
   @override
   Widget build(BuildContext context) {
-    var scaffoldKey = GlobalKey<ScaffoldState>();
-
     Widget amoniaInput() {
       return Container(
         margin: EdgeInsets.only(
@@ -35,7 +24,7 @@ class _WeeklyWaterEntryPageState extends State<WeeklyWaterEntryPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'ammonia Air',
+              'ammonia Air (mg/L)',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -81,7 +70,7 @@ class _WeeklyWaterEntryPageState extends State<WeeklyWaterEntryPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Floc Air',
+              'Flok Air',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -127,7 +116,7 @@ class _WeeklyWaterEntryPageState extends State<WeeklyWaterEntryPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Kadar Nitrit',
+              'Kadar Nitrit (mg/L)',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -173,7 +162,7 @@ class _WeeklyWaterEntryPageState extends State<WeeklyWaterEntryPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Kadar Nitrat',
+              'Kadar Nitrat (mg/L)',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -219,7 +208,7 @@ class _WeeklyWaterEntryPageState extends State<WeeklyWaterEntryPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Nilai Hardness',
+              'Nilai Hardness (mg/L)',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -318,33 +307,13 @@ class _WeeklyWaterEntryPageState extends State<WeeklyWaterEntryPage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
-          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
-            title: const Text("Entry Kondisi Air Harian"),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  // scaffoldKey.currentState?.openEndDrawer();
-                  setState(() {
-                    isMenuTapped.value = !isMenuTapped.value;
-                  });
-                },
-                icon: Icon(Icons.card_travel_rounded),
-              )
-            ],
+            title: const Text("Entry Kondisi Air Mingguan"),
           ),
           backgroundColor: backgroundColor1,
-          endDrawer: DrawerInvetarisList(),
           body: ListView(
             children: [
-              if (isMenuTapped.value)
-                Column(
-                  children: [
-                    newMenu(),
-                    SizedBox(height: 10,),
-                  ],
-                ),
               flocInput(),
               amoniaInput(),
               nitriteInput(),

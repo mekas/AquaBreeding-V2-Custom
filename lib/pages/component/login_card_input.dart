@@ -6,10 +6,8 @@ import '../../controllers/authentication/login_controller.dart';
 
 class LoginInputCard extends StatelessWidget {
   final VoidCallback loginfunc;
-  LoginInputCard({Key? key, required this.loginfunc, required this.isLoading})
-      : super(key: key);
+  LoginInputCard({Key? key, required this.loginfunc}) : super(key: key);
   final LoginController controller = Get.put(LoginController());
-  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -218,21 +216,13 @@ class LoginInputCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: isLoading
-                  ? SizedBox(
-                      height: 30,
-                      width: 30,
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ),
-                    )
-                  : Text(
-                      'Login',
-                      style: primaryTextStyle.copyWith(
-                        fontSize: 16,
-                        fontWeight: medium,
-                      ),
-                    ),
+              child: Text(
+                'Login',
+                style: primaryTextStyle.copyWith(
+                  fontSize: 16,
+                  fontWeight: medium,
+                ),
+              ),
             ),
           ),
           SizedBox(

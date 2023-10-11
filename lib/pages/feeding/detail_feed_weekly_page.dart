@@ -1,26 +1,23 @@
 import 'package:fish/pages/component/feed_daily_card.dart';
+import 'package:fish/pages/feeding/feed_controller.dart';
+import 'package:fish/pages/feeding/feed_monthly_controller.dart';
 import 'package:fish/pages/feeding/feed_weekly_controller.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
+import 'package:fish/pages/pond/detail_pond_controller.dart';
+import 'package:fish/pages/pond/pond_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
-import '../../widgets/new_Menu_widget.dart';
-
-class DetailFeedWeeklyPage extends StatefulWidget {
+class DetailFeedWeeklyPage extends StatelessWidget {
   const DetailFeedWeeklyPage({Key? key}) : super(key: key);
 
   @override
-  State<DetailFeedWeeklyPage> createState() => _DetailFeedWeeklyPageState();
-}
-
-class _DetailFeedWeeklyPageState extends State<DetailFeedWeeklyPage> {
-  var isMenuTapped = false.obs;
-  @override
   Widget build(BuildContext context) {
+    final PondController pondController = Get.find();
+    final DetailPondController detailPondController = Get.find();
+    final FeedController feedController = Get.find();
+    final FeedMonthlyController feedMonthlyController = Get.find();
     final FeedWeeklyController controller = Get.put(FeedWeeklyController());
-
-    var scaffoldKey = GlobalKey<ScaffoldState>();
 
     Widget feedWeeklyDataRecap() {
       return Container(
@@ -34,7 +31,7 @@ class _DetailFeedWeeklyPageState extends State<DetailFeedWeeklyPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "kolam ${controller.pond.alias}",
+                  "kolam ${pondController.selectedPond.value.alias}",
                   style: primaryTextStyle.copyWith(
                     fontSize: 18,
                     fontWeight: heavy,
@@ -43,7 +40,7 @@ class _DetailFeedWeeklyPageState extends State<DetailFeedWeeklyPage> {
                   maxLines: 1,
                 ),
                 Text(
-                  "Bulan ${controller.feedHistoryMonthly.getMonthNameFull()}",
+                  "Bulan ${feedController.selectedFeedHistoryMonthly.value.getMonthNameFull()}",
                   style: secondaryTextStyle.copyWith(
                     fontSize: 13,
                     fontWeight: medium,
@@ -52,7 +49,7 @@ class _DetailFeedWeeklyPageState extends State<DetailFeedWeeklyPage> {
                   maxLines: 1,
                 ),
                 Text(
-                  "Minggu Ke-${controller.feedHistoryWeekly.week}",
+                  "Minggu Ke-${feedMonthlyController.selectedFeedHistoryWeekly.value.week}",
                   style: secondaryTextStyle.copyWith(
                     fontSize: 13,
                     fontWeight: medium,
@@ -287,10 +284,12 @@ class _DetailFeedWeeklyPageState extends State<DetailFeedWeeklyPage> {
             children: controller.list_feedHistoryDaily
                 .map(
                   (feedHistoryDaily) => FeedDailyCard(
-                    activation: controller.activation,
-                    pond: controller.pond,
-                    feedHistoryMonthly: controller.feedHistoryMonthly,
-                    feedHistoryWeekly: controller.feedHistoryWeekly,
+                    activation: detailPondController.selectedActivation.value,
+                    pond: pondController.selectedPond.value,
+                    feedHistoryMonthly:
+                        feedController.selectedFeedHistoryMonthly.value,
+                    feedHistoryWeekly:
+                        feedMonthlyController.selectedFeedHistoryWeekly.value,
                     feedHistoryDaily: feedHistoryDaily,
                   ),
                 )
@@ -301,33 +300,13 @@ class _DetailFeedWeeklyPageState extends State<DetailFeedWeeklyPage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
-          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Detail Pakan Mingguan"),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  // scaffoldKey.currentState?.openEndDrawer();
-                  setState(() {
-                    isMenuTapped.value = !isMenuTapped.value;
-                  });
-                },
-                icon: Icon(Icons.card_travel_rounded),
-              )
-            ],
           ),
-          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
-              if (isMenuTapped.value)
-                Column(
-                  children: [
-                    newMenu(),
-                    SizedBox(height: 10,),
-                  ],
-                ),
               feedWeeklyDataRecap(),
               // detail(),
               recapTitle(),

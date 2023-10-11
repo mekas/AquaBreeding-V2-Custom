@@ -1,9 +1,11 @@
+import 'dart:convert';
+
 import 'package:fish/controllers/fish_transfer/fish_transfer_entry_controller.dart';
 import 'package:fish/controllers/fish_transfer/pond_list_item_controller.dart';
 import 'package:fish/pages/fish_transfer/new_fish_transfer_input_page.dart';
-import 'package:fish/service/activation_service.dart';
+import 'package:fish/pages/pond/detail_pond_controller.dart';
+import 'package:fish/pages/pond/pond_controller.dart';
 import 'package:fish/service/fish_transfer_service.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
@@ -12,7 +14,6 @@ import 'package:get/get.dart';
 
 import '../../controllers/fish_transfer/fish_transfer_list_controller.dart';
 import '../../models/new_sortir_model.dart';
-import '../../widgets/new_Menu_widget.dart';
 import '../component/deactivation_with_fish_transfer_input.dart';
 
 class NewFishTransferEntryPage extends StatefulWidget {
@@ -26,7 +27,6 @@ class _NewFishTransferEntryPageState extends State<NewFishTransferEntryPage> {
   final FishTransferEntryController controller =
       Get.put(FishTransferEntryController());
 
-
   final TransferController fishTransferController =
       Get.put(TransferController());
 
@@ -34,7 +34,9 @@ class _NewFishTransferEntryPageState extends State<NewFishTransferEntryPage> {
       Get.put(PondListController());
 
   final pageController = PageController(initialPage: 0);
-  var isMenuTapped = false.obs;
+
+  final PondController pondController = Get.find();
+  final DetailPondController detailPondController = Get.find();
   @override
   void dispose() {
     controller.descController.clear();
@@ -85,12 +87,11 @@ class _NewFishTransferEntryPageState extends State<NewFishTransferEntryPage> {
     // controller.getHarvestedBool(controller.activation);
     controller.getPondsData(controller.methodController.toString());
     controller.getHarvestedBool(controller.activation);
+    // controller.buildFishDeath();
   }
 
   @override
   Widget build(BuildContext context) {
-    var scaffoldKey = GlobalKey<ScaffoldState>();
-
     Widget sampleWeightInput() {
       return Container(
         margin: EdgeInsets.only(
@@ -1105,7 +1106,7 @@ class _NewFishTransferEntryPageState extends State<NewFishTransferEntryPage> {
     //   );
     // }
 
-//input aktivasi
+    //input aktivasi
     Widget checkBoxFish() {
       return Container(
         margin: EdgeInsets.only(
@@ -1653,6 +1654,9 @@ class _NewFishTransferEntryPageState extends State<NewFishTransferEntryPage> {
             // );
             // controller.postDataLog(controller.fitur);
             await postData();
+            await pondController.updateListandSelectedPond();
+            await detailPondController.updateListAndSelectedActivation();
+            await fishTransferController.getTransfertData();
           },
           style: TextButton.styleFrom(
             backgroundColor: Colors.green,
@@ -1686,7 +1690,7 @@ class _NewFishTransferEntryPageState extends State<NewFishTransferEntryPage> {
                 Navigator.pop(context);
               },
             );
-            fishTransferController.getTransfertData(context);
+            fishTransferController.getTransfertData();
           },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
@@ -1743,7 +1747,7 @@ class _NewFishTransferEntryPageState extends State<NewFishTransferEntryPage> {
                     context,
                     () {
                       Navigator.pop(context);
-                      fishTransferController.getTransfertData(context);
+                      fishTransferController.getTransfertData();
                     },
                   );
                   controller.postDataLog(controller.fitur);
@@ -1831,14 +1835,22 @@ class _NewFishTransferEntryPageState extends State<NewFishTransferEntryPage> {
           margin: EdgeInsets.only(right: defaultMargin, left: defaultMargin),
           child: TextButton(
             onPressed: () {
-              if (controller.listPondSelected.isNotEmpty) {
+              if (controller.listPondSelected.isNotEmpty &&
+                  controller
+                      .totalAmountDeactivationController.text.isNotEmpty &&
+                  controller
+                      .totalWeightDeactivationController.text.isNotEmpty) {
                 pageController.nextPage(
                     duration: const Duration(milliseconds: 500),
                     curve: Curves.easeIn);
               }
             },
             style: TextButton.styleFrom(
-              backgroundColor: controller.listPondSelected.isNotEmpty
+              backgroundColor: controller.listPondSelected.isNotEmpty &&
+                      controller
+                          .totalAmountDeactivationController.text.isNotEmpty &&
+                      controller
+                          .totalWeightDeactivationController.text.isNotEmpty
                   ? Colors.green
                   : Colors.grey,
               shape: RoundedRectangleBorder(
@@ -2023,56 +2035,414 @@ class _NewFishTransferEntryPageState extends State<NewFishTransferEntryPage> {
     }
 
     Widget destinationPond() {
-      return Expanded(
-        // margin: EdgeInsets.only(right: defaultMargin, left: defaultMargin),
-        // width: double.infinity,
-        child: Container(
-          margin: EdgeInsets.all(defaultMargin),
-          child: Obx(() {
-            return MultiSelectDialogField<ListPondSortir>(
-              title: Text("List Kolam"),
-              buttonText: Text(
-                "Pilih Kolam",
-                style: TextStyle(color: Colors.white),
+      return Row(
+        children: [
+          Expanded(
+            // margin: EdgeInsets.only(right: defaultMargin, left: defaultMargin),
+            // width: double.infinity,
+            child: Container(
+              margin: EdgeInsets.all(defaultMargin),
+              child: Obx(() {
+                return MultiSelectDialogField<ListPondSortir>(
+                  title: Text("List Kolam"),
+                  buttonText: Text(
+                    "Pilih Kolam",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  decoration: BoxDecoration(
+                      color: backgroundColor2,
+                      borderRadius: BorderRadius.circular(12)),
+                  buttonIcon: Icon(
+                    Icons.arrow_drop_down,
+                    color: Colors.grey.shade700,
+                  ),
+                  items: controller.listPond
+                      .map((e) => MultiSelectItem(e, e.name!))
+                      .toList(),
+                  listType: MultiSelectListType.LIST,
+                  onConfirm: (values) {
+                    controller.setData(values);
+                  },
+                );
+              }),
+            ),
+          ),
+        ],
+      );
+    }
+
+    Widget fishWightInput() {
+      return Container(
+        margin: EdgeInsets.only(
+            top: defaultSpace, right: defaultMargin, left: defaultMargin),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  'Berat Rata-rata Ikan (Kg)',
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 16,
+                    fontWeight: medium,
+                  ),
+                ),
+                SizedBox(width: 10),
+                TextButton(
+                  onPressed: () => controller.calculateAvgWeightFish(),
+                  style: TextButton.styleFrom(
+                    backgroundColor: primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Text(
+                    'Hitung',
+                    style: primaryTextStyle.copyWith(
+                      fontSize: 16,
+                      fontWeight: medium,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Container(
+              height: 50,
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
               ),
               decoration: BoxDecoration(
-                  color: backgroundColor2,
-                  borderRadius: BorderRadius.circular(12)),
-              buttonIcon: Icon(
-                Icons.arrow_drop_down,
-                color: Colors.grey.shade700,
+                color: backgroundColor2,
+                borderRadius: BorderRadius.circular(12),
               ),
-              items: controller.listPond
-                  .map((e) => MultiSelectItem(e, e.name!))
-                  .toList(),
-              listType: MultiSelectListType.LIST,
-              onConfirm: (values) {
-                controller.setData(values);
-              },
-            );
-          }),
+              child: Center(
+                  child: TextFormField(
+                style: primaryTextStyle,
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                ],
+                controller: controller.fishWeightController,
+              )),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget fishLengthAvgInput() {
+      return Container(
+        margin: EdgeInsets.only(
+            top: defaultSpace, right: defaultMargin, left: defaultMargin),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Panjang Rata-rata (cm) (Opsional)',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Container(
+              height: 50,
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              decoration: BoxDecoration(
+                color: backgroundColor2,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: Center(
+                    child: TextFormField(
+                  style: primaryTextStyle,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
+                  keyboardType: TextInputType.number,
+                  controller: controller.fishLengthAvgController,
+                  decoration: InputDecoration.collapsed(
+                      hintText: 'ex: 23', hintStyle: subtitleTextStyle),
+                )),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget undersizeInput() {
+      return Container(
+        margin: EdgeInsets.only(
+            top: defaultSpace, right: defaultMargin, left: defaultMargin),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Jumlah Ikan Undersize (Ekor) (Opsional)',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Container(
+              height: 50,
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              decoration: BoxDecoration(
+                color: backgroundColor2,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: Center(
+                    child: TextFormField(
+                  style: primaryTextStyle,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                  keyboardType: TextInputType.number,
+                  controller: controller.undersizeController,
+                  decoration: InputDecoration.collapsed(
+                      hintText: 'ex: 23', hintStyle: subtitleTextStyle),
+                )),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget oversizeInput() {
+      return Container(
+        margin: EdgeInsets.only(
+            top: defaultSpace, right: defaultMargin, left: defaultMargin),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Jumlah Ikan Oversize (Ekor) (Opsional)',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Container(
+              height: 50,
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              decoration: BoxDecoration(
+                color: backgroundColor2,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: Center(
+                    child: TextFormField(
+                  style: primaryTextStyle,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                  keyboardType: TextInputType.number,
+                  controller: controller.oversizeController,
+                  decoration: InputDecoration.collapsed(
+                      hintText: 'ex: 4', hintStyle: subtitleTextStyle),
+                )),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget normalsizeInput() {
+      return Container(
+        margin: EdgeInsets.only(
+            top: defaultSpace, right: defaultMargin, left: defaultMargin),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Jumlah Ikan Normalsize (Ekor) (Opsional)',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Container(
+              height: 50,
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              decoration: BoxDecoration(
+                color: backgroundColor2,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                  child: TextFormField(
+                style: primaryTextStyle,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
+                keyboardType: TextInputType.number,
+                controller: controller.normalsizeController,
+                decoration: InputDecoration.collapsed(
+                    hintText: 'ex: 23', hintStyle: subtitleTextStyle),
+              )),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget totalWeightInput() {
+      return Container(
+        margin: EdgeInsets.only(
+            top: defaultSpace, right: defaultMargin, left: defaultMargin),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Berat Ikan Terpanen (Kg)',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Container(
+              height: 50,
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              decoration: BoxDecoration(
+                color: backgroundColor2,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                  child: TextFormField(
+                style: primaryTextStyle,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
+                keyboardType: TextInputType.number,
+                controller: controller.totalWeightDeactivationController,
+                decoration: InputDecoration.collapsed(
+                    hintText: 'ex: 23', hintStyle: subtitleTextStyle),
+              )),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget totalFishInput() {
+      return Container(
+        margin: EdgeInsets.only(
+            top: defaultSpace, right: defaultMargin, left: defaultMargin),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Jumlah Ikan Terpanen (Ekor)',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Container(
+              height: 50,
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              decoration: BoxDecoration(
+                color: backgroundColor2,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                  child: TextFormField(
+                style: primaryTextStyle,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
+                keyboardType: TextInputType.number,
+                controller: controller.totalAmountDeactivationController,
+                decoration: InputDecoration.collapsed(
+                    hintText: 'ex: 23', hintStyle: subtitleTextStyle),
+              )),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget sampleAmountInput() {
+      return Container(
+        margin: EdgeInsets.only(
+            top: defaultSpace, right: defaultMargin, left: defaultMargin),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Jumlah Sample (Ekor)',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Container(
+                height: 50,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 16,
+                ),
+                decoration: BoxDecoration(
+                  color: backgroundColor2,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(
+                    child: TextFormField(
+                  style: primaryTextStyle,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                  keyboardType: TextInputType.number,
+                  controller: controller.sampleAmountController,
+                ))),
+          ],
         ),
       );
     }
 
     return Scaffold(
-        key: scaffoldKey,
         appBar: AppBar(
           backgroundColor: backgroundColor2,
-          title: const Text("Entry Sortir"),
-          actions: [
-            IconButton(
-              onPressed: () {
-                // scaffoldKey.currentState?.openEndDrawer();
-                setState(() {
-                  isMenuTapped.value = !isMenuTapped.value;
-                });
-              },
-              icon: Icon(Icons.card_travel_rounded),
-            )
-          ],
+          title: Text("Entry Sortir ${controller.pond.alias}"),
         ),
-        endDrawer: DrawerInvetarisList(),
         backgroundColor: backgroundColor1,
         body: PageView(
           physics: const NeverScrollableScrollPhysics(),
@@ -2080,20 +2450,24 @@ class _NewFishTransferEntryPageState extends State<NewFishTransferEntryPage> {
           children: [
             ListView(
               children: [
-                if (isMenuTapped.value)
-                  Column(
-                    children: [
-                      newMenu(),
-                      SizedBox(height: 10,),
-                    ],
-                  ),
                 transferMethodInput(),
-                // SizedBox(
-                //   height: 16,
-                // ),
+                SizedBox(
+                  height: 16,
+                ),
                 destinationPond(),
+                totalFishInput(),
+                totalWeightInput(),
+                fishWightInput(),
+                sampleAmountInput(),
+                fishLengthAvgInput(),
+                normalsizeInput(),
+                undersizeInput(),
+                oversizeInput(),
                 // destinationPondInput(),
                 // addButton(),
+                SizedBox(
+                  height: 16,
+                ),
                 nextButton()
               ],
             ),
@@ -2114,7 +2488,6 @@ class _NewFishTransferEntryPageState extends State<NewFishTransferEntryPage> {
   }
 
   Future<void> postData() async {
-    print("NEW FISH ENTRY PAGE");
     bool isFullfiled;
     List<dynamic> transferList = [];
 
@@ -2144,18 +2517,43 @@ class _NewFishTransferEntryPageState extends State<NewFishTransferEntryPage> {
       for (var i in controller.listPondSelected) {
         transferList.add(i.dataInput);
       }
-      print("transferlist: ${transferList}");
+
+      print(transferList);
+      controller.buildFishDeath(transferList);
       FishTransferService().postTransfer(
           origin_pond_id: controller.pond.id.toString(),
           transfer_method: controller.methodController.selected.value,
+          total_fish_harvested:
+              controller.totalAmountDeactivationController.text,
+          total_weight_harvested:
+              controller.totalWeightDeactivationController.text,
+          sampleAmount: controller.sampleAmountOriginController.text.isEmpty
+              ? '0'
+              : controller.sampleAmountOriginController.text,
+          sampleLong: controller.sampleLongOriginController.text.isEmpty
+              ? "0"
+              : controller.sampleLongOriginController.text,
+          sampleWeight: controller.sampleWeightOriginController.text.isEmpty
+              ? "0"
+              : controller.sampleWeightOriginController.text,
+          amountNormal: controller.normalsizeController.text.isEmpty
+              ? "0"
+              : controller.normalsizeController.text,
+          amountOversize: controller.oversizeController.text.isEmpty
+              ? "0"
+              : controller.oversizeController.text,
+          amountUndersize: controller.oversizeController.text.isEmpty
+              ? "0"
+              : controller.oversizeController.text,
           transferList: transferList,
-          ctx: context).then((value){
-            if (value != null && value == true){
-              Get.back();
-            }
-      });
-      fishTransferController.getTransfertData(context);
+          fishDeath: controller.buildFishDeath(transferList),
+          ctx: context);
+      fishTransferController.getTransfertData();
 
+      await pondController.updateListandSelectedPond();
+      // fishTransferController.getTransfertData(context);
+
+      Get.back();
     }
   }
 }

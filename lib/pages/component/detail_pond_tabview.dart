@@ -3,7 +3,6 @@ import 'package:fish/controllers/daily_water/daily_water_controller.dart';
 import 'package:fish/pages/pond/detail_breed_page.dart';
 import 'package:fish/pages/treatment/treatment_page.dart';
 import 'package:fish/theme.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fish/models/activation_model.dart';
@@ -32,18 +31,18 @@ class MyTabsPond extends GetxController with GetSingleTickerProviderStateMixin {
   @override
   void onInit() {
     controller = TabController(length: 2, vsync: this);
-    // controller.addListener(() {
-    //   if (controller.indexIsChanging) {
-    //     if (controller.previousIndex == 0) {
-    //       Get.delete<DetailPondController>();
-    //       Get.put(DailyWaterBreedListController());
-    //     } else {
-    //       Get.delete<DailyWaterBreedListController>();
-    //       Get.put(DetailPondController());
-    //     }
-    //   }
-    //   // Tab Changed tapping on new tab
-    // });
+    controller.addListener(() {
+      if (controller.indexIsChanging) {
+        if (controller.previousIndex == 0) {
+          Get.delete<DetailPondController>();
+          Get.put(DailyWaterBreedListController());
+        } else {
+          Get.delete<DailyWaterBreedListController>();
+          Get.put(DetailPondController());
+        }
+      }
+      // Tab Changed tapping on new tab
+    });
     super.onInit();
   }
 
@@ -55,23 +54,13 @@ class MyTabsPond extends GetxController with GetSingleTickerProviderStateMixin {
   }
 }
 
-class MyTabPondScreen extends StatefulWidget {
+class MyTabPondScreen extends StatelessWidget {
   MyTabPondScreen({Key? key}) : super(key: key);
-
-  @override
-  State<MyTabPondScreen> createState() => _MyTabPondScreenState();
-}
-
-class _MyTabPondScreenState extends State<MyTabPondScreen> {
   final pondController = Get.put(PondController());
-  var isMenuTapped = false.obs;
   @override
   Widget build(BuildContext context) {
-    var scaffoldKey = GlobalKey<ScaffoldState>();
-
     final MyTabsPond _tabs = Get.put(MyTabsPond());
     return Scaffold(
-      key: scaffoldKey,
       appBar: AppBar(
         backgroundColor: backgroundColor2,
         title: const Text('Detail Kolam'),
@@ -90,22 +79,10 @@ class _MyTabPondScreenState extends State<MyTabPondScreen> {
             pondController.getPondsData(context);
           },
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              // scaffoldKey.currentState?.openEndDrawer();
-              setState(() {
-                isMenuTapped.value = !isMenuTapped.value;
-              });
-            },
-            icon: Icon(Icons.card_travel_rounded),
-          )
-        ],
       ),
-      endDrawer: DrawerInvetarisList(),
       body: TabBarView(
         controller: _tabs.controller,
-        children: [DetailPondPage(isMenuTapped: isMenuTapped.value,), DailyWaterDetailPondPage(isMenuTapped: isMenuTapped.value,)],
+        children: [DetailPondPage(), DailyWaterDetailPondPage()],
       ),
     );
   }

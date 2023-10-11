@@ -1,19 +1,8 @@
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/component/pond_card.dart';
-import 'package:fish/pages/inventaris/inventaris_aset/inventaris_aset_page.dart';
-import 'package:fish/pages/inventaris/inventaris_aset/inventaris_aset_state.dart';
-import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_mainpage.dart';
-import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_state.dart';
-import 'package:fish/pages/inventaris/inventaris_benih/inventaris_benih_mainpage.dart';
-import 'package:fish/pages/inventaris/inventaris_listrik/inventaris_listrik_mainpage.dart';
-import 'package:fish/pages/inventaris/inventaris_listrik/inventaris_listrik_state.dart';
-import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_mainpage.dart';
 
 import 'package:fish/pages/pond/add_pond_page.dart';
 import 'package:fish/pages/pond/pond_controller.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
-import 'package:fish/widgets/main_inventaris_button.dart';
-import 'package:fish/widgets/new_Menu_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
@@ -26,15 +15,6 @@ class PondPage extends StatefulWidget {
 
 class _PondPageState extends State<PondPage> {
   final PondController controller = Get.put(PondController());
-  final InventarisBahanBudidayaState stateA =
-      Get.put(InventarisBahanBudidayaState());
-
-  final InventarisAsetState stateB = Get.put(InventarisAsetState());
-
-  final InventarisListrikState stateC = Get.put(InventarisListrikState());
-
-  DateTime now = DateTime.now();
-  var isMenuTapped = false.obs;
   int? _value = null;
   final chip = ["Aktif", "Panen", "Tidak Aktif"];
   @override
@@ -50,8 +30,6 @@ class _PondPageState extends State<PondPage> {
 
   @override
   Widget build(BuildContext context) {
-    var scaffoldKey = GlobalKey<ScaffoldState>();
-
     Widget title() {
       return Container(
         margin: EdgeInsets.only(
@@ -165,28 +143,9 @@ class _PondPageState extends State<PondPage> {
           ));
     }
 
-    // var scaffoldKey = GlobalKey<ScaffoldState>();
-
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
-          key: scaffoldKey,
-          appBar: AppBar(
-            backgroundColor: backgroundColor1,
-            title: Text('Kolam'),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  // scaffoldKey.currentState?.openEndDrawer();
-                  setState(() {
-                    isMenuTapped.value = !isMenuTapped.value;
-                  });
-                },
-                icon: Icon(Icons.card_travel_rounded),
-              )
-            ],
-          ),
-          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           floatingActionButton: FloatingActionButton(
             onPressed: () {
@@ -197,9 +156,7 @@ class _PondPageState extends State<PondPage> {
           ),
           body: ListView(
             children: [
-              // title(),
-              if (isMenuTapped.value)
-                newMenu(),
+              title(),
               filter(),
               controller.ponds.isEmpty ? emptyListPond() : pondList(),
               SizedBox(

@@ -1,12 +1,8 @@
-// ignore_for_file: non_constant_identifier_names
-
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:fish/models/activation_model.dart';
-import 'package:fish/models/fish_death_model.dart';
+import 'package:fish/models/fishDeath_model.dart';
 import 'package:fish/models/pond_model.dart';
-import 'package:fish/service/activation_service.dart';
 import 'package:fish/service/fish_death_service.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -26,6 +22,7 @@ class FishRecapController extends GetxController {
   void onInit() async {
     getFishDeaths(activation_id: activation.id!);
     getcharData(activation_id: activation.id!);
+
     // inspect(charData);
     super.onInit();
   }

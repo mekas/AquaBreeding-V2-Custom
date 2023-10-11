@@ -27,7 +27,6 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   late SharedPreferences prefs;
   final RegisterController controller = Get.put(RegisterController());
-  bool isLoading = false;
 
   final pageController = PageController(initialPage: 0);
   @override
@@ -49,9 +48,6 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void register() async {
-    setState(() {
-      isLoading = true;
-    });
     final response = await http.post(
       Uri.parse(Urls.register),
       headers: {
@@ -82,9 +78,6 @@ class _RegisterPageState extends State<RegisterPage> {
         myToken,
       );
       prefs.setString('identity', identity.toString());
-      setState(() {
-        isLoading = false;
-      });
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => DashboardPage()));
       print(response.body);
@@ -98,7 +91,6 @@ class _RegisterPageState extends State<RegisterPage> {
       controller.farmnameController.clear();
       controller.nikController.clear();
     } else {
-      // inspect(response);
       showDialog<String>(
           context: context,
           builder: (BuildContext context) => AlertDialog(
@@ -113,12 +105,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     borderRadius: BorderRadius.all(Radius.circular(16.0))),
                 actions: <Widget>[
                   TextButton(
-                    onPressed: () {
-                      Navigator.pop(context, 'OK');
-                      setState(() {
-                        isLoading = false;
-                      });
-                    },
+                    onPressed: () => Navigator.pop(context, 'OK'),
                     child: const Text('OK'),
                   ),
                 ],
@@ -242,7 +229,6 @@ class _RegisterPageState extends State<RegisterPage> {
             return RegisterNextInputCard(
               registerfunc: register,
               pageController: pageController,
-              isLoading: isLoading,
             );
           }),
           itemCount: 1,
@@ -308,7 +294,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.pushReplacement(context,
+                  Navigator.push(context,
                       MaterialPageRoute(builder: (context) => LoginPage()));
                 },
                 child: Text(
@@ -396,41 +382,5 @@ class _RegisterPageState extends State<RegisterPage> {
         );
       }
     });
-    // return Scaffold(
-    //     appBar: AppBar(
-    //       backgroundColor: backgroundColor2,
-    //       title: const Text("Entry Sortir"),
-    //     ),
-    //     backgroundColor: backgroundColor1,
-    //     body: PageView(
-    //       physics: const NeverScrollableScrollPhysics(),
-    //       controller: pageController,
-    //       children: [
-    //         ListView(
-    //           children: [
-    //             SizedBox(
-    //               height: 10,
-    //             ),
-    //             footer(),
-    //             formInput(),
-    //             SizedBox(
-    //               height: 10,
-    //             ),
-    //           ],
-    //         ),
-    //         ListView(
-    //           children: [
-    //             SizedBox(
-    //               height: 10,
-    //             ),
-    //             footer(),
-    //             formInput(),
-    //             SizedBox(
-    //               height: 10,
-    //             ),
-    //           ],
-    //         ),
-    //       ],
-    //     ));
   }
 }

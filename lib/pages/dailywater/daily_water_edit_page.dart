@@ -1,33 +1,29 @@
+import 'package:fish/controllers/daily_water/daily_water_breed_list_controller.dart';
 import 'package:fish/controllers/daily_water/daily_water_edit_controller.dart';
 import 'package:fish/controllers/daily_water/daily_water_controller.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
+import 'package:fish/pages/pond/pond_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/daily_water/daily_water_detail_controller.dart';
-import '../../widgets/new_Menu_widget.dart';
 
-class DailyWaterEditPage extends StatefulWidget {
+class DailyWaterEditPage extends StatelessWidget {
   DailyWaterEditPage({Key? key}) : super(key: key);
 
-  @override
-  State<DailyWaterEditPage> createState() => _DailyWaterEditPageState();
-}
-
-class _DailyWaterEditPageState extends State<DailyWaterEditPage> {
   final DailyWaterEditController controller =
       Get.put(DailyWaterEditController());
 
   final DailyWaterDetailController dailyWaterControlller =
       Get.put(DailyWaterDetailController());
 
-  var isMenuTapped = false.obs;
   @override
   Widget build(BuildContext context) {
-    var scaffoldKey = GlobalKey<ScaffoldState>();
-
+    final PondController pondController = Get.find();
+    final DailyWaterBreedListController dailyWaterBreedListController =
+        Get.find();
+    final DailyWaterController dailyWaterController = Get.find();
     Widget descInput() {
       return Container(
         margin: EdgeInsets.only(
@@ -211,11 +207,11 @@ class _DailyWaterEditPageState extends State<DailyWaterEditPage> {
             await controller.editDailyWaterData(
               context,
               () {
-                Navigator.pop(context);
+                Get.back();
               },
             );
-            dailyWaterControlller.getDailyWaterData(
-                context, controller.dailyWater.id.toString());
+            dailyWaterControlller.getDailyWaterData(context,
+                dailyWaterController.selectedDailyWater.value.id.toString());
             // controller.getWeek();
           },
           style: TextButton.styleFrom(
@@ -254,33 +250,13 @@ class _DailyWaterEditPageState extends State<DailyWaterEditPage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
-          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Edit Kondisi Air Harian"),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  // scaffoldKey.currentState?.openEndDrawer();
-                  setState(() {
-                    isMenuTapped.value = !isMenuTapped.value;
-                  });
-                },
-                icon: Icon(Icons.card_travel_rounded),
-              )
-            ],
           ),
-          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
-              if (isMenuTapped.value)
-                Column(
-                  children: [
-                    newMenu(),
-                    SizedBox(height: 10,),
-                  ],
-                ),
               phInput(),
               doInput(),
               temperatureInput(),

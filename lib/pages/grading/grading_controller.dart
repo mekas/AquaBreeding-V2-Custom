@@ -1,9 +1,7 @@
-// ignore_for_file: non_constant_identifier_names
-
 import 'dart:developer';
 
 import 'package:fish/models/activation_model.dart';
-import 'package:fish/models/fish_grading_model.dart';
+import 'package:fish/models/fishGrading_model.dart';
 import 'package:fish/models/grading_chart_model.dart';
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/service/fish_grading_service.dart';
@@ -64,7 +62,7 @@ class GradingController extends GetxController {
   Future<void> postDataLog(String fitur) async {
     // print(buildJsonFish());
     bool value =
-    await LoggingService().postLogging(startAt: startTime, fitur: fitur);
+        await LoggingService().postLogging(startAt: startTime, fitur: fitur);
     print(value);
   }
 
@@ -74,4 +72,3 @@ class GradingController extends GetxController {
     super.dispose();
   }
 }
-

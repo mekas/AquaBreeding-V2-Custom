@@ -1,27 +1,17 @@
-import 'dart:developer';
-
 import 'package:fish/pages/grading/grading_entry_controller.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
+import 'package:fish/pages/pond/detail_pond_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import '../../widgets/text_field_widget.dart';
+import 'package:http/http.dart';
+
 import '../component/fish_list_card.dart';
-import '../../widgets/new_Menu_widget.dart';
-import '../pond/detail_pond_controller.dart';
 import 'grading_controller.dart';
 
-class GradingEntryPage extends StatefulWidget {
+class GradingEntryPage extends StatelessWidget {
   const GradingEntryPage({Key? key}) : super(key: key);
 
-  @override
-  State<GradingEntryPage> createState() => _GradingEntryPageState();
-}
-
-class _GradingEntryPageState extends State<GradingEntryPage> {
-  var isMenuTapped = false.obs;
   @override
   Widget build(BuildContext context) {
     final GradingEntryController controller = Get.put(GradingEntryController());
@@ -56,21 +46,21 @@ class _GradingEntryPageState extends State<GradingEntryPage> {
               ),
               child: Center(
                 child: Obx(() => DropdownButtonFormField<String>(
-                  onChanged: (newValue) =>
-                      controller.fishTypeController.setSelected(newValue!),
-                  value: controller.fishTypeController.selected.value,
-                  items: controller.listFishAlive.map((fish) {
-                    return DropdownMenuItem<String>(
-                      value: fish,
-                      child: Text(
-                        fish,
-                        style: primaryTextStyle,
-                      ),
-                    );
-                  }).toList(),
-                  dropdownColor: backgroundColor5,
-                  decoration: InputDecoration(border: InputBorder.none),
-                )),
+                      onChanged: (newValue) =>
+                          controller.fishTypeController.setSelected(newValue!),
+                      value: controller.fishTypeController.selected.value,
+                      items: controller.listFishAlive.map((fish) {
+                        return DropdownMenuItem<String>(
+                          value: fish,
+                          child: Text(
+                            fish,
+                            style: primaryTextStyle,
+                          ),
+                        );
+                      }).toList(),
+                      dropdownColor: backgroundColor5,
+                      decoration: InputDecoration(border: InputBorder.none),
+                    )),
               ),
             ),
           ],
@@ -105,11 +95,11 @@ class _GradingEntryPageState extends State<GradingEntryPage> {
                 Divider(color: Colors.white),
                 Column(
                   children:
-                  detailPondController.selectedActivation.value.fishLive!
-                      .map(
-                        (fish) => FishListCard(fish: fish),
-                  )
-                      .toList(),
+                      detailPondController.selectedActivation.value.fishLive!
+                          .map(
+                            (fish) => FishListCard(fish: fish),
+                          )
+                          .toList(),
                 ),
                 SizedBox(
                   height: 10,
@@ -151,8 +141,8 @@ class _GradingEntryPageState extends State<GradingEntryPage> {
                     ),
                     Text(
                       detailPondController
-                          .selectedActivation.value.totalWeightFishAlive!
-                          .toStringAsFixed(2) +
+                              .selectedActivation.value.totalWeightFishAlive!
+                              .toStringAsFixed(2) +
                           " Kg",
                       style: purpleTextStyle.copyWith(
                         fontSize: 18,
@@ -219,13 +209,13 @@ class _GradingEntryPageState extends State<GradingEntryPage> {
                   controller: controller.sampleAmountController,
                   decoration: controller.validatesampleAmount.value == true
                       ? controller.sampleAmount == ''
-                      ? InputDecoration(
-                      errorText: 'jumlah ikan tidak boleh kosong',
-                      isCollapsed: true)
+                          ? InputDecoration(
+                              errorText: 'jumlah ikan tidak boleh kosong',
+                              isCollapsed: true)
+                          : InputDecoration.collapsed(
+                              hintText: 'ex: 20', hintStyle: subtitleTextStyle)
                       : InputDecoration.collapsed(
-                      hintText: 'ex: 20', hintStyle: subtitleTextStyle)
-                      : InputDecoration.collapsed(
-                      hintText: 'ex: 20', hintStyle: subtitleTextStyle),
+                          hintText: 'ex: 20', hintStyle: subtitleTextStyle),
                 );
               })),
             ),
@@ -309,15 +299,15 @@ class _GradingEntryPageState extends State<GradingEntryPage> {
               child: Center(
                 child: Center(
                     child: TextFormField(
-                      style: primaryTextStyle,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
-                      ],
-                      keyboardType: TextInputType.number,
-                      controller: controller.fishLengthAvgController,
-                      decoration: InputDecoration.collapsed(
-                          hintText: 'ex: 23', hintStyle: subtitleTextStyle),
-                    )),
+                  style: primaryTextStyle,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.deny(RegExp(r'[-+=*#%/,\s]'))
+                  ],
+                  keyboardType: TextInputType.number,
+                  controller: controller.fishLengthAvgController,
+                  decoration: InputDecoration.collapsed(
+                      hintText: 'ex: 23', hintStyle: subtitleTextStyle),
+                )),
               ),
             ),
           ],
@@ -354,15 +344,15 @@ class _GradingEntryPageState extends State<GradingEntryPage> {
               child: Center(
                 child: Center(
                     child: TextFormField(
-                      style: primaryTextStyle,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                      keyboardType: TextInputType.number,
-                      controller: controller.undersizeController,
-                      decoration: InputDecoration.collapsed(
-                          hintText: 'ex: 23', hintStyle: subtitleTextStyle),
-                    )),
+                  style: primaryTextStyle,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                  keyboardType: TextInputType.number,
+                  controller: controller.undersizeController,
+                  decoration: InputDecoration.collapsed(
+                      hintText: 'ex: 23', hintStyle: subtitleTextStyle),
+                )),
               ),
             ),
           ],
@@ -399,15 +389,15 @@ class _GradingEntryPageState extends State<GradingEntryPage> {
               child: Center(
                 child: Center(
                     child: TextFormField(
-                      style: primaryTextStyle,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                      keyboardType: TextInputType.number,
-                      controller: controller.oversizeController,
-                      decoration: InputDecoration.collapsed(
-                          hintText: 'ex: 4', hintStyle: subtitleTextStyle),
-                    )),
+                  style: primaryTextStyle,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                  keyboardType: TextInputType.number,
+                  controller: controller.oversizeController,
+                  decoration: InputDecoration.collapsed(
+                      hintText: 'ex: 4', hintStyle: subtitleTextStyle),
+                )),
               ),
             ),
           ],
@@ -443,15 +433,15 @@ class _GradingEntryPageState extends State<GradingEntryPage> {
               ),
               child: Center(
                   child: TextFormField(
-                    style: primaryTextStyle,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
-                    keyboardType: TextInputType.number,
-                    controller: controller.normalsizeController,
-                    decoration: InputDecoration.collapsed(
-                        hintText: 'ex: 23', hintStyle: subtitleTextStyle),
-                  )),
+                style: primaryTextStyle,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
+                keyboardType: TextInputType.number,
+                controller: controller.normalsizeController,
+                decoration: InputDecoration.collapsed(
+                    hintText: 'ex: 23', hintStyle: subtitleTextStyle),
+              )),
             ),
           ],
         ),
@@ -530,117 +520,6 @@ class _GradingEntryPageState extends State<GradingEntryPage> {
               sampleAmountInput(),
               fishWightInput(),
               fishLengthAvgInput(),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 4, horizontal: 24),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Checkbox(
-                          value: controller.checkUsedDate.value,
-                          onChanged: (v) {
-                            controller.checkUsedDate.value = v!;
-                            controller.selectedUsedDate.value = '';
-                            controller.showedUsedDate.clear();
-                          },
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              'Aktifkan tanggal grading manual',
-                              style: headingText3,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    controller.checkUsedDate.value
-                        ? GestureDetector(
-                      onTap: () async {
-                        final DateTime? datePicker =
-                        await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1900),
-                          lastDate: DateTime(2100),
-                        );
-
-                        // ignore: use_build_context_synchronously
-                        if (datePicker != null) {
-                          final TimeOfDay? selectedTime =
-                          await showTimePicker(
-                            context: context,
-                            initialTime: TimeOfDay.fromDateTime(
-                                datePicker!),
-                            builder: (context, child) {
-                              return MediaQuery(
-                                data: MediaQuery.of(context)
-                                    .copyWith(
-                                    alwaysUse24HourFormat:
-                                    true),
-                                child: child!,
-                              );
-                            },
-                          );
-
-                          if (selectedTime != null) {
-                            // Define the format for parsing
-
-                            // Define the format for parsing the input date and time string
-                            String inputFormatStr =
-                                'EEEE, d MMMM yyyy | \'Jam\' HH:mm:ss.SSS';
-                            DateTime dateTime = DateFormat(
-                                inputFormatStr, 'id_ID')
-                                .parse(
-                                '${controller.dateFormat(datePicker.toString(), false)} | Jam ${selectedTime!.hour < 10 ? '0${selectedTime.hour}' : selectedTime.hour}:${selectedTime.minute < 10 ? '0${selectedTime.minute}' : selectedTime.minute}:00.000');
-
-                            // Define the format for formatting the date into the desired format
-                            String outputFormatStr =
-                                'yyyy-MM-ddTHH:mm:ss.SSS';
-                            String formattedDateTime =
-                            DateFormat(outputFormatStr)
-                                .format(dateTime);
-
-                            inspect(DateTime.now().toString());
-
-                            controller.selectedUsedDate
-                                .value = datePicker ==
-                                null
-                                ? ''
-                                : '$formattedDateTime +0000';
-
-                            controller.showedUsedDate
-                                .text = datePicker ==
-                                null
-                                ? ''
-                                : '${controller.dateFormat(datePicker.toString(), false)} | Jam ${selectedTime!.hour < 10 ? '0${selectedTime.hour}' : selectedTime.hour}:${selectedTime.minute < 10 ? '0${selectedTime.minute}' : selectedTime.minute}';
-
-                            inspect(controller
-                                .selectedUsedDate.value);
-                          }
-                        }
-                      },
-                      child: TextFieldWidget(
-                        label: 'Pilih Tanggal',
-                        controller: controller.showedUsedDate,
-                        isLong: true,
-                        isEdit: false,
-                        suffixSection: Icon(
-                          Icons.arrow_drop_down_circle_rounded,
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
-                        : Container(),
-                  ],
-                ),
-              ),
               submitButton(),
               SizedBox(
                 height: 8,

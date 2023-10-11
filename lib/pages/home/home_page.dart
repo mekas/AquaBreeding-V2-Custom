@@ -1,37 +1,19 @@
+import 'package:fish/pages/component/fish_card.dart';
 import 'package:fish/pages/component/statistic_card.dart';
 import 'package:fish/pages/component/water_card.dart';
 import 'package:fish/controllers/home/home_controller.dart';
-import 'package:fish/pages/deactivation_recap/deactivation_recap_page.dart';
-import 'package:fish/pages/inventaris/inventaris_aset/inventaris_aset_page.dart';
-import 'package:fish/pages/inventaris/inventaris_aset/inventaris_aset_state.dart';
-import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_mainpage.dart';
-import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_state.dart';
-import 'package:fish/pages/inventaris/inventaris_benih/inventaris_benih_mainpage.dart';
-import 'package:fish/pages/inventaris/inventaris_listrik/inventaris_listrik_mainpage.dart';
-import 'package:fish/pages/inventaris/inventaris_listrik/inventaris_listrik_state.dart';
-import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_mainpage.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
-import 'package:fish/widgets/main_inventaris_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fish/theme.dart';
 
-import '../../widgets/new_Menu_widget.dart';
-
-class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  final HomeController controller = Get.put(HomeController(), permanent: false);
-  var isMenuTapped = false.obs;
-  var scaffoldKey = GlobalKey<ScaffoldState>();
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final HomeController controller =
+        Get.put(HomeController(), permanent: false);
+
     Widget title() {
       return Container(
         margin: EdgeInsets.only(
@@ -138,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                         title: 'Total Pakan',
                         value: double.parse(controller
                             .statistic.value.total_feed_dose!
-                            .toStringAsFixed(1)),
+                            .toStringAsFixed(0)),
                         unit: 'Kg',
                       )),
                 ],
@@ -169,43 +151,43 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    // Widget fish() {
-    //   return Container(
-    //     margin: EdgeInsets.only(top: 14),
-    //     child: SingleChildScrollView(
-    //       scrollDirection: Axis.horizontal,
-    //       child: Row(
-    //         children: [
-    //           SizedBox(
-    //             width: defaultMargin,
-    //           ),
-    //           Row(children: [
-    //             FishCard(
-    //               title: "Lele",
-    //               value: controller.statistic.value.fishes_weight_lele!,
-    //               image: "assets/lele.png",
-    //             ),
-    //             FishCard(
-    //               title: "Nila Merah",
-    //               value: controller.statistic.value.fishes_weight_nilamerah!,
-    //               image: "assets/nilamerah.png",
-    //             ),
-    //             FishCard(
-    //               title: "Nila Hitam",
-    //               value: controller.statistic.value.fishes_weight_nilahitam!,
-    //               image: "assets/nilahitam.png",
-    //             ),
-    //             FishCard(
-    //               title: "Mas",
-    //               value: controller.statistic.value.fishes_weight_mas!,
-    //               image: "assets/mas.png",
-    //             ),
-    //           ]),
-    //         ],
-    //       ),
-    //     ),
-    //   );
-    // }
+    Widget fish() {
+      return Container(
+        margin: EdgeInsets.only(top: 14),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              SizedBox(
+                width: defaultMargin,
+              ),
+              Row(children: [
+                FishCard(
+                  title: "Lele",
+                  value: controller.statistic.value.fishes_weight_lele!,
+                  image: "assets/lele.png",
+                ),
+                FishCard(
+                  title: "Nila Merah",
+                  value: controller.statistic.value.fishes_weight_nilamerah!,
+                  image: "assets/nilamerah.png",
+                ),
+                FishCard(
+                  title: "Nila Hitam",
+                  value: controller.statistic.value.fishes_weight_nilahitam!,
+                  image: "assets/nilahitam.png",
+                ),
+                FishCard(
+                  title: "Mas",
+                  value: controller.statistic.value.fishes_weight_mas!,
+                  image: "assets/mas.png",
+                ),
+              ]),
+            ],
+          ),
+        ),
+      );
+    }
 
     Widget waterTitle() {
       return Container(
@@ -231,7 +213,7 @@ class _HomePageState extends State<HomePage> {
 
     Widget water() {
       return Container(
-        margin: const EdgeInsets.only(top: 14),
+        margin: EdgeInsets.only(top: 14),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -262,172 +244,48 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    // Widget logoutButton() {
-    //   return Container(
-    //     height: 50,
-    //     width: double.infinity,
-    //     margin: EdgeInsets.only(
-    //         top: defaultSpace * 3, right: defaultMargin, left: defaultMargin),
-    //     child: TextButton(
-    //       onPressed: () {
-    //         // Get.back();
-    //         controller.deleteToken();
-    //         // controller.getWeek();
-    //       },
-    //       style: TextButton.styleFrom(
-    //         backgroundColor: primaryColor,
-    //         shape: RoundedRectangleBorder(
-    //           borderRadius: BorderRadius.circular(12),
-    //         ),
-    //       ),
-    //       child: Text(
-    //         'Submit',
-    //         style: primaryTextStyle.copyWith(
-    //           fontSize: 16,
-    //           fontWeight: medium,
-    //         ),
-    //       ),
-    //     ),
-    //   );
-    // }
-
-    // Widget newMenu(bool isMenuTapped) {
-    //   return isMenuTapped ? Column(
-    //     children: [
-    //       SizedBox(height: 10,),
-    //       Container(
-    //         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-    //         child: Row(
-    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //           children: [
-    //             Column(
-    //               children: [
-    //                 SizedBox(
-    //                   width: 55,
-    //                   height: 55,
-    //                   child: ElevatedButton(onPressed: (){}, child: Image.asset("assets/icon_pakan.png", fit: BoxFit.cover,), style: ElevatedButton.styleFrom(backgroundColor: Colors.white, shape: CircleBorder(),)),
-    //                 ),
-    //                 SizedBox(height: 10,),
-    //                 Text("Pakan",
-    //                   style: primaryTextStyle.copyWith(
-    //                     fontSize: 18,
-    //                     fontWeight: semiBold,
-    //                   ),)
-    //               ],
-    //             ),
-    //             Column(
-    //               children: [
-    //                 SizedBox(
-    //                   width: 55,
-    //                   height: 55,
-    //                   child: ElevatedButton(onPressed: (){}, child: Image.asset("assets/icon_suplemen.png", fit: BoxFit.cover,), style: ElevatedButton.styleFrom(backgroundColor: Colors.white, shape: CircleBorder(),)),
-    //                 ),
-    //                 SizedBox(height: 10,),
-    //                 Text("Suplemen",
-    //                   style: primaryTextStyle.copyWith(
-    //                     fontSize: 18,
-    //                     fontWeight: semiBold,
-    //                   ),)
-    //               ],
-    //             ),
-    //             Column(
-    //               children: [
-    //                 SizedBox(
-    //                   width: 55,
-    //                   height: 55,
-    //                   child: ElevatedButton(onPressed: (){}, child: Image.asset("assets/icon_listrik.png", fit: BoxFit.cover,), style: ElevatedButton.styleFrom(backgroundColor: Colors.white, shape: CircleBorder(),)),
-    //                 ),
-    //                 SizedBox(height: 10,),
-    //                 Text("Listrik",
-    //                   style: primaryTextStyle.copyWith(
-    //                     fontSize: 18,
-    //                     fontWeight: semiBold,
-    //                   ),)
-    //               ],
-    //             ),
-    //             Column(
-    //               children: [
-    //                 SizedBox(
-    //                   width: 55,
-    //                   height: 55,
-    //                   child: ElevatedButton(onPressed: (){}, child: Image.asset("assets/ikon_asset.png", fit: BoxFit.cover,), style: ElevatedButton.styleFrom(backgroundColor: Colors.white, shape: CircleBorder(),)),
-    //                 ),
-    //                 SizedBox(height: 10,),
-    //                 Text("Asset",
-    //                   style: primaryTextStyle.copyWith(
-    //                     fontSize: 18,
-    //                     fontWeight: semiBold,
-    //                   ),)
-    //               ],
-    //             ),
-    //             Column(
-    //               children: [
-    //                 SizedBox(
-    //                   width: 55,
-    //                   height: 55,
-    //                   child: ElevatedButton(onPressed: (){}, child: Image.asset("assets/icon_benih.png", fit: BoxFit.cover,), style: ElevatedButton.styleFrom(backgroundColor: Colors.white, shape: CircleBorder(),)),
-    //                 ),
-    //                 SizedBox(height: 10,),
-    //                 Text("Benih",
-    //                   style: primaryTextStyle.copyWith(
-    //                     fontSize: 18,
-    //                     fontWeight: semiBold,
-    //                   ),)
-    //               ],
-    //             ),
-    //           ],
-    //         ),
-    //       ),
-    //     ],
-    //   ) : Container();
-    // }
+    Widget logoutButton() {
+      return Container(
+        height: 50,
+        width: double.infinity,
+        margin: EdgeInsets.only(
+            top: defaultSpace * 3, right: defaultMargin, left: defaultMargin),
+        child: TextButton(
+          onPressed: () {
+            // Get.back();
+            controller.deleteToken();
+            // controller.getWeek();
+          },
+          style: TextButton.styleFrom(
+            backgroundColor: primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          child: Text(
+            'Submit',
+            style: primaryTextStyle.copyWith(
+              fontSize: 16,
+              fontWeight: medium,
+            ),
+          ),
+        ),
+      );
+    }
 
     return Obx(() {
       if (controller.isLoading.value == false) {
-        return Scaffold(
-          key: scaffoldKey,
-          appBar: AppBar(
-            backgroundColor: backgroundColor1,
-            title: Text('Home'),
-            centerTitle: true,
-            leading: IconButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) {
-                    return DeactivationRecapPage();
-                  },
-                ));
-              },
-              icon: Icon(Icons.book_rounded),
-            ),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  // scaffoldKey.currentState?.openEndDrawer();
-                  setState(() {
-                    isMenuTapped.value = !isMenuTapped.value;
-                  });
-                },
-                icon: Icon(Icons.card_travel_rounded),
-              )
-            ],
-          ),
-          endDrawer: DrawerInvetarisList(),
-          backgroundColor: backgroundColor1,
-          body: ListView(
-            children: [
-              if (isMenuTapped.value)
-                newMenu(),
-              title(),
-              username(),
-              statistic(),
-              waterTitle(),
-              water(),
-              const SizedBox(
-                height: 10,
-              )
-            ],
-          ),
+        return ListView(
+          children: [
+            title(),
+            username(),
+            statistic(),
+            waterTitle(),
+            water(),
+            SizedBox(
+              height: 10,
+            )
+          ],
         );
       } else {
         return Center(
@@ -439,5 +297,3 @@ class _HomePageState extends State<HomePage> {
     });
   }
 }
-
-

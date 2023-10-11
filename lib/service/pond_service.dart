@@ -1,9 +1,10 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:math';
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/service/url_api.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,8 +20,6 @@ class PondService {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token'
     };
-    print("get url: ${Uri.parse(Urls.ponds)}");
-    print("token: $token");
 
     var response = await http.get(url, headers: headers);
 
@@ -35,7 +34,7 @@ class PondService {
       }
 
       print(ponds);
-
+      print("ini ponds data $ponds");
       return ponds;
     } else {
       throw Exception(e);
@@ -70,7 +69,7 @@ class PondService {
       required String? width,
       required String? diameter,
       required String? height,
-      required String? buildAt,
+      required String? status,
       required Function doInPost,
       required BuildContext context}) async {
     if (diameter!.isNotEmpty) {
@@ -96,7 +95,6 @@ class PondService {
     WidgetsFlutterBinding.ensureInitialized();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
-    inspect(buildAt);
     final response = await http.post(
       Uri.parse(Urls.ponds),
       headers: {
@@ -109,24 +107,13 @@ class PondService {
         "location": location,
         "shape": shape,
         "material": material,
+        "status": status,
         "length": length,
         "width": width,
         "diameter": diameter,
         "height": height,
-        "build_at": buildAt,
       },
     );
-    print({
-      "alias": alias,
-      "location": location,
-      "shape": shape,
-      "material": material,
-      "length": length,
-      "width": width,
-      "diameter": diameter,
-      "height": height,
-      "build_at": buildAt,
-    },);
 
     if (response.statusCode == 200) {
       doInPost();
@@ -157,18 +144,19 @@ class PondService {
       return false;
     }
   }
+
   Future<bool> pondEdit(
       {required String? alias,
-        required String id,
-        required String? location,
-        required String? shape,
-        required String? material,
-        required String? length,
-        required String? width,
-        required String? diameter,
-        required String? height,
-        required String? status,
-        required BuildContext context}) async {
+      required String id,
+      required String? location,
+      required String? shape,
+      required String? material,
+      required String? length,
+      required String? width,
+      required String? diameter,
+      required String? height,
+      required String? status,
+      required BuildContext context}) async {
     if (diameter!.isNotEmpty) {
       if (diameter.contains(",")) {
         diameter = diameter.replaceAll(',', '.');
@@ -219,17 +207,6 @@ class PondService {
         "height": height,
       },
     );
-    print({
-      "alias": alias,
-      "location": location,
-      "shape": shape,
-      "material": material,
-      "status": status,
-      "length": length,
-      "width": width,
-      "diameter": diameter,
-      "height": height,
-    });
 
     if (response.statusCode == 200) {
       // doInPost();

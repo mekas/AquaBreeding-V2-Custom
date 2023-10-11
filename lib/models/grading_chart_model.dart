@@ -53,9 +53,9 @@ class FishGradingChart {
         .toList();
 
     List<FishFeedHistory> fishFeedList =
-    (json['list_fish_feed_history'] as List)
-        .map((item) => FishFeedHistory.fromJson(item))
-        .toList();
+        (json['list_fish_feed_history'] as List)
+            .map((item) => FishFeedHistory.fromJson(item))
+            .toList();
 
     return FishGradingChart(
       listFishWeight: fishWeightList,

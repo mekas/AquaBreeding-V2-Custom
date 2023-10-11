@@ -54,11 +54,11 @@ class PondCard extends StatelessWidget {
                   height: 30,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    color: pond.isActive! ? Colors.green : Colors.red.shade300,
+                    color: pond.getColor(),
                   ),
                   child: Center(
                     child: Text(
-                      pond.isActive! ? 'Aktif' : 'Tidak Aktif',
+                      pond.pondStatusStr!,
                       style: blackTextStyle.copyWith(
                         fontSize: 14,
                         fontWeight: heavy,
@@ -84,7 +84,9 @@ class PondCard extends StatelessWidget {
                         width: 10,
                       ),
                       Text(
-                        pond.getLastActivationDate(),
+                        pond.lastActivationDate != '-'
+                            ? pond.getLastActivationDateEYD()
+                            : "-",
                         style: subtitleTextStyle.copyWith(
                           fontSize: 16,
                           fontWeight: regular,
@@ -118,19 +120,17 @@ class PondCard extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             )
-                          : pond.pondPhDesc == null
+                          : pond.pondPh == null
                               ? Text(
-                                  "Belum Diukur",
-                                  style: subtitleTextStyle.copyWith(
-                                      fontSize: 16,
-                                      fontWeight: bold,
-                                      color: Colors.green),
+                                  "-",
+                                  style:
+                                      subtitleTextStyle.copyWith(fontSize: 16),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                 )
                               : pond.pondPhDesc!.capitalize == "Normal"
                                   ? Text(
-                                      pond.pondDo.toString(),
+                                      pond.pondPh.toString(),
                                       style: subtitleTextStyle.copyWith(
                                           fontSize: 16,
                                           fontWeight: bold,
@@ -140,7 +140,7 @@ class PondCard extends StatelessWidget {
                                     )
                                   : pond.pondPhDesc!.capitalize == "Berbahaya"
                                       ? Text(
-                                          pond.pondDo.toString(),
+                                          pond.pondPh.toString(),
                                           style: subtitleTextStyle.copyWith(
                                               fontSize: 16,
                                               fontWeight: bold,
@@ -149,7 +149,7 @@ class PondCard extends StatelessWidget {
                                           maxLines: 1,
                                         )
                                       : Text(
-                                          pond.pondDo.toString(),
+                                          pond.pondPh.toString(),
                                           style: subtitleTextStyle.copyWith(
                                             fontSize: 16,
                                             fontWeight: regular,
@@ -209,13 +209,12 @@ class PondCard extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             )
-                          : pond.pondDoDesc == null
+                          : pond.pondDo == null
                               ? Text(
                                   "Belum Diukur",
                                   style: subtitleTextStyle.copyWith(
-                                      fontSize: 16,
-                                      fontWeight: bold,
-                                      color: Colors.green),
+                                    fontSize: 16,
+                                  ),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                 )
@@ -287,51 +286,61 @@ class PondCard extends StatelessWidget {
                       ),
                     ],
                   ),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
                   Row(
                     children: [
-                      Text(
-                        "Suhu:",
-                        style: subtitleTextStyle.copyWith(
-                          fontSize: 16,
-                          fontWeight: heavy,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
+                      Image.asset(
+                        'assets/pond_secondary.png',
+                        width: 25,
+                        color: Colors.black,
                       ),
                       SizedBox(
                         width: 10,
                       ),
-                      pond.status != "Aktif"
-                          ? Text(
-                              "-",
-                              style: subtitleTextStyle.copyWith(
-                                fontSize: 16,
-                                fontWeight: regular,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            )
-                          : pond.pondTemp == null
-                              ? Text(
-                                  "Belum Diukur",
-                                  style: subtitleTextStyle.copyWith(
-                                    fontSize: 16,
-                                    fontWeight: regular,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                )
-                              : Text(
-                                  "${pond.pondTemp} " + "°C",
-                                  style: subtitleTextStyle.copyWith(
-                                    fontSize: 16,
-                                    fontWeight: bold,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
+                      Text(
+                        pond.volume!.toStringAsFixed(2) + " m\u00B3",
+                        style: subtitleTextStyle.copyWith(
+                          fontSize: 16,
+                          fontWeight: regular,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
                     ],
-                  )
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Image.asset('assets/fish_transparent.png',
+                          width: 25, color: blackColor),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        pond.getRatioVolumePerFishAlive() + " cm\u00B3 / Ekor",
+                        style: subtitleTextStyle.copyWith(
+                          fontSize: 16,
+                          fontWeight: regular,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

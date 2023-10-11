@@ -16,6 +16,7 @@ class FishDeath {
   });
 
   factory FishDeath.fromJson(Map<String, dynamic> json) {
+    print(json);
     return FishDeath(
       id: json['_id'],
       diagnosis: json['diagnosis'],

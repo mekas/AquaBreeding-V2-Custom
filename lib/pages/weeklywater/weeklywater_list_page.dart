@@ -3,13 +3,10 @@ import 'package:fish/controllers/weeklywater/weekly_water_controller.dart';
 import 'package:fish/pages/component/weekly_water_card.dart';
 import 'package:fish/pages/weeklywater/weeklywater_avg.dart';
 import 'package:fish/pages/weeklywater/weeklywater_entry_page.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
 // import 'package:fish/pages/dailywater/daily_water_entry_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
-
-import '../../widgets/new_Menu_widget.dart';
 
 class WeeklyWaterPage extends StatefulWidget {
   WeeklyWaterPage({Key? key}) : super(key: key);
@@ -20,14 +17,10 @@ class WeeklyWaterPage extends StatefulWidget {
 
 class _WeeklyWaterPageState extends State<WeeklyWaterPage> {
   final WeeklyWaterController controller = Get.put(WeeklyWaterController());
-  var isMenuTapped = false.obs;
+
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-    //   await controller.getPondActivations(
-    //       pondId: controller.pond.id.toString());
-    // });
     controller.getWeeklyWaterData(context);
   }
 
@@ -39,8 +32,6 @@ class _WeeklyWaterPageState extends State<WeeklyWaterPage> {
 
   @override
   Widget build(BuildContext context) {
-    var scaffoldKey = GlobalKey<ScaffoldState>();
-
     Widget fishDataRecap() {
       return Container(
         margin: EdgeInsets.only(
@@ -142,22 +133,6 @@ class _WeeklyWaterPageState extends State<WeeklyWaterPage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
-          key: scaffoldKey,
-          appBar: AppBar(
-            backgroundColor: backgroundColor1,
-            actions: [
-              IconButton(
-                onPressed: () {
-                  // scaffoldKey.currentState?.openEndDrawer();
-                  setState(() {
-                    isMenuTapped.value = !isMenuTapped.value;
-                  });
-                },
-                icon: Icon(Icons.card_travel_rounded),
-              )
-            ],
-          ),
-          endDrawer: DrawerInvetarisList(),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               Get.to(() => WeeklyWaterEntryPage(), arguments: {
@@ -172,13 +147,6 @@ class _WeeklyWaterPageState extends State<WeeklyWaterPage> {
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
-              if (isMenuTapped.value)
-                Column(
-                  children: [
-                    newMenu(),
-                    SizedBox(height: 10,),
-                  ],
-                ),
               fishDataRecap(),
               controller.listWeeklyWater.isEmpty
                   ? emptyList()

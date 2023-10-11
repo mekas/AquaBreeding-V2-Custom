@@ -1,14 +1,8 @@
 import 'package:fish/pages/pond/pond_controller.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
-import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
-
-import '../../widgets/new_Menu_widget.dart';
 
 class AddPondPage extends StatefulWidget {
   const AddPondPage({Key? key}) : super(key: key);
@@ -19,13 +13,6 @@ class AddPondPage extends StatefulWidget {
 
 class _AddPondPageState extends State<AddPondPage> {
   final PondController controller = Get.put(PondController());
-  var isMenuTapped = false.obs;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    initializeDateFormatting('id', null);
-  }
 
   @override
   void dispose() {
@@ -35,15 +22,11 @@ class _AddPondPageState extends State<AddPondPage> {
     controller.locationController.clear();
     controller.lengthController.clear();
     controller.widthController.clear();
-    controller.selectedUsedDate.value = '';
-    controller.showedUsedDate.clear();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    var scaffoldKey = GlobalKey<ScaffoldState>();
-
     Widget aliasInput() {
       return Container(
         margin: EdgeInsets.only(
@@ -519,33 +502,13 @@ class _AddPondPageState extends State<AddPondPage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
-          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Registrasi Kolam"),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  // scaffoldKey.currentState?.openEndDrawer();
-                  setState(() {
-                    isMenuTapped.value = !isMenuTapped.value;
-                  });
-                },
-                icon: Icon(Icons.card_travel_rounded),
-              )
-            ],
           ),
-          endDrawer: DrawerInvetarisList(),
           backgroundColor: backgroundColor1,
           body: ListView(
             children: [
-              if (isMenuTapped.value)
-                Column(
-                  children: [
-                    newMenu(),
-                    SizedBox(height: 10,),
-                  ],
-                ),
               aliasInput(),
               locationInput(),
               materialInput(),
@@ -554,106 +517,6 @@ class _AddPondPageState extends State<AddPondPage> {
                   ? persegiInput()
                   : bundarInput(),
               heightInput(),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 4, horizontal: 24),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Checkbox(
-                          value: controller.checkUsedDate.value,
-                          onChanged: (v) {
-                            controller.checkUsedDate.value = v!;
-                            controller.selectedUsedDate.value = '';
-                            controller.showedUsedDate.clear();
-                          },
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              'Aktifkan tanggal registrasi kolam manual',
-                              style: headingText3,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    controller.checkUsedDate.value
-                        ? GestureDetector(
-                            onTap: () async {
-                              final DateTime? datePicker = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(1900),
-                                lastDate: DateTime(2100),
-                              );
-
-                              // ignore: use_build_context_synchronously
-                              if (datePicker != null) {
-                                final TimeOfDay? selectedTime =
-                                    await showTimePicker(
-                                  context: context,
-                                  initialTime:
-                                      TimeOfDay.fromDateTime(datePicker!),
-                                  builder: (context, child) {
-                                    return MediaQuery(
-                                      data: MediaQuery.of(context).copyWith(
-                                          alwaysUse24HourFormat: true),
-                                      child: child!,
-                                    );
-                                  },
-                                );
-
-                                if (selectedTime != null) {
-                                  // Define the format for parsing
-
-                                  // Define the format for parsing the input date and time string
-                                  String inputFormatStr =
-                                      'EEEE, d MMMM yyyy | \'Jam\' HH:mm:ss.SSS';
-                                  DateTime dateTime =
-                                      DateFormat(inputFormatStr, 'id_ID').parse(
-                                          '${controller.dateFormat(datePicker.toString(), false)} | Jam ${selectedTime!.hour < 10 ? '0${selectedTime.hour}' : selectedTime.hour}:${selectedTime.minute < 10 ? '0${selectedTime.minute}' : selectedTime.minute}:00.000');
-
-                                  // Define the format for formatting the date into the desired format
-                                  String outputFormatStr =
-                                      'yyyy-MM-ddTHH:mm:ss.SSS';
-                                  String formattedDateTime =
-                                      DateFormat(outputFormatStr)
-                                          .format(dateTime);
-
-                                  controller.selectedUsedDate.value =
-                                      datePicker == null
-                                          ? ''
-                                          : '$formattedDateTime +0000';
-
-                                  controller.showedUsedDate.text = datePicker ==
-                                          null
-                                      ? ''
-                                      : '${controller.dateFormat(datePicker.toString(), false)} | Jam ${selectedTime!.hour < 10 ? '0${selectedTime.hour}' : selectedTime.hour}:${selectedTime.minute < 10 ? '0${selectedTime.minute}' : selectedTime.minute}';
-                                }
-                              }
-                            },
-                            child: TextFieldWidget(
-                              label: 'Pilih Tanggal',
-                              controller: controller.showedUsedDate,
-                              isLong: true,
-                              isEdit: false,
-                              suffixSection: Icon(
-                                Icons.arrow_drop_down_circle_rounded,
-                                color: Colors.white,
-                              ),
-                            ),
-                          )
-                        : Container(),
-                  ],
-                ),
-              ),
               registerButton(),
               SizedBox(
                 height: 8,

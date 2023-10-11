@@ -1,24 +1,13 @@
 import 'package:fish/controllers/weeklywater/weekly_water_detail_controller.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
-import '../../widgets/new_Menu_widget.dart';
-
-class WeeklyWaterDetailPage extends StatefulWidget {
+class WeeklyWaterDetailPage extends StatelessWidget {
   const WeeklyWaterDetailPage({Key? key}) : super(key: key);
 
   @override
-  State<WeeklyWaterDetailPage> createState() => _WeeklyWaterDetailPageState();
-}
-
-class _WeeklyWaterDetailPageState extends State<WeeklyWaterDetailPage> {
-  var isMenuTapped = false.obs;
-  @override
   Widget build(BuildContext context) {
-    var scaffoldKey = GlobalKey<ScaffoldState>();
-
     final WeeklyWaterDetailController controller =
         Get.put(WeeklyWaterDetailController());
 
@@ -167,7 +156,7 @@ class _WeeklyWaterDetailPageState extends State<WeeklyWaterDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Floc",
+                  "Flok",
                   style: primaryTextStyle.copyWith(
                     fontSize: 18,
                     fontWeight: medium,
@@ -308,33 +297,13 @@ class _WeeklyWaterDetailPageState extends State<WeeklyWaterDetailPage> {
     return Obx(() {
       if (controller.isLoading.value == false) {
         return Scaffold(
-          key: scaffoldKey,
           appBar: AppBar(
             backgroundColor: backgroundColor2,
             title: const Text("Detail Kondisi Air Harian"),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  // scaffoldKey.currentState?.openEndDrawer();
-                  setState(() {
-                    isMenuTapped.value = !isMenuTapped.value;
-                  });
-                },
-                icon: Icon(Icons.card_travel_rounded),
-              )
-            ],
           ),
           backgroundColor: backgroundColor1,
-          endDrawer: DrawerInvetarisList(),
           body: ListView(
             children: [
-              if (isMenuTapped.value)
-                Column(
-                  children: [
-                    newMenu(),
-                    SizedBox(height: 10,),
-                  ],
-                ),
               treatmentDataRecap(),
               detail(),
               titleRecap(),
