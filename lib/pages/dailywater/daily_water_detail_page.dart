@@ -6,7 +6,6 @@ import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/daily_water/daily_water_controller.dart';
-import '../../models/daily_water_model.dart';
 import '../../widgets/new_Menu_widget.dart';
 
 class DailyWaterDetailPage extends StatefulWidget {

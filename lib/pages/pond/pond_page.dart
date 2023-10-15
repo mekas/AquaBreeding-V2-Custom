@@ -1,18 +1,11 @@
-import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/component/pond_card.dart';
-import 'package:fish/pages/inventaris/inventaris_aset/inventaris_aset_page.dart';
 import 'package:fish/pages/inventaris/inventaris_aset/inventaris_aset_state.dart';
-import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_mainpage.dart';
 import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_state.dart';
-import 'package:fish/pages/inventaris/inventaris_benih/inventaris_benih_mainpage.dart';
-import 'package:fish/pages/inventaris/inventaris_listrik/inventaris_listrik_mainpage.dart';
 import 'package:fish/pages/inventaris/inventaris_listrik/inventaris_listrik_state.dart';
-import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_mainpage.dart';
 
 import 'package:fish/pages/pond/add_pond_page.dart';
 import 'package:fish/pages/pond/pond_controller.dart';
 import 'package:fish/widgets/drawer_inventaris_list.dart';
-import 'package:fish/widgets/main_inventaris_button.dart';
 import 'package:fish/widgets/new_Menu_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';

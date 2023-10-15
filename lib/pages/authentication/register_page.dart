@@ -13,7 +13,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:http/http.dart' as http;
 
-import '../component/login_card_input.dart';
 import '../component/register_input.dart';
 import '../component/register_input_next.dart';
 import 'login_page.dart';

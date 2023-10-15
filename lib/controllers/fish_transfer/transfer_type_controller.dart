@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 
-import 'fish_transfer_entry_controller.dart';
 import '../../service/logging_service.dart';
 
 class TransferTypeController extends GetxController {

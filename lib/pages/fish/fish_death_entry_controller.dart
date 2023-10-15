@@ -1,9 +1,7 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/fish/fish_recap_controller.dart';
-import 'package:fish/pages/fish/fish_type_controller.dart';
 import 'package:fish/service/activation_service.dart';
 import 'package:fish/service/fish_death_service.dart';
 import 'package:flutter/material.dart';

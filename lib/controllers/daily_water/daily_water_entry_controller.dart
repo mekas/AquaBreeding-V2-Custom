@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'package:fish/controllers/daily_water/daily_water_controller.dart';
 import 'package:fish/service/daily_water_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/models/activation_model.dart';
 
-import '../../models/daily_water_model.dart';
 import '../../service/logging_service.dart';
 
 class DailyWaterEntryController extends GetxController {

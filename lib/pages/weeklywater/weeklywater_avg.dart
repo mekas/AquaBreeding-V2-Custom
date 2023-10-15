@@ -1,7 +1,4 @@
-import 'package:fish/pages/component/daily_water_avg_card.dart';
-import 'package:fish/pages/component/daily_water_card.dart';
 import 'package:fish/controllers/weeklywater/weekly_water_avg_controller.dart';
-import 'package:fish/pages/dailywater/daily_water_entry_page.dart';
 import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';

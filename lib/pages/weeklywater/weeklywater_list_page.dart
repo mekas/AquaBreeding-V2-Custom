@@ -1,4 +1,3 @@
-import 'package:fish/pages/component/daily_water_card.dart';
 import 'package:fish/controllers/weeklywater/weekly_water_controller.dart';
 import 'package:fish/pages/component/weekly_water_card.dart';
 import 'package:fish/pages/weeklywater/weeklywater_avg.dart';

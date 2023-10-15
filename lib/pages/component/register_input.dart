@@ -1,10 +1,7 @@
-import 'package:fish/models/fish_model.dart';
-import 'package:fish/pages/authentication/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import '../../controllers/authentication/register_controller.dart';
 
 class RegisterInputCard extends StatelessWidget {

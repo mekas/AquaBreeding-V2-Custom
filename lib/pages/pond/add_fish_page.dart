@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
 
 import '../../widgets/new_Menu_widget.dart';
 

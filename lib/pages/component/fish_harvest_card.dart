@@ -1,4 +1,3 @@
-import 'package:fish/models/fish_model.dart';
 import 'package:fish/models/fish_harvested.dart';
 import 'package:flutter/material.dart';
 

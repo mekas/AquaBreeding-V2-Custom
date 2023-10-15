@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:fish/models/statistic_model.dart';
 import 'package:fish/service/statistic_service.dart';
@@ -10,7 +9,6 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../pages/authentication/login_page.dart';
-import '../../pages/dashboard.dart';
 import '../../service/logging_service.dart';
 
 

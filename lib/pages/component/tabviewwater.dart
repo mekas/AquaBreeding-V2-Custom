@@ -5,8 +5,6 @@ import 'package:fish/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:fish/models/activation_model.dart';
-import 'package:fish/models/pond_model.dart';
 
 import '../weeklywater/weeklywater_list_page.dart';
 

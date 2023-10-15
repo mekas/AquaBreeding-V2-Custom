@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';

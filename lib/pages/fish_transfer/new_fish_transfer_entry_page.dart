@@ -1,7 +1,6 @@
 import 'package:fish/controllers/fish_transfer/fish_transfer_entry_controller.dart';
 import 'package:fish/controllers/fish_transfer/pond_list_item_controller.dart';
 import 'package:fish/pages/fish_transfer/new_fish_transfer_input_page.dart';
-import 'package:fish/service/activation_service.dart';
 import 'package:fish/service/fish_transfer_service.dart';
 import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';

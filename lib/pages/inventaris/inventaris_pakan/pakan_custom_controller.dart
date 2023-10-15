@@ -1,14 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_state.dart';
 import 'package:fish/pages/treatment/carbon_type_controller.dart';
-import 'package:fish/service/treatment_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:fish/models/pond_model.dart';
 import 'package:fish/models/activation_model.dart';
 
 import '../../../service/logging_service.dart';

@@ -3,9 +3,6 @@ import 'dart:developer';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:fish/pages/pond/activation_breed_controller.dart';
 import 'package:fish/pages/pond/detail_pond_controller.dart';
-import 'package:fish/pages/pond/detail_pond_page.dart';
-import 'package:fish/service/pond_service.dart';
-import 'package:fish/service/activation_service.dart';
 import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:fish/pages/inventaris/inventaris_benih/inventaris_benih_state.dart';
@@ -16,7 +13,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/new_Menu_widget.dart';
-import '../component/detail_pond_tabview.dart';
 
 class ActivationBreedPage extends StatefulWidget {
   ActivationBreedPage({Key? key}) : super(key: key);

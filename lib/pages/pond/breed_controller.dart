@@ -1,9 +1,6 @@
 import 'dart:developer';
 
-import 'package:fish/models/activation_model.dart';
-import 'package:fish/models/fish_live_model.dart';
 import 'package:fish/models/fishchart_model.dart';
-import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/pond/detail_pond_controller.dart';
 import 'package:fish/pages/pond/pond_controller.dart';
 import 'package:fish/service/activation_service.dart';

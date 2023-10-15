@@ -1,6 +1,5 @@
 import 'package:fish/models/fish_harvested.dart';
 import 'package:intl/intl.dart';
-import 'package:fish/models/fish_model.dart';
 
 class FishTransfer {
   String? id;

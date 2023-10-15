@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:fish/models/fish_transfer_model.dart';
 import 'package:fish/service/url_api.dart';
 import 'package:flutter/material.dart';

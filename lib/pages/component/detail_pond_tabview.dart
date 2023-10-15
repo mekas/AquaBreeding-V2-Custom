@@ -1,19 +1,12 @@
-import 'package:fish/controllers/daily_water/daily_water_breed_list_controller.dart';
-import 'package:fish/controllers/daily_water/daily_water_controller.dart';
-import 'package:fish/pages/pond/detail_breed_page.dart';
-import 'package:fish/pages/treatment/treatment_page.dart';
 import 'package:fish/theme.dart';
 import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:fish/models/activation_model.dart';
 import 'package:fish/models/pond_model.dart';
-import 'package:fish/pages/pond/detail_pond_controller.dart';
 import 'package:fish/pages/pond/pond_controller.dart';
 import 'package:fish/pages/pond/detail_pond_page.dart';
 
 import 'package:fish/pages/dailywater/daily_water_pond_detail_page.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 
 class MyTabsPond extends GetxController with GetSingleTickerProviderStateMixin {
   var isLoading = false.obs;

@@ -1,8 +1,6 @@
-import 'package:fish/models/fish_death_model.dart';
 import 'package:fish/pages/component/treatment_card.dart';
 import 'package:fish/pages/treatment/treatment_controller.dart';
 import 'package:fish/pages/treatment/treatment_entry_page.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';

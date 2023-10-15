@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../widgets/new_Menu_widget.dart';
-import '../component/tabviewwater.dart';
 
 class DailyWaterEntryPage extends StatefulWidget {
   DailyWaterEntryPage({Key? key}) : super(key: key);

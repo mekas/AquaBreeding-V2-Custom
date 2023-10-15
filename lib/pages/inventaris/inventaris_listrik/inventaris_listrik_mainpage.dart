@@ -1,19 +1,15 @@
-import 'dart:developer';
 
-import 'package:another_flushbar/flushbar.dart';
 import 'package:fish/pages/inventaris/inventaris_listrik/add_or_edit_electricity_usage/add_electricity_usage.dart';
 import 'package:fish/pages/inventaris/inventaris_listrik/inventaris_listrik_pages/pascabayar_page.dart';
 import 'package:fish/pages/inventaris/inventaris_listrik/inventaris_listrik_pages/prabayar_page.dart';
 import 'package:fish/pages/inventaris/inventaris_listrik/inventaris_listrik_state.dart';
 import 'package:fish/theme.dart';
-import 'package:fish/widgets/bottom_sheet_widget.dart';
 import 'package:fish/widgets/dialog_widget.dart';
 import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
 
 class InventarisListrikPage extends StatefulWidget {
   const InventarisListrikPage({Key? key}) : super(key: key);

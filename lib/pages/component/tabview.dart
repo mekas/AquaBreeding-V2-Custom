@@ -9,11 +9,8 @@ import 'package:fish/theme.dart';
 import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:fish/models/activation_model.dart';
-import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/pond/detail_pond_controller.dart';
 
-import 'package:get/get_connect/http/src/utils/utils.dart';
 
 import '../pond/detail_finished_breed_page.dart';
 

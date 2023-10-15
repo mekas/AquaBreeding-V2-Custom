@@ -1,24 +1,18 @@
-import 'dart:developer';
 
 import 'package:fish/pages/inventaris/inventaris_bahan_budidaya/inventaris_bahan_budidaya_state.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_state.dart';
 
-import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/component/activation_card.dart';
 import 'package:fish/pages/pond/activation_breed_controller.dart';
 import 'package:fish/pages/pond/activation_breed_page.dart';
 import 'package:fish/pages/pond/pond_controller.dart';
-import 'package:fish/pages/pond/add_pond_page.dart';
 import 'package:fish/pages/pond/deactivation_breed_page.dart';
 import 'package:fish/pages/pond/detail_pond_controller.dart';
-import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:fish/widgets/new_Menu_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
-import '../fish_transfer/fish_transfer_entry_page.dart';
-import 'deactivation_breed_controller.dart';
 import 'edit_pond_page.dart';
 
 class DetailPondPage extends StatefulWidget {

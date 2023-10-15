@@ -1,5 +1,4 @@
 import 'package:another_flushbar/flushbar.dart';
-import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_pages/new_pakan_campuran_page.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/pakan_custom_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,6 @@ import 'package:get/get.dart';
 import '../../../../theme.dart';
 import '../../../../widgets/new_Menu_widget.dart';
 import '../../../../widgets/text_field_widget.dart';
-import '../inventaris_pakan_mainpage.dart';
 import '../inventaris_pakan_state.dart';
 
 class AddCustomFeed extends StatefulWidget {

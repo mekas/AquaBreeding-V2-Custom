@@ -1,13 +1,8 @@
-import 'dart:convert';
-import 'dart:developer';
 
-import 'package:fish/controllers/authentication/register_controller.dart';
-import 'package:fish/pages/dashboard.dart';
 import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../controllers/authentication/profile_controller.dart';
 import 'login_page.dart';
 

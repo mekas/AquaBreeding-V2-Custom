@@ -1,4 +1,3 @@
-import 'package:fish/pages/treatment/treatment_detail_controller.dart';
 import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';

@@ -1,11 +1,9 @@
-import 'dart:developer';
 
 import 'package:fish/models/fish_model.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/pages/pond/deactivation_breed_controller.dart';
 import 'package:fish/theme.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class DeactivationListCard extends StatelessWidget {

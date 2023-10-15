@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
-import '../pond/detail_pond_page.dart';
 
 class PondCard extends StatelessWidget {
   final Pond pond;

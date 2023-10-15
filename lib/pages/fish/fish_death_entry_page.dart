@@ -1,9 +1,5 @@
-import 'dart:developer';
 
-import 'package:fish/pages/component/detail_pond_tabview.dart';
-import 'package:fish/pages/dashboard.dart';
 import 'package:fish/pages/fish/fish_death_entry_controller.dart';
-import 'package:fish/pages/fish/fish_recap_page.dart';
 import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:fish/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';

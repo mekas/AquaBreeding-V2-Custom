@@ -1,16 +1,11 @@
-import 'dart:ffi';
 
-import 'package:fish/pages/component/tabviewwater.dart';
 import 'package:fish/pages/dashboard_controller.dart';
 
 import 'package:fish/pages/home/home_page.dart';
-import 'package:fish/pages/component/tabviewwater.dart';
 import 'package:fish/pages/pond/pond_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:fish/theme.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'authentication/profile_page.dart';
 

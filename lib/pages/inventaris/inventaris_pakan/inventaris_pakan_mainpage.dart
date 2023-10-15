@@ -2,7 +2,6 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/add_name_and_feed_screens/add_custom_feed.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/detail_inventaris_pakan/detail_inventaris_pakan_mainpage.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_pages/pakan_alami_page.dart';
-import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_pages/pakan_campuran_page.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_pages/pakan_industri_page.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/inventaris_pakan_state.dart';
 import 'package:fish/pages/inventaris/inventaris_pakan/pakan_custom_controller.dart';
@@ -15,7 +14,6 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-import '../../treatment/treatment_entry_controller.dart';
 import 'add_name_and_feed_screens/add_feed.dart';
 import 'add_name_and_feed_screens/add_feed_name.dart';
 import 'inventaris_pakan_pages/new_pakan_campuran_page.dart';

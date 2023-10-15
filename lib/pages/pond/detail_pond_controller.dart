@@ -1,11 +1,9 @@
 import 'dart:developer';
 
 import 'package:fish/models/activation_model.dart';
-import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/pond/pond_controller.dart';
 import 'package:fish/service/activation_service.dart';
 import 'package:fish/service/logging_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class DetailPondController extends GetxController {

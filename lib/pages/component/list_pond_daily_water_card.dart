@@ -1,4 +1,3 @@
-import 'package:fish/models/daily_water_model.dart';
 import 'package:fish/models/pond_model.dart';
 import 'package:fish/pages/dailywater/daily_water_pond_detail_page.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
 
-import '../pond/detail_pond_page.dart';
 
 class DailyWaterListPondCard extends StatefulWidget {
   final Pond pond;

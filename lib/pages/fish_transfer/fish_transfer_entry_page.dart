@@ -1,21 +1,15 @@
-import 'package:fish/models/fish_model.dart';
-import 'package:fish/pages/component/treatment_berat_input_card.dart';
-import 'package:fish/pages/treatment/treatment_entry_controller.dart';
 import 'package:fish/controllers/fish_transfer/fish_transfer_entry_controller.dart';
 import 'package:fish/controllers/fish_transfer/pond_list_item_controller.dart';
 import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
-import 'package:fish/pages/pond/detail_pond_controller.dart';
 import 'package:fish/theme.dart';
 
-import 'package:fish/pages/component/deactivation_list_input.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/fish_transfer/fish_transfer_list_controller.dart';
 import '../../widgets/new_Menu_widget.dart';
 import '../component/deactivation_with_fish_transfer_input.dart';
-import '../component/fish_transfer_input.dart';
 
 class FishTransferEntryPage extends StatefulWidget {
   FishTransferEntryPage({Key? key}) : super(key: key);

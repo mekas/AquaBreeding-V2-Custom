@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:fish/pages/component/deactivation_list_input.dart';
 import 'package:fish/pages/dashboard.dart';

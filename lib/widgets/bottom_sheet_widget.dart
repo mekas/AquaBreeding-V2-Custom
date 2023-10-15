@@ -1,7 +1,6 @@
 import 'package:fish/theme.dart';
 import 'package:fish/widgets/max_width_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class BottomSheetWidget {
   static getBottomSheetWidget(BuildContext context, List<Widget> children,

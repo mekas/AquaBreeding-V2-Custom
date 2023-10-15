@@ -1,15 +1,7 @@
-import 'package:fish/models/daily_water_model.dart';
-import 'package:fish/models/pond_model.dart';
-import 'package:fish/pages/treatment/treatment_controller.dart';
-import 'package:fish/pages/dailywater/daily_water_detail_page.dart';
 
-import 'package:fish/controllers/daily_water/daily_water_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
-import 'package:get/get.dart';
-import 'package:fish/models/treatment_model.dart';
 
-import '../../models/activation_model.dart';
 
 class DailyWaterCardAvg extends StatelessWidget {
   final Map<String, dynamic> sol;

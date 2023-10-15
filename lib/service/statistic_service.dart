@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:fish/models/statistic_model.dart';
-import 'package:fish/pages/dashboard.dart';
 import 'package:fish/service/url_api.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;

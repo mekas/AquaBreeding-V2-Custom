@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:fish/models/feed_chart_model.dart';
 import 'package:fish/pages/component/feed_month_card.dart';

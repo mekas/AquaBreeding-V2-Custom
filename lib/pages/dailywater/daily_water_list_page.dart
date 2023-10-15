@@ -5,7 +5,6 @@ import 'package:fish/widgets/drawer_inventaris_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fish/theme.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
 
 import '../../widgets/new_Menu_widget.dart';
 import 'daily_water_avg.dart';

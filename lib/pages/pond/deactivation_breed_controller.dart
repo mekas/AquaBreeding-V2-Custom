@@ -1,18 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:ffi';
 
 import 'package:fish/models/activation_model.dart';
-import 'package:fish/models/fish_model.dart';
 import 'package:fish/models/history/history_feed_model.dart';
 import 'package:fish/models/history/history_seed_model.dart';
 import 'package:fish/models/history/history_suplemen_model.dart';
 import 'package:fish/models/inventaris/aset/inventaris_asset_model.dart';
 import 'package:fish/models/inventaris/listrik/inventaris_listrik_model.dart';
 import 'package:fish/models/pond_model.dart';
-import 'package:fish/pages/dashboard.dart';
 import 'package:fish/pages/deactivation_recap/deactivation_recap_state.dart';
-import 'package:fish/pages/pond/detail_pond_controller.dart';
 import 'package:fish/pages/pond/pond_controller.dart';
 import 'package:fish/service/activation_service.dart';
 import 'package:fish/theme.dart';

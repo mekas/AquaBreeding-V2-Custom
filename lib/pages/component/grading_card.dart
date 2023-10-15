@@ -1,11 +1,5 @@
-import 'package:fish/models/activation_model.dart';
-import 'package:fish/models/fish_grading_model.dart';
-import 'package:fish/models/pond_model.dart';
-import 'package:fish/pages/grading/grading_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:fish/pages/grading/detail_grading_page.dart';
 import 'package:fish/theme.dart';
-import 'package:get/get.dart';
 
 class GradingCard extends StatelessWidget {
   final List<dynamic>? fishList;
